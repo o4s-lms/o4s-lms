@@ -45,7 +45,7 @@ const countries = introspect.graphql({
 
 const lms = introspect.postgresql({
   apiNamespace: 'lms',
-  databaseURL: 'postgres://lms:Kdp5FcekQpFTdfxB@joseantcordeiro.hopto.org:5433/lms_dev',
+  databaseURL: new EnvironmentVariable('WG_DATABASE_URL', 'localhost'),
 });
 
 // configureWunderGraph emits the configuration
