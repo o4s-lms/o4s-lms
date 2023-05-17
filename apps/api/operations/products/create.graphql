@@ -1,0 +1,19 @@
+mutation ($name: String!, $description: String!, $image: String, $price: Int!, $currency: String = "EUR")
+@rbac(requireMatchAll: [admin]) {
+	createOneproduct: lms_createOneProduct(
+		data: {
+			name: $name
+			description: $description
+			image: $image
+			price: $price
+			currency: $currency
+		}
+	) {
+		id
+		name
+		description
+		image
+		price
+		currency
+	}
+}

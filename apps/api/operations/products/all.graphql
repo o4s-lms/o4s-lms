@@ -1,0 +1,16 @@
+query ($deleted: Boolean = false) {
+	products: lms_findManyProduct() {
+		id
+		name
+		description
+		image
+		price
+  	currency
+		courses(where: { deleted: { equals: $deleted } }) {
+			id
+			name
+			description
+			image
+		}
+	}
+}
