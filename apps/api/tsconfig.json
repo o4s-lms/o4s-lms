@@ -1,0 +1,12 @@
+{
+	"extends": "@o4s/tsconfig/wundergraph.json",
+	"compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "~/*": [
+        "./*"
+      ]
+    }
+  },
+  "include": ["**/*.ts"]
+}

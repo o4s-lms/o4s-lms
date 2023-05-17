@@ -1,0 +1,15 @@
+query ($id: Int!) {
+	course: lms_findUniqueCourse(where: { id: $id }) {
+		id,
+		name,
+		description,
+		module {
+			id,
+			name,
+			lesson {
+				id,
+				name,
+			}
+		}
+	}
+}

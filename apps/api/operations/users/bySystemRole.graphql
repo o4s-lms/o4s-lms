@@ -1,0 +1,10 @@
+query ($role: String!) {
+	users: lms_findManyUser(where: { roles: { includes: $role } }) {
+		id,
+		name,
+		email,
+		emailVerified,
+		image,
+		roles,
+	}
+}

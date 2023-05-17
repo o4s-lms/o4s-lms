@@ -1,0 +1,10 @@
+query ($id: String! @fromClaim(name: USERID)) @rbac(requireMatchAll: [user]) {
+	user: lms_findUniqueUser(where: { id: $id }) {
+		id,
+		name,
+		email,
+		emailVerified,
+		image,
+		roles,
+	}
+}

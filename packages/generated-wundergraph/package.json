@@ -1,0 +1,15 @@
+{
+  "name": "@o4s/generated-wundergraph",
+  "version": "0.1.0",
+  "main": "client.ts",
+  "types": "client.ts",
+  "license": "MIT",
+  "dependencies": {
+    "api": "^0.1.0"
+  },
+	"devDependencies": {
+    "@o4s/eslint-config": "^0.1.0",
+    "eslint": "^8.40.0",
+    "typescript": "^5.0.4"
+  }
+}
