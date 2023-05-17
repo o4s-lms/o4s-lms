@@ -3,16 +3,16 @@ generator client {
 }
 
 datasource db {
-  provider     = "postgresql"
+  provider     = "mysql"
   url          = env("DATABASE_URL")
-  // directUrl    = env("DATABASE_DIRECT_URL")
-  // relationMode = "prisma"
+  directUrl    = env("DATABASE_DIRECT_URL")
+  relationMode = "prisma"
 }
 
 model Account {
-  id                String  @id @default(cuid()) @db.VarChar(50)
-  userId            String	@db.VarChar(50)
-  type              String  
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
   provider          String
   providerAccountId String
   refresh_token     String? @db.Text
@@ -30,9 +30,9 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid()) @db.VarChar(50)
+  id           String   @id @default(cuid())
   sessionToken String   @unique
-  userId       String		@db.VarChar(50)
+  userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -40,12 +40,12 @@ model Session {
 }
 
 model User {
-  id               String               @id @default(cuid()) @db.VarChar(50)
-  name             String?							@db.VarChar(100)
+  id               String               @id @default(cuid())
+  name             String?
   email            String?              @unique
   emailVerified    DateTime?
-  image            String?							@db.VarChar(1000)
-  roles            UserRoles[]          @default([user])
+  image            String?
+  roles            String               @default("user") @db.VarChar(10)
   accounts         Account[]
   sessions         Session[]
 	payments         Payment[]
@@ -66,7 +66,7 @@ model MemberInCourse {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @default(now()) @updatedAt
 	lastActivity DateTime?
-  userId       String				 @db.VarChar(50)
+  userId       String
   courseId     Int
   role         CourseRole
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -79,12 +79,12 @@ model MemberInCourse {
 
 model Course {
   id          Int      				@id @default(autoincrement())
-  name        String					@db.VarChar(100)
+  name        String
   description String					@db.VarChar(1000)
-  slug        String					@db.VarChar(150)
+  slug        String
 	image				String?					@db.VarChar(1000)
 	published   Boolean  				@default(false)
-	createdBy   String?					@db.VarChar(50)
+	createdBy   String?
 	createdAt		DateTime 				@default(now())
 	deleted			Boolean					@default(false)
 	modules			Module[]
@@ -95,8 +95,8 @@ model Course {
 
 model Module {
 	id             Int      @id @default(autoincrement())
-  name           String		@db.VarChar(100)
-	slug           String		@db.VarChar(150)
+  name           String
+	slug           String
 	pos						 Int			@default(0)
 	deleted				 Boolean	@default(false)
 	course         Course   @relation(fields: [courseId], references: [id])
@@ -108,14 +108,14 @@ model Module {
 
 model Lesson {
   id             Int                  @id @default(autoincrement())
-  name           String								@db.VarChar(100)
-  slug           String								@db.VarChar(150)
+  name           String
+  slug           String
 	pos						 Int									@default(0)
   course         Course               @relation(fields: [courseId], references: [id])
   courseId       Int
 	module				 Module								@relation(fields: [moduleId], references: [id])
 	moduleId			 Int
-  html       		 String?  						@db.Text
+  html       		 String?  						@db.LongText
   coverImage 		 String?  						@db.VarChar(1000)
   status     		 String   						@default("draft") @db.VarChar(50)
 	createdAt			 DateTime 						@default(now())
@@ -132,7 +132,7 @@ model Lesson {
 
 model UserLessonProgress {
   user        User     @relation(fields: [userId], references: [id])
-  userId      String	 @db.VarChar(50)
+  userId      String
   lesson      Lesson   @relation(fields: [lessonId], references: [id])
   lessonId    Int
   completedAt DateTime @default(now())
@@ -144,8 +144,8 @@ model UserLessonProgress {
 
 model Assignment {
 	id                 Int               @id @default(autoincrement())
-	title              String						 @db.VarChar(100)
-	type               String						 @db.VarChar(50)
+	title              String
+	type               String
 	dueDate            DateTime?
 	priority           Int
 	lessonId           Int
@@ -159,7 +159,7 @@ model Assignment {
 
 model StudentAssignment {
   user         User             @relation(fields: [userId], references: [id])
-  userId       String						@db.VarChar(50)
+  userId       String
 	assignmentId Int
   asignment    Assignment       @relation(fields: [assignmentId], references: [id])
 	status       AssignmentStatus @default(INPROGRESS)
@@ -173,7 +173,7 @@ model StudentAssignment {
 
 model File {
 	id           Int         @id @default(autoincrement())
-	name         String			 @db.VarChar(100)
+	name         String
   url          String      @db.VarChar(1000)
 	downloads    Int         @default(0)
 	lessonId     Int?
@@ -187,7 +187,7 @@ model File {
 
 model Link {
 	id           Int        @id @default(autoincrement())
-	name         String			@db.VarChar(100)
+	name         String
 	ref          String     @db.VarChar(1000)
 	isExternal   Boolean    @default(true)
 	clicks       Int        @default(0)
@@ -202,8 +202,8 @@ model Link {
 
 model Product {
   id          Int       @id @default(autoincrement())
-  name        String		@db.VarChar(100)
-  description String		@db.VarChar(1000)
+  name        String
+  description String
 	image 			String?   @db.VarChar(1000)
   price       Int       @default(3500)
   currency    String    @default("EUR")
@@ -218,10 +218,10 @@ model Payment {
 	status      PaymentStatus
 	value       Int
 	type				PaymentType
-	gateway			String				@db.VarChar(50)
-	customerId  String				@db.VarChar(50)
-	paymentId   String				@db.VarChar(50)
-	userId      String				@db.VarChar(50)
+	gateway			String
+	customerId  String
+	paymentId   String
+	userId      String
 	payedBy     User          @relation(fields: [userId], references: [id])
 	products    Product[]
 
@@ -234,12 +234,6 @@ enum CourseRole {
   TEACHER
 	OBSERVATOR
   STUDENT
-}
-
-enum UserRoles {
-	user
-	admin
-	manager
 }
 
 enum AssignmentStatus {

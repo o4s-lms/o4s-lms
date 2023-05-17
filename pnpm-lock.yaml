@@ -44,18 +44,18 @@ importers:
         specifier: ^0.1.0
         version: link:../../packages/config/tsconfig
       '@wundergraph/nextjs':
-        specifier: ^0.10.27
-        version: 0.10.27(@wundergraph/sdk@0.157.0)(next@13.4.2)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5)
+        specifier: ^0.10.29
+        version: 0.10.29(@wundergraph/sdk@0.158.1)(next@13.4.2)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5)
       '@wundergraph/sdk':
-        specifier: ^0.157.0
-        version: 0.157.0(@graphql-mesh/store@0.9.20)(react-native@0.71.8)
+        specifier: ^0.158.1
+        version: 0.158.1(@graphql-mesh/store@0.9.20)(react-native@0.71.8)(typescript@5.0.4)
     devDependencies:
       '@o4s/eslint-config':
         specifier: ^0.1.0
         version: link:../../packages/config/eslint
       '@types/node':
-        specifier: ^20.1.4
-        version: 20.1.4
+        specifier: ^20.1.7
+        version: 20.1.7
       dotenv-cli:
         specifier: ^7.2.1
         version: 7.2.1
@@ -3244,6 +3244,16 @@ packages:
       tailwindcss: 3.3.2
     dev: true
 
+  /@timkendall/tql@1.0.0-rc.8(graphql@16.6.0):
+    resolution: {integrity: sha512-uJUAYCAGqtBJ/qdF6zjS+BPH6gmgTddyEAmH6bFqRLagDBieI3+GOC1zVTOPItiqY5DVP+hnbWfnVYQOqPTTvA==}
+    peerDependencies:
+      graphql: ^16.0.0
+    dependencies:
+      '@graphql-typed-document-node/core': 3.2.0(graphql@16.6.0)
+      graphql: 16.6.0
+      ts-toolbelt: 9.6.0
+    dev: false
+
   /@trpc/client@10.23.1(@trpc/server@10.23.1):
     resolution: {integrity: sha512-0uEUU3oxULvEZpg2P2Qn1pkq3ATNRoWz4AfycWjmP4MN89GZYnwUReIeQQCHmP+mIElBcHwehOYyVkqs/T9o5w==}
     peerDependencies:
@@ -3362,13 +3372,13 @@ packages:
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
     dev: false
 
+  /@types/node@13.13.52:
+    resolution: {integrity: sha512-s3nugnZumCC//n4moGGe6tkNMyYEdaDBitVjwPxXmR5lnMG5dHePinH2EdxkG3Rh1ghFHHixAG4NJhpJW1rthQ==}
+    dev: false
+
   /@types/node@16.18.30:
     resolution: {integrity: sha512-Kmp/wBZk19Dn7uRiol8kF8agnf8m0+TU9qIwyfPmXglVxMlmiIz0VQSMw5oFgwhmD2aKTlfBIO5FtsVj3y7hKQ==}
     dev: false
-
-  /@types/node@20.1.4:
-    resolution: {integrity: sha512-At4pvmIOki8yuwLtd7BNHl3CiWNbtclUbNtScGx4OHfBd4/oWoJC8KRCIxXwkdndzhxOsPXihrsOoydxBjlE9Q==}
-    dev: true
 
   /@types/node@20.1.7:
     resolution: {integrity: sha512-WCuw/o4GSwDGMoonES8rcvwsig77dGCMbZDrZr2x4ZZiNW4P/gcoZXe/0twgtobcTkmg9TuKflxYL/DuwDyJzg==}
@@ -3652,8 +3662,8 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /@wundergraph/nextjs@0.10.27(@wundergraph/sdk@0.157.0)(next@13.4.2)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5):
-    resolution: {integrity: sha512-Fq65gOBMdbX0ljpC5YqkqqAhA5dGqzPZJinXRz2Q6ADpr2gE9fB4pRzmezaTw5NVkbm/Eo50GoD40ohkLkyVcQ==}
+  /@wundergraph/nextjs@0.10.29(@wundergraph/sdk@0.158.1)(next@13.4.2)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5):
+    resolution: {integrity: sha512-R+/8mZk5U1Sng95HioafjrHPba2d0J3OOGOdl6Bh5rdYA23Jl2HvNTAH1I8/IFnmX8dSeYmlGmLfc1vJV7G2Hw==}
     peerDependencies:
       '@wundergraph/sdk': '>=0.91.0'
       next: ^12.1.0 || ^13.0.0
@@ -3661,9 +3671,9 @@ packages:
       react-dom: ^16.8.0 || ^17.0.2 || ^18.0.0
       swr: ^2.0.0
     dependencies:
-      '@wundergraph/protobuf': 0.111.0
-      '@wundergraph/sdk': 0.157.0(@graphql-mesh/store@0.9.20)(react-native@0.71.8)
-      '@wundergraph/swr': 0.14.31(@wundergraph/sdk@0.157.0)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5)
+      '@wundergraph/protobuf': 0.112.0
+      '@wundergraph/sdk': 0.158.1(@graphql-mesh/store@0.9.20)(react-native@0.71.8)(typescript@5.0.4)
+      '@wundergraph/swr': 0.14.33(@wundergraph/sdk@0.158.1)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5)
       handlebars: 4.7.7
       next: 13.4.2(@babel/core@7.21.8)(react-dom@18.2.0)(react@18.2.0)
       object-hash: 2.2.0
@@ -3673,16 +3683,31 @@ packages:
       swr: 2.1.5(react@18.2.0)
     dev: false
 
-  /@wundergraph/protobuf@0.111.0:
-    resolution: {integrity: sha512-L1e0EaQ39xt4HWckaciQ3wXJIEesZKB28wHBZXVlIxHBKek/LVzfYkirqVukbbf9FOglM2efeB3CaE1Mkj71lw==}
+  /@wundergraph/orm@0.0.3(typescript@5.0.4):
+    resolution: {integrity: sha512-rp/W8wjJPk0QaYQ4IY6NuEC8M+6a73rqSM8UXNlCCfWVcCuiw0gE+WOR7sTvQ88aF9TrkAW9byf4v2L05gL4XQ==}
+    dependencies:
+      '@timkendall/tql': 1.0.0-rc.8(graphql@16.6.0)
+      graphql: 16.6.0
+      hotscript: 1.0.12
+      ix: 5.0.0
+      outvariant: 1.4.0
+      remeda: 1.14.0
+      ts-poet: 6.4.1
+      type-fest: 3.10.0(typescript@5.0.4)
+    transitivePeerDependencies:
+      - typescript
+    dev: false
+
+  /@wundergraph/protobuf@0.112.0:
+    resolution: {integrity: sha512-yO7I20pec3KdbDj/AMU/KTqwNKfZQZZQRbdWEFsqYJIZ21IbrdW+S/x0sLiUD0o4HcG+ReyWO9J6OS3S0sy/0A==}
     dependencies:
       long: 5.2.3
       protobufjs: 6.11.3
       ts-proto: 1.147.2
     dev: false
 
-  /@wundergraph/sdk@0.157.0(@graphql-mesh/store@0.9.20)(react-native@0.71.8):
-    resolution: {integrity: sha512-IMiZdTcIuD187lkhnHjtAFlovXKgdmAw7rypyX6Viuu7uwvc/BUjLSfQUfkIzBw5UISPJzKYe1IKTmuk2wpBvQ==}
+  /@wundergraph/sdk@0.158.1(@graphql-mesh/store@0.9.20)(react-native@0.71.8)(typescript@5.0.4):
+    resolution: {integrity: sha512-HQ8/pPsHsvCVOibI6zBFFM9kWSU8aYeDaeTddacT8i2vdIGOrGItlS9SWj2x94kQuOBxRikYDvxCwFDk3fL/jg==}
     hasBin: true
     dependencies:
       '@fastify/formbody': 7.4.0
@@ -3697,9 +3722,10 @@ packages:
       '@prisma/generator-helper': 3.15.2
       '@web-std/fetch': 4.1.0
       '@whatwg-node/fetch': 0.8.8
-      '@wundergraph/protobuf': 0.111.0
+      '@wundergraph/orm': 0.0.3(typescript@5.0.4)
+      '@wundergraph/protobuf': 0.112.0
       '@wundergraph/straightforward': 4.2.5
-      '@wundergraph/wunderctl': 0.151.0
+      '@wundergraph/wunderctl': 0.152.1
       axios: 0.26.1(debug@4.3.4)
       axios-retry: 3.4.0
       close-with-grace: 1.2.0
@@ -3713,6 +3739,7 @@ packages:
       graphql-helix: 1.13.0(graphql@16.6.0)
       handlebars: 4.7.7
       https-proxy-agent: 5.0.1
+      ix: 5.0.0
       js-yaml: 4.1.0
       json-schema: 0.4.0
       json-schema-to-typescript: 11.0.5
@@ -3727,6 +3754,7 @@ packages:
       raw-body: 2.5.2
       swagger2openapi: 7.0.8
       terminate: 2.6.1
+      traverse: 0.6.7
       ts-retry-promise: 0.7.0
       tslib: 2.5.0
       typescript-json-schema: 0.55.0
@@ -3741,6 +3769,7 @@ packages:
       - react-native
       - react-native-windows
       - supports-color
+      - typescript
     dev: false
 
   /@wundergraph/straightforward@4.2.5:
@@ -3754,23 +3783,23 @@ packages:
       - supports-color
     dev: false
 
-  /@wundergraph/swr@0.14.31(@wundergraph/sdk@0.157.0)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5):
-    resolution: {integrity: sha512-xB4hLUGKGvUqdlRj2B/oGgAHEy/Al5orbP9tasyaU1Ek/CP8vhDs0qpomzbc1LK4zLgiIDDmYxc/gWBbCLv2Ww==}
+  /@wundergraph/swr@0.14.33(@wundergraph/sdk@0.158.1)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5):
+    resolution: {integrity: sha512-BuJQkVxgYAv1n1t8i22rrdFwDhyTEfUScuc4sf4HFQFE+9w9lm6Ez76Q7XpfR8qxOfosi+i30lUvyTD/rcgN2A==}
     peerDependencies:
       '@wundergraph/sdk': '>=0.110.0'
       react: ^16.8.0 || ^17.0.2 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.2 || ^18.0.0
       swr: ^2.0.0
     dependencies:
-      '@wundergraph/sdk': 0.157.0(@graphql-mesh/store@0.9.20)(react-native@0.71.8)
+      '@wundergraph/sdk': 0.158.1(@graphql-mesh/store@0.9.20)(react-native@0.71.8)(typescript@5.0.4)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-ssr-prepass: 1.5.0(react@18.2.0)
       swr: 2.1.5(react@18.2.0)
     dev: false
 
-  /@wundergraph/wunderctl@0.151.0:
-    resolution: {integrity: sha512-n+PbCwpUL16FtaGqf91W54vnJ/RM+tMDfX1s84uU/co14RPUaP0DVcz2s0d0sbcj4EsTXXHV21jWknxp53ycDA==}
+  /@wundergraph/wunderctl@0.152.1:
+    resolution: {integrity: sha512-ZSGQIsRTQySt9owBPi80NO2+JBpu7BCN5vL2ywoiQBNVEN5fEec97P6WFqQOMfxN/QeGUQGMp89wsJzo2UD1vg==}
     hasBin: true
     requiresBuild: true
     dependencies:
@@ -6850,6 +6879,10 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
+  /hotscript@1.0.12:
+    resolution: {integrity: sha512-ANWgLMEhhfmmUsAkmJR6eclnVMC7KrDAAtOxWYN7PclUr1N5P9irs3WVJvMT/NpUxOXluYXj5JgyBG0iuKW5+Q==}
+    dev: false
+
   /html-minifier@4.0.0:
     resolution: {integrity: sha512-aoGxanpFPLg7MkIl/DDFYtb0iWz7jMFGqFhvEDZga6/4QTjneiD8I/NXL1x5aaoCp7FSIT6h/OhykDdPsbtMig==}
     engines: {node: '>=6'}
@@ -7369,6 +7402,13 @@ packages:
   /isobject@3.0.1:
     resolution: {integrity: sha512-WhB9zCku7EGTj/HQQRz5aUQEUeoQZH2bWcltRErOpymJ4boYE6wL9Tbr23krRPSZ+C5zqNSrSw+Cc7sZZ4b7vg==}
     engines: {node: '>=0.10.0'}
+    dev: false
+
+  /ix@5.0.0:
+    resolution: {integrity: sha512-6LyyrHnvNrSy5pKtW/KA+KKusHrB223aBJCJlIGPN7QBfDkEEtNrAkAz9lLLShIcdJntq6BiPCHuKaCM/9wwXw==}
+    dependencies:
+      '@types/node': 13.13.52
+      tslib: 2.5.0
     dev: false
 
   /javascript-natural-sort@0.7.1:
@@ -9555,6 +9595,10 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: false
 
+  /outvariant@1.4.0:
+    resolution: {integrity: sha512-AlWY719RF02ujitly7Kk/0QlV+pXGFDHrHf9O2OKqyqgBieaPOIeuSkL8sRK6j2WK+/ZAURq2kZsY0d8JapUiw==}
+    dev: false
+
   /p-cancelable@1.1.0:
     resolution: {integrity: sha512-s73XxOZ4zpt1edZYZzvhqFa6uvQc1vwUa0K0BdtIZgQMAJj9IbebH+JkgKZc9h+B05PKHLOTl4ajG1BmNrVZlw==}
     engines: {node: '>=6'}
@@ -10610,6 +10654,10 @@ packages:
       unified: 10.1.2
     dev: false
 
+  /remeda@1.14.0:
+    resolution: {integrity: sha512-AFPpCRtlYAcSzW4cI8sOw+x+BtbvX6tIwL3lhRxUO9YuPXRe06N1woIMPq/O1cNNy5n4a0TwbIHIciqnswkaQg==}
+    dev: false
+
   /repeat-element@1.1.4:
     resolution: {integrity: sha512-LFiNfRcSu7KK3evMyYOuCzv3L10TW7yC1G2/+StMjK8Y6Vqd2MG7r/Qjw4ghtuCOjFvlnms/iMmLqpvW/ES/WQ==}
     engines: {node: '>=0.10.0'}
@@ -11625,6 +11673,10 @@ packages:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
     dev: false
 
+  /traverse@0.6.7:
+    resolution: {integrity: sha512-/y956gpUo9ZNCb99YjxG7OaslxZWHfCHAUUfshwqOXmxUIvqLjVO581BT+gM59+QV9tFe6/CGG53tsA1Y7RSdg==}
+    dev: false
+
   /tree-kill@1.2.2:
     resolution: {integrity: sha512-L0Orpi8qGpRG//Nd+H90vFB+3iHnue1zSSGmNOOCh1GLJ7rUKVwV2HvijphGQS2UmhUZewS9VgvxYIdgr+fG1A==}
     hasBin: true
@@ -11701,6 +11753,10 @@ packages:
   /ts-retry-promise@0.7.0:
     resolution: {integrity: sha512-x6yWZXC4BfXy4UyMweOFvbS1yJ/Y5biSz/mEPiILtJZLrqD3ZxIpzVOGGgifHHdaSe3WxzFRtsRbychI6zofOg==}
     engines: {node: '>=6'}
+    dev: false
+
+  /ts-toolbelt@9.6.0:
+    resolution: {integrity: sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==}
     dev: false
 
   /tsconfig-paths@3.14.2:
@@ -11805,6 +11861,15 @@ packages:
   /type-fest@0.7.1:
     resolution: {integrity: sha512-Ne2YiiGN8bmrmJJEuTWTLJR32nh/JdL1+PSicowtNb0WFpn59GK8/lfD61bVtzguz7b3PBt74nxpv/Pw5po5Rg==}
     engines: {node: '>=8'}
+    dev: false
+
+  /type-fest@3.10.0(typescript@5.0.4):
+    resolution: {integrity: sha512-hmAPf1datm+gt3c2mvu0sJyhFy6lTkIGf0GzyaZWxRLnabQfPUqg6tF95RPg6sLxKI7nFLGdFxBcf2/7+GXI+A==}
+    engines: {node: '>=14.16'}
+    peerDependencies:
+      typescript: '>=4.7.0'
+    dependencies:
+      typescript: 5.0.4
     dev: false
 
   /type@1.2.0:

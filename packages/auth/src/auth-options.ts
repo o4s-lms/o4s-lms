@@ -31,7 +31,7 @@ declare module "next-auth" {
 
   interface User {
     // ...other properties
-    roles: string[];
+    roles: string;
   }
 }
 
@@ -79,7 +79,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token, user }) {
       if (session.user) {
         session.user.id = user.id;
-        session.user.roles = user.roles;
+        session.user.roles = [user.roles];
       }
       console.log("Session Callback", { session, token, user });
       return session;
@@ -87,7 +87,7 @@ export const authOptions: NextAuthOptions = {
     jwt: ({ token, user }) => {
       console.log("JWT Callback", { token, user });
       if (user) {
-        token.roles = user.roles;
+        token.roles = [user.roles];
         return {
           ...token,
         };

@@ -1,5 +1,5 @@
 query ($role: String!) {
-	users: lms_findManyUser(where: { roles: { includes: $role } }) {
+	users: lms_findManyUser(where: { roles: { equals: $role } }) {
 		id,
 		name,
 		email,

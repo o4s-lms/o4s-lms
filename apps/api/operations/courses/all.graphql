@@ -4,10 +4,10 @@ query ($deleted: Boolean = false) {
 		name,
 		description,
 		image,
-		module(where: { deleted: { equals: $deleted } } ) {
+		modules(where: { deleted: { equals: $deleted } } ) {
 			id,
 			name,
-			lesson(where: { deleted: { equals: $deleted } } ) {
+			lessons(where: { deleted: { equals: $deleted } } ) {
 				id,
 				name,
 			}

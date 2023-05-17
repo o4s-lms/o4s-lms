@@ -13,7 +13,7 @@ const nextConfig = {
   typescript: { ignoreBuildErrors: !!process.env.CI },
 
   images: {
-    domains: ["lh3.googleusercontent.com", "vercel.com", "s.gravatar.com"],
+    domains: ["joseantcordeiro.hopto.org", "joseantcordeiro.hopto.org:9000", "vercel.com", "s.gravatar.com"],
   },
 };
 

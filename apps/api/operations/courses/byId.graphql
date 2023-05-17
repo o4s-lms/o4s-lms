@@ -3,10 +3,10 @@ query ($id: Int!) {
 		id,
 		name,
 		description,
-		module {
+		modules {
 			id,
 			name,
-			lesson {
+			lessons {
 				id,
 				name,
 			}

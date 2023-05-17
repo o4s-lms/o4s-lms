@@ -16,12 +16,12 @@
     "@o4s/auth": "^0.1.0",
     "@o4s/db": "^0.1.0",
     "@o4s/comm": "^0.1.0",
-		"@wundergraph/nextjs": "^0.10.27",
-    "@wundergraph/sdk": "^0.157.0"
+		"@wundergraph/nextjs": "^0.10.29",
+    "@wundergraph/sdk": "^0.158.1"
   },
   "devDependencies": {
 		"@o4s/eslint-config": "^0.1.0",
-    "@types/node": "^20.1.4",
+    "@types/node": "^20.1.7",
 		"dotenv-cli": "^7.2.1",
     "eslint": "^8.40.0",
     "typescript": "^5.0.4"

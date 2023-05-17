@@ -10,32 +10,25 @@ import { NextJsTemplate } from '@wundergraph/nextjs/dist/template';
 import server from './wundergraph.server';
 import operations from './wundergraph.operations';
 
-const cloudflareR2 = {
-  name: "cloudflareR2",
-  endpoint: "YOUR_CLOUDFLARE_USER_ID.r2.cloudflarestorage.com",
-  accessKeyID: "YOUR_ACCESS_KEY_ID",
-  secretAccessKey:
-    "YOUR_SECRET_ACCESS_KEY",
-  bucketLocation: "", // not all S3 providers require this
-  bucketName: "YOUR_BUCKET_NAME",
-  useSSL: true, // you'll always want SSL enabled for cloud storage
-  uploadProfiles: {
-    // profile for a user's 'avatar' picture 
-    avatar: {
-      maxAllowedUploadSizeBytes: 1024 * 1024 * 10, // 10 MB, optional, defaults to 25 MB
-      maxAllowedFiles: 1, // limit the number of files to 1, leave undefined for unlimited files
-      allowedMimeTypes: ["image/png", "image/jpeg"], // wildcard is supported, e.g. 'image/*', leave empty/undefined to allow all
-      allowedFileExtensions: ["png", "jpg"], // leave empty/undefined to allow all}z
-      requireAuthentication: true, // WunderGraph only lets authenticated users upload files but for this demonstration, use this to override it
+const aws = {
+  name: 'minio', // a unique name for the storage provider
+  endpoint: new EnvironmentVariable('MINIO_URL', 'localhost:9000'), // the MinIO endpoint
+  accessKeyID: new EnvironmentVariable('MINIO_ROOT_USER', 'minioadmin'), // access key to upload files to the S3 bucket
+  secretAccessKey: new EnvironmentVariable('MINIO_ROOT_PASSWORD', 'minioadmin'), // access secret to upload files to the S3 bucket
+  bucketName: 'uploads', // the bucket name to which you're uploading files
+	bucketLocation: '',
+  useSSL: false, // disable SSL if you're running e.g. Minio on your local machine
+  uploadProfiles: [
+    {
+      avatar: {
+        requireAuthentication: false, // optional, defaults to true
+        maxAllowedUploadSizeBytes: 1024 * 1024 * 1, // 10 MB, optional, defaults to 25 MB
+        maxAllowedFiles: 1, // limit the number of files to 1, leave undefined for unlimited files
+        allowedMimeTypes: ['image/png', 'image/jpeg'], // wildcard is supported, e.g. 'image/*', leave empty/undefined to allow all
+        allowedFileExtensions: ['png', 'jpg'], // leave empty/undefined to allow all
+      },
     },
-		lessons: {
-			maxAllowedUploadSizeBytes: 1024 * 1024 * 10, // 10 MB, optional, defaults to 25 MB
-      maxAllowedFiles: 1, // limit the number of files to 1, leave undefined for unlimited files
-      allowedMimeTypes: ["image/png", "image/jpeg"], // wildcard is supported, e.g. 'image/*', leave empty/undefined to allow all
-      allowedFileExtensions: ["png", "jpg"], // leave empty/undefined to allow all}z
-      requireAuthentication: true, // WunderGraph only lets authenticated users upload files but for this demonstration, use this to override it
-		},
-  },
+  ],
 };
 
 const countries = introspect.graphql({
@@ -43,13 +36,14 @@ const countries = introspect.graphql({
   url: 'https://countries.trevorblades.com/'
 });
 
-const lms = introspect.postgresql({
+const lms = introspect.prisma({
   apiNamespace: 'lms',
-  databaseURL: new EnvironmentVariable('WG_DATABASE_URL', 'localhost'),
+  prismaFilePath: '../../packages/db/wundergraph/schema.prisma',
 });
 
 // configureWunderGraph emits the configuration
 configureWunderGraphApplication({
+	s3UploadProvider: [aws],
   apis: [countries, lms],
   server,
 	operations,
@@ -72,10 +66,22 @@ configureWunderGraphApplication({
 		},
   ],
 	authentication: {
+		/** customClaims: {
+			// Implicit: required
+			SHOPID: {
+				jsonPath: 'shop.id', // Nested 'id' field inside a 'shop' object
+				type: 'int', // Must be an integer
+			},
+			// Implicit: string
+			TENANTID: {
+				jsonPath: 'teid',
+				required: false, // Optional
+			},
+		}, */
     tokenBased: {
       providers: [
         {
-          userInfoEndpoint: 'http://joseantcordeiro.hopto.org:4000/api/auth/userInfo',
+          userInfoEndpoint: new EnvironmentVariable('WG_TOKEN_AUTH_ENDPOINT', 'http://localhost:3000/api/auth/session'),
         },
       ],
     },
@@ -116,6 +122,9 @@ configureWunderGraphApplication({
     title: 'O4S LMS',
     apiVersion: '0.1.0',
   },
+	experimental: {
+		orm: true,
+	},
 	options: {
     listen: {
       host: new EnvironmentVariable('WG_NODE_HOST', 'localhost'),
