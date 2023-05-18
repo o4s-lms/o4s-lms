@@ -9,7 +9,6 @@ import { nFormatter } from "@/lib/utils";
 import { getToken } from "@/lib/get-token";
 import Hero from "@/components/home/hero";
 import CourseCard from "@/components/home/course-card";
-import { getData } from "@/lib/get-data";
 import { createClient } from '@o4s/generated-wundergraph/client';
 
 export default async function Home() {
