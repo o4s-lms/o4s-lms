@@ -11,26 +11,12 @@ RUN npm install -g pnpm turbo
 WORKDIR /usr/src/app
 
 COPY . .
-# rebuild image when package.json or lock has changed
-# COPY package*.json ./
-# COPY pnpm-workspace.yaml ./
-# COPY .npmrc ./
-# COPY .nvmrc ./
-# COPY renovate.json ./
-# COPY turbo.json ./
-# COPY ./packages ./
-# COPY ./apps/api ./
 
 # install dependencies
-# RUN npm ci --only=production
 RUN pnpm install
 RUN pnpm install --offline
 
-# add project artifacts to docker image
-# ADD . .
-
 # generate your wundergraph application
-# RUN npm exec wunderctl generate
 RUN pnpm turbo run build --filter=api...
 
 # Image layer for production
@@ -48,8 +34,6 @@ RUN wunderctl version
 
 # run as non-root user
 USER node
-
-# WORKDIR /usr/src/app
 
 CMD WG_NODE_HOST=0.0.0.0 wunderctl start
 
