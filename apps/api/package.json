@@ -16,6 +16,7 @@
     "@o4s/auth": "^0.1.0",
     "@o4s/db": "^0.1.0",
     "@o4s/comm": "^0.1.0",
+		"@sindresorhus/slugify": "^2.2.1",
 		"@wundergraph/nextjs": "^0.10.29",
     "@wundergraph/sdk": "^0.158.1"
   },

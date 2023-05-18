@@ -1,10 +1,11 @@
-query ($id: String!) @rbac(requireMatchAll: [admin]) {
+query ($id: String!)
+@rbac(requireMatchAll: [admin]) {
 	user: lms_findUniqueUser(where: { id: $id }) {
-		id,
-		name,
-		email,
-		emailVerified,
-		image,
-		roles,
+		id
+		name
+		email
+		emailVerified
+		image
+		roles
 	}
 }

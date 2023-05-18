@@ -1,10 +1,24 @@
-mutation ($name: String!, $description: String!, $image: String!)
+mutation (
+	$name: String!,
+	$description: String!,
+	$slug: String!,
+	$image: String!,
+	$role: String = "AUTHOR",
+	$userId: String @fromClaim(name: USERID)
+	)
 @rbac(requireMatchAll: [admin]) {
 	createOnecourse: lms_createOneCourse(
 		data: {
 			name: $name
 			description: $description
+			slug: $slug
 			image: $image
+			members: {
+				create: {
+					userId: $userId
+					role: $role
+				}
+			}
 		}
 	) {
 		id

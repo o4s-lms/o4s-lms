@@ -3,7 +3,7 @@ version: '3.7'
 # Settings and configurations that are common for all containers
 x-minio-common: &minio-common
   build: .
-  restart: unless-stopped
+  restart: always
   command: server --console-address ":9001" http://minio{1...2}/data{1...2}
   expose:
     - '9000'

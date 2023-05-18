@@ -1,14 +1,33 @@
 query ($id: Int!, $deleted: Boolean = false) {
 	course: lms_findUniqueCourse(where: { id: $id }) {
-		id,
-		name,
-		description,
-		modules(where: { deleted: { equals: $deleted } }) {
-			id,
-			name,
-			lessons(where: { deleted: { equals: $deleted } }) {
-				id,
-				name,
+		id
+		name
+		description
+		image
+		published
+		createdBy
+		createdAt
+		modules(
+			where: { deleted: { equals: $deleted } }
+			orderBy: { pos: asc }
+			) {
+			id
+			name
+			slug
+			pos
+			courseId
+			lessons(
+				where: { deleted: { equals: $deleted } }
+				orderBy: { pos: asc }
+				) {
+				id
+				name
+				slug
+				pos
+				status
+				courseId
+				moduleId
+				createdAt
 			}
 		}
 	}

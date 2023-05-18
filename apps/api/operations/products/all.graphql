@@ -11,6 +11,9 @@ query ($deleted: Boolean = false) {
 			name
 			description
 			image
+			published
+			createdBy
+			createdAt
 		}
 	}
 }

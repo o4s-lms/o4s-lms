@@ -11,6 +11,9 @@ query ($id: Int!, $deleted: Boolean = false) {
 			name
 			description
 			image
+			published
+			createdBy
+			createdAt
 		}
 	}
 }

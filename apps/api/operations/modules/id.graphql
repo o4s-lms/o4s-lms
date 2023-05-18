@@ -1,0 +1,25 @@
+query ($id: Int!, $deleted: Boolean = false) {
+	module: lms_findUniqueModule(
+		where: { id: $id }
+		orderBy: { pos: asc }
+	) {
+		id
+		name
+		slug
+		pos
+		courseId
+		lessons(
+			where: { deleted: { equals: $deleted } }
+			orderBy: { pos: asc }
+		) {
+			id
+			name
+			slug
+			pos
+			status
+			courseId
+			moduleId
+			createdAt
+		}
+	}
+}

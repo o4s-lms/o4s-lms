@@ -1,0 +1,25 @@
+query ($deleted: Boolean = false) {
+	modules: lms_findManyModule(
+		where: { deleted: { equals: $deleted } }
+		orderBy: { pos: asc }
+	) {
+		id
+		name
+		slug
+		pos
+		courseId
+		lessons(
+			where: { deleted: { equals: $deleted } }
+			orderBy: { pos: asc }
+		) {
+			id
+			name
+			slug
+			pos
+			status
+			courseId
+			moduleId
+			createdAt
+		}
+	}
+}
