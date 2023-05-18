@@ -5,8 +5,8 @@ generator client {
 datasource db {
   provider     = "mysql"
   url          = env("DATABASE_URL")
-  // directUrl    = env("DATABASE_DIRECT_URL")
-  // relationMode = "prisma"
+  //directUrl    = env("DATABASE_DIRECT_URL")
+  //relationMode = "prisma"
 }
 
 model Account {
@@ -84,7 +84,7 @@ model Course {
   slug        String
 	image				String?					@db.VarChar(1000)
 	published   Boolean  				@default(false)
-	createdBy   String?
+	createdBy   String
 	createdAt		DateTime 				@default(now())
 	deleted			Boolean					@default(false)
 	modules			Module[]
@@ -99,6 +99,8 @@ model Module {
 	slug           String
 	pos						 Int			@default(0)
 	deleted				 Boolean	@default(false)
+	createdBy   	 String
+	createdAt			 DateTime @default(now())
 	course         Course   @relation(fields: [courseId], references: [id])
   courseId       Int
 	lessons     	 Lesson[]
@@ -118,6 +120,7 @@ model Lesson {
   html       		 String?  						@db.LongText
   coverImage 		 String?  						@db.VarChar(1000)
   status     		 String   						@default("draft") @db.VarChar(50)
+	createdBy   	 String
 	createdAt			 DateTime 						@default(now())
 	updatedAt			 DateTime?						@updatedAt
 	deleted				 Boolean							@default(false)

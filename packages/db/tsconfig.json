@@ -1,4 +1,7 @@
 {
   "extends": "../../tsconfig.json",
+	"compilerOptions": {
+    "lib": ["es2016", "esnext.asynciterable"]
+  },
   "include": ["src", "index.ts", "db.ts"]
 }

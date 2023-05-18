@@ -1,7 +1,6 @@
 query ($id: Int!, $deleted: Boolean = false) {
 	module: lms_findUniqueModule(
 		where: { id: $id }
-		orderBy: { pos: asc }
 	) {
 		id
 		name

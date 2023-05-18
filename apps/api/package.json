@@ -4,6 +4,7 @@
   "description": "Open source LMS.",
   "author": "José Cordeiro <joseantcordeiro@gmail.com>",
   "license": "MIT",
+	"type": "module",
   "scripts": {
 		"clean": "rm -rf .turbo generated node_modules",
     "dev": "pnpm with-env wunderctl up --logs --wundergraph-dir .",
