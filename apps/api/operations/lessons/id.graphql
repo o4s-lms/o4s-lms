@@ -1,0 +1,15 @@
+query ($id: Int!, $deleted: Boolean = false) {
+	lesson: lms_findUniqueLesson(
+		where: { id: $id }
+		orderBy: { pos: asc }
+	) {
+		id
+		name
+		slug
+		pos
+		status
+		courseId
+		moduleId
+		createdAt
+	}
+}

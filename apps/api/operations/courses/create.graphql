@@ -13,6 +13,7 @@ mutation (
 			description: $description
 			slug: $slug
 			image: $image
+			createdBy: $userId
 			members: {
 				create: {
 					userId: $userId
@@ -25,5 +26,7 @@ mutation (
 		name
 		description
 		image
+		createdBy
+		createdAt
 	}
 }

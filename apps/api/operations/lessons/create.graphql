@@ -2,6 +2,7 @@ mutation (
 	$name: String!,
 	$slug: String!,
 	$courseId: Int!,
+	$moduleId: Int!,
 	$userId: String @fromClaim(name: USERID)
 	)
 @rbac(requireMatchAll: [admin]) {
@@ -10,6 +11,7 @@ mutation (
 			name: $name
 			slug: $slug
 			courseId: $courseId
+			moduleId: $moduleId
 			createdBy: $userId
 		}
 	) {
@@ -17,6 +19,7 @@ mutation (
 		name
 		slug
 		courseId
+		moduleId
 		createdBy
 		createdAt
 	}
