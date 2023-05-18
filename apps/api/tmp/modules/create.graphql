@@ -8,8 +8,8 @@ mutation (
 		data: {
 			name: $name
 			slug: $slug
-			courseId: $courseId
 			createdBy: $userId
+			course: { connect: { id: $courseId } }
 		}
 	) {
 		id

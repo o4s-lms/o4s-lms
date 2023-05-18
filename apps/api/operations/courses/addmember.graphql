@@ -1,0 +1,17 @@
+mutation (
+	$courseId: Int!,
+	$userId: String!,
+	$role: lms_CourseRole!
+	) {
+	addMemberCourse: lms_createOneMemberInCourse(
+		data: {
+			course: { connect: { id: $courseId } }
+			user: { connect: { id: $userId } }
+			role: $role
+		}
+	) {
+		courseId
+		userId
+		role
+	}
+}

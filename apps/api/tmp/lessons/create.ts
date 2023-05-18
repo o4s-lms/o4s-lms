@@ -2,7 +2,6 @@ import slugify from '@sindresorhus/slugify';
 import { createOperation, z } from '../../generated/wundergraph.factory';
 
 export default createOperation.mutation({
-  // by specifying the input schema, we're automatically creating a JSON Schema for input validation
   input: z.object({
 		name: z.string(),
     courseId: z.number(),

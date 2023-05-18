@@ -1,0 +1,31 @@
+mutation (
+	$name: String!,
+	$description: String!,
+	$slug: String!,
+	$image: String!,
+	$role: lms_CourseRole! = AUTHOR,
+	$userId: String! @fromClaim(name: USERID)
+	) {
+	createOneCourse: lms_createOneCourse(
+		data: {
+			name: $name
+			description: $description
+			slug: $slug
+			image: $image
+			createdBy: $userId
+			members: {
+				create: {
+					user: { connect: { id: $userId } }
+					role: $role
+				}
+			}
+		}
+	) {
+		id
+		name
+		description
+		image
+		createdBy
+		createdAt
+	}
+}

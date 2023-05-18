@@ -23,10 +23,3 @@ mutation (
 		createdAt
 	}
 }
-
-mutation ($id: String!, $name: String!, $email: String!) {
-  my_db_executeRaw(
-    query: "insert or ignore into User (id,name,email) values ($1,$2,$3)"
-    parameters: [$id, $name, $email]
-  )
-}
