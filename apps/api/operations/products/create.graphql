@@ -1,6 +1,6 @@
 mutation ($name: String!, $description: String!, $image: String, $price: Int!, $currency: String = "EUR")
 @rbac(requireMatchAll: [admin]) {
-	createOneproduct: lms_createOneProduct(
+	createOneProduct: lms_createOneProduct(
 		data: {
 			name: $name
 			description: $description

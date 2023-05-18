@@ -4,9 +4,8 @@ mutation (
 	$courseId: Int!,
 	$moduleId: Int!,
 	$userId: String @fromClaim(name: USERID)
-	)
-@rbac(requireMatchAll: [admin]) {
-	createOnemodule: lms_createOneModule(
+	) {
+	createOneLesson: lms_createOneLesson(
 		data: {
 			name: $name
 			slug: $slug
