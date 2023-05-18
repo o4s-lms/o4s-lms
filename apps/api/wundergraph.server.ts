@@ -2,7 +2,6 @@ import { EnvironmentVariable, type LoggerLevel } from '@wundergraph/sdk';
 import { configureWunderGraphServer } from '@wundergraph/sdk/server';
 import type { HooksConfig } from './generated/wundergraph.hooks';
 import type { InternalClient } from './generated/wundergraph.internal.client';
-import slugify from '@sindresorhus/slugify';
 
 export default configureWunderGraphServer<HooksConfig, InternalClient>(() => ({
   hooks: {
@@ -12,7 +11,7 @@ export default configureWunderGraphServer<HooksConfig, InternalClient>(() => ({
 			},
 		},
     queries: {
-
+			
 		},
     mutations: {
 

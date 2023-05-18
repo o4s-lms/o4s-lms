@@ -1,5 +1,5 @@
 {
-	"extends": "@o4s/tsconfig/wundergraph.json",
+	"extends": "@o4s/tsconfig/wundergraph",
 	"compilerOptions": {
     "baseUrl": ".",
     "paths": {

@@ -37,7 +37,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   };
 
-	const isAdmin = session.user.role === "admin";
+	const isAdmin = session.user.roles === "admin";
 
 	if (!isAdmin) {
     return {

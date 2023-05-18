@@ -1,0 +1,262 @@
+generator client {
+  provider        = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_DIRECT_URL")
+  //directUrl    = env("DATABASE_DIRECT_URL")
+  //relationMode = "prisma"
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model User {
+  id               String               @id @default(cuid())
+  name             String?
+  email            String?              @unique
+  emailVerified    DateTime?
+  image            String?
+  roles            String               @default("user") @db.VarChar(10)
+  accounts         Account[]
+  sessions         Session[]
+	payments         Payment[]
+  courses          MemberInCourse[]
+  completedLessons UserLessonProgress[]
+	assignments      StudentAssignment[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model MemberInCourse {
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @default(now()) @updatedAt
+	lastActivity DateTime?
+  userId       String
+  courseId     Int
+  role         CourseRole
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course       Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+	@@index([userId])
+  @@index([courseId])
+}
+
+model Course {
+  id          Int      				@id @default(autoincrement())
+  name        String
+  description String					@db.VarChar(1000)
+  slug        String
+	image				String?					@db.VarChar(1000)
+	published   Boolean  				@default(false)
+	createdBy   String
+	createdAt		DateTime 				@default(now())
+	deleted			Boolean					@default(false)
+	modules			Module[]
+  lessons     Lesson[]
+	members     MemberInCourse[]
+  products    Product[]
+}
+
+model Module {
+	id             Int      @id @default(autoincrement())
+  name           String
+	slug           String
+	pos						 Int			@default(0)
+	deleted				 Boolean	@default(false)
+	createdBy   	 String
+	createdAt			 DateTime @default(now())
+	course         Course   @relation(fields: [courseId], references: [id])
+  courseId       Int
+	lessons     	 Lesson[]
+
+  @@index([courseId])
+}
+
+model Lesson {
+  id             Int                  @id @default(autoincrement())
+  name           String
+  slug           String
+	pos						 Int									@default(0)
+  course         Course               @relation(fields: [courseId], references: [id])
+  courseId       Int
+	module				 Module								@relation(fields: [moduleId], references: [id])
+	moduleId			 Int
+  html       		 String?  						@db.LongText
+  coverImage 		 String?  						@db.VarChar(1000)
+  status     		 String   						@default("draft") @db.VarChar(50)
+	createdBy   	 String
+	createdAt			 DateTime 						@default(now())
+	updatedAt			 DateTime?						@updatedAt
+	deleted				 Boolean							@default(false)
+  usersCompleted UserLessonProgress[]
+	assignments    Assignment[]
+	links          Link[]
+	files          File[]
+
+  @@index([courseId])
+	@@index([moduleId])
+}
+
+model UserLessonProgress {
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  lesson      Lesson   @relation(fields: [lessonId], references: [id])
+  lessonId    Int
+  completedAt DateTime @default(now())
+
+  @@id([userId, lessonId])
+  @@index([userId])
+  @@index([lessonId])
+}
+
+model Assignment {
+	id                 Int               @id @default(autoincrement())
+	title              String
+	type               String
+	dueDate            DateTime?
+	priority           Int
+	lessonId           Int
+	lesson             Lesson            @relation(fields: [lessonId], references: [id])
+	files              File[]
+	links              Link[]
+	studentAssignments StudentAssignment[]
+  
+  @@index([lessonId])
+}
+
+model StudentAssignment {
+  user         User             @relation(fields: [userId], references: [id])
+  userId       String
+	assignmentId Int
+  asignment    Assignment       @relation(fields: [assignmentId], references: [id])
+	status       AssignmentStatus @default(INPROGRESS)
+	startedAt    DateTime         @default(now())
+  completedAt  DateTime?
+
+  @@id([userId, assignmentId])
+  @@index([userId])
+  @@index([assignmentId])
+}
+
+model File {
+	id           Int         @id @default(autoincrement())
+	name         String
+  url          String      @db.VarChar(1000)
+	downloads    Int         @default(0)
+	lessonId     Int?
+	lesson       Lesson?     @relation(fields: [lessonId], references: [id])
+	assignmentId Int?
+	assignment   Assignment? @relation(fields: [assignmentId], references: [id])
+
+	@@index([lessonId])
+	@@index([assignmentId])
+}
+
+model Link {
+	id           Int        @id @default(autoincrement())
+	name         String
+	ref          String     @db.VarChar(1000)
+	isExternal   Boolean    @default(true)
+	clicks       Int        @default(0)
+	lessonId     Int?
+	lesson       Lesson?     @relation(fields: [lessonId], references: [id])
+	assignmentId Int?
+	assignment   Assignment? @relation(fields: [assignmentId], references: [id])
+
+	@@index([lessonId])
+	@@index([assignmentId])
+}
+
+model Product {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+	image 			String?   @db.VarChar(1000)
+  price       Int       @default(3500)
+  currency    String    @default("EUR")
+  courses     Course[]
+	payments    Payment[]
+}
+
+model Payment {
+	id          String  	    @id @default(cuid())
+	createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt
+	status      PaymentStatus
+	value       Int
+	type				PaymentType
+	gateway			String
+	customerId  String
+	paymentId   String
+	userId      String
+	payedBy     User          @relation(fields: [userId], references: [id])
+	products    Product[]
+
+	@@index([userId])
+}
+
+enum CourseRole {
+  ADMIN
+	AUTHOR
+  TEACHER
+	OBSERVATOR
+  STUDENT
+}
+
+enum AssignmentStatus {
+	INPROGRESS
+	COMPLETE
+	NOTSARTED
+}
+
+enum PaymentType {
+	CC
+	SEPA
+	PAYPAL
+	BOLETO
+	PIX
+}
+
+enum PaymentStatus {
+	PAID
+	WAITING
+	REFUNDED
+	CANCELLED
+	ERROR
+}

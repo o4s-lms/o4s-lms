@@ -20,6 +20,10 @@
       "dependsOn": ["^build", "^db:generate"],
       "outputs": [".next/**", ".expo/**", ".vercel/**", "generated-wundergraph/**", "generated/**"]
     },
+		"build:docker": {
+      "dependsOn": ["^build:docker", "^db:generate"],
+      "outputs": [".next/**", ".expo/**", ".vercel/**", "generated-wundergraph/**", "generated/**"]
+    },
     "lint": {},
     "lint:fix": {},
     "clean": {

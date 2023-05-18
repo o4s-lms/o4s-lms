@@ -6,19 +6,32 @@ ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 # optionally if you want to run npm global bin without specifying path
 ENV PATH=$PATH:/home/node/.npm-global/bin
 
+RUN npm install -g pnpm turbo
+
 WORKDIR /usr/src/app
 
+COPY . .
 # rebuild image when package.json or lock has changed
-COPY package*.json ./
+# COPY package*.json ./
+# COPY pnpm-workspace.yaml ./
+# COPY .npmrc ./
+# COPY .nvmrc ./
+# COPY renovate.json ./
+# COPY turbo.json ./
+# COPY ./packages ./
+# COPY ./apps/api ./
 
 # install dependencies
-RUN npm ci --only=production
+# RUN npm ci --only=production
+RUN pnpm install
+RUN pnpm install --offline
 
 # add project artifacts to docker image
-ADD . .
+# ADD . .
 
 # generate your wundergraph application
-RUN npm exec wunderctl generate
+# RUN npm exec wunderctl generate
+RUN pnpm turbo run build --filter=api...
 
 # Image layer for production
 FROM node:18-alpine as runner
@@ -26,7 +39,8 @@ WORKDIR /usr/src/app
 
 # copy entire project and dependencies
 COPY --from=build --chown=node:node /usr/src/app/node_modules ./node_modules
-COPY --from=build --chown=node:node /usr/src/app/.wundergraph ./.wundergraph
+COPY --from=build --chown=node:node /usr/src/app/apps/api ./
+
 # copy wunderctl
 COPY --from=build --chown=node:node /usr/src/app/node_modules/@wundergraph/wunderctl/download/wunderctl /usr/local/bin/wunderctl
 
@@ -35,7 +49,7 @@ RUN wunderctl version
 # run as non-root user
 USER node
 
-WORKDIR .wundergraph
+# WORKDIR /usr/src/app
 
 CMD WG_NODE_HOST=0.0.0.0 wunderctl start
 

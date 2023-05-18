@@ -19,7 +19,7 @@ export default configureWunderGraphOperations<OperationsConfiguration>({
       liveQuery: {
         enable: true,
         pollingIntervalSeconds: 1
-      }
+      },
     }),
     mutations: (config) => ({
       ...config
@@ -27,6 +27,13 @@ export default configureWunderGraphOperations<OperationsConfiguration>({
     subscriptions: (config) => ({
       ...config
     }),
-    custom: {}
+    custom: {
+			HealthLive: (config) => ({
+				...config,
+				authentication: {
+					required: false,
+				},
+			}),
+		},
   }
 });

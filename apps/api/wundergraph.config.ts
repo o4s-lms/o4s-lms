@@ -38,7 +38,7 @@ const countries = introspect.graphql({
 
 const lms = introspect.prisma({
   apiNamespace: 'lms',
-  prismaFilePath: '../../packages/db/wundergraph/schema.prisma',
+  prismaFilePath: './prisma/schema.prisma',
 });
 
 // configureWunderGraph emits the configuration
