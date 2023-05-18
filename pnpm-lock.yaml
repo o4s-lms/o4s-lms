@@ -43,6 +43,9 @@ importers:
       '@o4s/tsconfig':
         specifier: ^0.1.0
         version: link:../../packages/config/tsconfig
+      '@sindresorhus/slugify':
+        specifier: ^2.2.1
+        version: 2.2.1
       '@wundergraph/nextjs':
         specifier: ^0.10.29
         version: 0.10.29(@wundergraph/sdk@0.158.1)(next@13.4.2)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5)
@@ -3177,6 +3180,14 @@ packages:
 
   /@sindresorhus/slugify@2.2.0:
     resolution: {integrity: sha512-9Vybc/qX8Kj6pxJaapjkFbiUJPk7MAkCh/GFCxIBnnsuYCFPIXKvnLidG8xlepht3i24L5XemUmGtrJ3UWrl6w==}
+    engines: {node: '>=12'}
+    dependencies:
+      '@sindresorhus/transliterate': 1.6.0
+      escape-string-regexp: 5.0.0
+    dev: false
+
+  /@sindresorhus/slugify@2.2.1:
+    resolution: {integrity: sha512-MkngSCRZ8JdSOCHRaYd+D01XhvU3Hjy6MGl06zhOk614hp9EOAp5gIkBeQg7wtmxpitU6eAL4kdiRMcJa2dlrw==}
     engines: {node: '>=12'}
     dependencies:
       '@sindresorhus/transliterate': 1.6.0

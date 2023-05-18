@@ -5,8 +5,7 @@ mutation (
 	$image: String!,
 	$role: String = "AUTHOR",
 	$userId: String @fromClaim(name: USERID)
-	)
-@rbac(requireMatchAll: [admin]) {
+	) {
 	createOneCourse: lms_createOneCourse(
 		data: {
 			name: $name
