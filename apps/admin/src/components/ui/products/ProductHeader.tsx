@@ -17,7 +17,7 @@ const ProductHeader = ({ id, name, image, active, onProductDelete }: Props) => {
 	const toast = useRef<Toast>(null);
 
 	const reject = () => {
-		toast.current?.show({ severity: 'warn', summary: 'Rejected', detail: 'You have rejected', life: 6000 });
+		toast.current?.show({ severity: 'warn', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
 	};
 
 	const confirm = (event) => {

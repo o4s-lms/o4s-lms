@@ -6,7 +6,7 @@ import { Button } from 'primereact/button';
 import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
 import { Tag } from 'primereact/tag';
 import { useRouter } from 'next/router';
-import Loading from './Loading';
+import Loading from '../Loading';
 //import { useQuery } from '@o4s/generated-wundergraph/nextjs';
 
 type Course = RouterOutputs["course"]["byAuthor"][number];

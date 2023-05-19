@@ -6,7 +6,7 @@ import { type RouterOutputs, api } from '~/utils/api';
 import { Toast } from 'primereact/toast';
 
 import SectionWrapper from "~/components/SectionWrapper";
-import LessonHeader from "~/components/ui/LessonHeader";
+import LessonHeader from "~/components/ui/lessons/LessonHeader";
 
 const LessonEditor: React.FC<{
 	lesson: RouterOutputs["lesson"]["getContent"];

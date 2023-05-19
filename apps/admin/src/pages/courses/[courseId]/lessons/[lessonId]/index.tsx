@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
 import { api } from "~/utils/api";
 
-import Header from "~/components/ui/Header";
-import Nav from "~/components/ui/Nav";
-import LessonEditor from "~/components/ui/LessonEditor";
-import LoadingEditor from "~/components/ui/LoadingEditor";
+import Header from "~/components/ui/layout/Header";
+import Nav from "~/components/ui/layout/Nav";
+import LessonEditor from "~/components/ui/lessons/LessonEditor";
+import LoadingEditor from "~/components/ui/lessons/LoadingEditor";
 
 const EditLesson = () => {
 	const router = useRouter();

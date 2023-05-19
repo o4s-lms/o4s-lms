@@ -6,8 +6,8 @@ import { Toast } from "primereact/toast";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from 'primereact/button';
-import Header from "~/components/ui/Header";
-import Nav from "~/components/ui/Nav";
+import Header from "~/components/ui/layout/Header";
+import Nav from "~/components/ui/layout/Nav";
 import SectionWrapper from "~/components/SectionWrapper";
 
 const CreateCourseForm: React.FC = () => {

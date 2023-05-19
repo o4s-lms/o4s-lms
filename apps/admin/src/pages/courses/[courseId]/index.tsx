@@ -1,13 +1,13 @@
 import { useRef } from "react";
 import { useRouter } from "next/router";
-import { api, type RouterOutputs } from "~/utils/api";
+import { api } from "~/utils/api";
 
-import Header from "~/components/ui/Header";
-import Nav from "~/components/ui/Nav";
+import Header from "~/components/ui/layout/Header";
+import Nav from "~/components/ui/layout/Nav";
 import SectionWrapper from "~/components/SectionWrapper";
-import CourseHeader from "~/components/ui/CourseHeader";
+import CourseHeader from "~/components/ui/courses/CourseHeader";
 import Loading from "~/components/ui/Loading";
-import ModulesList from "~/components/ui/ModuleList";
+import ModulesList from "~/components/ui/modules/ModuleList";
 import { Toast } from "primereact/toast";
 import CreateModuleForm from "~/components/forms/CreateModuleForm";
 

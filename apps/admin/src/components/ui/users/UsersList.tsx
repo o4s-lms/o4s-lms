@@ -1,5 +1,5 @@
-import { api, type RouterOutputs } from "~/utils/api";
-import Loading from "./Loading";
+import { type RouterOutputs } from "~/utils/api";
+import Loading from "../Loading";
 import UsersTable from "./UsersTable";
 
 type Users = RouterOutputs["user"]["all"];

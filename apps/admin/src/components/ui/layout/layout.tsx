@@ -1,7 +1,7 @@
 import Head from "next/head";
 
-import Nav from "./ui/Nav";
-import Footer from "./ui/Footer";
+import Nav from "~/components/ui/layout/Nav";
+import Footer from "~/components/ui/layout/Footer";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

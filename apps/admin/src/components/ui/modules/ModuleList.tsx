@@ -1,6 +1,6 @@
 import { api, type RouterOutputs } from "~/utils/api";
-import Loading from "./Loading";
-import LessonsTable from "./LessonsTable";
+import Loading from "../Loading";
+import LessonsTable from "~/components/ui/lessons/LessonsTable";
 
 type Modules = RouterOutputs["module"]["byCourse"];
 

@@ -4,10 +4,10 @@ import { getServerSession } from "next-auth/next";
 import type Session from "next-auth/next";
 import { useSession } from "next-auth/react"
 
-import Header from "~/components/ui/Header";
-import Nav from "~/components/ui/Nav";
-import CoursesList from "~/components/ui/CoursesList";
-import Stats from "~/components/ui/Stats";
+import Header from "~/components/ui/layout/Header";
+import Nav from "~/components/ui/layout/Nav";
+import CoursesList from "~/components/ui/courses/CoursesList";
+import Stats from "~/components/ui/home/Stats";
 import { authOptions } from "@o4s/auth";
 
 type Props = {

@@ -1,8 +1,6 @@
 import React from 'react';
 import { useRouter } from "next/router";
-//import { redirect } from 'next/navigation';
 import { Menubar } from 'primereact/menubar';
-// import { InputText } from 'primereact/inputtext';
 import { useSession, signOut } from "next-auth/react";
 
 import Brand from "./Brand";
