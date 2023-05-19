@@ -57,7 +57,7 @@ async function getDBSession(token: string) {
           name: true,
           email: true,
           image: true,
-          role: true,
+          roles: true,
         },
       },
     },
@@ -191,7 +191,7 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
 });
 
 const enforceUserIsAdmin = t.middleware(({ ctx, next }) => {
-  if (!(ctx.session?.user.role === "admin")) {
+  if (!(ctx.session?.user.roles === "admin")) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
   return next({

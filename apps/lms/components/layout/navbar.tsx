@@ -6,8 +6,11 @@ import useScroll from "@/lib/hooks/use-scroll";
 import { useSignInModal } from "./sign-in-modal";
 import UserDropdown from "./user-dropdown";
 import { type TokenResponse } from "@/lib/get-token";
+import { type Session } from "next-auth";
+import { useSession } from "next-auth/react";
 
-export default function NavBar({ authenticated, token }: TokenResponse) {
+export default function NavBar() {
+	const { data: session } = useSession();
   const { SignInModal, setShowSignInModal } = useSignInModal();
   const scrolled = useScroll(50);
 
@@ -41,8 +44,8 @@ export default function NavBar({ authenticated, token }: TokenResponse) {
           </Link>
           <div>
 						
-            {authenticated ? (
-              <UserDropdown email={token?.email} picture={token?.picture} />
+            {session ? (
+              <UserDropdown email={session?.user.email} picture={session?.user.image} />
             ) : (
               <button
                 className="rounded-full border border-black bg-black p-1.5 px-4 text-sm text-white transition-all hover:bg-white hover:text-black"

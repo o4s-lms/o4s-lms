@@ -2,6 +2,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { type DefaultSession, type NextAuthOptions } from "next-auth";
 import { type DefaultJWT } from "next-auth/jwt";
 import EmailProvider from "next-auth/providers/email";
+import { User } from "next-auth";
 // import FusionAuthProvider from "next-auth/providers/fusionauth";
 
 import { prisma } from "@o4s/db";
@@ -17,15 +18,15 @@ import { prisma } from "@o4s/db";
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
-      id: string;
+      id: string | undefined;
       // ...other properties
-      roles: string[];
+      roles: string;
     } & DefaultSession["user"];
   }
 
 	interface JWT extends DefaultJWT {
 		token: {
-			roles: string[];
+			roles: string;
 		} & DefaultJWT["token"];
 	}
 
@@ -76,24 +77,36 @@ export const authOptions: NextAuthOptions = {
       else if (new URL(url).origin === baseUrl) return url;
       return baseUrl;
     },
-    // eslint-disable-next-line @typescript-eslint/require-await
-    async session({ session, token, user }) {
+    jwt: ({ token, user }) => {
+      console.log("JWT Callback", { token, user });
+      if (user) {
+        token.roles = user.roles;
+        return {
+          ...token,
+					...user
+        };
+      }
+      return token;
+    },
+		// eslint-disable-next-line @typescript-eslint/require-await
+		async session({ session, token, user }) {
+      // Send properties to the client, like an access_token from a provider.
+      session.user.id = token.sub;
+			session.user.name = token.name;
+			session.user.email = token.email;
+			session.user.image = token.picture;
+			session.user.roles = token.roles;
+			session.expires = token.exp;
+
+      return session;
+    },
+		/**async session({ session, token, user }) {
       if (session.user) {
         session.user.id = user.id;
         session.user.roles = [user.roles];
       }
       console.log("Session Callback", { session, token, user });
       return session;
-    },
-    jwt: ({ token, user }) => {
-      console.log("JWT Callback", { token, user });
-      if (user) {
-        token.roles = [user.roles];
-        return {
-          ...token,
-        };
-      }
-      return token;
-    },
+    },*/
   },
 };

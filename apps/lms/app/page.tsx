@@ -1,3 +1,5 @@
+"use client";
+
 import Card from "@/components/home/card";
 import Balancer from "react-wrap-balancer";
 import { DEPLOY_URL } from "@/lib/constants";
@@ -10,10 +12,13 @@ import { getToken } from "@/lib/get-token";
 import Hero from "@/components/home/hero";
 import CourseCard from "@/components/home/course-card";
 import { client } from "@/lib/api";
+import { getSession, useSession } from "next-auth/react";
+import { useQuery } from "@o4s/generated-wundergraph/nextjs";
 
 
-export default async function Home() {
-	const { authenticated } = await getToken();
+export default function Home() {
+	//const { authenticated } = await getToken();
+	const { data: session } = useSession();
 	/** const coursesData = getData({
 		operation: "courses/all",
 		revalidate: 60,
@@ -25,8 +30,11 @@ export default async function Home() {
 			Authorization: `Bearer ${bearer}`,
 		},
 	});*/
+	const { data, error, isLoading } = useQuery({
+		operationName: 'courses/all',
+	});
 
-	if (!authenticated) {
+	if (!session) {
 		/**const { data, error, isLoading } = useQuery({
 			operationName: 'courses/all',
 		});*/
@@ -38,13 +46,21 @@ export default async function Home() {
 		)
   }
 
-	if (authenticated) {
+	if (session) {
 		//const [ data ] = await Promise.all([coursesData]);
-
-		const { data, error } = await client.query({
+		
+		/** const { data, error } = await client.query({
 			operationName: 'courses/all',
-		});
+		}); */
 
+		if (error) {
+			throw new Error(error);
+		}
+
+		if (isLoading) {
+			return <p>Loading...</p>;
+		}
+	
 		return (
 			<>
 			<div className="my-10 grid w-full max-w-screen-xl animate-fade-up grid-cols-1 gap-5 px-5 md:grid-cols-3 xl:px-0">
