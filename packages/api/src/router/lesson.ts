@@ -109,6 +109,7 @@ export const lessonRouter = createTRPCRouter({
         data: {
           name: input.name,
           slug: slugify(input.name),
+					createdBy: String(ctx.session.user.id),
           courseId: input.courseId,
           moduleId: input.moduleId,
         },

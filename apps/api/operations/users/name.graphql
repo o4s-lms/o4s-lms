@@ -1,4 +1,4 @@
-mutation ($id: Int!, $name: String!) {
+mutation ($id: String!, $name: String!) {
 	lms_updateOneUser(where: { id: $id }, data: { name: { set: $name } }) {
 		id
 		name

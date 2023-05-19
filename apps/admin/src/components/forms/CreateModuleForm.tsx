@@ -31,7 +31,7 @@ const CreateModuleForm: React.FC<{ courseId: number; }> = ({ courseId }) => {
 					placeholder="Create your first module..."
 					value={name}
 					onChange={(e) => setName(e.target.value)}
-					className="w-full" />
+					className="w-full px-2" />
 				{error?.data?.zodError?.fieldErrors.name && (
 					<span className="mb-2 text-red-500">
 						{error.data.zodError.fieldErrors.name}
@@ -46,7 +46,7 @@ const CreateModuleForm: React.FC<{ courseId: number; }> = ({ courseId }) => {
 					}}
 					label="Module"
 					icon="pi pi-plus"
-					className="p-button-success"
+					className="p-button-success px-2"
 				/>
 			</div>
 		</>

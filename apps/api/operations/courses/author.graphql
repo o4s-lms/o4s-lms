@@ -1,0 +1,19 @@
+query ($deleted: Boolean = false, $userId: String! @fromClaim(name: USERID)) {
+	courses: lms_findManyCourse(where: {
+		createdBy: { equals: $userId }
+		deleted: { equals: $deleted }
+		}) {
+		id
+		name
+		description
+		image
+		published
+		createdBy
+		createdAt
+		_count {
+			modules
+			lessons
+			members
+		}
+	}
+}

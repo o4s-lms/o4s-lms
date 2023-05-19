@@ -28,11 +28,11 @@ const ManageCourse = () => {
 		onSettled: () => {
 			void courseQuery.refetch();
 			void router.push('/');
-			toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Course deleted successfully', life: 6000 });
+			toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Course deleted successfully', life: 3000 });
 		},
 		onError: (error) => {
 			console.error(error);
-			toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Something went wrong', life: 6000 });
+			toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Something went wrong', life: 3000 });
 		},
 	});
 

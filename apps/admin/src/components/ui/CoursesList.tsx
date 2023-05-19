@@ -7,12 +7,41 @@ import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
 import { Tag } from 'primereact/tag';
 import { useRouter } from 'next/router';
 import Loading from './Loading';
+//import { useQuery } from '@o4s/generated-wundergraph/nextjs';
 
 type Course = RouterOutputs["course"]["byAuthor"][number];
+
+/**interface Course {
+	courses: {
+		id: number;
+		name: string;
+		description: string;
+		image?: string;
+		published: boolean;
+		createdBy: string;
+		createdAt: string;
+		_count: {
+			modules: number;
+			lessons: number;
+			members: number;
+		};
+	};
+}*/
 
 const CoursesList = () => {
 	const router = useRouter();
 	const [layout, setLayout] = useState('grid');
+	/**const { data: courses, error, isLoading } = useQuery({
+		operationName: 'courses/author',
+	});
+
+	if (isLoading) {
+		return <Loading />;
+	}
+
+	if (error) {
+		throw new Error(error.message);
+	}*/
 
 	const courses = api.course.byAuthor.useQuery();
 

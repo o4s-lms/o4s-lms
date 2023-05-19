@@ -88,12 +88,12 @@ export const courseRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string().min(1),
-        description: z.string().min(1).max(2000),
+        description: z.string().min(1).max(1000),
         image: z.string().min(1),
       }),
     )
     .mutation(({ ctx, input }) => {
-      const id = ctx.session?.user?.id;
+      const id = String(ctx.session?.user?.id);
       return ctx.prisma.course.create({
         data: {
           name: input.name,
@@ -101,7 +101,47 @@ export const courseRouter = createTRPCRouter({
           slug: slugify(input.name),
           image: input.image,
           createdBy: id,
+					members: {
+						create: {
+							user: { connect: { id: id } },
+							role: "AUTHOR",
+						},
+					},
         },
+      });
+    }),
+	addmember: adminProcedure
+		.input(
+			z.object({
+				userId: z.string().min(1),
+				courseId: z.number(),
+				role: z.enum(["ADMIN", "AUTHOR", "OBSERVATOR", "STUDENT"]),
+			}),
+		)
+		.mutation(({ ctx, input }) => {
+			return ctx.prisma.memberInCourse.create({
+        data: {
+          userId: input.userId,
+          courseId: input.courseId,
+          role: input.role,
+        },
+      });
+    }),
+	removemember: adminProcedure
+		.input(
+			z.object({
+				userId: z.string().min(1),
+				courseId: z.number(),
+			}),
+		)
+		.mutation(({ ctx, input }) => {
+			return ctx.prisma.memberInCourse.delete({
+				where: {
+					userId_courseId: {
+						userId: input.userId,
+            courseId: input.courseId,
+					},
+				},
       });
     }),
   publish: adminProcedure.input(z.number()).mutation(({ ctx, input }) => {

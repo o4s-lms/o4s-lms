@@ -1,5 +1,6 @@
 import React from 'react';
 import { useRouter } from "next/router";
+//import { redirect } from 'next/navigation';
 import { Menubar } from 'primereact/menubar';
 // import { InputText } from 'primereact/inputtext';
 import { useSession, signOut } from "next-auth/react";
@@ -11,7 +12,7 @@ export default function Nav() {
 	const { data: session } = useSession();
 	const router = useRouter();
 	if (!session) {
-		void router.push("/api/auth/signin");
+		void router.push("/api/auth/signin", );
 	};
 
 	const items = [

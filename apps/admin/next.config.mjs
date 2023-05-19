@@ -13,6 +13,10 @@ const config = {
   eslint: { ignoreDuringBuilds: !!process.env.CI },
   typescript: { ignoreBuildErrors: !!process.env.CI },
 
+	images: {
+    domains: ["joseantcordeiro.hopto.org", "joseantcordeiro.hopto.org:9000", "vercel.com", "s.gravatar.com"],
+  },
+
 	async headers() {
     return [
       {

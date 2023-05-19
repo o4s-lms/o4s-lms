@@ -43,6 +43,9 @@ importers:
       '@o4s/db':
         specifier: ^0.1.0
         version: link:../../packages/db
+      '@o4s/generated-wundergraph':
+        specifier: ^0.1.0
+        version: link:../../packages/generated-wundergraph
       '@o4s/postcss-config':
         specifier: ^0.1.0
         version: link:../../packages/config/postcss
@@ -100,6 +103,9 @@ importers:
       superjson:
         specifier: 1.12.3
         version: 1.12.3
+      swr:
+        specifier: ^2.1.5
+        version: 2.1.5(react@18.2.0)
       tinymce:
         specifier: ^6.4.2
         version: 6.4.2

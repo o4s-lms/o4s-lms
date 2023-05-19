@@ -97,6 +97,7 @@ export const moduleRouter = createTRPCRouter({
         data: {
           name: input.name,
           slug: slugify(input.name),
+					createdBy: String(ctx.session.user.id),
           course: {
             connect: {
               id: input.courseId,
@@ -106,6 +107,7 @@ export const moduleRouter = createTRPCRouter({
             create: {
               name: lessonName,
               slug: slugify(lessonName),
+							createdBy: String(ctx.session.user.id),
               course: {
                 connect: {
                   id: input.courseId,
