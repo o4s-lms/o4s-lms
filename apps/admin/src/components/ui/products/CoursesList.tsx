@@ -20,7 +20,7 @@ const ModulesList: React.FC<{
 					{courses.length === 0 ? (
 						<span>There are no courses!</span>
 					) : (
-						<CoursesTable modules={courses} />
+						<CoursesTable courses={courses} />
 					)}
 				</div>
 

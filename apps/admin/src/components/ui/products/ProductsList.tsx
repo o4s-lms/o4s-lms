@@ -40,7 +40,7 @@ const ProductsList = () => {
 							<div className="text-900">{product.description}</div>
 						</div>
 						<div className="flex align-items-center gap-3">
-							<Tag value={product.active ? ("Published") : ("Draft")} severity={getSeverity(product)}></Tag>
+							<Tag value={product.active ? ("Active") : ("Desactived")} severity={getSeverity(product)}></Tag>
 						</div>
 						<div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
 							<span className="font-semibold">C: {product._count.courses}</span>
@@ -58,7 +58,7 @@ const ProductsList = () => {
 			<div className="col-12 sm:col-6 lg:col-12 xl:col-4 p-2">
 				<div className="p-4 border-1 surface-border surface-card border-round">
 					<div className="flex flex-wrap align-items-center justify-content-between gap-2">
-						<Tag value={product.active ? ("Published") : ("Draft")} severity={getSeverity(product)}></Tag>
+						<Tag value={product.active ? ("Active") : ("Desactived")} severity={getSeverity(product)}></Tag>
 					</div>
 					<div className="flex flex-column align-items-center gap-3 py-5">
 						<Image className="w-9 shadow-2 border-round" src={product.image} alt={product.name} width={205} height={201} />

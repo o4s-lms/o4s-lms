@@ -48,11 +48,7 @@ const ManageProduct = () => {
 						active={productQuery.data.active}
 						onProductDelete={() => deleteProductMutation.mutate(productQuery.data.id)} />
 					<SectionWrapper className="mt-0">
-						{productQuery.data.courses.length === 0 ? (
-							<CreateModuleForm courseId={productQuery.data.id} />
-						) : (
-							<CoursesList courses={productQuery.data.courses} />
-						)}
+						<CoursesList courses={productQuery.data.courses} />
 					</SectionWrapper>
 				</>
 			) : (

@@ -1,20 +1,15 @@
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { Button } from "primereact/button";
 import { Toast } from 'primereact/toast';
 
 type Props = {
 	currentFilter: string;
-	onUserFilter: (role: string) => void;
 }
 
-const UsersHeader = ({ currentFilter, onUserFilter }: Props) => {
+const UsersHeader = ({ currentFilter }: Props) => {
 	const router = useRouter();
 	const toast = useRef<Toast>(null);
-
-	const filter = (userType: string) => {
-		onUserFilter(userType);
-	}
 
 	return (
 		<><Toast ref={toast} />
@@ -27,7 +22,7 @@ const UsersHeader = ({ currentFilter, onUserFilter }: Props) => {
 						<i className="pi pi-angle-right text-500 line-height-3"></i>
 					</li>
 					<li>
-						<a onClick={() => { void router.push('/users'); }} className="text-500 no-underline line-height-3 cursor-pointer">Users</a>
+						<a onClick={() => { void router.push('/users') }} className="text-500 no-underline line-height-3 cursor-pointer">Users</a>
 					</li>
 					<li className="px-2">
 						<i className="pi pi-angle-right text-500 line-height-3"></i>
@@ -56,11 +51,11 @@ const UsersHeader = ({ currentFilter, onUserFilter }: Props) => {
 					</div>
 					<div className="mt-3 lg:mt-0">
 						<Button label="Invite" className="p-button-outlined mr-2" icon="pi pi-user-plus" />
-						<Button onClick={() => { filter("TEACHER") }} label="Teachers" className="p-button-outlined mr-2" icon="pi pi-user" />
-						<Button onClick={() => { filter("STUDENT") }} label="Students" className="p-button-outlined mr-2" icon="pi pi-user" />
-						<Button onClick={() => { filter("OBSERVATOR") }} label="Observators" className="p-button-outlined mr-2" icon="pi pi-user" />
-						<Button onClick={() => { filter("AUTHOR") }} label="Authors" className="p-button-outlined mr-2" icon="pi pi-user" />
-						<Button onClick={() => { filter("ADMIN") }} label="Administrators" className="p-button-outlined mr-2" icon="pi pi-user" />
+						<Button onClick={() => { void router.push('/users/teacher') }} label="Teachers" className="p-button-outlined mr-2" icon="pi pi-user" />
+						<Button onClick={() => { void router.push('/users/student') }} label="Students" className="p-button-outlined mr-2" icon="pi pi-user" />
+						<Button onClick={() => { void router.push('/users/observator') }} label="Observators" className="p-button-outlined mr-2" icon="pi pi-user" />
+						<Button onClick={() => { void router.push('/users/author') }} label="Authors" className="p-button-outlined mr-2" icon="pi pi-user" />
+						<Button onClick={() => { void router.push('/users/admin') }} label="Administrators" className="p-button-outlined mr-2" icon="pi pi-user" />
 					</div>
 				</div>
 			</div>

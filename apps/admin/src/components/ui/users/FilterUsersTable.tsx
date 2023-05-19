@@ -13,9 +13,9 @@ import { Toast } from "primereact/toast";
 import { useRef, useState } from "react";
 import { type RouterOutputs } from '~/utils/api';
 
-type Users = RouterOutputs["user"]["all"];
+type Users = RouterOutputs["user"]["byUserRole"];
 
-const UsersTable: React.FC<{
+const FilterUsersTable: React.FC<{
 	users: Users;
 }> = ({ users }) => {
 	const toast = useRef<Toast>(null);
@@ -137,12 +137,12 @@ const UsersTable: React.FC<{
 			<div className="px-5">
 				<h5>User Roles</h5>
 				<DataTable
-					value={data.courses}
+					value={data.user.courses}
 					dataKey="id"
 					tableStyle={{ minWidth: '50rem' }}
 				>
 					<Column field="courseId" header="#" style={{ width: '5%' }}></Column>
-					<Column field="course.name" header="Course" style={{ width: '50%' }}></Column>
+					<Column field="name" header="Course" style={{ width: '50%' }}></Column>
 					<Column field="role" header="Role" style={{ minWidth: '12rem' }} body={roleBodyTemplate} />
 				</DataTable>
 			</div>
@@ -156,14 +156,14 @@ const UsersTable: React.FC<{
 					paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
 					rowsPerPageOptions={[10, 25, 50]} dataKey="id" selectionMode="checkbox" selection={selectedUsers} onSelectionChange={(e) => setSelectedUsers(e.value)}
 					expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)} rowExpansionTemplate={rowExpansionTemplate}
-					filters={filters} filterDisplay="menu" globalFilterFields={['name', 'email']}
+					filters={filters} filterDisplay="menu" globalFilterFields={['user.name', 'user.email']}
 					emptyMessage="No users found." currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
 					<Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
 					<Column expander={allowExpansion} style={{ width: '3rem' }} />
-					<Column field="image" style={{ minWidth: '3rem' }} body={imageBodyTemplate} />
-					<Column field="name" header="Name" sortable filter filterPlaceholder="Search by name" style={{ minWidth: '14rem' }} />
-					<Column field="email" header="Email" sortable filter filterPlaceholder="Search by email" style={{ minWidth: '14rem' }} />
-					<Column field="emailVerified" header="Date" sortable filterField="date" dataType="date" style={{ minWidth: '12rem' }} body={dateBodyTemplate} filter filterElement={dateFilterTemplate} />
+					<Column field="user.image" style={{ minWidth: '3rem' }} body={imageBodyTemplate} />
+					<Column field="user.name" header="Name" sortable filter filterPlaceholder="Search by name" style={{ minWidth: '14rem' }} />
+					<Column field="user.email" header="Email" sortable filter filterPlaceholder="Search by email" style={{ minWidth: '14rem' }} />
+					<Column field="user.emailVerified" header="Date" sortable filterField="date" dataType="date" style={{ minWidth: '12rem' }} body={dateBodyTemplate} filter filterElement={dateFilterTemplate} />
 					<Column headerStyle={{ width: '5rem', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible' }} body={actionBodyTemplate} />
 				</DataTable>
 			</div>
@@ -172,4 +172,4 @@ const UsersTable: React.FC<{
 
 };
 
-export default UsersTable;
+export default FilterUsersTable;
