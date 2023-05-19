@@ -14,7 +14,7 @@ const config = {
   },
   settings: {
     next: {
-      rootDir: ["apps/api", "apps/lms"],
+      rootDir: ["apps/admin", "apps/api", "apps/lms"],
     },
   },
 };
