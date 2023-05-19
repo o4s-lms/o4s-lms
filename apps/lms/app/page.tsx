@@ -1,6 +1,6 @@
 import Card from "@/components/home/card";
 import Balancer from "react-wrap-balancer";
-import { API_URL, DEPLOY_URL } from "@/lib/constants";
+import { DEPLOY_URL } from "@/lib/constants";
 import { Github, Twitter } from "@/components/shared/icons";
 import WebVitals from "@/components/home/web-vitals";
 import ComponentGrid from "@/components/home/component-grid";
@@ -9,21 +9,22 @@ import { nFormatter } from "@/lib/utils";
 import { getToken } from "@/lib/get-token";
 import Hero from "@/components/home/hero";
 import CourseCard from "@/components/home/course-card";
-import { createClient } from '@o4s/generated-wundergraph/client';
+import { client } from "@/lib/api";
+
 
 export default async function Home() {
-	const { authenticated, bearer } = await getToken();
+	const { authenticated } = await getToken();
 	/** const coursesData = getData({
 		operation: "courses/all",
 		revalidate: 60,
 		cache: "force-cache",
-	}); */
+	}); 
 	const client = createClient({
 		customFetch: fetch,
 		extraHeaders: {
 			Authorization: `Bearer ${bearer}`,
 		},
-	});
+	});*/
 
 	if (!authenticated) {
 		/**const { data, error, isLoading } = useQuery({

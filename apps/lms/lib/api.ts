@@ -11,3 +11,13 @@ export const api = async (): Promise<WunderGraphClient> => {
 	});
 	return api;
 }
+const { bearer } = async () => {
+	const token = await getToken();
+	return token.bearer;
+}
+export const client = createClient({
+	customFetch: fetch,
+	extraHeaders: {
+		Authorization: `Bearer ${bearer}`,
+	},
+});
