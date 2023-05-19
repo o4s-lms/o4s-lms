@@ -115,14 +115,14 @@ export const courseRouter = createTRPCRouter({
 			z.object({
 				userId: z.string().min(1),
 				courseId: z.number(),
-				role: z.enum(["ADMIN", "AUTHOR", "OBSERVATOR", "STUDENT"]),
+				role: z.enum(["ADMIN", "AUTHOR", "TEACHER", "OBSERVATOR", "STUDENT"]),
 			}),
 		)
 		.mutation(({ ctx, input }) => {
 			return ctx.prisma.memberInCourse.create({
         data: {
-          userId: input.userId,
-          courseId: input.courseId,
+          course: { connect: { id: input.courseId } },
+					user: { connect: { id: input.userId } },
           role: input.role,
         },
       });
@@ -178,6 +178,34 @@ export const courseRouter = createTRPCRouter({
             },
             data: {
               deleted: true,
+            },
+          },
+        },
+      },
+    });
+  }),
+	undelete: adminProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.prisma.course.update({
+      where: { id: input },
+      data: {
+        deleted: false,
+        modules: {
+          updateMany: {
+            where: {
+              deleted: true,
+            },
+            data: {
+              deleted: false,
+            },
+          },
+        },
+        lessons: {
+          updateMany: {
+            where: {
+              deleted: true,
+            },
+            data: {
+              deleted: false,
             },
           },
         },

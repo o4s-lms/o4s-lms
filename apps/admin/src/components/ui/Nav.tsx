@@ -81,35 +81,29 @@ export default function Nav() {
 					command: () => { void router.push("/users/invite"); },
 				},
 				{
-					label: 'Search',
-					icon: 'pi pi-fw pi-users',
+					label: 'Filter',
+					icon: 'pi pi-fw pi-filter',
 					items: [
 						{
-							label: 'Filter',
-							icon: 'pi pi-fw pi-filter',
-							items: [
-								{
-									label: 'Teachers',
-									icon: 'pi pi-fw pi-users',
-									command: () => { void router.push("/users/teachers"); },
-								},
-								{
-									label: 'Students',
-									icon: 'pi pi-fw pi-users',
-									command: () => { void router.push("/users/students"); },
-								},
-								{
-									label: 'Observators',
-									icon: 'pi pi-fw pi-users',
-									command: () => { void router.push("/users/observators"); },
-								},
-								{
-									label: 'Administrators',
-									icon: 'pi pi-fw pi-users',
-									command: () => { void router.push("/users/administrators"); },
-								},
-							]
-						}
+							label: 'Teachers',
+							icon: 'pi pi-fw pi-users',
+							command: () => { void router.push("/users/teachers"); },
+						},
+						{
+							label: 'Students',
+							icon: 'pi pi-fw pi-users',
+							command: () => { void router.push("/users/students"); },
+						},
+						{
+							label: 'Observators',
+							icon: 'pi pi-fw pi-users',
+							command: () => { void router.push("/users/observators"); },
+						},
+						{
+							label: 'Administrators',
+							icon: 'pi pi-fw pi-users',
+							command: () => { void router.push("/users/administrators"); },
+						},
 					]
 				}
 			]

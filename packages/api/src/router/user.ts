@@ -6,8 +6,8 @@ export const userRouter = createTRPCRouter({
   all: adminProcedure
     .input(
       z.object({
-        skip: z.number(),
-        take: z.number(),
+        skip: z.number().optional(),
+        take: z.number().optional(),
       }),
     )
     .query(({ ctx, input }) => {
@@ -28,6 +28,7 @@ export const userRouter = createTRPCRouter({
               course: {
                 select: {
                   name: true,
+									image: true,
                 },
               },
             },
@@ -38,8 +39,8 @@ export const userRouter = createTRPCRouter({
   byUserRole: adminProcedure
     .input(
       z.object({
-        skip: z.number(),
-        take: z.number(),
+        skip: z.number().optional(),
+        take: z.number().optional(),
         role: z.enum(["ADMIN", "AUTHOR", "TEACHER", "OBSERVATOR", "STUDENT"]),
       }),
     )
@@ -56,7 +57,7 @@ export const userRouter = createTRPCRouter({
               email: true,
               emailVerified: true,
               image: true,
-              role: true,
+              roles: true,
             },
           },
         },
@@ -92,8 +93,8 @@ export const userRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.prisma.memberInCourse.create({
         data: {
-          courseId: input.courseId,
-          userId: input.userId,
+					course: { connect: { id: input.courseId } },
+					user: { connect: { id: input.userId } },
           role: input.role,
         },
       });

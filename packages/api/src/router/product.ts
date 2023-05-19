@@ -3,13 +3,80 @@ import { z } from "zod";
 import { adminProcedure, createTRPCRouter, publicProcedure } from "../trpc";
 
 export const productRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.product.findMany({ orderBy: { id: "desc" } });
+  all: publicProcedure
+		.query(({ ctx }) => {
+			return ctx.prisma.product.findMany({
+				orderBy: { id: "desc" },
+				select: {
+					id: true,
+          name: true,
+          description: true,
+					image: true,
+          price: true,
+          currency: true,
+					active: true,
+					_count: {
+						select: {
+              courses: true,
+							payments: true,
+            },
+					},
+				},
+			});
   }),
   byId: publicProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
-      return ctx.prisma.product.findFirst({ where: { id: input.id } });
+      return ctx.prisma.product.findFirst({
+				where: { id: input.id },
+				select: {
+					id: true,
+          name: true,
+          description: true,
+					image: true,
+          price: true,
+          currency: true,
+					active: true,
+					courses: {
+						select: {
+							id: true,
+              name: true,
+              description: true,
+              image: true,
+						},
+					},
+				},
+			});
+    }),
+	addCourse: adminProcedure
+		.input(
+			z.object({
+				productId: z.number(),
+				courseId: z.number(),
+			}),
+		)
+		.mutation(({ ctx, input }) => {
+			return ctx.prisma.product.update({
+				where: { id: input.productId },
+        data: {
+          courses: { connect: { id: input.courseId } },
+        },
+      });
+    }),
+	removeCourse: adminProcedure
+		.input(
+			z.object({
+				productId: z.number(),
+				courseId: z.number(),
+			}),
+		)
+		.mutation(({ ctx, input }) => {
+			return ctx.prisma.product.update({
+				where: { id: input.productId },
+        data: {
+          courses: { disconnect: { id: input.courseId } },
+        },
+      });
     }),
   create: adminProcedure
     .input(

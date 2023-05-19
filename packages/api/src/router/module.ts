@@ -136,4 +136,22 @@ export const moduleRouter = createTRPCRouter({
       },
     });
   }),
+	undelete: adminProcedure.input(z.number()).mutation(({ ctx, input }) => {
+    return ctx.prisma.module.update({
+      where: { id: input },
+      data: {
+        deleted: false,
+        lessons: {
+          updateMany: {
+            where: {
+              deleted: true,
+            },
+            data: {
+              deleted: false,
+            },
+          },
+        },
+      },
+    });
+  }),
 });
