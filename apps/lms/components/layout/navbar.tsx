@@ -5,7 +5,7 @@ import Link from "next/link";
 import useScroll from "@/lib/hooks/use-scroll";
 import { useSignInModal } from "./sign-in-modal";
 import UserDropdown from "./user-dropdown";
-import { TokenResponse } from "@/lib/get-token";
+import { type TokenResponse } from "@/lib/get-token";
 
 export default function NavBar({ authenticated, token }: TokenResponse) {
   const { SignInModal, setShowSignInModal } = useSignInModal();

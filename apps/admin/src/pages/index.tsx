@@ -1,18 +1,21 @@
 import SectionWrapper from "~/components/SectionWrapper";
 import { type GetServerSideProps, type NextPage } from 'next/types';
-import { getServerSession, type Session } from "@o4s/auth";
+import { getServerSession } from "next-auth/next";
+import type Session from "next-auth/next";
+import { useSession } from "next-auth/react"
 
 import Header from "~/components/ui/Header";
 import Nav from "~/components/ui/Nav";
 import CoursesList from "~/components/ui/CoursesList";
 import Stats from "~/components/ui/Stats";
+import { authOptions } from "@o4s/auth";
 
 type Props = {
 	session: Session;
 	isAdmin: boolean;
 };
 
-const Home: NextPage<Props> = ({ isAdmin }) => {
+const Home: NextPage<Props> = () => {
 
 	return (
 		<><Header title="Cursos - Admin" />
@@ -26,7 +29,7 @@ const Home: NextPage<Props> = ({ isAdmin }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-	const session = await getServerSession(context);
+	const session = await getServerSession(context.req, context.res, authOptions)
 
 	if (!session) {
     return {
@@ -37,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   };
 
-	const isAdmin = session.user.roles === "admin";
+	const isAdmin = session.user.roles.includes('admin');
 
 	if (!isAdmin) {
     return {

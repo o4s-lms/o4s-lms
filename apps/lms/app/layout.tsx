@@ -1,6 +1,6 @@
 import "./globals.css";
 
-//import { NextAuthProvider } from "./providers";
+// import { NextAuthProvider } from "./providers";
 
 import cx from "classnames";
 import { sfPro, inter } from "./fonts";
@@ -37,6 +37,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" data-theme="light">
+			
       <body className={cx(sfPro.variable, inter.variable)}>
         <div className="fixed h-screen w-full bg-gradient-to-br from-indigo-50 via-white to-cyan-100" />
         <Suspense fallback="...">
@@ -48,6 +49,7 @@ export default function RootLayout({
         </main>
         <Footer />
       </body>
+			
     </html>
   );
 }
