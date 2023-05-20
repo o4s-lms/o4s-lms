@@ -2,6 +2,11 @@ import React from 'react';
 import { useRouter } from "next/router";
 import { Menubar } from 'primereact/menubar';
 import { useSession, signOut } from "next-auth/react";
+import {
+  PopoverNotificationCenter,
+  NotificationBell,
+	NovuProvider,
+} from '@novu/notification-center';
 
 import Brand from "./Brand";
 import UserAvatar from './Avatar';
@@ -170,12 +175,26 @@ export default function Nav() {
 
 	const start = <Brand className="mr-2"></Brand>;
 	// const end = <InputText placeholder="Search" type="text" className="w-full" />;
-	const end = <UserAvatar image={session?.user.image} />;
+	const end = () => { 
+		return (
+		<>
+			<PopoverNotificationCenter colorScheme={'light'}>
+				{({ unseenCount }) => <NotificationBell unseenCount={unseenCount} />}
+			</PopoverNotificationCenter>
+		</>
+	)}
 
 	return (
 		<header>
 			<div className="card">
-				<Menubar model={items} start={start} end={end} />
+				<NovuProvider
+					subscriberId={session?.user.id}
+					applicationIdentifier={'ff5UcyJv0woS'}
+					backendUrl={'http://joseantcordeiro.hopto.org:3003'}
+					socketUrl={'http://joseantcordeiro.hopto.org:3002'}
+					>
+					<Menubar model={items} start={start} end={end} />
+				</NovuProvider>
 			</div>
 		</header>
 	)

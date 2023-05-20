@@ -35,10 +35,12 @@ export const env = createEnv({
 		CACHE_USER: z.string().min(1),
 		CACHE_PASSWORD: z.string().min(1),
 		CACHE_DATABASE: z.number(),
-		// Ghost
-		GHOST_CONTENT_API_KEY: z.string().min(1),
-		GHOST_ADMIN_API_KEY: z.string().min(1),
-		GHOST_API_URL: z.string().url(),
+		// Novu
+		NOVU_BACKEND_URL: z.string().url(),
+		NOVU_API_ENDPOINT: z.string().url(),
+		NOVU_SOCKET_ENDPOINT: z.string().url(),
+		NOVU_CLIENT_APP_ID: z.string().min(1),
+		NOVU_API_KEYD: z.string().min(1),
   },
   /**
    * Specify your client-side environment variables schema here.

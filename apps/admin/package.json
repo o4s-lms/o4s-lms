@@ -20,11 +20,13 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
+    "@novu/node": "^0.15.0",
+    "@novu/notification-center": "^0.15.0",
     "@o4s/api": "^0.1.0",
     "@o4s/auth": "^0.1.0",
     "@o4s/comm": "^0.1.0",
     "@o4s/db": "^0.1.0",
-		"@o4s/generated-wundergraph": "^0.1.0",
+    "@o4s/generated-wundergraph": "^0.1.0",
     "@o4s/postcss-config": "^0.1.0",
     "@t3-oss/env-nextjs": "^0.2.2",
     "@tanstack/react-query": "^4.29.5",

@@ -13,6 +13,11 @@
   },
   "dependencies": {
     "@o4s/db": "^0.1.0",
+		"@novu/node": "^0.15.0",
+		"@novu/notification-center": "^0.15.0",
+		"clsx": "^1.2.1",
+		"next": "^13.4.3",
+		"prop-types": "^15.8.1",
 		"@faire/mjml-react": "3.3.0",
 		"html-minifier": "^4.0.0",
 		"mjml": "^4.14.1",

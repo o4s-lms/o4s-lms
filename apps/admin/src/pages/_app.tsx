@@ -6,6 +6,7 @@ import "primeflex/primeflex.css";
 import type { AppType } from "next/app";
 import type { Session } from "@o4s/auth";
 import { SessionProvider } from "next-auth/react";
+import { NovuProvider } from '@novu/notification-center';
 
 /**import { type Middleware } from 'swr';
 import { useAuthMiddleware } from '@wundergraph/nextjs';
