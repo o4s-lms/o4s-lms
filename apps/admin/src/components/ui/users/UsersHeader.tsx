@@ -51,10 +51,10 @@ const UsersHeader = ({ currentFilter }: Props) => {
 					</div>
 					<div className="mt-3 lg:mt-0">
 						<Button label="Invite" className="p-button-outlined mr-2" icon="pi pi-user-plus" />
-						<Button onClick={() => { void router.push('/users/teacher') }} label="Teachers" className="p-button-outlined mr-2" icon="pi pi-user" />
 						<Button onClick={() => { void router.push('/users/student') }} label="Students" className="p-button-outlined mr-2" icon="pi pi-user" />
-						<Button onClick={() => { void router.push('/users/observator') }} label="Observators" className="p-button-outlined mr-2" icon="pi pi-user" />
+						<Button onClick={() => { void router.push('/users/teacher') }} label="Teachers" className="p-button-outlined mr-2" icon="pi pi-user" />
 						<Button onClick={() => { void router.push('/users/author') }} label="Authors" className="p-button-outlined mr-2" icon="pi pi-user" />
+						<Button onClick={() => { void router.push('/users/observator') }} label="Observators" className="p-button-outlined mr-2" icon="pi pi-user" />
 						<Button onClick={() => { void router.push('/users/admin') }} label="Administrators" className="p-button-outlined mr-2" icon="pi pi-user" />
 					</div>
 				</div>

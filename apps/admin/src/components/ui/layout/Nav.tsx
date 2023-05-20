@@ -17,21 +17,23 @@ export default function Nav() {
 		{
 			label: 'Home',
 			icon: 'pi pi-fw pi-home',
-			command: () => { void router.push('/'); },
+			command: () => { void router.push('/') },
 		},
 		{
 			label: 'Courses',
 			icon: 'pi pi-fw pi-file',
 			items: [
 				{
-					label: 'New',
-					icon: 'pi pi-fw pi-plus',
-					command: () => { void router.push("/courses/new"); },
+					label: 'List',
+					icon: 'pi pi-fw pi-align-center',
+					command: () => { void router.push('/') },
 
 				},
 				{
-					label: 'Delete',
-					icon: 'pi pi-fw pi-trash'
+					label: 'New',
+					icon: 'pi pi-fw pi-plus',
+					command: () => { void router.push("/courses/new") },
+
 				},
 				{
 					separator: true
@@ -39,6 +41,24 @@ export default function Nav() {
 				{
 					label: 'Export',
 					icon: 'pi pi-fw pi-external-link'
+				},
+				{
+					separator: true
+				},
+				{
+					label: 'Archive',
+					icon: 'pi pi-fw pi-trash',
+					items: [
+						{
+							label: 'List',
+							icon: 'pi pi-fw pi-trash',
+							command: () => { void router.push("/courses/archive") },
+						},
+						{
+							label: 'Clean',
+							icon: 'pi pi-fw pi-trash'
+						}
+					]
 				}
 			]
 		},
@@ -83,39 +103,44 @@ export default function Nav() {
 					icon: 'pi pi-fw pi-filter',
 					items: [
 						{
-							label: 'Teachers',
-							icon: 'pi pi-fw pi-users',
-							command: () => { void router.push("/users/teachers"); },
-						},
-						{
 							label: 'Students',
 							icon: 'pi pi-fw pi-users',
-							command: () => { void router.push("/users/students"); },
+							command: () => { void router.push("/users/student"); },
+						},
+						{
+							label: 'Teachers',
+							icon: 'pi pi-fw pi-users',
+							command: () => { void router.push("/users/teacher"); },
+						},
+						{
+							label: 'Authors',
+							icon: 'pi pi-fw pi-users',
+							command: () => { void router.push("/users/author"); },
 						},
 						{
 							label: 'Observators',
 							icon: 'pi pi-fw pi-users',
-							command: () => { void router.push("/users/observators"); },
+							command: () => { void router.push("/users/observator"); },
 						},
 						{
 							label: 'Administrators',
 							icon: 'pi pi-fw pi-users',
-							command: () => { void router.push("/users/administrators"); },
+							command: () => { void router.push("/users/admin"); },
 						},
 					]
 				}
 			]
 		},
 		{
-			label: 'Events',
+			label: 'Certificates',
 			icon: 'pi pi-fw pi-calendar',
 			items: [
 				{
-					label: 'Edit',
+					label: 'Sign and Send',
 					icon: 'pi pi-fw pi-pencil',
 					items: [
 						{
-							label: 'Save',
+							label: 'List',
 							icon: 'pi pi-fw pi-calendar-plus'
 						},
 						{

@@ -69,7 +69,7 @@ const FilterUsersTable: React.FC<{
 	};
 
 	const dateBodyTemplate = (rowData) => {
-		return formatDate(rowData.emailVerified);
+		return formatDate(rowData.user.emailVerified);
 	};
 
 	const dateFilterTemplate = (options) => {
@@ -79,7 +79,7 @@ const FilterUsersTable: React.FC<{
 	const expandAll = () => {
 		const _expandedRows: DataTableExpandedRows = {};
 
-		users.forEach((p) => (_expandedRows[`${p.id}`] = true));
+		users.forEach((p) => (_expandedRows[`${p.user.id}`] = true));
 
 		setExpandedRows(_expandedRows);
 	};
@@ -89,8 +89,8 @@ const FilterUsersTable: React.FC<{
 	};
 
 	const allowExpansion = (rowData) => {
-		// return true;
-		return rowData.courses.length > 0;
+		//return true;
+		return rowData.user.courses.length > 0;
 	};
 
 	const renderHeader = () => {
@@ -113,7 +113,7 @@ const FilterUsersTable: React.FC<{
 
 		return (
 			<div className="flex align-items-center gap-2">
-				<img alt={rowData.name} src={rowData.image} width="32" />
+				<img alt={rowData.user.name} src={rowData.user.image} width="32" />
 			</div>
 		);
 	};
@@ -138,12 +138,12 @@ const FilterUsersTable: React.FC<{
 				<h5>User Roles</h5>
 				<DataTable
 					value={data.user.courses}
-					dataKey="id"
+					dataKey="courseId"
 					tableStyle={{ minWidth: '50rem' }}
 				>
 					<Column field="courseId" header="#" style={{ width: '5%' }}></Column>
-					<Column field="name" header="Course" style={{ width: '50%' }}></Column>
-					<Column field="role" header="Role" style={{ minWidth: '12rem' }} body={roleBodyTemplate} />
+					<Column field="course.name" header="Course" style={{ width: '50%' }}></Column>
+					<Column field="course.role" header="Role" style={{ minWidth: '12rem' }} body={roleBodyTemplate} />
 				</DataTable>
 			</div>
 		);
@@ -154,7 +154,7 @@ const FilterUsersTable: React.FC<{
 			<div className="card">
 				<DataTable value={users} paginator header={header} rows={10}
 					paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-					rowsPerPageOptions={[10, 25, 50]} dataKey="id" selectionMode="checkbox" selection={selectedUsers} onSelectionChange={(e) => setSelectedUsers(e.value)}
+					rowsPerPageOptions={[10, 25, 50]} dataKey="user.id" selectionMode="checkbox" selection={selectedUsers} onSelectionChange={(e) => setSelectedUsers(e.value)}
 					expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)} rowExpansionTemplate={rowExpansionTemplate}
 					filters={filters} filterDisplay="menu" globalFilterFields={['user.name', 'user.email']}
 					emptyMessage="No users found." currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
