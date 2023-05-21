@@ -7,7 +7,8 @@ import { User } from "next-auth";
 
 import { prisma } from "@o4s/db";
 
-import { sendVerificationRequest } from "./utils/sendVerificationRequest";
+// import { sendVerificationRequest } from "./utils/sendVerificationRequest";
+import { novu, sanitizeUrl } from "@o4s/comm";
 
 /**
  * Module augmentation for `next-auth` types
@@ -58,6 +59,32 @@ export const authOptions: NextAuthOptions = {
         },
       },
       from: process.env.EMAIL_FROM,
+			async sendVerificationRequest({
+				identifier: email,
+				url,
+				provider: { server, from },
+			}) {
+				const user = await prisma.user.findUnique({ 
+					where: { email: email },
+					select: { id: true },
+				});
+				if (user === null) {
+						throw new Error("User not found");
+				}
+				try {
+					await novu.trigger('signin-verification-email', {
+						to: {
+							subscriberId: user.id,
+							email: email
+						},
+						payload: {
+							url: sanitizeUrl(url)
+						}
+					});
+				} catch (err) {
+					throw new Error(`Email(s) could not be sent`)
+				}
+			},
 			// sendVerificationRequest,
     }),
 		/** FusionAuthProvider({
