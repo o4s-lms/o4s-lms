@@ -2,7 +2,7 @@
 import Image from "next/image";
 import AuthForm from "./components/AuthForm";
 
-const Home = async () => {
+const Home = () => {
 
   return (
     <div 

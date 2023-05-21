@@ -6,24 +6,22 @@ import Image from "next/image";
 import UserDropdown from './UserDropdown';
 import useScroll from "~/app/hooks/use-scroll";
 import { useSession } from 'next-auth/react';
+import clsx from "clsx";
+import LoadingModal from '~/app/components/modals/LoadingModal';
 
 
 function Nav() {
-	const { data: session } = useSession();
+	const session = useSession();
 	const router = useRouter();
 	const [isOpen, setIsOpen] = useState(false);
 	const scrolled = useScroll(50);
 
-	if (!session) {
-		router.push('/');
-	}
-
  return (
 	<><div className="bg-gradient-to-br from-indigo-50 via-white to-cyan-100" />
-		<nav className={`fixed w-full flex items-center justify-between flex-wrap px-6 py-3
-						${scrolled
-						? "border-b border-gray-200 bg-white/50 backdrop-blur-xl"
-						: "bg-white/0"} z-30 transition-all`}>
+		<nav className={clsx(`fixed w-full flex items-center justify-between flex-wrap px-6 py-3`,
+						scrolled && `border-b border-gray-200 bg-white/50 backdrop-blur-xl`,
+						!scrolled && `bg-white/0`,
+						`z-30 transition-all`)}>
 		 <div className="flex items-center flex-shrink-0 text-white mr-6 lg:mr-72">
 			 <Image src={'/images/logoO4S-01.png'} width={78} height={37} alt="Logo" />
 		 </div>
@@ -69,7 +67,7 @@ function Nav() {
 		 </div>
 		 
 		 <div>
-			 <UserDropdown email={session?.user.email} picture={session?.user.image} />
+			 <UserDropdown email={session?.data?.user.email} picture={session?.data?.user.image} />
 		 </div>
 	 </nav></>
 

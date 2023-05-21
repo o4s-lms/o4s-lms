@@ -1,5 +1,5 @@
 import { prisma } from "@o4s/db";
-import getSession from "./get-session";
+import getSession from "./getSession";
 
 const me = async () => {
   try {

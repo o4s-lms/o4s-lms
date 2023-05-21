@@ -14,24 +14,25 @@ import LoadingModal from '~/app/components/modals/LoadingModal';
 type Variant = 'LOGIN' | 'REGISTER';
 
 const AuthForm = () => {
+	const session = useSession();
+  const router = useRouter();
 	const emailParam = useSearchParams();
+	const [email, setEmail] = useState(emailParam.get('email') || '');
+	const [sessionStatus, setSessionStatus] = useState(false);
   const [variant, setVariant] = useState<Variant>('LOGIN');
   const [isLoading, setIsLoading] = useState(false);
 	const [isMagicLinkSent, setIsMagicLinkSent] = useState(false);
-	const session = useSession();
-  const router = useRouter();
+	
 
 	useEffect(() => {
     if (session?.status === 'authenticated') {
       router.push('/lms')
     }
-  }, [session?.status, router]);
-
-	if (session?.status === 'loading') {
-		return <LoadingModal />;
-  }
-
-	const email = emailParam.get('email');
+		if (session?.status === 'loading') {
+			setSessionStatus(false);
+		}
+		setSessionStatus(true);
+  }, [session?.status, router, setSessionStatus]);
 
   const toggleVariant = useCallback(() => {
     if (variant === 'LOGIN') {
@@ -74,8 +75,12 @@ const AuthForm = () => {
    
   }
 
-  return ( 
-    <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+	if (!sessionStatus) {
+		return <LoadingModal />;
+	}
+
+  return (
+		<div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
 			{!isMagicLinkSent && (
       <div 
         className="
