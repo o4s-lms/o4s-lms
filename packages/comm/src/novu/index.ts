@@ -1,9 +1,9 @@
 import { Novu } from '@novu/node';
 
 const config = {
-	appId: String(process.env.NOVU_CLIENT_APP_ID),
-	backendUrl: String(process.env.NOVU_API_ENDPOINT),
-	socketUrl: String(process.env.NOVU_SOCKET_ENDPOINT),
+	appId: process.env.NOVU_CLIENT_APP_ID as string,
+	backendUrl: process.env.NOVU_API_ENDPOINT as string,
+	socketUrl: process.env.NOVU_SOCKET_ENDPOINT as string,
 }
 
-export const novu = new Novu(String(process.env.NOVU_API_KEY), config);
+export const novu = new Novu(process.env.NOVU_API_KEY as string, config);

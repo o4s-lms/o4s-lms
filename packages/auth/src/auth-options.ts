@@ -7,7 +7,7 @@ import { User } from "next-auth";
 
 import { prisma } from "@o4s/db";
 
-// import { sendVerificationRequest } from "./utils/sendVerificationRequest";
+import { sendVerificationRequest } from "./utils/sendVerificationRequest";
 
 /**
  * Module augmentation for `next-auth` types
@@ -58,6 +58,7 @@ export const authOptions: NextAuthOptions = {
         },
       },
       from: process.env.EMAIL_FROM,
+			sendVerificationRequest,
     }),
 		/** FusionAuthProvider({
 			issuer: process.env.FUSIONAUTH_ISSUER,
