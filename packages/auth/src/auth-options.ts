@@ -76,7 +76,14 @@ export const authOptions: NextAuthOptions = {
 		async updateUser(message) { // user updated - e.g. their email was verified },
 		async linkAccount(message) { // account (e.g. Twitter) linked to a user },
 		async session(message) { // session is active },
-	}, */
+	},
+	pages: {
+    signIn: '/auth/signin',
+    signOut: '/auth/signout',
+    error: '/auth/error', // Error code passed in query string as ?error=
+    verifyRequest: '/auth/verify-request', // (used for check email message)
+    newUser: '/lms/users/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
+  }, */
   callbacks: {
     // eslint-disable-next-line @typescript-eslint/require-await
     async redirect({ url, baseUrl }) {

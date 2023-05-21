@@ -1,31 +1,37 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-'use client';
+/* eslint-disable @typescript-eslint/no-misused-promises */
+"use client";
 
 import { signIn, useSession } from 'next-auth/react';
 import { useCallback, useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { type FieldValues, type SubmitHandler, useForm } from 'react-hook-form';
-import { useRouter } from "next/navigation";
 
-import Input from "@/components/input/Input";
-import Button from "@/components/shared/Button";
+import Input from "~/app/components/inputs/Input";
+import Button from "~/app/components/shared/Button";
 import { toast } from "react-hot-toast";
+import LoadingModal from '~/app/components/modals/LoadingModal';
 
 type Variant = 'LOGIN' | 'REGISTER';
 
 const AuthForm = () => {
-  const session = useSession();
-  const router = useRouter();
+	const emailParam = useSearchParams();
   const [variant, setVariant] = useState<Variant>('LOGIN');
   const [isLoading, setIsLoading] = useState(false);
 	const [isMagicLinkSent, setIsMagicLinkSent] = useState(false);
+	const session = useSession();
+  const router = useRouter();
 
-  useEffect(() => {
+	useEffect(() => {
     if (session?.status === 'authenticated') {
       router.push('/lms')
     }
   }, [session?.status, router]);
+
+	if (session?.status === 'loading') {
+		return <LoadingModal />;
+  }
+
+	const email = emailParam.get('email');
 
   const toggleVariant = useCallback(() => {
     if (variant === 'LOGIN') {
@@ -43,7 +49,7 @@ const AuthForm = () => {
     }
   } = useForm<FieldValues>({
     defaultValues: {
-      email: '',
+      email: email
     }
   });
 
@@ -51,21 +57,26 @@ const AuthForm = () => {
     setIsLoading(true);
 
 		signIn('email', {
-      email: data.email,
-      redirect: false,
-    })
-    .then((callback) => {
-        if (callback?.error) {
-          toast.error('Something is wrong!');
-        }
+			email: data.email,
+			redirect: false
+		})
+		.then((callback) => {
+			if (callback?.error) {
+				toast.error('Something is wrong!');
+			}
 
-        setIsMagicLinkSent(true);
-    })
-    .finally(() => setIsLoading(false));
+			if (callback?.ok) {
+				setIsMagicLinkSent(true);
+			}
+
+		})
+		.finally(() => setIsLoading(false))
+   
   }
 
   return ( 
     <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+			{!isMagicLinkSent && (
       <div 
         className="
         bg-white
@@ -76,10 +87,12 @@ const AuthForm = () => {
           sm:px-10
         "
       >
+				
         <form 
           className="space-y-6" 
           onSubmit={handleSubmit(onSubmit)}
         >
+					
           <Input 
             disabled={isLoading}
             register={register}
@@ -95,50 +108,44 @@ const AuthForm = () => {
             </Button>
           </div>
         </form>
-				{isMagicLinkSent && (
-					<div className="mt-6">
-						<div className="relative">
-							<div 
-								className="
-									absolute 
-									inset-0 
-									flex 
-									items-center
-								"
-							>
-								<div className="w-full border-t border-gray-300" />
-							</div>
-							<div className="relative flex justify-center text-sm">
-								<span className="bg-white px-2 text-gray-500">
-									Magic link sent!
-								</span>
+				
+					<div 
+						className="
+							flex 
+							gap-2 
+							justify-center 
+							text-sm 
+							mt-6 
+							px-2 
+							text-gray-500
+						"
+					>
+						<div>
+							{variant === 'LOGIN' ? 'New to LMS?' : 'Already have an account?'} 
+						</div>
+						<div 
+							onClick={toggleVariant} 
+							className="underline cursor-pointer"
+						>
+							{variant === 'LOGIN' ? 'Create an account' : 'Login'}
+						</div>
+					</div>
+				
+      </div>
+			)}
+			{isMagicLinkSent && (
+					<div className="mt-3">
+						<div className="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md" role="alert">
+							<div className="flex">
+								<div className="py-1"><svg className="fill-current h-6 w-6 text-teal-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div>
+									<div>
+										<p className="font-bold">A magic link email was sent. 🪄</p>
+										<p className="text-sm">Make sure to check your spam folder.</p>
+									</div>
 							</div>
 						</div>
-
 					</div>
-				)}
-        <div 
-          className="
-            flex 
-            gap-2 
-            justify-center 
-            text-sm 
-            mt-6 
-            px-2 
-            text-gray-500
-          "
-        >
-          <div>
-            {variant === 'LOGIN' ? 'New to LMS?' : 'Already have an account?'} 
-          </div>
-          <div 
-            onClick={toggleVariant} 
-            className="underline cursor-pointer"
-          >
-            {variant === 'LOGIN' ? 'Create an account' : 'Login'}
-          </div>
-        </div>
-      </div>
+			)}
     </div>
   );
 }

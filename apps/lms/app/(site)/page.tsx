@@ -1,7 +1,9 @@
+
 import Image from "next/image";
 import AuthForm from "./components/AuthForm";
 
-const Auth = () => {
+const Home = async () => {
+
   return (
     <div 
       className="
@@ -20,7 +22,7 @@ const Auth = () => {
           height="48"
           width="48"
           className="mx-auto w-auto"
-          src="/logoO4S-01.png"
+          src="/images/logoO4S-01.png"
           alt="Logo"
         />
         <h2 
@@ -41,4 +43,4 @@ const Auth = () => {
   )
 }
 
-export default Auth;
+export default Home;

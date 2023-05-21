@@ -1,7 +1,5 @@
-"use client";
-
-import Nav from "@/components/layout/nav";
-import Footer from "@/components/layout/footer";
+import Nav from "~/app/components/layout/Nav";
+import Footer from "~/app/components/layout/Footer";
 import { Suspense } from "react";
 
 export default function LmsLayout({
