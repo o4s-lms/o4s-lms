@@ -58,7 +58,7 @@ export const authOptions: NextAuthOptions = {
         },
       },
       from: process.env.EMAIL_FROM,
-			sendVerificationRequest,
+			// sendVerificationRequest,
     }),
 		/** FusionAuthProvider({
 			issuer: process.env.FUSIONAUTH_ISSUER,

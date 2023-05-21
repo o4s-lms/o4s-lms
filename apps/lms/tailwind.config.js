@@ -65,22 +65,13 @@ module.exports = {
     },
   },
   plugins: [
-    require("@tailwindcss/forms"),
+    require('@tailwindcss/forms')({
+      strategy: 'class'
+    }),
     require("@tailwindcss/typography"),
-		require("daisyui"),
     plugin(({ addVariant }) => {
       addVariant("radix-side-top", '&[data-side="top"]');
       addVariant("radix-side-bottom", '&[data-side="bottom"]');
     }),
   ],
-	daisyui: {
-    styled: true,
-    themes: ["light", "dark"],
-    base: true,
-    utils: true,
-    logs: true,
-    rtl: false,
-    prefix: "",
-    darkTheme: "dark",
-  },
 };

@@ -4,6 +4,7 @@ const nextConfig = {
   experimental: {
     appDir: true,
 		serverActions: true,
+		swcPlugins: [["next-superjson-plugin", {}]]
   },
   swcMinify: true,
 	/** Enables hot reloading for local packages without a build step */

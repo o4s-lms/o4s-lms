@@ -3,13 +3,11 @@
 import "./globals.css";
 
 import { SessionProvider } from "next-auth/react";
+import ToastProvider from "@/app/providers/Toast"
 
 import cx from "classnames";
 import { sfPro, inter } from "./fonts";
-import Nav from "@/components/layout/nav";
-import Footer from "@/components/layout/footer";
-import { Suspense } from "react";
-import { Session } from "next-auth";
+import { type Session } from "next-auth";
 
 export const dynamic = 'auto';
 export const dynamicParams = true;
@@ -41,22 +39,16 @@ export default function RootLayout({
 	session: Session;
 }) {
   return (
-    <html lang="en" data-theme="light">
-			
+    <html lang="en">
       <body className={cx(sfPro.variable, inter.variable)}>
 				<SessionProvider session={session}>
+					<ToastProvider />
 					<div className="fixed h-screen w-full bg-gradient-to-br from-indigo-50 via-white to-cyan-100" />
-					<Suspense fallback="...">
-						{/* @ts-expect-error Server Component */}
-						<Nav />
-					</Suspense>
 					<main className="flex min-h-screen w-full flex-col items-center justify-center py-32">
 						{children}
 					</main>
-					<Footer />
 				</SessionProvider>
       </body>
-			
     </html>
   );
 }
