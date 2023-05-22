@@ -149,6 +149,9 @@ importers:
 
   apps/api:
     dependencies:
+      '@novu/node':
+        specifier: ^0.15.0
+        version: 0.15.0
       '@o4s/tsconfig':
         specifier: ^0.1.0
         version: link:../../packages/config/tsconfig
@@ -158,6 +161,9 @@ importers:
       '@wundergraph/sdk':
         specifier: ^0.158.1
         version: 0.158.1(@graphql-mesh/store@0.9.20)(react-native@0.71.8)(typescript@5.0.4)
+      stripe:
+        specifier: ^12.6.0
+        version: 12.6.0
     devDependencies:
       '@o4s/eslint-config':
         specifier: ^0.1.0
@@ -12437,6 +12443,14 @@ packages:
   /strip-json-comments@3.1.1:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
+
+  /stripe@12.6.0:
+    resolution: {integrity: sha512-aJat4pGA6fr5DvuojRVXMaOCAw8ceS3UQM4ux1BMUViG686NmOAf1psEh6Wu+NFUifoy6kV7+4APq66OlTWtTw==}
+    engines: {node: '>=12.*'}
+    dependencies:
+      '@types/node': 20.2.1
+      qs: 6.11.1
+    dev: false
 
   /strnum@1.0.5:
     resolution: {integrity: sha512-J8bbNyKKXl5qYcR36TIO8W3mVGVHrmmxsd5PAItGkmyzwJvybiw2IVq5nqd0i4LSNSkB/sx9VHllbfFdr9k1JA==}

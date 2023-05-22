@@ -1,0 +1,17 @@
+mutation (
+	$courseId: Int!,
+	$userId: String!,
+	) {
+	removeMemberCourse: lms_deleteOneMemberInCourse(
+		where: {
+			userId_courseId: {
+				userId: $userId
+				courseId: $courseId
+			}
+		}
+	) {
+		courseId
+		userId
+		role
+	}
+}

@@ -1,0 +1,17 @@
+mutation (
+	$productId: Int!,
+	$courseId: Int!
+	) {
+	addCourseProduct: lms_updateOneProduct(
+		where: { id: $productId }
+		data: {
+			courses: { connect: { id: $courseId } }
+		}
+	) {
+		id
+		courses {
+			id
+			name
+		}
+	}
+}

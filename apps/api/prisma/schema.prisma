@@ -41,6 +41,7 @@ model Session {
 
 model User {
   id               String               @id @default(cuid())
+	customerId			 String?              @unique
 	name             String?
   firstName				 String?
 	lastName				 String?
@@ -213,6 +214,7 @@ model Product {
   description String
 	image 			String?   @db.VarChar(1000)
   price       Int       @default(3500)
+	priceId			String?
   currency    String    @default("EUR")
 	active			Boolean		@default(false)
   courses     Course[]

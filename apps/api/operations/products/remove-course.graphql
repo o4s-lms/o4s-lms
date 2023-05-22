@@ -1,0 +1,17 @@
+mutation (
+	$productId: Int!,
+	$courseId: Int!
+	) {
+	removeCourseProduct: lms_updateOneProduct(
+		where: { id: $productId }
+		data: {
+			courses: { disconnect: { id: $courseId } }
+		}
+	) {
+		id
+		courses {
+			id
+			name
+		}
+	}
+}

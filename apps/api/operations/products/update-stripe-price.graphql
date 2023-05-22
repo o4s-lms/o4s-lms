@@ -1,0 +1,6 @@
+mutation ($productId: Int!, $priceId: String!) {
+	lms_updateOneProduct(where: { id: $productId }, data: { priceId: { set: $priceId } }) {
+		id
+		priceId
+	}
+}

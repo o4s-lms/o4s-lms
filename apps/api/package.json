@@ -15,6 +15,8 @@
   },
   "dependencies": {
 		"@o4s/tsconfig": "^0.1.0",
+		"stripe": "^12.6.0",
+		"@novu/node": "^0.15.0",
 		"@wundergraph/nextjs": "^0.10.29",
     "@wundergraph/sdk": "^0.158.1"
   },
