@@ -43,9 +43,6 @@ importers:
       '@o4s/auth':
         specifier: ^0.1.0
         version: link:../../packages/auth
-      '@o4s/comm':
-        specifier: ^0.1.0
-        version: link:../../packages/comm
       '@o4s/db':
         specifier: ^0.1.0
         version: link:../../packages/db
@@ -222,9 +219,6 @@ importers:
       autoprefixer:
         specifier: ^10.4.14
         version: 10.4.14(postcss@8.4.23)
-      buffer:
-        specifier: ^6.0.3
-        version: 6.0.3
       eslint:
         specifier: 8.41.0
         version: 8.41.0

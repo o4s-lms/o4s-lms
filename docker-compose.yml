@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: ./apps/api/Dockerfile
-    container_name: api
+    container_name: wundergraph
     ports:
       - '9991:9991'
     environment:

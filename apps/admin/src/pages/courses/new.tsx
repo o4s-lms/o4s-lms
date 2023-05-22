@@ -9,6 +9,7 @@ import { Button } from 'primereact/button';
 import Header from "~/components/ui/layout/Header";
 import Nav from "~/components/ui/layout/Nav";
 import SectionWrapper from "~/components/SectionWrapper";
+import { type NotificationBody, sendNotification } from "~/utils/novu";
 
 const CreateCourseForm: React.FC = () => {
 	const { data: session } = useSession();
@@ -24,22 +25,20 @@ const CreateCourseForm: React.FC = () => {
 			setDescription("");
 			setImage("");
 			toast.current?.show({ severity: 'success', summary: 'Success', detail: `Course ${data.id} created successfully`, life: 6000 });
-			addAuthor.mutate({
-				courseId: data.id,
-				userId: session?.user.id,
-				role: "AUTHOR",
-			});
+			const notification: NotificationBody = {
+				name: "admin-notification",
+				to: {
+					subscriberId: session?.user.id as string,
+				},
+				payload: {
+					message: 'Curso criado com sucesso',
+					id: data.id as unknown as string,
+					name: data.name,
+					description: data.description,
+				}
+			};
+			void sendNotification(notification);
 
-		},
-		onError(error) {
-			console.error(error);
-			toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Something went wrong', life: 3000 });
-		},
-	});
-
-	const addAuthor = api.user.addToCourse.useMutation({
-		onSuccess() {
-			toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Author added to the course', life: 3000 });
 		},
 		onError(error) {
 			console.error(error);

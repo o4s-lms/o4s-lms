@@ -22,7 +22,6 @@ const AuthForm = () => {
   const [variant, setVariant] = useState<Variant>('LOGIN');
   const [isLoading, setIsLoading] = useState(false);
 	const [isMagicLinkSent, setIsMagicLinkSent] = useState(false);
-	
 
 	useEffect(() => {
     if (session?.status === 'authenticated') {

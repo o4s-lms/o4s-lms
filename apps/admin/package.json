@@ -24,7 +24,6 @@
     "@novu/notification-center": "^0.15.0",
     "@o4s/api": "^0.1.0",
     "@o4s/auth": "^0.1.0",
-    "@o4s/comm": "^0.1.0",
     "@o4s/db": "^0.1.0",
     "@o4s/generated-wundergraph": "^0.1.0",
     "@o4s/postcss-config": "^0.1.0",

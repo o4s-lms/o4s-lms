@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from "next/router";
 import { Menubar } from 'primereact/menubar';
 import { useSession, signOut } from "next-auth/react";
@@ -12,11 +12,14 @@ import Brand from "./Brand";
 import UserAvatar from './Avatar';
 
 export default function Nav() {
-	const { data: session } = useSession();
+	const session = useSession();
 	const router = useRouter();
-	if (!session) {
-		void router.push("/api/auth/signin", );
-	};
+
+	useEffect(() => {
+    if (session?.status === 'unauthenticated') {
+      void router.push('/api/auth/signin')
+    }
+  }, [session?.status, router]);
 
 	const items = [
 		{
@@ -188,7 +191,7 @@ export default function Nav() {
 		<header>
 			<div className="card">
 				<NovuProvider
-					subscriberId={session?.user.id}
+					subscriberId={session?.data?.user.id}
 					applicationIdentifier={'ff5UcyJv0woS'}
 					backendUrl={'http://joseantcordeiro.hopto.org:3003'}
 					socketUrl={'http://joseantcordeiro.hopto.org:3002'}
