@@ -1,11 +1,16 @@
 query ()
 @rbac(requireMatchAll: [admin]) {
 	users: lms_findManyUser() {
-		id,
-		name,
-		email,
-		emailVerified,
-		image,
-		roles,
+		id
+		customerId
+		name
+		firstName
+		lastName
+		email
+		phone
+		locale
+		emailVerified
+		image
+		roles
 	}
 }

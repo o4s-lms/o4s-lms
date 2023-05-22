@@ -1,8 +1,13 @@
 query ($role: String!) {
 	users: lms_findManyUser(where: { roles: { equals: $role } }) {
 		id
+		customerId
 		name
+		firstName
+		lastName
 		email
+		phone
+		locale
 		emailVerified
 		image
 		roles

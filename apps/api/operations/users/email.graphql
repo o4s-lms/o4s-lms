@@ -1,8 +1,13 @@
 query ($email: String!) {
 	user: lms_findUniqueUser(where: { email: $email }) {
 		id
+		customerId
 		name
+		firstName
+		lastName
 		email
+		phone
+		locale
 		emailVerified
 		image
 		roles

@@ -215,7 +215,7 @@ model Product {
 	image 			String?   @db.VarChar(1000)
   price       Int       @default(3500)
 	priceId			String?
-  currency    String    @default("EUR")
+  currency    String    @default("eur")
 	active			Boolean		@default(false)
   courses     Course[]
 	payments    Payment[]

@@ -5,6 +5,7 @@ query ($deleted: Boolean = false) {
 		description
 		image
 		price
+		priceId
   	currency
 		courses(where: { deleted: { equals: $deleted } }) {
 			id

@@ -2,8 +2,13 @@ query ($id: String!)
 @rbac(requireMatchAll: [admin]) {
 	user: lms_findUniqueUser(where: { id: $id }) {
 		id
+		customerId
 		name
+		firstName
+		lastName
 		email
+		phone
+		locale
 		emailVerified
 		image
 		roles
