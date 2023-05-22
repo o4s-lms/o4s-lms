@@ -4,6 +4,7 @@ import LoadingModal from "~/app/components/modals/LoadingModal";
 import CourseCard from "./components/CourseCard";
 import { client } from "~/app/lib/api";
 import SectionWrapper from "~/app/components/layout/SectionWrapper";
+import { useQuery } from "~/app/lib/react-query";
 
 async function getCourses() {
 	const { data, error } = await client.query({
@@ -18,7 +19,10 @@ async function getCourses() {
 }
 
 const Lms = async () => {
-	const data = await getCourses();
+	// const data = await getCourses();
+	const { data } = useQuery({
+		operationName: 'courses/all',
+	});
 
 	return data?.courses ? (
 		<>

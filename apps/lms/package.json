@@ -19,13 +19,17 @@
     "@novu/notification-center": "^0.15.0",
     "@o4s/auth": "^0.1.0",
     "@o4s/db": "^0.1.0",
-		"@o4s/generated-wundergraph": "^0.1.0",
+    "@o4s/generated-wundergraph": "^0.1.0",
     "@radix-ui/react-popover": "^1.0.5",
     "@radix-ui/react-tooltip": "^1.0.5",
+    "@tanstack/react-query": "^4.24.9",
+    "@tanstack/react-query-devtools": "^4.29.7",
     "@types/node": "20.2.1",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.1",
+    "@wundergraph/react-query": "^0.8.33",
     "autoprefixer": "^10.4.14",
+    "buffer": "^6.0.3",
     "eslint": "8.41.0",
     "eslint-config-next": "^13.4.2",
     "focus-trap-react": "^10.1.4",
@@ -45,6 +49,7 @@
     "typescript": "^5.0.4"
   },
   "devDependencies": {
-    "dotenv-cli": "^7.2.1"
+    "dotenv-cli": "^7.2.1",
+    "webpack-node-externals": "^3.0.0"
   }
 }

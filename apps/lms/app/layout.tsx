@@ -1,6 +1,7 @@
 import AuthContext from './context/AuthContext'
 import ToasterContext from './context/ToasterContext'
-import './globals.css'
+import QueryContext from './context/QueryContext'
+import './globals.css';
 
 export const metadata = {
   title: 'O4S LMS',
@@ -17,7 +18,9 @@ export default function RootLayout({
       <body>
 				<AuthContext>
           <ToasterContext />
+					<QueryContext>
           	{children}
+					</QueryContext>
         </AuthContext>
 			</body>
     </html>

@@ -36,7 +36,7 @@ importers:
         version: 0.15.0
       '@novu/notification-center':
         specifier: ^0.15.0
-        version: 0.15.0(@babel/core@7.21.8)(@types/react@18.2.6)(acorn@8.8.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 0.15.0(@babel/core@7.21.8)(@types/react@18.2.6)(acorn@8.8.2)(react-dom@18.2.0)(react-native@0.71.8)(react@18.2.0)
       '@o4s/api':
         specifier: ^0.1.0
         version: link:../../packages/api
@@ -60,7 +60,7 @@ importers:
         version: 0.2.2(zod@3.21.4)
       '@tanstack/react-query':
         specifier: ^4.29.5
-        version: 4.29.5(react-dom@18.2.0)(react@18.2.0)
+        version: 4.29.5(react-dom@18.2.0)(react-native@0.71.8)(react@18.2.0)
       '@tinymce/tinymce-react':
         specifier: ^4.3.0
         version: 4.3.0(react-dom@18.2.0)(react@18.2.0)
@@ -185,7 +185,7 @@ importers:
         version: 1.7.14(react-dom@18.2.0)(react@18.2.0)
       '@novu/notification-center':
         specifier: ^0.15.0
-        version: 0.15.0(@babel/core@7.21.8)(@types/react@18.2.6)(acorn@8.8.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 0.15.0(@babel/core@7.21.8)(@types/react@18.2.6)(acorn@8.8.2)(react-dom@18.2.0)(react-native@0.71.8)(react@18.2.0)
       '@o4s/auth':
         specifier: ^0.1.0
         version: link:../../packages/auth
@@ -201,6 +201,12 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.0.5
         version: 1.0.5(@types/react@18.2.6)(react-dom@18.2.0)(react@18.2.0)
+      '@tanstack/react-query':
+        specifier: ^4.24.9
+        version: 4.29.5(react-dom@18.2.0)(react-native@0.71.8)(react@18.2.0)
+      '@tanstack/react-query-devtools':
+        specifier: ^4.29.7
+        version: 4.29.7(@tanstack/react-query@4.29.5)(react-dom@18.2.0)(react@18.2.0)
       '@types/node':
         specifier: 20.2.1
         version: 20.2.1
@@ -210,9 +216,15 @@ importers:
       '@types/react-dom':
         specifier: ^18.2.1
         version: 18.2.4
+      '@wundergraph/react-query':
+        specifier: ^0.8.33
+        version: 0.8.33(@tanstack/react-query@4.29.5)(@wundergraph/sdk@0.158.1)(react-dom@18.2.0)(react@18.2.0)
       autoprefixer:
         specifier: ^10.4.14
         version: 10.4.14(postcss@8.4.23)
+      buffer:
+        specifier: ^6.0.3
+        version: 6.0.3
       eslint:
         specifier: 8.41.0
         version: 8.41.0
@@ -268,6 +280,9 @@ importers:
       dotenv-cli:
         specifier: ^7.2.1
         version: 7.2.1
+      webpack-node-externals:
+        specifier: ^3.0.0
+        version: 3.0.0
 
   packages/api:
     dependencies:
@@ -347,7 +362,7 @@ importers:
         version: 0.15.0
       '@novu/notification-center':
         specifier: ^0.15.0
-        version: 0.15.0(@babel/core@7.21.8)(@types/react@18.2.6)(acorn@8.8.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 0.15.0(@babel/core@7.21.8)(@types/react@18.2.6)(acorn@8.8.2)(react-dom@18.2.0)(react-native@0.71.8)(react@18.2.0)
       '@novu/stateless':
         specifier: ^0.15.0
         version: 0.15.0
@@ -2897,7 +2912,7 @@ packages:
       - debug
     dev: false
 
-  /@novu/notification-center@0.15.0(@babel/core@7.21.8)(@types/react@18.2.6)(acorn@8.8.2)(react-dom@18.2.0)(react@18.2.0):
+  /@novu/notification-center@0.15.0(@babel/core@7.21.8)(@types/react@18.2.6)(acorn@8.8.2)(react-dom@18.2.0)(react-native@0.71.8)(react@18.2.0):
     resolution: {integrity: sha512-1+ovU7nmafObhyYkODPRn/ZbtaH2MVv+TfLk6URQ/jAJ4uVxMRJ1SFz7BYXDFYDjYyAy0L5lsvMPnHn2HgRgSg==}
     peerDependencies:
       react: '>=16.8.0'
@@ -2911,7 +2926,7 @@ packages:
       '@novu/client': 0.15.0
       '@novu/shared': 0.15.0
       '@rollup/plugin-babel': 6.0.3(@babel/core@7.21.8)
-      '@tanstack/react-query': 4.29.5(react-dom@18.2.0)(react@18.2.0)
+      '@tanstack/react-query': 4.29.5(react-dom@18.2.0)(react-native@0.71.8)(react@18.2.0)
       acorn-jsx: 5.3.2(acorn@8.8.2)
       axios: 1.4.0
       chroma-js: 2.4.2
@@ -3844,11 +3859,33 @@ packages:
       zod: 3.21.4
     dev: false
 
+  /@tanstack/match-sorter-utils@8.8.4:
+    resolution: {integrity: sha512-rKH8LjZiszWEvmi01NR72QWZ8m4xmXre0OOwlRGnjU01Eqz/QnN+cqpty2PJ0efHblq09+KilvyR7lsbzmXVEw==}
+    engines: {node: '>=12'}
+    dependencies:
+      remove-accents: 0.4.2
+    dev: false
+
   /@tanstack/query-core@4.29.5:
     resolution: {integrity: sha512-xXIiyQ/4r9KfaJ3k6kejqcaqFXXBTzN2aOJ5H1J6aTJE9hl/nbgAdfF6oiIu0CD5xowejJEJ6bBg8TO7BN4NuQ==}
     dev: false
 
-  /@tanstack/react-query@4.29.5(react-dom@18.2.0)(react@18.2.0):
+  /@tanstack/react-query-devtools@4.29.7(@tanstack/react-query@4.29.5)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-fckNnBV6Kfbtq6EJqQen8oBjPqGFcOPS9SJmNKLbFLQgd7OpNIlA4M0r37iJYUY9m14/ESKc1wzKd36VfeiPjg==}
+    peerDependencies:
+      '@tanstack/react-query': 4.29.7
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      '@tanstack/match-sorter-utils': 8.8.4
+      '@tanstack/react-query': 4.29.5(react-dom@18.2.0)(react-native@0.71.8)(react@18.2.0)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      superjson: 1.12.3
+      use-sync-external-store: 1.2.0(react@18.2.0)
+    dev: false
+
+  /@tanstack/react-query@4.29.5(react-dom@18.2.0)(react-native@0.71.8)(react@18.2.0):
     resolution: {integrity: sha512-F87cibC3s3eG0Q90g2O+hqntpCrudKFnR8P24qkH9uccEhXErnJxBC/AAI4cJRV2bfMO8IeGZQYf3WyYgmSg0w==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -3863,6 +3900,7 @@ packages:
       '@tanstack/query-core': 4.29.5
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+      react-native: 0.71.8(@babel/core@7.21.8)(@babel/preset-env@7.21.5)(react@18.2.0)
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
 
@@ -3907,7 +3945,7 @@ packages:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
     dependencies:
-      '@tanstack/react-query': 4.29.5(react-dom@18.2.0)(react@18.2.0)
+      '@tanstack/react-query': 4.29.5(react-dom@18.2.0)(react-native@0.71.8)(react@18.2.0)
       '@trpc/client': 10.23.1(@trpc/server@10.23.1)
       '@trpc/react-query': 10.23.0(@tanstack/react-query@4.29.5)(@trpc/client@10.23.1)(@trpc/server@10.23.1)(react-dom@18.2.0)(react@18.2.0)
       '@trpc/server': 10.23.1
@@ -3926,7 +3964,7 @@ packages:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
     dependencies:
-      '@tanstack/react-query': 4.29.5(react-dom@18.2.0)(react@18.2.0)
+      '@tanstack/react-query': 4.29.5(react-dom@18.2.0)(react-native@0.71.8)(react@18.2.0)
       '@trpc/client': 10.23.1(@trpc/server@10.23.1)
       '@trpc/server': 10.23.1
       react: 18.2.0
@@ -4423,6 +4461,20 @@ packages:
       long: 5.2.3
       protobufjs: 6.11.3
       ts-proto: 1.147.2
+    dev: false
+
+  /@wundergraph/react-query@0.8.33(@tanstack/react-query@4.29.5)(@wundergraph/sdk@0.158.1)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-h9bdGQgotPMsdZT7Ik9VwllqIFHagdh9czllxSc+Ksq0FiBo4Xr5r2U5jQoqS6HqYPtNFILlj270vXHPj3GNbw==}
+    peerDependencies:
+      '@tanstack/react-query': ^4.29.3
+      '@wundergraph/sdk': '>=0.110.0'
+      react: ^16.8.0 || ^17.0.2 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.2 || ^18.0.0
+    dependencies:
+      '@tanstack/react-query': 4.29.5(react-dom@18.2.0)(react-native@0.71.8)(react@18.2.0)
+      '@wundergraph/sdk': 0.158.1(@graphql-mesh/store@0.9.20)(react-native@0.71.8)(typescript@5.0.4)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /@wundergraph/sdk@0.158.1(@graphql-mesh/store@0.9.20)(react-native@0.71.8)(typescript@5.0.4):
@@ -11694,6 +11746,10 @@ packages:
     resolution: {integrity: sha512-AFPpCRtlYAcSzW4cI8sOw+x+BtbvX6tIwL3lhRxUO9YuPXRe06N1woIMPq/O1cNNy5n4a0TwbIHIciqnswkaQg==}
     dev: false
 
+  /remove-accents@0.4.2:
+    resolution: {integrity: sha512-7pXIJqJOq5tFgG1A2Zxti3Ht8jJF337m4sowbuHsW30ZnkQFnDzy9qBNhgzX8ZLW4+UBcXiiR7SwR6pokHsxiA==}
+    dev: false
+
   /repeat-element@1.1.4:
     resolution: {integrity: sha512-LFiNfRcSu7KK3evMyYOuCzv3L10TW7yC1G2/+StMjK8Y6Vqd2MG7r/Qjw4ghtuCOjFvlnms/iMmLqpvW/ES/WQ==}
     engines: {node: '>=0.10.0'}
@@ -13371,6 +13427,11 @@ packages:
   /webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
     dev: false
+
+  /webpack-node-externals@3.0.0:
+    resolution: {integrity: sha512-LnL6Z3GGDPht/AigwRh2dvL9PQPFQ8skEpVrWZXLWBYmqcaojHNN0onvHzie6rq7EWKrrBfPYqNEzTJgiwEQDQ==}
+    engines: {node: '>=6'}
+    dev: true
 
   /whatwg-fetch@3.6.2:
     resolution: {integrity: sha512-bJlen0FcuU/0EMLrdbJ7zOnW6ITZLrZMIarMUVmdKtsGvZna8vxKYaexICWPfZ8qwf9fzNq+UEIZrnSaApt6RA==}
