@@ -1,4 +1,3 @@
-import { novu, sanitizeUrl } from "@o4s/comm";
 import { prisma } from "@o4s/db";
 
 type Props = {
@@ -14,17 +13,36 @@ export const sendVerificationRequest = async ({ identifier, url }: Props) => {
 	if (user === null) {
 			throw new Error("User not found");
 	}
-  try {
-		await novu.trigger('signin-verification-email', {
-			to: {
-				subscriberId: user.id,
-				email: identifier
-			},
-			payload: {
-				url: sanitizeUrl(url)
+  const data = {
+		name: "signin-verification-email",
+		to: {
+			subscriberId: user.id,
+			email: identifier
+		},
+		payload: {
+			url: url
+		}
+	};
+	try {
+		const response = await fetch(
+			`http://joseantcordeiro.hopto.org:3003/v1/events/trigger`,
+			{
+				body: JSON.stringify(data),
+				headers: {
+					'Authorization': 'ApiKey ' + `${process.env.NOVU_API_KEY}`,
+					'Content-Type': 'application/json',
+				},
+				method: 'POST'
 			}
-		});
-  } catch (err) {
-    throw new Error(`Email(s) could not be sent`)
-  }
+
+		);
+
+		if (response.status >= 400) {
+			console.error('There was an error');
+		}
+
+	} catch (error) {
+		throw new Error('Failed to send email');
+	}
+	console.log({ status: 'ok' });
 }

@@ -59,6 +59,7 @@ const AuthForm = () => {
 
 		signIn('email', {
 			email: data.email,
+			callbackUrl: '/lms',
 			redirect: false
 		})
 		.then((callback) => {

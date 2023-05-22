@@ -7,6 +7,11 @@ import UserDropdown from './UserDropdown';
 import useScroll from "~/app/hooks/use-scroll";
 import { useSession } from 'next-auth/react';
 import clsx from "clsx";
+import {
+  PopoverNotificationCenter,
+  NotificationBell,
+	NovuProvider,
+} from '@novu/notification-center';
 import LoadingModal from '~/app/components/modals/LoadingModal';
 
 
@@ -66,8 +71,22 @@ function Nav() {
 
 		 </div>
 		 
-		 <div>
-			 <UserDropdown email={session?.data?.user.email} picture={session?.data?.user.image} />
+		 <div className='flex items-center px-2'>
+			 <div className='px-2'>
+		 		<NovuProvider
+					subscriberId={session?.data?.user.id}
+					applicationIdentifier={'ff5UcyJv0woS'}
+					backendUrl={'http://joseantcordeiro.hopto.org:3003'}
+					socketUrl={'http://joseantcordeiro.hopto.org:3002'}
+					>
+					<PopoverNotificationCenter colorScheme={'light'}>
+						{({ unseenCount }) => <NotificationBell unseenCount={unseenCount} />}
+					</PopoverNotificationCenter>
+			 </NovuProvider>
+			 </div>
+			 <div className='px-2'>
+			 	<UserDropdown email={session?.data?.user.email} picture={session?.data?.user.image} />
+			 </div>
 		 </div>
 	 </nav></>
 

@@ -34,6 +34,7 @@ export default configureWunderGraphOperations<OperationsConfiguration>({
 					required: false,
 				},
 			}),
+			
 		},
   }
 });
