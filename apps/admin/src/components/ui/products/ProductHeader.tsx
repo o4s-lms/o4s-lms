@@ -1,25 +1,26 @@
 import { useRouter } from "next/router";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Button } from "primereact/button";
-import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { Toast } from 'primereact/toast';
 import React from "react";
 import { Dialog } from "primereact/dialog";
+import useDeleteProductMutation from "~/hooks/useDeleteProductMutation";
 
 type Props = {
 	id: number | undefined;
 	name: string | undefined;
 	image: string | undefined;
 	active: boolean | undefined;
-	onProductDelete: () => void;
 }
 
-const ProductHeader = ({ id, name, image, active, onProductDelete }: Props) => {
+const ProductHeader = ({ id, name, image, active }: Props) => {
 	const router = useRouter();
 	const toast = useRef<Toast>(null);
+	const deleteProduct = useDeleteProductMutation();
+	const [deleteProductDialog, setDeleteProductDialog] = useState<boolean>(false);
 
 	const hideDeleteProductDialog = () => {
-		setDeleteCourseDialog(false);
+		setDeleteProductDialog(false);
 	};
 
 	const confirmDeleteProduct = () => {
@@ -91,7 +92,7 @@ const ProductHeader = ({ id, name, image, active, onProductDelete }: Props) => {
 					<div className="mt-3 lg:mt-0">
 						<Button label="Add" className="p-button-outlined mr-2" icon="pi pi-user-plus" />
 						<Button
-							onClick={confirm}
+							onClick={confirmDeleteProduct}
 							label="Delete"
 							severity="danger"
 							className="p-button-outlined mr-2"

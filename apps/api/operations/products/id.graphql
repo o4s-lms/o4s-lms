@@ -16,6 +16,11 @@ query ($id: Int!, $deleted: Boolean = false) {
 			published
 			createdBy
 			createdAt
+			_count {
+				modules
+				lessons
+				members
+			}
 		}
 	}
 }

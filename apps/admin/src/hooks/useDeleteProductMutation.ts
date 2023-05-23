@@ -7,7 +7,7 @@ function useDeleteProductMutation() {
 		operationName: 'products/all'
 	});
 	const deleteProduct = useMutation({
-		operationName: 'product/delete'
+		operationName: 'products/delete'
 	});
 
 	const trigger: typeof deleteProduct.trigger = async (input, options) => {

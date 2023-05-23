@@ -2,10 +2,8 @@ import Loading from "../Loading";
 import LessonsTable from "~/components/ui/lessons/LessonsTable";
 import { type ModulesAllResponseData } from "@o4s/generated-wundergraph/models";
 
-type Modules = ModulesAllResponseData["modules"];
-
 const ModulesList: React.FC<{
-	modules: Modules | undefined;
+	modules: ModulesAllResponseData["modules"] | undefined;
 }> = ({ modules }) => {
 
 	return (

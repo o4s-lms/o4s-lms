@@ -1,26 +1,20 @@
-import { api, type RouterOutputs } from "~/utils/api";
-import Loading from "./Loading";
-import CoursesTable from "./CoursesTable";
+import Loading from "~/components/ui/Loading";
+import ProductCoursesTable from "./ProductCoursesTable";
+import { type CoursesAuthorResponseData } from "@o4s/generated-wundergraph/models";
 
-type Courses = RouterOutputs["course"]["byProduct"];
-
-const ModulesList: React.FC<{
-	courses: Courses;
+const CoursesList: React.FC<{
+	courses: CoursesAuthorResponseData["courses"];
 }> = ({ courses }) => {
-
-	const removeProductMutation = api.product.removeCourse.useMutation({
-		onSettled: () => productQuery.refetch(),
-	});
 
 	return (
 		<>
 			{courses ? (
 
 				<div className="w-full">
-					{courses.length === 0 ? (
+					{courses?.length === 0 ? (
 						<span>There are no courses!</span>
 					) : (
-						<CoursesTable courses={courses} />
+						<ProductCoursesTable courses={courses} />
 					)}
 				</div>
 
@@ -31,4 +25,4 @@ const ModulesList: React.FC<{
 	)
 }
 
-export default ModulesList;
+export default CoursesList;

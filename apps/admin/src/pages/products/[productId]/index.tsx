@@ -8,7 +8,6 @@ import Nav from "~/components/ui/layout/Nav";
 import SectionWrapper from "~/components/SectionWrapper";
 import Loading from "~/components/ui/Loading";
 import { Toast } from "primereact/toast";
-import CreateModuleForm from "~/components/forms/CreateModuleForm";
 import ProductHeader from "~/components/ui/products/ProductHeader";
 import CoursesList from "~/components/ui/products/CoursesList";
 import { useQuery } from "~/utils/wundergraph";
@@ -46,7 +45,7 @@ const ManageProduct = () => {
 						name={data?.product?.name}
 						image={data?.product?.image}
 						active={data?.product?.active}
-						onProductDelete={() => deleteProductMutation.mutate(data?.product?.id)} />
+					/>
 					<SectionWrapper className="mt-0">
 						<CoursesList courses={data?.product?.courses} />
 					</SectionWrapper>
