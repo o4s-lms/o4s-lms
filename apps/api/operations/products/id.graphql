@@ -1,5 +1,5 @@
 query ($id: Int!, $deleted: Boolean = false) {
-	products: lms_findUniqueProduct(where: { id: $id }) {
+	product: lms_findUniqueProduct(where: { id: $id }) {
 		id
 		name
 		description

@@ -1,38 +1,57 @@
 import { useRouter } from "next/router";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Button } from "primereact/button";
-import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { Toast } from 'primereact/toast';
+import { Dialog } from "primereact/dialog";
+import React from "react";
+import useDeleteCourseMutation from '~/hooks/useDeleteCourseMutation';
 
 type Props = {
 	id: number;
 	name: string;
 	published: boolean;
-	onCourseDelete: () => void;
 }
 
-const CourseHeader = ({ id, name, published, onCourseDelete }: Props) => {
+const CourseHeader = ({ id, name, published }: Props) => {
 	const router = useRouter();
 	const toast = useRef<Toast>(null);
+	const deleteCourse = useDeleteCourseMutation();
+	const [deleteCourseDialog, setDeleteCourseDialog] = useState<boolean>(false);
 
-	const reject = () => {
-		toast.current?.show({ severity: 'warn', summary: 'Rejected', detail: 'You have rejected', life: 6000 });
+	const hideDeleteCourseDialog = () => {
+		setDeleteCourseDialog(false);
 	};
 
-	const confirm = (event) => {
-		confirmDialog({
-			trigger: event.currentTarget,
-			message: 'Are you sure you want to proceed?',
-			header: 'Confirmation',
-			icon: 'pi pi-exclamation-triangle',
-			accept: () => onCourseDelete(),
-			reject,
-		});
+	const confirmDeleteCourse = () => {
+		setDeleteCourseDialog(true);
 	};
+
+	const confirmedDeleteCourse = () => {
+		setDeleteCourseDialog(false);
+		void deleteCourse.trigger({ id: id }, { throwOnError: false });
+		toast.current?.show({severity:'success', summary: 'Success', detail:'Course deleted successfully', life: 3000});
+		void router.push('/');
+	};
+
+	const deleteCourseDialogFooter = (
+		<React.Fragment>
+				<Button label="No" icon="pi pi-times" outlined onClick={hideDeleteCourseDialog} />
+				<Button label="Yes" icon="pi pi-check" severity="danger" onClick={confirmedDeleteCourse} />
+		</React.Fragment>
+	);
 
 	return (
 		<><Toast ref={toast} />
-			<ConfirmDialog />
+			<Dialog visible={deleteCourseDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deleteCourseDialogFooter} onHide={hideDeleteCourseDialog}>
+				<div className="confirmation-content">
+					<i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
+						{module && (
+							<span>
+								<b>Are you sure you want to proceed?</b>
+							</span>
+						)}
+				</div>
+			</Dialog>
 			<div className="surface-0">
 				<ul className="list-none p-0 m-0 flex align-items-center font-medium mb-3">
 					<li>
@@ -66,7 +85,7 @@ const CourseHeader = ({ id, name, published, onCourseDelete }: Props) => {
 					<div className="mt-3 lg:mt-0">
 						<Button label="Add" className="p-button-outlined mr-2" icon="pi pi-user-plus" />
 						<Button
-							onClick={confirm}
+							onClick={confirmDeleteCourse}
 							label="Delete"
 							severity="danger"
 							className="p-button-outlined mr-2"

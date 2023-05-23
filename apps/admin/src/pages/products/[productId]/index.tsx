@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { useRef } from "react";
 import { useRouter } from "next/router";
-import { api } from "~/utils/api";
 
 import Header from "~/components/ui/layout/Header";
 import Nav from "~/components/ui/layout/Nav";
@@ -10,6 +11,7 @@ import { Toast } from "primereact/toast";
 import CreateModuleForm from "~/components/forms/CreateModuleForm";
 import ProductHeader from "~/components/ui/products/ProductHeader";
 import CoursesList from "~/components/ui/products/CoursesList";
+import { useQuery } from "~/utils/wundergraph";
 
 const ManageProduct = () => {
 	const router = useRouter();
@@ -22,33 +24,31 @@ const ManageProduct = () => {
 	//  throw new Error("missing id");
 	//}
 
-	const productQuery = api.product.byId.useQuery({ id: parseInt(productId) });
-
-	const deleteProductMutation = api.product.delete.useMutation({
-		onSettled: () => {
-			void productQuery.refetch();
-			void router.push('/products');
-			toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Product deleted successfully', life: 3000 });
+	const { data, error, isLoading } = useQuery({
+		operationName: 'products/id',
+		input: {
+			id: parseInt(productId)
 		},
-		onError: (error) => {
-			console.error(error);
-			toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Something went wrong', life: 3000 });
-		},
+		enabled: true,
 	});
+
+	if (error) {
+		return <p>{error.message}</p>;
+	}
 
 	return (
 		<><Toast ref={toast} />
-			{productQuery.data ? (
-				<><Header title={productQuery.data.name} />
+			{!isLoading ? (
+				<><Header title={data?.product?.name} />
 					<Nav />
 					<ProductHeader
-						id={productQuery.data.id}
-						name={productQuery.data.name}
-						image={productQuery.data.image}
-						active={productQuery.data.active}
-						onProductDelete={() => deleteProductMutation.mutate(productQuery.data.id)} />
+						id={data?.product?.id}
+						name={data?.product?.name}
+						image={data?.product?.image}
+						active={data?.product?.active}
+						onProductDelete={() => deleteProductMutation.mutate(data?.product?.id)} />
 					<SectionWrapper className="mt-0">
-						<CoursesList courses={productQuery.data.courses} />
+						<CoursesList courses={data?.product?.courses} />
 					</SectionWrapper>
 				</>
 			) : (

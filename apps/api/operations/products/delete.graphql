@@ -1,0 +1,11 @@
+mutation ($id: Int!, $deleted: Boolean = true) {
+	product: lms_updateOneProduct(
+		where: { id: $id }
+		data: {
+      deleted: { set: $deleted }
+    }
+	) {
+		id
+		deleted
+	}
+}

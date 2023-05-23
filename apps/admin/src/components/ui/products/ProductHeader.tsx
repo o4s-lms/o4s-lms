@@ -3,12 +3,14 @@ import { useRef } from "react";
 import { Button } from "primereact/button";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { Toast } from 'primereact/toast';
+import React from "react";
+import { Dialog } from "primereact/dialog";
 
 type Props = {
-	id: number;
-	name: string;
-	image: string;
-	active: boolean;
+	id: number | undefined;
+	name: string | undefined;
+	image: string | undefined;
+	active: boolean | undefined;
 	onProductDelete: () => void;
 }
 
@@ -16,24 +18,40 @@ const ProductHeader = ({ id, name, image, active, onProductDelete }: Props) => {
 	const router = useRouter();
 	const toast = useRef<Toast>(null);
 
-	const reject = () => {
-		toast.current?.show({ severity: 'warn', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+	const hideDeleteProductDialog = () => {
+		setDeleteCourseDialog(false);
 	};
 
-	const confirm = (event) => {
-		confirmDialog({
-			trigger: event.currentTarget,
-			message: 'Are you sure you want to proceed?',
-			header: 'Confirmation',
-			icon: 'pi pi-exclamation-triangle',
-			accept: () => onProductDelete(),
-			reject,
-		});
+	const confirmDeleteProduct = () => {
+		setDeleteProductDialog(true);
 	};
+
+	const confirmedDeleteProduct = () => {
+		setDeleteProductDialog(false);
+		void deleteProduct.trigger({ id: id }, { throwOnError: false });
+		toast.current?.show({severity:'success', summary: 'Success', detail:'Product deleted successfully', life: 3000});
+		void router.push('/products');
+	};
+
+	const deleteProductDialogFooter = (
+		<React.Fragment>
+				<Button label="No" icon="pi pi-times" outlined onClick={hideDeleteProductDialog} />
+				<Button label="Yes" icon="pi pi-check" severity="danger" onClick={confirmedDeleteProduct} />
+		</React.Fragment>
+	);
 
 	return (
 		<><Toast ref={toast} />
-			<ConfirmDialog />
+			<Dialog visible={deleteProductDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
+				<div className="confirmation-content">
+					<i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
+						{module && (
+							<span>
+								<b>Are you sure you want to proceed?</b>
+							</span>
+						)}
+				</div>
+			</Dialog>
 			<div className="surface-0">
 				<ul className="list-none p-0 m-0 flex align-items-center font-medium mb-3">
 					<li>

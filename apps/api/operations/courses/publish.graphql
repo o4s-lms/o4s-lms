@@ -1,5 +1,8 @@
 mutation ($id: Int!, $published: Boolean!) {
-	lms_updateOneCourse(where: { id: $id }, data: { published: { set: $published } }) {
+	lms_updateOneCourse(
+		where: { id: $id }
+		data: { published: { set: $published } }
+	) {
 		id
 		published
 	}

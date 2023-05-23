@@ -217,6 +217,7 @@ model Product {
 	priceId			String?
   currency    String    @default("eur")
 	active			Boolean		@default(false)
+	deleted			Boolean		@default(false)
   courses     Course[]
 	payments    Payment[]
 }
