@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
@@ -9,7 +10,7 @@ import { Button } from 'primereact/button';
 import Header from "~/components/ui/layout/Header";
 import Nav from "~/components/ui/layout/Nav";
 import SectionWrapper from "~/components/SectionWrapper";
-import { type NotificationBody, sendNotification } from "~/utils/novu";
+import { type NotificationPayload, sendToNotificationWebhook } from "~/utils/novu";
 
 const CreateCourseForm: React.FC = () => {
 	const { data: session } = useSession();
@@ -25,19 +26,20 @@ const CreateCourseForm: React.FC = () => {
 			setDescription("");
 			setImage("");
 			toast.current?.show({ severity: 'success', summary: 'Success', detail: `Course ${data.id} created successfully`, life: 6000 });
-			const notification: NotificationBody = {
-				name: "admin-notification",
-				to: {
-					subscriberId: session?.user.id as string,
+			const payload = {
+				"eventId": "admin-notification",
+				"to": {
+					"subscriberId": `${session?.user.id as string}`,
 				},
-				payload: {
-					message: 'Curso criado com sucesso',
-					id: data.id as unknown as string,
-					name: data.name,
-					description: data.description,
+				"payload": {
+					"message": "Curso criado com sucesso",
+					"id": `${data.id as unknown as string}`,
+					"name": `${data.name}`,
+					"description": `${data.description}`,
 				}
 			};
-			void sendNotification(notification);
+
+			void sendToNotificationWebhook(payload);
 
 		},
 		onError(error) {

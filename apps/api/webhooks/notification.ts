@@ -1,6 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { createWebhook } from '../generated/wundergraph.webhooks';
+// import { symmetric } from 'secure-webhooks';
 import { Novu } from '@novu/node';
+
+// const secret = process.env.WEBHOOK_SECRET as string;
 
 const config = {
 	appId: process.env.NOVU_CLIENT_APP_ID as string,
@@ -17,17 +22,32 @@ export default createWebhook({
     event.method;
     event.query; */
 
+		/** const isTrustWorthy = symmetric.verify(
+			event.body, // 👈 needs to be exactly the same as above, make sure to disable any body parsing for this route
+			secret,
+			event.headers["x-webhook-signature"]
+		);
+
+		if (!isTrustWorthy) {
+			return {
+				statusCode: 401,
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: {
+					data: { message: 'Not Authorized' },
+				},
+			};
+		}; */
+
+		console.log(event.body);
+		
 		const data ={
 			to: {
-				subscriberId: event.body.subscriberId
+				subscriberId: event.body.to.subscriberId,
 			},
-			payload: {
-				message: event.body.message,
-				objectId: event.body.objectId,
-			}
+			payload: event.body.payload,
 		};
-
-		console.log(JSON.stringify(context));
 
 		const res = await novu.trigger(event.body.eventId, data);
 
@@ -38,7 +58,7 @@ export default createWebhook({
       },
       body: {
         statusText: res.statusText,
-				data: JSON.stringify(res.data),
+				data: res.data,
       },
     };
   },

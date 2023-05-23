@@ -1,19 +1,20 @@
-import { Novu } from '@novu/node';
+// import { Novu } from '@novu/node';
+// import { symmetric } from "secure-webhooks";
 
-export type NotificationBody = {
-	name: string;
-	to: {
-		subscriberId: string;
+export type NotificationPayload = {
+	"eventId": string;
+	"to": {
+		"subscriberId": string;
 	};
-	payload: {
-		message: string;
-		id: string;
-		name: string;
-		description: string;
+	"payload": {
+		"message": string;
+		"id": string;
+		"name": string;
+		"description": string;
 	};
 }
 
-const config = {
+/** const config = {
 	appId: process.env.NOVU_CLIENT_APP_ID as string,
 	backendUrl: process.env.NOVU_API_ENDPOINT as string,
 	socketUrl: process.env.NOVU_SOCKET_ENDPOINT as string,
@@ -21,18 +22,21 @@ const config = {
 
 export const novu = new Novu(process.env.NOVU_API_KEY as string, config);
 
-export async function sendNotification(data: NotificationBody) {
+const secret = process.env.WEBHOOK_SECRET as string; */
+
+export async function sendToNotificationWebhook(body: NotificationPayload) {
+	const payload = JSON.stringify(body);
+	// const signature = symmetric.sign(payload, secret);
 
 	try {
 		const response = await fetch(
-			`http://joseantcordeiro.hopto.org:3003/v1/events/trigger`,
-			{
-				body: JSON.stringify(data),
+			`${process.env.WG_PUBLIC_NODE_URL}webhooks/notification`, {
+				method: "POST",
+				body: payload,
 				headers: {
-					'Authorization': 'ApiKey ' + `${process.env.NOVU_API_KEY as string}`,
-					'Content-Type': 'application/json',
+					//"x-webhook-signature": signature,
+					"Content-Type": "application/json",
 				},
-				method: 'POST'
 			}
 
 		);
@@ -44,5 +48,5 @@ export async function sendNotification(data: NotificationBody) {
 	} catch (error) {
 		throw new Error('Failed to send notification');
 	}
-	console.log({ status: 'ok' });
+	console.log({ message: 'Notification sent!' });
 }

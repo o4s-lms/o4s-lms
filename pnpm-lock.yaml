@@ -103,6 +103,9 @@ importers:
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
+      secure-webhooks:
+        specifier: ^0.3.0
+        version: 0.3.0
       superjson:
         specifier: 1.12.3
         version: 1.12.3
@@ -161,6 +164,9 @@ importers:
       '@wundergraph/sdk':
         specifier: ^0.158.1
         version: 0.158.1(@graphql-mesh/store@0.9.20)(react-native@0.71.8)(typescript@5.0.4)
+      secure-webhooks:
+        specifier: ^0.3.0
+        version: 0.3.0
       stripe:
         specifier: ^12.6.0
         version: 12.6.0
@@ -11919,6 +11925,11 @@ packages:
 
   /secure-json-parse@2.7.0:
     resolution: {integrity: sha512-6aU+Rwsezw7VR8/nyvKTx8QpWH9FrcYiXXlqC4z5d5XQBDRqtbfsRjnwGyqbi3gddNtWHuEk9OANUotL26qKUw==}
+    dev: false
+
+  /secure-webhooks@0.3.0:
+    resolution: {integrity: sha512-UMcMEIvRHfbrAY2zhfv6ugEjkgbBXNwml50iDzq2FZBMeFoeJnfzw7RZFSUBcGG+/myfRP5A5Shw3msWdENxUA==}
+    engines: {node: '>=10'}
     dev: false
 
   /sembear@0.5.2:
