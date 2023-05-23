@@ -16,7 +16,7 @@ const useAuthToken: Middleware = (useSWRNext) => {
   return useAuthMiddleware(useSWRNext, async () => {
     return await getToken();
   });
-};*/
+}; */
 
 import { api } from "~/utils/api";
 

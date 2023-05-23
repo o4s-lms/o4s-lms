@@ -7,9 +7,12 @@ import { Toast } from 'primereact/toast';
 
 import SectionWrapper from "~/components/SectionWrapper";
 import LessonHeader from "~/components/ui/lessons/LessonHeader";
+import { type LessonsIdResponseData } from '@o4s/generated-wundergraph/models';
+
+type Lesson = LessonsIdResponseData["lesson"]
 
 const LessonEditor: React.FC<{
-	lesson: RouterOutputs["lesson"]["getContent"];
+	lesson: Lesson;
 }> = ({ lesson }) => {
   const editorRef = useRef(null);
 	const toast = useRef<Toast>(null);

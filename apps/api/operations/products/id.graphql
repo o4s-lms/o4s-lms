@@ -7,6 +7,7 @@ query ($id: Int!, $deleted: Boolean = false) {
 		price
 		priceId
   	currency
+		active
 		courses (where: { deleted: { equals: $deleted } }) {
 			id
 			name

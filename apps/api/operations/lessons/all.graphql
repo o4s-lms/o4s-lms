@@ -10,6 +10,8 @@ query ($deleted: Boolean = false) {
 		status
 		courseId
 		moduleId
+		createdBy
 		createdAt
+		updatedAt
 	}
 }

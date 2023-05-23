@@ -17,6 +17,8 @@ mutation (
 		id
 		name
 		slug
+		pos
+		status
 		courseId
 		moduleId
 		createdBy

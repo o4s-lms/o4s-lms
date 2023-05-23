@@ -11,12 +11,13 @@ import { Dropdown, type DropdownChangeEvent } from 'primereact/dropdown';
 import { Toolbar } from 'primereact/toolbar';
 import { Tag } from 'primereact/tag';
 import { Toast } from "primereact/toast";
-import { type RouterOutputs, api } from '~/utils/api';
+import { api } from '~/utils/api';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
+import { type ModulesAllResponseData } from "@o4s/generated-wundergraph/models";
 
-type Module = RouterOutputs["module"]["byCourse"][number];
-type Modules = RouterOutputs["module"]["byCourse"];
+type Module = ModulesAllResponseData["modules"][number];
+type Modules = ModulesAllResponseData["modules"];
 
 type ModuleDTO = {
 	courseId: number;

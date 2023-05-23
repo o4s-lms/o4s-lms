@@ -1,4 +1,4 @@
-query ($deleted: Boolean = false) {
+query {
 	products: lms_findManyProduct() {
 		id
 		name
@@ -7,14 +7,10 @@ query ($deleted: Boolean = false) {
 		price
 		priceId
   	currency
-		courses(where: { deleted: { equals: $deleted } }) {
-			id
-			name
-			description
-			image
-			published
-			createdBy
-			createdAt
+		active
+		_count {
+			courses
+			payments
 		}
 	}
 }

@@ -1,16 +1,12 @@
-import { api, type RouterOutputs } from "~/utils/api";
 import Loading from "../Loading";
 import LessonsTable from "~/components/ui/lessons/LessonsTable";
+import { type ModulesAllResponseData } from "@o4s/generated-wundergraph/models";
 
-type Modules = RouterOutputs["module"]["byCourse"];
+type Modules = ModulesAllResponseData["modules"];
 
 const ModulesList: React.FC<{
-	modules: Modules;
+	modules: Modules | undefined;
 }> = ({ modules }) => {
-
-	const deleteModuleMutation = api.module.delete.useMutation({
-		onSettled: () => moduleQuery.refetch(),
-	});
 
 	return (
 		<>

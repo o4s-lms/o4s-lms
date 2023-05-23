@@ -23,6 +23,8 @@ export const env = createEnv({
       // VERCEL_URL doesn't include `https` so it cant be validated as a URL
       process.env.VERCEL ? z.string() : z.string().url(),
     ),
+		WG_PUBLIC_NODE_URL: z.string().url(),
+		WG_TOKEN_AUTH_ENDPOINT: z.string().url(),
     // Add `.min(1) on ID and SECRET if you want to make sure they're not empty
 		EMAIL_SERVER_HOST: z.string().min(1),
 		EMAIL_SERVER_PORT: z.number(),

@@ -1,24 +1,23 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { useRouter } from 'next/router'
 import { Button } from 'primereact/button';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 import { Toast } from 'primereact/toast';
 import { useRef } from 'react';
-import { type RouterOutputs } from '~/utils/api';
+import { type LessonsIdResponseData } from '@o4s/generated-wundergraph/models';
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-};
+type Lesson = LessonsIdResponseData["lesson"]
 
 const LessonHeader: React.FC<{
-  lesson: RouterOutputs["lesson"]["getContent"];
+  lesson: Lesson;
 	saveLessonHTML: () => void;
 }> = ({ lesson, saveLessonHTML }) => {
 	const router = useRouter();
 	const toast = useRef<Toast>(null);
 
 	const reject = () => {
-		toast.current?.show({ severity: 'warn', summary: 'Rejected', detail: 'You have rejected', life: 6000 });
+		toast.current?.show({ severity: 'warn', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
 	}
 
 	const confirm = (event) => {
@@ -44,18 +43,18 @@ const LessonHeader: React.FC<{
 					<i className="pi pi-angle-right text-500 line-height-3"></i>
 				</li>
 				<li>
-					<a onClick={() => { void router.push(`/courses/${lesson.course.id}`); } } className="text-500 no-underline line-height-3 cursor-pointer">{lesson.course.name}</a>
+					<a onClick={() => { void router.push(`/courses/${lesson?.course.id}`); } } className="text-500 no-underline line-height-3 cursor-pointer">{lesson?.course.name}</a>
 				</li>
 				<li className="px-2">
 					<i className="pi pi-angle-right text-500 line-height-3"></i>
 				</li>
 				<li>
-					<span className="text-900 line-height-3">{lesson.name}</span>
+					<span className="text-900 line-height-3">{lesson?.name}</span>
 				</li>
 			</ul>
 			<div className="flex align-items-start flex-column lg:justify-content-between lg:flex-row">
 				<div>
-					<div className="font-medium text-3xl text-900">{lesson.id} : {lesson.name}</div>
+					<div className="font-medium text-3xl text-900">{lesson?.id} : {lesson?.name}</div>
 					<div className="flex align-items-center text-700 flex-wrap">
 						<div className="mr-5 flex align-items-center mt-3">
 							<i className="pi pi-users mr-2"></i>
@@ -84,7 +83,7 @@ const LessonHeader: React.FC<{
 						severity="danger"
 						className="p-button-outlined mr-2"
 						icon="pi pi-trash" />
-					<Button label={lesson.status === 'draft' ? ("Publish") : ("Unpublish")} icon="pi pi-check" />
+					<Button label={lesson?.status === 'draft' ? ("Publish") : ("Unpublish")} icon="pi pi-check" />
 				</div>
 			</div>
 		</div>

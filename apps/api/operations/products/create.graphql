@@ -15,5 +15,6 @@ mutation ($name: String!, $description: String!, $image: String, $price: Int!, $
 		image
 		price
 		currency
+		active
 	}
 }

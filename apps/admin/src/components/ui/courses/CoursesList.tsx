@@ -1,32 +1,15 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import React, { useState } from 'react';
 import Image from "next/image";
-import { api, type RouterOutputs } from "~/utils/api";
+import { useQuery } from '~/utils/wundergraph';
 import { Button } from 'primereact/button';
 import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
 import { Tag } from 'primereact/tag';
 import { useRouter } from 'next/router';
 import Loading from '~/components/ui/Loading';
-//import { useQuery } from '@o4s/generated-wundergraph/nextjs';
+import { type CoursesAuthorResponseData } from '@o4s/generated-wundergraph/models';
 
-type Course = RouterOutputs["course"]["byAuthor"][number];
-
-/**interface Course {
-	courses: {
-		id: number;
-		name: string;
-		description: string;
-		image?: string;
-		published: boolean;
-		createdBy: string;
-		createdAt: string;
-		_count: {
-			modules: number;
-			lessons: number;
-			members: number;
-		};
-	};
-}*/
+type Course = CoursesAuthorResponseData["courses"][number];
 
 const CoursesList = () => {
 	const router = useRouter();
@@ -43,7 +26,16 @@ const CoursesList = () => {
 		throw new Error(error.message);
 	}*/
 
-	const courses = api.course.byAuthor.useQuery();
+	// const courses = api.course.byAuthor.useQuery();
+
+	const { data, error, isLoading } = useQuery({
+		operationName: 'courses/author',
+		enabled: true,
+	});
+
+	if (error) {
+		return <p>{error.message}</p>;
+	}
 
 	const getSeverity = (course: Course) => {
 		switch (course.published) {
@@ -125,9 +117,13 @@ const CoursesList = () => {
 
 	return (
 		<>
-			{courses.data ? (
+			{!isLoading ? (
 				<div className="card">
-					<DataView value={courses.data} itemTemplate={itemTemplate} layout={layout} header={header()} />
+					{data?.courses ? (
+						<DataView value={data.courses} itemTemplate={itemTemplate} layout={layout} header={header()} />
+					) : (
+						<p>No courses</p>
+					)}
 				</div>
 			) : (
 				<Loading />

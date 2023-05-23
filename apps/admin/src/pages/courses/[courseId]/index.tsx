@@ -10,23 +10,36 @@ import Loading from "~/components/ui/Loading";
 import ModulesList from "~/components/ui/modules/ModuleList";
 import { Toast } from "primereact/toast";
 import CreateModuleForm from "~/components/forms/CreateModuleForm";
+import { useQuery } from "~/utils/wundergraph";
 
 const ManageCourse = () => {
 	const router = useRouter();
 	const toast = useRef<Toast>(null);
 
 	const query = router.query;
-	const courseId: string = query.courseId;
+	const courseId = query.courseId;
 
 	//if (typeof courseId !== "string") {
 	//  throw new Error("missing id");
 	//}
 
-	const courseQuery = api.course.byId.useQuery({ id: parseInt(courseId) });
+	// const courseQuery = api.course.byId.useQuery({ id: parseInt(courseId) });
+
+	const { data, error, isLoading } = useQuery({
+		operationName: 'courses/id',
+		input: {
+			id: parseInt(courseId)
+		},
+		enabled: true,
+	});
+
+	if (error) {
+		return <p>{error.message}</p>;
+	}
 
 	const deleteCourseMutation = api.course.delete.useMutation({
 		onSettled: () => {
-			void courseQuery.refetch();
+			// void mutate();
 			void router.push('/');
 			toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Course deleted successfully', life: 3000 });
 		},
@@ -38,21 +51,27 @@ const ManageCourse = () => {
 
 	return (
 		<><Toast ref={toast} />
-			{courseQuery.data ? (
-				<><Header title={courseQuery.data.name} />
+			{!isLoading ? (
+				<>
+				{data?.course ? (
+				<><Header title={data.course.name} />
 					<Nav />
 					<CourseHeader
-						id={courseQuery.data.id}
-						name={courseQuery.data.name}
-						published={courseQuery.data.published}
-						onCourseDelete={() => deleteCourseMutation.mutate(courseQuery.data.id)} />
+							id={data.course.id}
+							name={data.course.name}
+							published={data.course.published}
+							onCourseDelete={() => deleteCourseMutation.mutate(data.course.id)} />
 					<SectionWrapper className="mt-0">
-						{courseQuery.data.modules.length === 0 ? (
-							<CreateModuleForm courseId={courseQuery.data.id} />
-						) : (
-							<ModulesList modules={courseQuery.data.modules} />
-						)}
+								{data?.course?.modules?.length === 0 ? (
+									<CreateModuleForm courseId={data.course.id} />
+								) : (
+									<ModulesList modules={data.course.modules} />
+								)}
 					</SectionWrapper>
+				</>			
+				) : (
+					<p>Course not found</p>
+				)}
 				</>
 			) : (
 				<Loading />

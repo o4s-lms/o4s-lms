@@ -7,6 +7,8 @@ query ($id: Int!, $deleted: Boolean = false) {
 		slug
 		pos
 		courseId
+		createdBy
+		createdAt
 		lessons(
 			where: { deleted: { equals: $deleted } }
 			orderBy: { pos: asc }
@@ -18,7 +20,9 @@ query ($id: Int!, $deleted: Boolean = false) {
 			status
 			courseId
 			moduleId
+			createdBy
 			createdAt
+			updatedAt
 		}
 	}
 }

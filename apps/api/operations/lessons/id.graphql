@@ -6,9 +6,18 @@ query ($id: Int!) {
 		name
 		slug
 		pos
-		status
 		courseId
 		moduleId
+		html
+		coverImage
+		status
+		createdBy
 		createdAt
+		updatedAt
+		deleted
+		course {
+			id
+			name
+		}
 	}
 }

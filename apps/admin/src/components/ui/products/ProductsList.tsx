@@ -1,20 +1,29 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import React, { useState } from 'react';
 import Image from "next/image";
-import { api, type RouterOutputs } from "~/utils/api";
 import { Button } from 'primereact/button';
 import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
 import { Tag } from 'primereact/tag';
 import { useRouter } from 'next/router';
 import Loading from '../Loading';
+import { type ProductsAllResponseData } from '@o4s/generated-wundergraph/models';
+import { useQuery } from '~/utils/wundergraph';
 
-type Product = RouterOutputs["product"]["all"][number];
+type Product = ProductsAllResponseData["products"][number];
 
 const ProductsList = () => {
 	const router = useRouter();
 	const [layout, setLayout] = useState('grid');
 
-	const products = api.product.all.useQuery();
+	const { data, error, isLoading } = useQuery({
+		operationName: 'products/all',
+		enabled: true,
+	});
+
+	if (error) {
+		return <p>{error.message}</p>;
+	}
 
 	const getSeverity = (product: Product) => {
 		switch (product.active) {
@@ -94,9 +103,9 @@ const ProductsList = () => {
 
 	return (
 		<>
-			{products.data ? (
+			{!isLoading ? (
 				<div className="card">
-					<DataView value={products.data} itemTemplate={itemTemplate} layout={layout} header={header()} />
+					<DataView value={data?.products} itemTemplate={itemTemplate} layout={layout} header={header()} />
 				</div>
 			) : (
 				<Loading />
