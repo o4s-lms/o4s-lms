@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { useRef } from "react";
 import { useRouter } from "next/router";
 
@@ -47,7 +45,7 @@ const ManageProduct = () => {
 						active={data?.product?.active}
 					/>
 					<SectionWrapper className="mt-0">
-						<CoursesList courses={data?.product?.courses} />
+						<CoursesList productId={data?.product?.id} courses={data?.product?.courses} />
 					</SectionWrapper>
 				</>
 			) : (
