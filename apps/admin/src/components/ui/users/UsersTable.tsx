@@ -11,12 +11,12 @@ import { Tag } from "primereact/tag";
 import { Calendar } from "primereact/calendar";
 import { Toast } from "primereact/toast";
 import { useRef, useState } from "react";
-import { type RouterOutputs } from '~/utils/api';
+import { type UsersAllResponseData } from "@o4s/generated-wundergraph/models";
 
-type Users = RouterOutputs["user"]["all"];
+type Users = UsersAllResponseData["users"];
 
 const UsersTable: React.FC<{
-	users: Users;
+	users: Users | undefined;
 }> = ({ users }) => {
 	const toast = useRef<Toast>(null);
 	const [expandedRows, setExpandedRows] = useState<DataTableExpandedRows>(null);
@@ -61,11 +61,12 @@ const UsersTable: React.FC<{
 
 
 	const formatDate = (value) => {
-		return value.toLocaleDateString('en-US', {
+		return value.substring(0,10);
+		/**return value.toLocaleDateString('en-US', {
 			day: '2-digit',
 			month: '2-digit',
 			year: 'numeric'
-		});
+		});*/
 	};
 
 	const dateBodyTemplate = (rowData) => {

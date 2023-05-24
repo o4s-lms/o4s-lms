@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { useRef, useState } from "react";
 import { useRouter } from "next/router";
 
 import Header from "~/components/ui/layout/Header";
@@ -9,13 +11,9 @@ import { Toast } from "primereact/toast";
 import ProductHeader from "~/components/ui/products/ProductHeader";
 import CoursesList from "~/components/ui/products/CoursesList";
 import { useQuery } from "~/utils/wundergraph";
-import { type CoursesAuthorResponseData } from '@o4s/generated-wundergraph/models';
-
-type Courses = CoursesAuthorResponseData["courses"];
 
 const ManageProduct = () => {
 	const toast = useRef<Toast>(null);
-	const [coursesToAdd, setCoursesToAdd] = useState<Courses>([]);
 	const { query: { productId } } = useRouter();
 
 	//if (typeof courseId !== "string") {

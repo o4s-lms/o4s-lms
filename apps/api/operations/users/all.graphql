@@ -1,5 +1,4 @@
-query ()
-@rbac(requireMatchAll: [admin]) {
+query () {
 	users: lms_findManyUser() {
 		id
 		customerId
@@ -12,5 +11,13 @@ query ()
 		emailVerified
 		image
 		roles
+		courses {
+			courseId
+			role
+			course {
+				name
+				image
+			}
+		}
 	}
 }

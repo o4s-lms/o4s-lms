@@ -1,11 +1,13 @@
 import { type RouterOutputs } from "~/utils/api";
 import Loading from "../Loading";
 import UsersTable from "./UsersTable";
+import { type UsersAllResponseData } from "@o4s/generated-wundergraph/models";
 
-type Users = RouterOutputs["user"]["all"];
+//type Users = RouterOutputs["user"]["all"];
+type Users = UsersAllResponseData["users"];
 
 const UsersList: React.FC<{
-	users: Users;
+	users: Users | undefined;
 }> = ({ users }) => {
 
 	return (

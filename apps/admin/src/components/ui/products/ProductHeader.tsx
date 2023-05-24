@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { Button } from "primereact/button";
@@ -7,19 +9,67 @@ import { Dialog } from "primereact/dialog";
 import useDeleteProductMutation from "~/hooks/useDeleteProductMutation";
 import { Avatar } from "primereact/avatar";
 import { Tag } from "primereact/tag";
+import { client } from "~/utils/wundergraph";
+import { type CoursesAuthorResponseData } from '@o4s/generated-wundergraph/models';
+import { type GetServerSideProps } from "next/types";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { removeObjectsWithId } from "@o4s/lib";
+import useAddCourseProductMutation from "~/hooks/useAddCourseProductMutation";
+
+type Courses = CoursesAuthorResponseData["courses"];
+type Course = CoursesAuthorResponseData["courses"][number];
 
 type Props = {
 	id: number | undefined;
 	name: string | undefined;
 	image: string | undefined;
 	active: boolean | undefined;
+	coursesToAdd?: Courses | undefined;
 }
 
-const ProductHeader = ({ id, name, image, active }: Props) => {
+const ProductHeader: React.FC<Props> = ({ id, name, image, active, coursesToAdd }) => {
 	const router = useRouter();
 	const toast = useRef<Toast>(null);
+	const [dialogVisible, setDialogVisible] = useState<boolean>(false);
 	const deleteProduct = useDeleteProductMutation();
+	const addCourse = useAddCourseProductMutation();
 	const [deleteProductDialog, setDeleteProductDialog] = useState<boolean>(false);
+
+	function add(courseId: any) {
+		if (typeof id === 'number' && typeof courseId === 'number') {
+			void addCourse.trigger({ productId: id, courseId: courseId }, { throwOnError: false })
+		}
+		toast.current?.show({severity:'success', summary: 'Success', detail:'Course added successfully', life: 3000});
+	};
+
+	const dialogFooterTemplate = () => {
+		return <Button label="Ok" icon="pi pi-check" onClick={() => setDialogVisible(false)} />;
+	};
+
+	const addBodyTemplate = (rowData) => {
+		return <Button
+							onClick={() => add(rowData.id)}
+							icon="pi pi-plus" rounded text
+							severity="success" 
+							className="hover:bg-gray-200" aria-label="Add" />;
+	};
+
+	const statusBodyTemplate = (course: Course) => {
+		return <Tag value={course.published ? 'Published' : 'Draft'} severity={getSeverity(course.published)}></Tag>;
+	};
+
+	const imageBodyTemplate = (course: Course) => {
+		return <img src={`${course.image}`} alt={course.name} className="w-6rem shadow-2 border-round" />;
+	};
+
+	const outHeader = (
+		<div className="flex flex-wrap align-items-center justify-content-between gap-2">
+				<span className="text-xl text-900 font-bold">Courses not included in product</span>
+				<Button icon="pi pi-refresh" rounded raised />
+		</div>
+	);
+	const outFooter = `In total there are ${coursesToAdd ? coursesToAdd.length : 0} courses.`;
 
 	const hideDeleteProductDialog = () => {
 		setDeleteProductDialog(false);
@@ -58,6 +108,15 @@ const ProductHeader = ({ id, name, image, active }: Props) => {
 
 	return (
 		<><Toast ref={toast} />
+			<Dialog header="Flex Scroll" visible={dialogVisible} style={{ width: '75vw' }} maximizable
+              modal contentStyle={{ height: '300px' }} onHide={() => setDialogVisible(false)} footer={dialogFooterTemplate}>
+        <DataTable value={coursesToAdd} header={outHeader} footer={outFooter} tableStyle={{ minWidth: '60rem' }}>
+					<Column field="name" header="Name"></Column>
+					<Column header="Image" body={imageBodyTemplate}></Column>            
+					<Column header="Status" body={statusBodyTemplate}></Column>
+					<Column style={{ width: '3%', minWidth: '3rem' }} body={addBodyTemplate} bodyStyle={{ textAlign: 'center' }}/>
+				</DataTable>
+      </Dialog>
 			<Dialog visible={deleteProductDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
 				<div className="confirmation-content">
 					<i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
@@ -117,7 +176,7 @@ const ProductHeader = ({ id, name, image, active }: Props) => {
 						</div>
 					</div>
 					<div className="mt-3 lg:mt-0">
-						<Button label="Add Product" className="p-button-outlined mr-2" icon="pi pi-plus" />
+						<Button onClick={() => setDialogVisible(true)} label="Add Course" className="p-button-outlined mr-2" icon="pi pi-plus" />
 						<Button
 							onClick={confirmDeleteProduct}
 							label="Delete"
@@ -130,6 +189,18 @@ const ProductHeader = ({ id, name, image, active }: Props) => {
 			</div>
 		</>
 	)
+};
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const { data } = await client.query({
+		operationName: 'courses/author',
+	});
+
+  return {
+    props: {
+      coursesToAdd: data?.courses
+    },
+  };
 };
 
 export default ProductHeader;

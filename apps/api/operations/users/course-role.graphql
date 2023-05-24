@@ -1,0 +1,23 @@
+query ($role: lms_CourseRole!) {
+	users: lms_findManyMemberInCourse(
+		where: { role: { equals: $role } }
+	) {
+		role
+		user {
+			id
+      name
+      email
+      emailVerified,
+      image
+      roles
+			courses {
+				courseId
+				role
+				course {
+					name
+					image
+				}
+			}
+		}
+	}
+}

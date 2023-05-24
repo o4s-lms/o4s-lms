@@ -61,6 +61,7 @@ const FilterUsersTable: React.FC<{
 
 
 	const formatDate = (value) => {
+		// return value.substring(0,10);
 		return value.toLocaleDateString('en-US', {
 			day: '2-digit',
 			month: '2-digit',
