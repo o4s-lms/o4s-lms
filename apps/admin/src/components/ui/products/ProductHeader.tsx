@@ -117,7 +117,7 @@ const ProductHeader = ({ id, name, image, active }: Props) => {
 						</div>
 					</div>
 					<div className="mt-3 lg:mt-0">
-						<Button label="Add Course" className="p-button-outlined mr-2" icon="pi pi-plus" />
+						<Button label="Add Product" className="p-button-outlined mr-2" icon="pi pi-plus" />
 						<Button
 							onClick={confirmDeleteProduct}
 							label="Delete"

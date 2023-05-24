@@ -72,8 +72,7 @@ export const env = createEnv({
 		CACHE_USER: process.env.CACHE_USER,
 		CACHE_PASSWORD: process.env.CACHE_PASSWORD,
 		CACHE_DATABASE: process.env.CACHE_DATABASE,
-		GHOST_CONTENT_API_KEY: process.env.GHOST_CONTENT_API_KEY,
-		GHOST_ADMIN_API_KEY: process.env.GHOST_ADMIN_API_KEY,
-		GHOST_API_URL: process.env.GHOST_API_URL,
+		WG_PUBLIC_NODE_URL: process.env.WG_PUBLIC_NODE_URL,
+		WG_TOKEN_AUTH_ENDPOINT: process.env.WG_TOKEN_AUTH_ENDPOINT,
 	},
 });

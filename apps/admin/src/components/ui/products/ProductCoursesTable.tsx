@@ -17,10 +17,10 @@ type Course = CoursesAuthorResponseData["courses"][number];
 
 const ProductCoursesTable: React.FC<{
 	productId: number | undefined;
-	courses: Courses;
+	courses: Courses | undefined;
 }> = ({ productId, courses }) => {
 		const toast = useRef<Toast>(null);
-		const [coursesToAdd, setCoursesToAdd] = useState<Courses>([]);
+		//const [coursesToAdd, setCoursesToAdd] = useState<Courses>([]);
 		const removeCourse = useRemoveCourseProductMutation();
 		const addCourse = useAddCourseProductMutation();
 
@@ -28,20 +28,7 @@ const ProductCoursesTable: React.FC<{
     //    return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
     //};
 
-		const { data, error, isLoading, mutate } = useQuery({
-			operationName: 'courses/author',
-			enabled: true
-		});
-
-		useEffect(() => {
-			void mutate();
-		}, [mutate]);
-
-		if (error) {
-			<p>{error.message}</p>
-		};
-
-		function removeObjectsWithId(out: Courses, inCourse: Courses) {
+		/**function removeObjectsWithId(out: Courses, inCourse: Courses) {
 			inCourse.forEach(i => {
 				const objWithIdIndex = out.findIndex((obj) => obj.id === i.id);
 				if (objWithIdIndex > -1) {
@@ -55,7 +42,7 @@ const ProductCoursesTable: React.FC<{
 		useEffect(() => {
 			const out = removeObjectsWithId(data?.courses, courses);
 			setCoursesToAdd(out);
-		}, [courses, data?.courses]);
+		}, [courses, data?.courses]);*/
 
     const imageBodyTemplate = (course: Course) => {
         return <img src={`${course.image}`} alt={course.name} className="w-6rem shadow-2 border-round" />;
@@ -142,7 +129,7 @@ const ProductCoursesTable: React.FC<{
 								<Column style={{ width: '3%', minWidth: '3rem' }} body={removeBodyTemplate} bodyStyle={{ textAlign: 'center' }}/>
             </DataTable>
         </div>
-				{!isLoading ? (
+					{/**
 					<div className="card">
 							<DataTable value={coursesToAdd} header={outHeader} footer={outFooter} tableStyle={{ minWidth: '60rem' }}>
 									<Column field="name" header="Name"></Column>
@@ -151,9 +138,7 @@ const ProductCoursesTable: React.FC<{
 									<Column style={{ width: '3%', minWidth: '3rem' }} body={addBodyTemplate} bodyStyle={{ textAlign: 'center' }}/>
 							</DataTable>
 					</div>
-				) : (
-					<Loading />
-				)}
+					 */}
 				</>
     );
 };

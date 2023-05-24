@@ -2,9 +2,11 @@ import Loading from "~/components/ui/Loading";
 import ProductCoursesTable from "./ProductCoursesTable";
 import { type CoursesAuthorResponseData } from "@o4s/generated-wundergraph/models";
 
+type Courses = CoursesAuthorResponseData["courses"];
+
 const CoursesList: React.FC<{
 	productId: number | undefined;
-	courses: CoursesAuthorResponseData["courses"] | undefined;
+	courses: Courses | undefined;
 }> = ({ productId, courses }) => {
 
 	return (
