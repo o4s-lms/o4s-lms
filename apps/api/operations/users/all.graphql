@@ -1,4 +1,5 @@
-query () {
+query ()
+@rbac(requireMatchAll: [admin]) {
 	users: lms_findManyUser() {
 		id
 		customerId

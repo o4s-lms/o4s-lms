@@ -18,7 +18,9 @@
     "next": "^13.4.2",
     "next-auth": "^4.22.1",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+		"@cerbos/core": "^0.10.0",
+    "@cerbos/grpc": "^0.10.0"
   },
   "devDependencies": {
     "@o4s/eslint-config": "^0.1.0",

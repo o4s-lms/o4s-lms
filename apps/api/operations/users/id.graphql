@@ -1,5 +1,5 @@
 query ($id: String!)
-@rbac(requireMatchAll: [admin]) {
+@rbac(requireMatchAny: [user, admin]) {
 	user: lms_findUniqueUser(where: { id: $id }) {
 		id
 		customerId
