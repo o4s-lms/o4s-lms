@@ -6,7 +6,7 @@ services:
     restart: always
     command: ["server", "--config=/data/config.yaml"]
     ports:
-      - 3592:3592
-      - 3593:3593
+      - '0.0.0.0:3592:3592'
+      - '0.0.0.0:3593:3593'
     volumes:
       - ./data:/data

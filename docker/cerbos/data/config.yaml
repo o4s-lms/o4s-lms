@@ -1,0 +1,54 @@
+---
+server:
+  httpListenAddr: ":3592"
+  grpcListenAddr: ":3593"
+  metricsEnabled: false
+  logRequestPayloads: true
+  #tls:
+  #  cert: /data/ssl/joseantcordeiro_hopto_org.pem
+  #  key: /data/ssl/joseantcordeiro_hopto_org.key
+  adminAPI:
+    enabled: true
+    adminCredentials:
+      username: cerbos
+      passwordHash: JDJ5JDEwJEtPZVJDOW05RE80TDlHbEs0QnRDa2VBZzVYcHpsTkRRNm1qMzZ5Qy5DZnFwUHRDanA5TWZxCgo=
+  playgroundEnabled: true
+
+audit:
+  enabled: true # Set to false to completely disable audit logging.
+  accessLogsEnabled: true # Log API access attempts
+  decisionLogsEnabled: true # Log policy decisions
+  backend: local # Audit backend to use.
+  local: # Configuration for the local audit backend
+    storagePath: /data/audit # Path to store the data
+    retentionPeriod: 168h # Records older than this will be automatically deleted
+
+#auxData:
+#  jwt:
+#    disableVerification: true
+
+engine:
+  defaultPolicyVersion: "default"
+
+schema:
+  enforcement: reject
+
+storage:
+  driver: "sqlite3"
+  sqlite3:
+    dsn: "file:/data/cerbos.sqlite?mode=rwc&cache=shared&_fk=true"
+  #driver: disk
+  #disk:
+  #  directory: /data/policies
+  #  watchForChanges: true
+
+telemetry:
+  disabled: true
+
+#tracing:
+#  serviceName: cerbos
+#  sampleProbability: 0.5
+#  exporter: jaeger
+#  jaeger:
+#    agentEndpoint: "joseantcordeiro.hopto.org:6831"
+

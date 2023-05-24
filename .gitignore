@@ -12,6 +12,9 @@ coverage
 **/prisma/db.sqlite
 **/prisma/db.sqlite-journal
 
+# cerbos
+**/docker/cerbos/data/cerbos.sqlite
+
 # next.js
 .next/
 out/
