@@ -5,6 +5,8 @@ import { Toast } from 'primereact/toast';
 import React from "react";
 import { Dialog } from "primereact/dialog";
 import useDeleteProductMutation from "~/hooks/useDeleteProductMutation";
+import { Avatar } from "primereact/avatar";
+import { Tag } from "primereact/tag";
 
 type Props = {
 	id: number | undefined;
@@ -41,6 +43,19 @@ const ProductHeader = ({ id, name, image, active }: Props) => {
 		</React.Fragment>
 	);
 
+	const getSeverity = (condition: boolean | undefined) => {
+		switch (condition) {
+				case true:
+						return 'success';
+
+				case false:
+						return 'danger';
+
+				default:
+						return null;
+		}
+	};
+
 	return (
 		<><Toast ref={toast} />
 			<Dialog visible={deleteProductDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
@@ -73,19 +88,31 @@ const ProductHeader = ({ id, name, image, active }: Props) => {
 				</ul>
 				<div className="flex align-items-start flex-column lg:justify-content-between lg:flex-row">
 					<div>
-						<div className="font-medium text-3xl text-900">{id} : {name}</div>
+						<div className="font-medium text-3xl text-900">
+							<div className="flex justify-between">
+								<span className="px-3">
+									<Tag className="padding-right" value={active ? 'Actived' : 'Desactived'} severity={getSeverity(active)}></Tag>
+								</span>
+								<Avatar 
+									image={image}
+									className="flex align-items-center justify-content-center mr-2" size="large" shape="circle"
+								/>
+								<span>{id} : {name}</span>
+								
+							</div>
+						</div>
 						<div className="flex align-items-center text-700 flex-wrap">
 							<div className="mr-5 flex align-items-center mt-3">
 								<i className="pi pi-users mr-2"></i>
-								<span>332 Active Users</span>
+								<span>332 Sales</span>
 							</div>
 							<div className="mr-5 flex align-items-center mt-3">
 								<i className="pi pi-globe mr-2"></i>
-								<span>9402 Sessions</span>
+								<span> ...</span>
 							</div>
 							<div className="flex align-items-center mt-3">
 								<i className="pi pi-clock mr-2"></i>
-								<span>2.32m Avg. Duration</span>
+								<span>EUR 9402 Revenue</span>
 							</div>
 						</div>
 					</div>

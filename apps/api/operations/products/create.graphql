@@ -1,5 +1,11 @@
-mutation ($name: String!, $description: String!, $image: String, $price: Int!, $currency: String = "EUR")
-@rbac(requireMatchAll: [admin]) {
+mutation (
+	$name: String!,
+	$description: String!,
+	$image: String,
+	$price: Int!,
+	$currency: String = "eur",
+	$userId: String! @fromClaim(name: USERID)
+) {
 	createOneProduct: lms_createOneProduct(
 		data: {
 			name: $name
@@ -7,6 +13,7 @@ mutation ($name: String!, $description: String!, $image: String, $price: Int!, $
 			image: $image
 			price: $price
 			currency: $currency
+			createdBy: $userId
 		}
 	) {
 		id
@@ -16,5 +23,7 @@ mutation ($name: String!, $description: String!, $image: String, $price: Int!, $
 		price
 		currency
 		active
+		createdBy
+		createdAt
 	}
 }

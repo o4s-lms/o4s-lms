@@ -5,7 +5,7 @@ mutation (
 	$image: String!,
 	$role: lms_CourseRole! = AUTHOR,
 	$userId: String! @fromClaim(name: USERID)
-	) {
+) {
 	createOneCourse: lms_createOneCourse(
 		data: {
 			name: $name

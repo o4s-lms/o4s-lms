@@ -11,11 +11,8 @@ import CoursesList from "~/components/ui/products/CoursesList";
 import { useQuery } from "~/utils/wundergraph";
 
 const ManageProduct = () => {
-	const router = useRouter();
 	const toast = useRef<Toast>(null);
-
-	const query = router.query;
-	const productId: string = query.productId;
+	const { query: { productId } } = useRouter();
 
 	//if (typeof courseId !== "string") {
 	//  throw new Error("missing id");

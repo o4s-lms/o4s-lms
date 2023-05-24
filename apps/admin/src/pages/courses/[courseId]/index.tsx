@@ -12,11 +12,8 @@ import CreateModuleForm from "~/components/forms/CreateModuleForm";
 import { useQuery } from "~/utils/wundergraph";
 
 const ManageCourse = () => {
-	const router = useRouter();
 	const toast = useRef<Toast>(null);
-
-	const query = router.query;
-	const courseId = query.courseId;
+	const { query: { courseId } } = useRouter();
 
 	//if (typeof courseId !== "string") {
 	//  throw new Error("missing id");
