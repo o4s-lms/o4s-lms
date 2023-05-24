@@ -7,16 +7,11 @@ import LessonEditor from "~/components/ui/lessons/LessonEditor";
 import LoadingEditor from "~/components/ui/lessons/LoadingEditor";
 
 const EditLesson = () => {
-	const router = useRouter();
-  const query = router.query;
-
-  const lessonId = query.lessonId;
+	const { query: { lessonId } } = useRouter();
 
 	//if (typeof courseId !== "string") {
   //  throw new Error("missing id");
   //}
-
-	// const lessonQuery = api.lesson.getContent.useQuery({ id });
 
 	const { data, error, isLoading } = useQuery({
 		operationName: 'lessons/id',
