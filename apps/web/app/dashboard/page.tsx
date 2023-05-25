@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import Link from "next/link"
 import { useQuery } from "@/lib/wundergraph"
@@ -6,7 +6,7 @@ import { type CoursesAuthorResponseData } from "@o4s/generated-wundergraph/model
 
 import { siteConfig } from "@/config/site"
 import { Button, buttonVariants } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
+import { Loading } from "@/components/loading"
 
 import { useToast } from "@/hooks/use-toast"
 
@@ -68,7 +68,7 @@ export default function Dashboard() {
 				{!isLoading ? (
         	<p>{JSON.stringify(data?.courses)}</p>
 				) : (
-					<Skeleton className="h-[20px] w-[100px] rounded-full" />
+					<Loading />
 				)}
       </div>
     </section>
