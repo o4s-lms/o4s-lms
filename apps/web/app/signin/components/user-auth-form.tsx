@@ -35,7 +35,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
     signIn('email', {
 			email: email,
-			callbackUrl: '/dashboard',
+			callbackUrl: '/x',
 			redirect: false
 		})
 		.then((callback) => {

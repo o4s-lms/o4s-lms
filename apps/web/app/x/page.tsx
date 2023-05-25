@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { getSession } from "next-auth/react"
 import { useQuery } from "@/lib/wundergraph"
 import { type CoursesAuthorResponseData } from "@o4s/generated-wundergraph/models"
 
@@ -9,19 +10,21 @@ import { Button, buttonVariants } from "@/components/ui/button"
 import { Loading } from "@/components/loading"
 
 import { useToast } from "@/hooks/use-toast"
+import { CourseCard } from "./components/course-card"
 
-type Course = CoursesAuthorResponseData["courses"][number];
+type Course = CoursesAuthorResponseData["courses"][number]
 
-export default function Dashboard() {
+export default async function Dashboard() {
+	const session = await getSession()
 	const { toast } = useToast()
 	
-	const { data, error, isLoading } = useQuery({
-		operationName: 'courses/author',
-		enabled: true,
+	const { data: users, error, isLoading } = useQuery({
+		operationName: 'users/my-courses',
+		enabled: !!session,
 	})
 
 	if (error) {
-		return <p>{error.message}</p>;
+		return <p>{error.message}</p>
 	}
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
@@ -66,7 +69,9 @@ export default function Dashboard() {
 
 			<div className="flex gap-4">
 				{!isLoading ? (
-        	<p>{JSON.stringify(data?.courses)}</p>
+					{users?.forEach((user => {
+						<CourseCard course={user.course} />	
+					})}
 				) : (
 					<Loading />
 				)}
