@@ -11,6 +11,68 @@ import Header from "~/components/ui/layout/Header";
 import Nav from "~/components/ui/layout/Nav";
 import SectionWrapper from "~/components/SectionWrapper";
 import { type NotificationPayload, sendToNotificationWebhook } from "~/utils/novu";
+import { useFileUpload } from "~/utils/wundergraph";
+
+const Upload = () => {
+
+	const [files, setFiles] = useState<FileList>();
+	const [data, setData] = useState<string[]>([]);
+
+	const { upload } = useFileUpload({});
+
+	let uploadProfile: 'images';
+
+	const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (e.target.files) setFiles(e.target.files);
+	};
+
+	const onSubmit = async (e: React.FormEvent<Element>) => {
+		e.preventDefault();
+		if (!files) {
+			return;
+		}
+		try {
+			const result = await upload({
+				provider: 'minio',
+				profile: uploadProfile,
+				files,
+			});
+			result && setData(result);
+		} catch (e) {
+			const msg = e instanceof Error ? e.message : 'Upload failed!';
+			alert(msg);
+			console.error("Couldn't upload files", msg);
+		}
+	};
+
+	return (
+		<div>
+			<form className="grid grid-cols-2 items-center gap-4 py-10" onSubmit={onSubmit}>
+				<input
+					className="col-span-2 border border-slate-500 rounded"
+					id="multiple_files"
+					type="file"
+					multiple
+					onChange={onFileChange}
+				/>
+				<button
+					name="upload"
+					className="col-span-1 bg-white text-black px-2 rounded"
+					type="submit"
+				>
+					Upload
+				</button>
+				</form>
+			<ul>
+				{data.map((file) => (
+					<li data-testid="result" className="text-center mt-8" key={file}>
+						Uploaded as {file}
+					</li>
+				))}
+			</ul>
+		</div>
+	);
+};
 
 const CreateCourseForm: React.FC = () => {
 	const { data: session } = useSession();
@@ -84,15 +146,16 @@ const CreateCourseForm: React.FC = () => {
 						{error.data.zodError.fieldErrors.image}
 					</span>
 				)}
+
+				<Upload />
+
 				<div className="field card flex">
 					<Button
-						onClick={() => {
-							mutate({
-								name,
-								description,
-								image,
-							});
-						}}
+						onClick={() => mutate({
+							name,
+							description,
+							image,
+						})}
 						label="Add new course" raised />
 				</div>
 
