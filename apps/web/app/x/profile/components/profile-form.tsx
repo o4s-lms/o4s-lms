@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "@/hooks/use-toast"
 import {
   Form,
   FormControl,
@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/form"
 
 const profileFormSchema = z.object({
-  username: z
+  name: z
     .string()
     .min(2, {
       message: "Username must be at least 2 characters.",
@@ -90,7 +90,7 @@ export function ProfileForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="username"
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Username</FormLabel>
