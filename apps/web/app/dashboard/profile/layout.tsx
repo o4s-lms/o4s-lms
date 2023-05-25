@@ -2,33 +2,33 @@ import { Metadata } from "next"
 import Image from "next/image"
 
 import { Separator } from "@/components/ui/separator"
-import { SidebarNav } from "@/app/examples/forms/components/sidebar-nav"
+import { SidebarNav } from "@/app/dashboard/profile/components/sidebar-nav"
 
 export const metadata: Metadata = {
-  title: "Forms",
+  title: "Profile",
   description: "Advanced form example using react-hook-form and Zod.",
 }
 
 const sidebarNavItems = [
   {
     title: "Profile",
-    href: "/examples/forms",
+    href: "/dashboard/profile",
   },
   {
     title: "Account",
-    href: "/examples/forms/account",
+    href: "/dashboard/profile/settings/account",
   },
   {
     title: "Appearance",
-    href: "/examples/forms/appearance",
+    href: "/dashboard/profile/settings/appearance",
   },
   {
     title: "Notifications",
-    href: "/examples/forms/notifications",
+    href: "/dashboard/profile/settings/notifications",
   },
   {
     title: "Display",
-    href: "/examples/forms/display",
+    href: "/dashboard/profile/settings/display",
   },
 ]
 
