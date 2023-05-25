@@ -14,6 +14,7 @@ import {
   NotificationBell,
 	NovuProvider,
 } from "@novu/notification-center"
+import { UserNav } from "@/components/user-nav"
 
 export function SiteHeader() {
 	const session = useSession()
@@ -57,17 +58,25 @@ export function SiteHeader() {
             </Link>
             <ThemeToggle />
 						{session && (
+						<>
 							<NovuProvider
-									subscriberId={session?.data?.user.id}
-									applicationIdentifier={'ff5UcyJv0woS'}
-									backendUrl={'http://joseantcordeiro.hopto.org:3003'}
-									socketUrl={'http://joseantcordeiro.hopto.org:3002'}
-									>
-									<PopoverNotificationCenter colorScheme={theme}>
-										{({ unseenCount }) => <NotificationBell unseenCount={unseenCount} />}
-									</PopoverNotificationCenter>
+								subscriberId={session?.data?.user.id}
+								applicationIdentifier={'ff5UcyJv0woS'}
+								backendUrl={'http://joseantcordeiro.hopto.org:3003'}
+								socketUrl={'http://joseantcordeiro.hopto.org:3002'}
+							>
+								<PopoverNotificationCenter colorScheme={theme}>
+									{({ unseenCount }) => <NotificationBell unseenCount={unseenCount} />}
+								</PopoverNotificationCenter>
 							</NovuProvider>
+							<UserNav
+								name={session?.data?.user.name}
+								email={session?.data?.user.email}
+								image={session?.data?.user.image}
+							/>
+						</>
 						)}
+						
           </nav>
         </div>
       </div>

@@ -6,6 +6,7 @@ import { type CoursesAuthorResponseData } from "@o4s/generated-wundergraph/model
 
 import { siteConfig } from "@/config/site"
 import { Button, buttonVariants } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
 
 import { useToast } from "@/hooks/use-toast"
 
@@ -29,7 +30,7 @@ export default function IndexPage() {
           Beautifully designed components <br className="hidden sm:inline" />
           built with Radix UI and Tailwind CSS.
         </h1>
-        <p className="max-w-[700px] text-lg text-muted-foreground sm:text-xl">
+        <p className="text-muted-foreground max-w-[700px] text-lg sm:text-xl">
           Accessible and customizable components that you can copy and paste
           into your apps. Free. Open Source. And Next.js 13 Ready.
         </p>
@@ -67,7 +68,7 @@ export default function IndexPage() {
 				{!isLoading ? (
         	<p>{JSON.stringify(data?.courses)}</p>
 				) : (
-					<p>Is loading....</p>
+					<Skeleton className="h-[20px] w-[100px] rounded-full" />
 				)}
       </div>
     </section>
