@@ -1,6 +1,6 @@
 packages:
   - apps/api
   - apps/admin
-  - apps/lms
+  - apps/web
   - packages/*
   - packages/config/*
