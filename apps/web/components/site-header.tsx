@@ -6,6 +6,7 @@ import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/button"
 import { Icons } from "@/components/icons"
 import { MainNav } from "@/components/main-nav"
+import useScroll from "@/hooks/use-scroll"
 import { useTheme } from "next-themes"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { useSession } from "next-auth/react"
@@ -19,9 +20,12 @@ import { UserNav } from "@/components/user-nav"
 export function SiteHeader() {
 	const session = useSession()
 	const { theme } = useTheme()
+	const scrolled = useScroll(50)
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background">
+    <header className={`bg-background sticky top-0 z-40 w-full border-b
+											${scrolled ? "border-gray-200 bg-white/50 backdrop-blur-xl dark:border-gray-800 dark:bg-black/50" : "bg-white/0"}
+											transition-all`} >
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
         <MainNav items={siteConfig.mainNav} />
         <div className="flex flex-1 items-center justify-end space-x-4">
