@@ -32,7 +32,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Check, ChevronsUpDown } from "lucide-react"
-import useUpdateProfileMutation from "@/hooks/use-update-profile-mutationion"
+import useUpdateProfileMutation from "@/hooks/use-update-profile-mutation"
 import { useState } from "react"
 import { Icons } from "@/components/icons"
 
