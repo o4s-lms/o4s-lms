@@ -12,10 +12,7 @@ function useUpdateProfileMutation() {
 
 		return await mutate(
 			{
-				operationName: 'users/id',
-				input: {
-					id: input.id
-				}
+				operationName: 'users/me'
 			},
 			() => {
 				return updateProfile.trigger(input, options);

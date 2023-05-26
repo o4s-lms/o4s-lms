@@ -32,8 +32,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Check, ChevronsUpDown } from "lucide-react"
-import { useSession } from "next-auth/react"
-import useUpdateProfileMutation from "@/hooks/useUpdateProfileMutation"
+import useUpdateProfileMutation from "@/hooks/use-update-profile-mutationion"
+import { useState } from "react"
+import { Icons } from "@/components/icons"
 
 const languages = [
   { label: "English", value: "en" },
@@ -66,15 +67,22 @@ const profileFormSchema = z.object({
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>
 
-export function ProfileForm() {
-	const { data: session } = useSession()
+interface Props {
+	userId: string;
+	name: string;
+	phone: string;
+	locale: string;
+}
+
+export function ProfileForm({ userId, name, phone, locale }: Props) {
 	const updateProfile = useUpdateProfileMutation()
+	const [isLoading, setIsLoading] = useState<boolean>(false)
 
 	const defaultValues: Partial<ProfileFormValues> = {
-		id: session?.user?.id as string,
-		name: session?.user?.name as string,
-		phone: session?.user?.phone as string,
-		locale: session?.user?.locale as string,
+		id: userId as string,
+		name: name as string,
+		phone: phone as string,
+		locale: locale as string,
 	}
 
   const form = useForm<ProfileFormValues>({
@@ -84,15 +92,30 @@ export function ProfileForm() {
   })
 
   function onSubmit(data: ProfileFormValues) {
-		updateProfile.trigger(data, { throwOnError: false });
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
+		setIsLoading(true)
+		const user = updateProfile.trigger(data, { throwOnError: false })
+
+		if (!user) {
+			toast({
+				variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+				description: (
+					<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+						<code className="text-white">{JSON.stringify(user, null, 2)}</code>
+					</pre>
+				),
+			})
+		} else {
+			toast({
+				title: "You submitted the following values:",
+				description: (
+					<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+						<code className="text-white">{JSON.stringify(data, null, 2)}</code>
+					</pre>
+				),
+			})
+		}
+		setIsLoading(false)
   }
 
   return (
@@ -201,7 +224,12 @@ export function ProfileForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Update profile</Button>
+        <Button type="submit" disabled={isLoading}>
+					{isLoading && (
+						<Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+					)}
+					Update profile
+				</Button>
       </form>
     </Form>
   )

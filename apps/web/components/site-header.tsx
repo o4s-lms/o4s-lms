@@ -62,7 +62,7 @@ export function SiteHeader() {
             </Link>
             <ThemeToggle />
 						{session && (
-						<>
+						<>{/**
 							<NovuProvider
 								subscriberId={session?.data?.user.id}
 								applicationIdentifier={'ff5UcyJv0woS'}
@@ -72,7 +72,7 @@ export function SiteHeader() {
 								<PopoverNotificationCenter colorScheme={theme}>
 									{({ unseenCount }) => <NotificationBell unseenCount={unseenCount} />}
 								</PopoverNotificationCenter>
-							</NovuProvider>
+							</NovuProvider>  */}
 							<UserNav
 								name={session?.data?.user.name}
 								email={session?.data?.user.email}

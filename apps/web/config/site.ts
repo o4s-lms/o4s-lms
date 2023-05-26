@@ -1,18 +1,18 @@
 export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
-  name: "Next.js",
+  name: "O4S LMS",
   description:
-    "Beautifully designed components built with Radix UI and Tailwind CSS.",
+    "Open source LMS",
   mainNav: [
     {
       title: "Home",
-      href: "/",
+      href: "/x",
     },
   ],
   links: {
-    twitter: "https://twitter.com/shadcn",
-    github: "https://github.com/shadcn/ui",
+    twitter: "https://twitter.com/joseantcordeiro",
+    github: "https://github.com/o4s-lms/o4s-lms",
     docs: "https://ui.shadcn.com",
   },
 }

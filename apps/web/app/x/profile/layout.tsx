@@ -15,10 +15,6 @@ const sidebarNavItems = [
     href: "/x/profile",
   },
   {
-    title: "Account",
-    href: "/x/profile/settings/account",
-  },
-  {
     title: "Appearance",
     href: "/x/profile/settings/appearance",
   },
