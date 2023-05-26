@@ -8,15 +8,15 @@ import * as z from "zod"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/hooks/use-toast"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command"
 import {
   Form,
   FormControl,
@@ -26,55 +26,65 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { Check, ChevronsUpDown } from "lucide-react"
+import { useSession } from "next-auth/react"
+import useUpdateProfileMutation from "@/hooks/useUpdateProfileMutation"
+
+const languages = [
+  { label: "English", value: "en" },
+  { label: "French", value: "fr" },
+  { label: "Spanish", value: "es" },
+  { label: "Portuguese", value: "pt" },
+] as const
+
+const phoneRegex = new RegExp(
+  /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
+)
 
 const profileFormSchema = z.object({
-  name: z
-    .string()
-    .min(2, {
-      message: "Username must be at least 2 characters.",
-    })
-    .max(30, {
-      message: "Username must not be longer than 30 characters.",
-    }),
-  email: z
-    .string({
-      required_error: "Please select an email to display.",
-    })
-    .email(),
-  bio: z.string().max(160).min(4),
-  urls: z
-    .array(
-      z.object({
-        value: z.string().url({ message: "Please enter a valid URL." }),
-      })
-    )
-    .optional(),
+	id: z.string(),
+	name: z
+		.string()
+		.min(5, {
+			message: "Name must be at least 5 characters.",
+		})
+		.max(50, {
+			message: "Name must not be longer than 50 characters.",
+		}),
+	phone: z
+		.string()
+		.regex(phoneRegex, 'Invalid Number!'),
+	locale: z.string({
+		required_error: "Please select a language.",
+	}),
 })
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>
 
-// This can come from your database or API.
-const defaultValues: Partial<ProfileFormValues> = {
-  bio: "I own a computer.",
-  urls: [
-    { value: "https://shadcn.com" },
-    { value: "http://twitter.com/shadcn" },
-  ],
-}
-
 export function ProfileForm() {
+	const { data: session } = useSession()
+	const updateProfile = useUpdateProfileMutation()
+
+	const defaultValues: Partial<ProfileFormValues> = {
+		id: session?.user?.id as string,
+		name: session?.user?.name as string,
+		phone: session?.user?.phone as string,
+		locale: session?.user?.locale as string,
+	}
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
     mode: "onChange",
   })
 
-  const { fields, append } = useFieldArray({
-    name: "urls",
-    control: form.control,
-  })
-
   function onSubmit(data: ProfileFormValues) {
+		updateProfile.trigger(data, { throwOnError: false });
     toast({
       title: "You submitted the following values:",
       description: (
@@ -88,18 +98,43 @@ export function ProfileForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
+				<FormField
+					control={form.control}
+					name="id"
+					render={({ field }) => (
+						<FormControl>
+              <Input type="hidden" {...field} />
+            </FormControl>
+					)}
+				/>
+				<FormField
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="Your name" {...field} />
               </FormControl>
               <FormDescription>
-                This is your public display name. It can be your real name or a
-                pseudonym. You can only change this once every 30 days.
+                This is the name that will be displayed on your profile and in
+                emails.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+				<FormField
+          control={form.control}
+          name="phone"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Phone</FormLabel>
+              <FormControl>
+                <Input placeholder="Your phone" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is the phone that will be displayed on your profile.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -107,83 +142,65 @@ export function ProfileForm() {
         />
         <FormField
           control={form.control}
-          name="email"
+          name="locale"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a verified email to display" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormDescription>
-                You can manage verified email addresses in your{" "}
-                <Link href="/examples/forms">email settings</Link>.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="bio"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Bio</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Tell us a little bit about yourself"
-                  className="resize-none"
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription>
-                You can <span>@mention</span> other users and organizations to
-                link to them.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div>
-          {fields.map((field, index) => (
-            <FormField
-              control={form.control}
-              key={field.id}
-              name={`urls.${index}`}
-              render={() => (
-                <FormItem>
-                  <FormLabel className={cn(index !== 0 && "sr-only")}>
-                    URLs
-                  </FormLabel>
-                  <FormDescription className={cn(index !== 0 && "sr-only")}>
-                    Add links to your website, blog, or social media profiles.
-                  </FormDescription>
+            <FormItem className="flex flex-col">
+              <FormLabel>Language</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
                   <FormControl>
-                    <Input {...form.register(`urls.${index}.value`)} />
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className={cn(
+                        "w-[200px] justify-between",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value
+                        ? languages.find(
+                            (language) => language.value === field.value
+                          )?.label
+                        : "Select language"}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ))}
-          <Button
-            type="button"
-            variant="link"
-            size="sm"
-            className="mt-1"
-            onClick={() => append({ value: "" })}
-          >
-            Add URL
-          </Button>
-        </div>
+                </PopoverTrigger>
+                <PopoverContent className="w-[200px] p-0">
+                  <Command>
+                    <CommandInput placeholder="Search language..." />
+                    <CommandEmpty>No language found.</CommandEmpty>
+                    <CommandGroup>
+                      {languages.map((language) => (
+                        <CommandItem
+                          value={language.value}
+                          key={language.value}
+                          onSelect={(value) => {
+                            form.setValue("locale", value)
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              language.value === field.value
+                                ? "opacity-100"
+                                : "opacity-0"
+                            )}
+                          />
+                          {language.label}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+              <FormDescription>
+                This is the language that will be used in the lms.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button type="submit">Update profile</Button>
       </form>
     </Form>

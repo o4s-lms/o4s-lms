@@ -20,12 +20,16 @@ declare module "next-auth" {
     user: {
       id: string | undefined;
       // ...other properties
+			phone: string | undefined;
+			locale: string | undefined;
       roles: string[];
     } & DefaultSession["user"];
   }
 
 	interface JWT extends DefaultJWT {
 		token: {
+			phone: string;
+			locale: string;
 			roles: string[];
 		} & DefaultJWT["token"];
 	}
@@ -33,6 +37,8 @@ declare module "next-auth" {
   interface User {
     // ...other properties
 		id: string;
+		phone: string;
+		locale: string;
     roles: string[];
   }
 }
@@ -112,6 +118,8 @@ export const authOptions: NextAuthOptions = {
 			session.user.name = token.name;
 			session.user.email = token.email;
 			session.user.image = token.picture;
+			session.user.phone = token.phone;
+			session.user.locale = token.locale;
 			session.user.roles = token.roles;
 			session.expires = token.exp;
 
