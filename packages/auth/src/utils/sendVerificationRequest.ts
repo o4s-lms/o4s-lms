@@ -11,6 +11,7 @@ export const sendVerificationRequest = async ({ identifier, url }: Props) => {
 		select: { id: true },
 	});
 	if (user === null) {
+			// is new user, send a welcome mail to another
 			throw new Error("User not found");
 	}
   const data = {

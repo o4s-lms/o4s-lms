@@ -9,7 +9,7 @@ export default withCors(async (req: NextApiRequest, res: NextApiResponse) => {
 
 	if (token) {
 		res.status(200);
-		res.json({ sub: token.sub, name: token.name, email: token.email, locale: token.locale, roles: [token.roles] });
+		res.json({ sub: token.sub, name: token.name, email: token.email, locale: token.locale, roles: token.roles });
 	} else {
 		// Not Signed in
 		res.status(401);

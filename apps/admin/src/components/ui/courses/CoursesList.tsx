@@ -8,6 +8,7 @@ import { Tag } from 'primereact/tag';
 import { useRouter } from 'next/router';
 import Loading from '~/components/ui/Loading';
 import { type CoursesAuthorResponseData } from '@o4s/generated-wundergraph/models';
+import { minioImage } from '~/utils/image';
 
 type Course = CoursesAuthorResponseData["courses"][number];
 
@@ -54,7 +55,7 @@ const CoursesList = () => {
 		return (
 			<div className="col-12">
 				<div className="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
-					<Image src={course.image} alt={course.name} width={205} height={201} className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" />
+					<Image src={minioImage(course.image)} alt={course.name} width={205} height={201} className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" />
 					<div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
 						<div className="flex flex-column align-items-center sm:align-items-start gap-3">
 							<div className="text-2xl font-bold text-900">{course.name}</div>
@@ -83,7 +84,7 @@ const CoursesList = () => {
 						<Tag value={course.published ? ("Published") : ("Draft")} severity={getSeverity(course)}></Tag>
 					</div>
 					<div className="flex flex-column align-items-center gap-3 py-5">
-						<Image className="w-9 shadow-2 border-round" src={course.image} alt={course.name} width={205} height={201} />
+						<Image className="w-9 shadow-2 border-round" src={minioImage(course.image)} alt={course.name} width={205} height={201} />
 						<div className="text-2xl font-bold">{course.name}</div>
 						<div className="text-900">{course.description}</div>
 					</div>
