@@ -14,24 +14,31 @@ import { CourseCard } from "./components/course-card"
 
 type Courses = UsersMy_coursesResponseData["users"]
 
-export default async function Dashboard() {
+export default function Dashboard() {
 	const { toast } = useToast()
 	
-	/**const { data, error, isLoading } = useQuery({
+	const { data, error, isLoading } = useQuery({
 		operationName: 'users/my-courses',
 		enabled: true,
 	})
-
-	if (error) return <p>{error.message}</p>*/
-
-	const isLoading = false
 	
   return (
 		<>
+		{error && (
+			toast({
+				variant: "destructive",
+				title: "Uh oh! Something went wrong.",
+				description: (
+					<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+						<code className="text-white">{error.message}</code>
+					</pre>
+				),
+			})
+		)}
 		<div className="container grid items-center space-y-6">
 			<div className="gap-6 pb-8 pt-6 md:py-10">
 				{!isLoading ? (
-					<><div>DASHBOARD</div></>
+					<><div>{JSON.stringify(data, null, 2)}</div></>
 				) : (
 					<Loading />
 				)}
