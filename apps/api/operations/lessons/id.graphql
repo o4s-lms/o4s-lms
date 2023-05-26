@@ -9,7 +9,7 @@ query ($id: Int!) {
 		courseId
 		moduleId
 		html
-		coverImage
+		image
 		status
 		createdBy
 		createdAt

@@ -20,20 +20,20 @@ declare module "next-auth" {
     user: {
       id: string | undefined;
       // ...other properties
-      roles: string;
+      roles: string[];
     } & DefaultSession["user"];
   }
 
 	interface JWT extends DefaultJWT {
 		token: {
-			roles: string;
+			roles: string[];
 		} & DefaultJWT["token"];
 	}
 
   interface User {
     // ...other properties
 		id: string;
-    roles: string;
+    roles: string[];
   }
 }
 

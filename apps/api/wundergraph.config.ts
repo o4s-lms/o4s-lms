@@ -39,6 +39,11 @@ const lms = introspect.prisma({
   prismaFilePath: './prisma/schema.prisma',
 });
 
+/**const lms = introspect.postgresql({
+  apiNamespace: 'lms',
+  databaseURL: new EnvironmentVariable('DATABASE_URL', 'postgresql://USER:PASSWORD@HOST:PORT/DATABASE'),
+});*/
+
 // configureWunderGraph emits the configuration
 configureWunderGraphApplication({
 	s3UploadProvider: [aws],

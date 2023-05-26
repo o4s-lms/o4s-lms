@@ -18,7 +18,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { CoursesAuthorResponseData } from "@o4s/generated-wundergraph/models"
+import { CoursesAuthorResponseData, UsersMy_coursesResponseData } from "@o4s/generated-wundergraph/models"
+import { Avatar, AvatarImage } from "@/components/ui/avatar"
 
 type Course = CoursesAuthorResponseData["courses"][number]
 interface Props {
@@ -33,28 +34,9 @@ export function CourseCard({ course }: Props) {
         <CardDescription>{course.description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <form>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Name</Label>
-              <Input id="name" placeholder="Name of your project" />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Framework</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select" />
-                  <SelectContent position="popper">
-                    <SelectItem value="next">Next.js</SelectItem>
-                    <SelectItem value="sveltekit">SvelteKit</SelectItem>
-                    <SelectItem value="astro">Astro</SelectItem>
-                    <SelectItem value="nuxt">Nuxt.js</SelectItem>
-                  </SelectContent>
-                </SelectTrigger>
-              </Select>
-            </div>
-          </div>
-        </form>
+				<Avatar className="h-60 w-60 rounded-full">
+          <AvatarImage src={course.image} alt={course.name} />
+        </Avatar>
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button variant="ghost">Cancel</Button>

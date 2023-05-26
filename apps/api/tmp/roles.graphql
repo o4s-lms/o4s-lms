@@ -1,5 +1,8 @@
 query ($role: String!) {
-	users: lms_findManyUser(where: { roles: { equals: $role } }) {
+	users: lms_findManyUser(where: {
+		path: ["roles"],
+  	array_contains: [$role],
+	}) {
 		id
 		customerId
 		name
