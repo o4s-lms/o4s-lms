@@ -1,14 +1,24 @@
+"use client"
+
 import { siteConfig } from "@/config/site"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
-import { getSession } from "next-auth/react"
+import { useSession } from "next-auth/react"
 import { Loading } from "@/components/loading"
 import { redirect } from "next/navigation"
 
-export default async function IndexPage() {
-	const session = await getSession()
+export default function IndexPage() {
+	const session = useSession()
 
-	if (!session) redirect("/signin")
+	if (session.status === "loading") {
+		<Loading />
+	}
+
+	if (!session) { 
+		redirect("/signin")
+	} else {
+		redirect("/x")
+	}
 
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">

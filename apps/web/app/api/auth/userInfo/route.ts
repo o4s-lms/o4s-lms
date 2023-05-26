@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
 		console.log(JSON.stringify(token));
 		return cors(
 			req,
-			new Response(JSON.stringify({ sub: token.sub, name: token.name, email: token.email, locale: token.locale, roles: [token.roles] }), {
+			new Response(JSON.stringify({ sub: token.sub, name: token.name, email: token.email, locale: token.locale, roles: token.roles }), {
 				status: 200,
 				headers: { "Content-Type": "application/json" },
 			})
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
 		console.log(JSON.stringify(token));
 		return cors(
 			req,
-			new Response(JSON.stringify({ sub: token.sub, name: token.name, email: token.email, locale: token.locale, roles: [token.roles] }), {
+			new Response(JSON.stringify({ sub: token.sub, name: token.name, email: token.email, locale: token.locale, roles: token.roles }), {
 				status: 200,
 				headers: { "Content-Type": "application/json" },
 			})

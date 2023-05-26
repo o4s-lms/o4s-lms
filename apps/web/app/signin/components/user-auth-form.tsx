@@ -105,7 +105,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 					</Button>
 				</>
 			) : (
-				<Alert>
+				<Alert className="bg-green-700 font-semibold">
 					<AlertTitle>A magic link email was sent. 🪄</AlertTitle>
 					<AlertDescription>
 						Make sure to check your spam folder.

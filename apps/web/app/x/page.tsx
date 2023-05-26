@@ -17,19 +17,21 @@ type Courses = UsersMy_coursesResponseData["users"]
 export default async function Dashboard() {
 	const { toast } = useToast()
 	
-	const { data, error, isLoading } = useQuery({
+	/**const { data, error, isLoading } = useQuery({
 		operationName: 'users/my-courses',
 		enabled: true,
 	})
 
-	if (error) return <p>{error.message}</p>
+	if (error) return <p>{error.message}</p>*/
+
+	const isLoading = false
 	
   return (
 		<>
 		<div className="container grid items-center space-y-6">
 			<div className="gap-6 pb-8 pt-6 md:py-10">
 				{!isLoading ? (
-					<div>{JSON.stringify(data?.users)}</div>
+					<><div>DASHBOARD</div></>
 				) : (
 					<Loading />
 				)}

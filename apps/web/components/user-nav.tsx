@@ -1,4 +1,5 @@
 import { CreditCard, LogOut, PlusCircle, Settings, User } from "lucide-react"
+import { minioImage } from "@/lib/minio"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -25,7 +26,7 @@ export function UserNav({ name, email, image}: Props) {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={image} alt={name} />
+            <AvatarImage src={minioImage(image)} alt={name} />
             <AvatarFallback>O4S</AvatarFallback>
           </Avatar>
         </Button>
