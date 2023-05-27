@@ -1,7 +1,7 @@
 "use client"
 
 import { Separator } from "@/components/ui/separator"
-import { ProfileForm } from "@/app/x/profile/components/profile-form"
+import { ProfileForm } from "@/app/profile/components/profile-form"
 import { useToast } from "@/hooks/use-toast"
 import { useQuery } from "@/lib/wundergraph";
 import { Loading } from "@/components/loading";
