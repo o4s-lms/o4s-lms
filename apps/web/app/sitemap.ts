@@ -7,7 +7,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       id: true,
     },
     take: 1,
-  });
+  })
 
   return [
     {
@@ -18,5 +18,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `https://precedent.dev/${user.id}`,
       lastModified: new Date(),
     })),
-  ];
+  ]
 }

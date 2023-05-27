@@ -1,0 +1,23 @@
+query (
+	$role: lms_CourseRole! = STUDENT,
+	$userId: String! @fromClaim(name: USERID)
+)
+@rbac(requireMatchAll: [user]) {
+	user: lms_findManyMemberInCourse(
+		where: {
+			userId: { equals: $userId }
+			role: { equals: $role }
+		}
+	) {
+		lastActivity
+		course {
+			id
+			name
+			description
+			image
+			published
+			createdBy
+			createdAt
+		}
+	}
+}

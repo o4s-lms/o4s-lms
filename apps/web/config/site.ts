@@ -3,7 +3,7 @@ export type SiteConfig = typeof siteConfig
 export const siteConfig = {
   name: "O4S LMS",
   description:
-    "Open source LMS",
+    "Open Source Learning Management System",
   mainNav: [
     {
       title: "Home",
