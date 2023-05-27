@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react"
 import { Loading } from "@/components/loading"
 import { redirect } from "next/navigation"
 
-export default function IndexPage() {
+export default function Index() {
 	const session = useSession()
 
 	if (session.status === "loading") {

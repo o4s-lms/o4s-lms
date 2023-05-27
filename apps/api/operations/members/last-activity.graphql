@@ -1,0 +1,22 @@
+mutation (
+	$courseId: Int!,
+	$date: DateTime! @injectCurrentDateTime,
+	$userId: String! @fromClaim(name: USERID)
+)
+@rbac(requireMatchAny: [user, admin]) {
+	lastActivity: lms_updateOneMemberInCourse(
+		where: {
+			userId_courseId: {
+				userId: $userId
+				courseId: $courseId
+			}
+		}
+		data: {
+			lastActivity: { set: $date }
+		}
+	) {
+		userId
+		courseId
+		lastActivity
+	}
+}

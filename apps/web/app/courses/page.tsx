@@ -9,11 +9,11 @@ import { Button, buttonVariants } from "@/components/ui/button"
 import { Loading } from "@/components/loading"
 
 import { useToast } from "@/hooks/use-toast"
-import { CourseCard } from "./components/course-card"
+import { CourseCard } from "@/app/courses/components/course-card"
 import { Item } from "@radix-ui/react-dropdown-menu"
 import { Separator } from "@/components/ui/separator"
 
-export default function Dashboard() {
+export default function Courses() {
 	const { toast } = useToast()
 	
 	const { data, error, isLoading } = useQuery({

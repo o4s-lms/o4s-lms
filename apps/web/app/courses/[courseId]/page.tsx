@@ -5,17 +5,22 @@ import Link from "next/link"
 import { useSession } from "next-auth/react"
 import { useQuery } from "@/lib/wundergraph"
 
-import { siteConfig } from "@/config/site"
-import { Button, buttonVariants } from "@/components/ui/button"
 import { Loading } from "@/components/loading"
-
 import { useToast } from "@/hooks/use-toast"
-import { Item } from "@radix-ui/react-dropdown-menu"
 import { Separator } from "@/components/ui/separator"
+import useLastActivityMutation from "@/hooks/use-last-activity-mutation"
+import { useEffect } from "react"
 
 export default function Course() {
 	const { toast } = useToast()
 	const { query: { courseId } } = useRouter()
+	const updateLastActivity = useLastActivityMutation()
+
+	useEffect(() => {
+		updateLastActivity.trigger({
+			courseId: parseInt(courseId as string),
+		}, { throwOnError: false }) // this will fire only on first render
+	}, [courseId, updateLastActivity])
 	
 	const { data, error, isLoading } = useQuery({
 		operationName: 'courses/id',
