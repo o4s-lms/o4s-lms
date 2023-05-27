@@ -2,5 +2,6 @@ packages:
   - apps/api
   - apps/admin
   - apps/web
+  - apps/site
   - packages/*
   - packages/config/*
