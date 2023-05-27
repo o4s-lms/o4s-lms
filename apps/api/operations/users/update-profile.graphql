@@ -1,4 +1,5 @@
-mutation ($id: String!, $name: String!, $phone: String!, $locale: String!) {
+mutation ($id: String!, $name: String!, $phone: String!, $locale: String!)
+@rbac(requireMatchAny: [user, admin]) {
 	user: lms_updateOneUser(
 		where: {
 			id: $id
@@ -11,5 +12,7 @@ mutation ($id: String!, $name: String!, $phone: String!, $locale: String!) {
 	) {
 		id
 		name
+		phone
+		locale
 	}
 }
