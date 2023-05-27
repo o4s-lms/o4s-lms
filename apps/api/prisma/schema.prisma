@@ -70,7 +70,6 @@ model VerificationToken {
 
 model MemberInCourse {
   createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @default(now()) @updatedAt
 	lastActivity DateTime?
   userId       String				 @db.VarChar(50)
   courseId     Int

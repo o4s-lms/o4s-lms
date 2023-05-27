@@ -17,7 +17,7 @@ export default function Index() {
 	if (!session) { 
 		redirect("/signin")
 	} else {
-		redirect("/x")
+		redirect("/courses")
 	}
 
   return (

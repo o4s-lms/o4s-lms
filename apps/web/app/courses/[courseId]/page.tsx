@@ -1,6 +1,5 @@
 "use client"
 
-import { useRouter } from "next/router"
 import Link from "next/link"
 import { useSession } from "next-auth/react"
 import { useQuery } from "@/lib/wundergraph"
@@ -9,23 +8,22 @@ import { Loading } from "@/components/loading"
 import { useToast } from "@/hooks/use-toast"
 import { Separator } from "@/components/ui/separator"
 import useLastActivityMutation from "@/hooks/use-last-activity-mutation"
-import { useEffect } from "react"
+import { useEffectOnce } from "usehooks-ts"
 
-export default function Course() {
+export default function Course({ params }: { params: { courseId: string } }) {
 	const { toast } = useToast()
-	const { query: { courseId } } = useRouter()
 	const updateLastActivity = useLastActivityMutation()
-
-	useEffect(() => {
-		updateLastActivity.trigger({
-			courseId: parseInt(courseId as string),
-		}, { throwOnError: false }) // this will fire only on first render
-	}, [courseId, updateLastActivity])
 	
+	useEffectOnce(() => {
+    updateLastActivity.trigger({
+			courseId: parseInt(params.courseId),
+		}, { throwOnError: false }) // this will fire only on first render
+  })
+
 	const { data, error, isLoading } = useQuery({
 		operationName: 'courses/id',
 		input: {
-			id: parseInt(courseId as string),
+			id: parseInt(params.courseId),
 		},
 		enabled: true,
 	})

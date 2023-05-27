@@ -7,7 +7,7 @@ export const siteConfig = {
   mainNav: [
     {
       title: "Home",
-      href: "/x",
+      href: "/",
     },
   ],
   links: {
