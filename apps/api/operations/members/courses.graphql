@@ -1,9 +1,9 @@
 query (
-	$role: lms_CourseRole! = STUDENT,
+	$role: lms_CourseRole!,
 	$userId: String! @fromClaim(name: USERID)
 )
 @rbac(requireMatchAll: [user]) {
-	user: lms_findManyMemberInCourse(
+	courses: lms_findManyMemberInCourse(
 		where: {
 			userId: { equals: $userId }
 			role: { equals: $role }

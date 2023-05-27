@@ -18,25 +18,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { CoursesAuthorResponseData, UsersMy_coursesResponseData } from "@o4s/generated-wundergraph/models"
+import { MembersCoursesResponseData } from "@o4s/generated-wundergraph/models"
 import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import { minioImage } from "@/lib/minio"
 
-type Course = CoursesAuthorResponseData["courses"][number]
-interface Props {
-	course: Course;
+type Course = MembersCoursesResponseData["courses"][number]
+interface CourseCardProps {
+	item: Course;
 }
 
-export function CourseCard({ course }: Props) {
+export function CourseCard({ item }: CourseCardProps) {
   return (
     <Card className="w-[350px]">
       <CardHeader>
-        <CardTitle>{course.name}</CardTitle>
-        <CardDescription>{course.description}</CardDescription>
+        <CardTitle>{item.course.name}</CardTitle>
+        <CardDescription>{item.course.description}</CardDescription>
       </CardHeader>
       <CardContent>
 				<Avatar className="h-60 w-60 rounded-full">
-          <AvatarImage src={minioImage(course.image)} alt={course.name} />
+          <AvatarImage src={minioImage(item.course.image)} alt={item.course.name} />
         </Avatar>
       </CardContent>
       <CardFooter className="flex justify-between">

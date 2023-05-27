@@ -11,6 +11,7 @@ import { Loading } from "@/components/loading"
 
 import { useToast } from "@/hooks/use-toast"
 import { CourseCard } from "./components/course-card"
+import { Item } from "@radix-ui/react-dropdown-menu"
 
 type Courses = UsersMy_coursesResponseData["users"]
 
@@ -18,7 +19,10 @@ export default function Dashboard() {
 	const { toast } = useToast()
 	
 	const { data, error, isLoading } = useQuery({
-		operationName: 'courses/author',
+		operationName: 'members/courses',
+		input: {
+			role: 'STUDENT',
+		},
 		enabled: true,
 	})
 
@@ -40,8 +44,8 @@ export default function Dashboard() {
 			<div className="gap-6 pb-8 pt-6 md:py-10">
 				{!isLoading ? (
 					<>
-					{data?.courses.map(course => (
-						<CourseCard course={course} />
+					{data?.courses.map(item => (
+						<CourseCard item={item} />
 					))}
 					</>
 				) : (
