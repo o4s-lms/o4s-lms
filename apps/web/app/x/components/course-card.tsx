@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select"
 import { CoursesAuthorResponseData, UsersMy_coursesResponseData } from "@o4s/generated-wundergraph/models"
 import { Avatar, AvatarImage } from "@/components/ui/avatar"
+import { minioImage } from "@/lib/minio"
 
 type Course = CoursesAuthorResponseData["courses"][number]
 interface Props {
@@ -35,7 +36,7 @@ export function CourseCard({ course }: Props) {
       </CardHeader>
       <CardContent>
 				<Avatar className="h-60 w-60 rounded-full">
-          <AvatarImage src={course.image} alt={course.name} />
+          <AvatarImage src={minioImage(course.image)} alt={course.name} />
         </Avatar>
       </CardContent>
       <CardFooter className="flex justify-between">
