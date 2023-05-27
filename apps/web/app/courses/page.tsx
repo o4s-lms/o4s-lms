@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast"
 import { CourseCard } from "@/app/courses/components/course-card"
 import { Item } from "@radix-ui/react-dropdown-menu"
 import { Separator } from "@/components/ui/separator"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 export default function Courses() {
 	const { toast } = useToast()
@@ -19,7 +20,7 @@ export default function Courses() {
 	const { data, error, isLoading } = useQuery({
 		operationName: 'members/courses',
 		input: {
-			role: 'ADMIN',
+			role: 'STUDENT',
 		},
 		enabled: true,
 	})
@@ -49,9 +50,22 @@ export default function Courses() {
 				<div className="pb-8 pt-6 md:py-10">
 					{!isLoading ? (
 						<>
-						{data?.courses.map(item => (
-							<CourseCard item={item} />
-						))}
+						{data?.courses.length > 0 ? (
+							<div className="hidden items-start justify-center gap-6 rounded-lg p-8 md:grid lg:grid-cols-2 xl:grid-cols-3">
+								{data?.courses.map(item => (
+									<CourseCard item={item} />
+								))}
+							</div>
+						) : (
+							<Alert className="bg-red-400 font-semibold">
+								<AlertTitle>You do not have any course. 🪄</AlertTitle>
+								<AlertDescription>
+									<Button variant="link">
+										<Link href="/products">Check your available courses.</Link>
+									</Button>
+								</AlertDescription>
+							</Alert>
+						)}
 						</>
 					) : (
 						<Loading />
