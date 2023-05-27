@@ -1,6 +1,9 @@
 mutation ($productId: Int!, $priceId: String!)
 @rbac(requireMatchAll: [admin]) {
-	lms_updateOneProduct(where: { id: $productId }, data: { priceId: { set: $priceId } }) {
+	product: lms_updateOneProduct(
+		where: { id: $productId }
+		data: { priceId: { set: $priceId } }
+	) {
 		id
 		priceId
 	}

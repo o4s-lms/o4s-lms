@@ -1,7 +1,8 @@
 mutation (
 	$productId: Int!,
 	$courseId: Int!
-	) {
+	)
+@rbac(requireMatchAll: [admin]) {
 	removeCourseProduct: lms_updateOneProduct(
 		where: { id: $productId }
 		data: {

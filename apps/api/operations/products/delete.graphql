@@ -1,4 +1,5 @@
-mutation ($id: Int!, $deleted: Boolean = true) {
+mutation ($id: Int!, $deleted: Boolean = true)
+@rbac(requireMatchAll: [admin]) {
 	product: lms_updateOneProduct(
 		where: { id: $id }
 		data: {

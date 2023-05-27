@@ -5,7 +5,7 @@ mutation (
 	$price: Int!,
 	$currency: String = "eur",
 	$userId: String! @fromClaim(name: USERID)
-) {
+) @rbac(requireMatchAll: [admin]) {
 	createOneProduct: lms_createOneProduct(
 		data: {
 			name: $name
