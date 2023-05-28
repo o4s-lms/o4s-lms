@@ -1,0 +1,11 @@
+query ($locale: String!) {
+	testimonials: site_findManyTestimonials(
+		where: { locale: { equals: $locale } }
+	) {
+		id
+		name
+		title
+		quote
+		locale
+	}
+}

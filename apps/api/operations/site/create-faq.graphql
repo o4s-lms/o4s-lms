@@ -1,0 +1,21 @@
+mutation (
+	$question: String!,
+	$answer: String!,
+	$order: Int!,
+	$locale: String!
+) @rbac(requireMatchAll: [admin]) {
+	faq: site_createOneFaqs(
+		data: {
+			question: $question
+			answer: $answer
+			order: $order
+			locale: $locale
+		}
+	) {
+		id
+		question
+		answer
+		order
+		locale
+	}
+}

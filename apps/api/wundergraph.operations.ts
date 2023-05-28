@@ -34,7 +34,13 @@ export default configureWunderGraphOperations<OperationsConfiguration>({
 					required: false,
 				},
 			}),
-			ProductsAll: (config) => ({
+			SiteGet_faqs: (config) => ({
+				...config,
+				authentication: {
+					required: false,
+				},
+			}),
+			SiteGet_testimonials: (config) => ({
 				...config,
 				authentication: {
 					required: false,

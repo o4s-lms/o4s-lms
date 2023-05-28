@@ -8,16 +8,41 @@ datasource db {
   url          			= env("DATABASE_MONGODB_URL")
 }
 
-model Product {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  description String
-	image 			String?
-  price       Int?
-	priceId			String?
-  currency    String    @default("eur")
-	active			Boolean		@default(false)
-	createdAt		DateTime 	@default(now())
-	updatedAt		DateTime?	@updatedAt
-	deleted			Boolean		@default(false)
+model Faqs {
+	id          String    @id @default(auto()) @map("_id") @db.ObjectId
+	question		String
+	answer			String
+	order				Int
+	locale			String
+
+	@@map("faqs")
 }
+
+model Courses {
+	id          String    @id @default(auto()) @map("_id") @db.ObjectId
+	thumbnail		String
+	price				String
+	image				String
+	title				String
+	description	String
+	slug				String
+	include			String
+	html				String?
+	order				Int
+	locale			String
+
+	@@map("courses")
+}
+
+model Testimonials {
+	id          String    @id @default(auto()) @map("_id") @db.ObjectId
+	avatar			String
+	name				String
+	title				String
+	quote				String
+	locale			String
+
+	@@map("testimonials")
+}
+
+

@@ -1,0 +1,12 @@
+query ($locale: String!) {
+	faqs: site_findManyFaqs(
+		where: { locale: { equals: $locale } }
+		orderBy: { order: asc }
+	) {
+		id
+		question
+		answer
+		order
+		locale
+	}
+}

@@ -1,0 +1,23 @@
+mutation (
+	$avatar: String!,
+	$name: String!,
+	$title: String!
+	$quote: String!
+	$locale: String!
+) @rbac(requireMatchAll: [admin]) {
+	testimonial: site_createOneTestimonials(
+		data: {
+			avatar: $avatar
+			name: $name
+			title: $title
+			quote: $quote
+			locale: $locale
+		}
+	) {
+		id
+		name
+		title
+		quote
+		locale
+	}
+}
