@@ -2,18 +2,16 @@ mutation (
 	$name: String!,
 	$description: String!,
 	$image: String,
-	$price: Int!,
-	$currency: String = "eur",
-	$userId: String! @fromClaim(name: USERID)
+	$price: Int,
+	$currency: String
 ) @rbac(requireMatchAll: [admin]) {
-	createOneProduct: lms_createOneProduct(
+	createOneProduct: site_createOneProduct(
 		data: {
 			name: $name
 			description: $description
 			image: $image
 			price: $price
 			currency: $currency
-			createdBy: $userId
 		}
 	) {
 		id
@@ -23,7 +21,6 @@ mutation (
 		price
 		currency
 		active
-		createdBy
 		createdAt
 	}
 }

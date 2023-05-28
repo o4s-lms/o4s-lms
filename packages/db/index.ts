@@ -1,12 +1,12 @@
 // import { PrismaClient } from "@prisma/client";
 // import type Prisma from "prisma";
 
-import { PrismaClient as Site } from "./generated/site";
-import { PrismaClient as Lms } from "./generated/lms";
+import { PrismaClient as Site } from "../../node_modules/@prisma/client/site";
+import { PrismaClient as Lms } from "../../node_modules/@prisma/client/lms";
 
 //export * from "@prisma/client";
-export * from "./generated/site"
-export * from "./generated/lms"
+// export * from "./generated/site"
+// export * from "./generated/lms"
 // export * from "./db";
 export * from "./src/sanitisePrismaObject";
 

@@ -1,6 +1,6 @@
-mutation ($id: Int!, $deleted: Boolean = true)
+mutation ($id: String!, $deleted: Boolean = true)
 @rbac(requireMatchAll: [admin]) {
-	product: lms_updateOneProduct(
+	product: site_updateOneProduct(
 		where: { id: $id }
 		data: {
       deleted: { set: $deleted }

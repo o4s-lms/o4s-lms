@@ -10,6 +10,7 @@ export const env = createEnv({
 		PUBLIC_URL: z.string().url(),
 		IS_ADMIN: z.boolean(),
     DATABASE_URL: z.string().url(),
+		DATABASE_MONGODB_URL: z.string().url(),
 		DATABASE_DIRECT_URL: z.string().url(),
     NODE_ENV: z.enum(["development", "test", "production"]),
     NEXTAUTH_SECRET:
@@ -58,6 +59,7 @@ export const env = createEnv({
 		PUBLIC_URL: process.env.PUBLIC_URL,
 		IS_ADMIN: process.env.IS_ADMIN,
 		DATABASE_URL: process.env.DATABASE_URL,
+		DATABASE_MONGODB_URL: process.env.DATABASE_MONGODB_URL,
 		DATABASE_DIRECT_URL: process.env.DATABASE_DIRECT_URL,
 		NODE_ENV: process.env.NODE_ENV,
 		NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,

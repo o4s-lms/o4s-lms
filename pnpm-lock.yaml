@@ -55,6 +55,9 @@ importers:
       '@o4s/postcss-config':
         specifier: ^0.1.0
         version: link:../../packages/config/postcss
+      '@prisma/nextjs-monorepo-workaround-plugin':
+        specifier: ^4.14.1
+        version: 4.14.1
       '@t3-oss/env-nextjs':
         specifier: ^0.2.2
         version: 0.2.2(zod@3.21.4)
@@ -3390,6 +3393,10 @@ packages:
       cross-spawn: 7.0.3
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /@prisma/nextjs-monorepo-workaround-plugin@4.14.1:
+    resolution: {integrity: sha512-WbK3DajKklEdeWh4Ds4ltTTBs0s+0yqXMtGVR1jFB2ma8vtrqKdRJtEi0xVNc8Sb6V+kS2fJ5sPSNP43LeMRRQ==}
     dev: false
 
   /@protobufjs/aspromise@1.1.2:

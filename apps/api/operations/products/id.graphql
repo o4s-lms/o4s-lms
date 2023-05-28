@@ -1,5 +1,5 @@
-query ($id: Int!, $deleted: Boolean = false) {
-	product: lms_findUniqueProduct(where: { id: $id }) {
+query ($id: String!) {
+	product: site_findUniqueProduct(where: { id: $id }) {
 		id
 		name
 		description
@@ -8,22 +8,7 @@ query ($id: Int!, $deleted: Boolean = false) {
 		priceId
   	currency
 		active
-		createdBy
 		createdAt
 		updatedAt
-		courses (where: { deleted: { equals: $deleted } }) {
-			id
-			name
-			description
-			image
-			published
-			createdBy
-			createdAt
-			_count {
-				modules
-				lessons
-				members
-			}
-		}
 	}
 }

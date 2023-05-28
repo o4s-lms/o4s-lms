@@ -192,7 +192,7 @@ export default function Nav() {
 			<div className="card">
 				<NovuProvider
 					subscriberId={session?.data?.user.id}
-					applicationIdentifier={'ff5UcyJv0woS'}
+					applicationIdentifier={'Gvw8rwb0Q9vt'}
 					backendUrl={'http://joseantcordeiro.hopto.org:3003'}
 					socketUrl={'http://joseantcordeiro.hopto.org:3002'}
 					>
