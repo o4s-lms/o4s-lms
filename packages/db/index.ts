@@ -1,60 +1,56 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
+// import { PrismaClient } from "@prisma/client";
+// import type Prisma from "prisma";
 
-import { PrismaClient } from "@prisma/client";
-import Redis from "ioredis";
-import type Prisma from "prisma";
-import { createPrismaRedisCache } from "prisma-redis-middleware";
+import { PrismaClient as Site } from "./generated/site";
+import { PrismaClient as Lms } from "./generated/lms";
 
-const redis = new Redis({
-  port: Number(process.env.CACHE_PORT), // Redis port
-  host: String(process.env.CACHE_HOST), // Redis host
-  username: String(process.env.CACHE_USER), // needs Redis >= 6
-  password: String(process.env.CACHE_PASSWORD),
-  db: Number(process.env.CACHE_DATABASE), // Defaults to 0
-});
-
-const cacheMiddleware: Prisma.Middleware = createPrismaRedisCache({
-  models: [
-    { model: "Lesson", excludeMethods: ["findFirst"] },
-    // { model: "Post", cacheTime: 180, cacheKey: "lesson" },
-  ],
-  storage: {
-    type: "redis",
-    options: {
-      client: redis,
-      invalidation: { referencesTTL: 300 },
-      log: console,
-    },
-  },
-  cacheTime: 300,
-  excludeModels: ["Session"],
-  excludeMethods: ["count", "groupBy"],
-  onHit: (key) => {
-    console.log("hit", key);
-  },
-  onMiss: (key) => {
-    console.log("miss", key);
-  },
-  onError: (key) => {
-    console.log("error", key);
-  },
-});
-
-export * from "@prisma/client";
-export * from "./db";
+//export * from "@prisma/client";
+export * from "./generated/site"
+export * from "./generated/lms"
+// export * from "./db";
 export * from "./src/sanitisePrismaObject";
 
-const globalForPrisma = globalThis as { prisma?: PrismaClient };
+//const globalForPrisma = globalThis as { prisma?: PrismaClient };
+const globalForSite = globalThis as { site?: Site };
+const globalForLms = globalThis as { lms?: Lms };
 
-export const prisma =
+/**export const prisma =
   globalForPrisma.prisma ||
   new PrismaClient({
     log:
       process.env.NODE_ENV === "development"
         ? ["query", "error", "warn"]
         : ["error"],
+  });*/
+
+export const site =
+	globalForSite.site ||
+	new Site({
+		log:
+			process.env.NODE_ENV === "development"
+				? ["query", "error", "warn"]
+				: ["error"],
+		datasources: {
+			db: {
+				url: process.env.DATABASE_MONGODB_URL,
+			},
+		},
   });
 
-if (!process.env.IS_ADMIN) prisma.$use(cacheMiddleware);
+export const lms =
+	globalForLms.lms ||
+	new Lms({
+		log:
+			process.env.NODE_ENV === "development"
+				? ["query", "error", "warn"]
+				: ["error"],
+		datasources: {
+			db: {
+				url: process.env.DATABASE_URL,
+			},
+		},
+  });
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+//if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+if (process.env.NODE_ENV !== "production") globalForSite.site = site;
+if (process.env.NODE_ENV !== "production") globalForLms.lms = lms;

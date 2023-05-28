@@ -5,7 +5,7 @@ import { adminProcedure, createTRPCRouter, publicProcedure } from "../trpc";
 export const productRouter = createTRPCRouter({
   all: publicProcedure
 		.query(({ ctx }) => {
-			return ctx.prisma.product.findMany({
+			return ctx.lms.product.findMany({
 				orderBy: { id: "desc" },
 				select: {
 					id: true,
@@ -27,7 +27,7 @@ export const productRouter = createTRPCRouter({
   byId: publicProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
-      return ctx.prisma.product.findFirst({
+      return ctx.lms.product.findFirst({
 				where: { id: input.id },
 				select: {
 					id: true,
@@ -56,7 +56,7 @@ export const productRouter = createTRPCRouter({
 			}),
 		)
 		.mutation(({ ctx, input }) => {
-			return ctx.prisma.product.update({
+			return ctx.lms.product.update({
 				where: { id: input.productId },
         data: {
           courses: { connect: { id: input.courseId } },
@@ -71,7 +71,7 @@ export const productRouter = createTRPCRouter({
 			}),
 		)
 		.mutation(({ ctx, input }) => {
-			return ctx.prisma.product.update({
+			return ctx.lms.product.update({
 				where: { id: input.productId },
         data: {
           courses: { disconnect: { id: input.courseId } },
@@ -86,9 +86,9 @@ export const productRouter = createTRPCRouter({
       }),
     )
     .mutation(({ ctx, input }) => {
-      return ctx.prisma.product.create({ data: input });
+      return ctx.lms.product.create({ data: input });
     }),
   delete: adminProcedure.input(z.number()).mutation(({ ctx, input }) => {
-    return ctx.prisma.product.delete({ where: { id: input } });
+    return ctx.lms.product.delete({ where: { id: input } });
   }),
 });

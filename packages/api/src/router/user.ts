@@ -11,7 +11,7 @@ export const userRouter = createTRPCRouter({
       }),
     )
     .query(({ ctx, input }) => {
-      return ctx.prisma.user.findMany({
+      return ctx.lms.user.findMany({
         orderBy: { id: "desc" },
         skip: input.skip,
         take: input.take,
@@ -45,7 +45,7 @@ export const userRouter = createTRPCRouter({
       }),
     )
     .query(({ ctx, input }) => {
-      return ctx.prisma.memberInCourse.findMany({
+      return ctx.lms.memberInCourse.findMany({
         where: { role: input.role },
         distinct: ["userId"],
         select: {
@@ -78,7 +78,7 @@ export const userRouter = createTRPCRouter({
       });
     }),
   memberOf: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.memberInCourse.findMany({
+    return ctx.lms.memberInCourse.findMany({
       where: { userId: ctx.session.user.id },
       select: {
         role: true,
@@ -103,7 +103,7 @@ export const userRouter = createTRPCRouter({
       }),
     )
     .mutation(({ ctx, input }) => {
-      return ctx.prisma.memberInCourse.create({
+      return ctx.lms.memberInCourse.create({
         data: {
 					course: { connect: { id: input.courseId } },
 					user: { connect: { id: input.userId } },

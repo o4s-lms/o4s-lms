@@ -8,8 +8,10 @@
 		"build:docker": "turbo build:docker",
     "clean": "git clean -xdf node_modules",
     "clean:workspaces": "turbo clean",
-    "db:generate": "turbo db:generate",
-    "db:push": "turbo db:push db:generate",
+    "lms:generate": "turbo lms:generate",
+    "lms:push": "turbo lms:push",
+		"site:generate": "turbo site:generate",
+    "site:push": "turbo site:push",
     "db:proxy": "pscale connect o4s-courses-apps main --port 3309",
     "dev": "turbo run dev --parallel",
     "generate": "turbo run generate"

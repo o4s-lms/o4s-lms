@@ -1,24 +1,7 @@
 version: '3'
 services:
-  mongodb:
-    image: mongo
-    container_name: mongodb
-    restart: always
-    logging:
-      driver: 'none'
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
-    volumes:
-      - mongodb:/data/db
-    ports:
-      - 27017:27017
   api:
-    image: 'ghcr.io/novuhq/novu/api:0.14.0'
-    depends_on:
-      - mongodb
+    image: 'ghcr.io/novuhq/novu/api:0.15.0'
     container_name: api
     restart: always
     environment:
@@ -46,9 +29,7 @@ services:
     ports:
       - '0.0.0.0:3003:3003'
   worker:
-    image: 'ghcr.io/novuhq/novu/worker:0.14.0'
-    depends_on:
-      - mongodb
+    image: 'ghcr.io/novuhq/novu/worker:0.15.0'
     container_name: worker
     restart: always
     environment:
@@ -67,9 +48,7 @@ services:
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       STORE_ENCRYPTION_KEY: ${STORE_ENCRYPTION_KEY}
   ws:
-    image: 'ghcr.io/novuhq/novu/ws:0.14.0'
-    depends_on:
-      - mongodb
+    image: 'ghcr.io/novuhq/novu/ws:0.15.0'
     container_name: ws
     restart: always
     environment:
@@ -87,7 +66,7 @@ services:
     ports:
       - '0.0.0.0:3002:3002'
   web:
-    image: 'ghcr.io/novuhq/novu/web:0.14.0'
+    image: 'ghcr.io/novuhq/novu/web:0.15.0'
     depends_on:
       - api
       - worker
@@ -102,7 +81,7 @@ services:
     ports:
       - '0.0.0.0:4200:4200'
   #widget:
-  #  image: 'ghcr.io/novuhq/novu/widget:0.14.0'
+  #  image: 'ghcr.io/novuhq/novu/widget:0.15.0'
   #  depends_on:
   #    - api
   #    - worker
@@ -118,11 +97,9 @@ services:
   #embed:
   #  depends_on:
   #    - widget
-  #  image: 'ghcr.io/novuhq/novu/embed:0.14.0'
+  #  image: 'ghcr.io/novuhq/novu/embed:0.15.0'
   #  container_name: embed
   #  environment:
   #    WIDGET_URL: ${WIDGET_URL}
   #  ports:
   #    - '0.0.0.0:4701:4701'
-volumes:
-  mongodb: ~

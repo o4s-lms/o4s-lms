@@ -5,17 +5,17 @@ import { adminProcedure, createTRPCRouter, publicProcedure } from "../trpc";
 
 export const lessonRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.lesson.findMany({ orderBy: { id: "desc" } });
+    return ctx.lms.lesson.findMany({ orderBy: { id: "desc" } });
   }),
   byId: publicProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
-      return ctx.prisma.lesson.findFirst({ where: { id: input.id } });
+      return ctx.lms.lesson.findFirst({ where: { id: input.id } });
     }),
   getContent: adminProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
-      return ctx.prisma.lesson.findFirst({
+      return ctx.lms.lesson.findFirst({
         where: {
           id: input.id,
           deleted: false,
@@ -37,7 +37,7 @@ export const lessonRouter = createTRPCRouter({
   withModule: adminProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
-      return ctx.prisma.lesson.findMany({
+      return ctx.lms.lesson.findMany({
         where: {
           courseId: input.id,
           deleted: false,
@@ -59,7 +59,7 @@ export const lessonRouter = createTRPCRouter({
       });
     }),
   byAuthor: adminProcedure.query(({ ctx }) => {
-    return ctx.prisma.course.findMany({
+    return ctx.lms.course.findMany({
       where: {
         createdBy: ctx.session.user.id,
         deleted: false,
@@ -87,7 +87,7 @@ export const lessonRouter = createTRPCRouter({
       }),
     )
     .mutation(({ ctx, input }) => {
-      return ctx.prisma.lesson.update({
+      return ctx.lms.lesson.update({
         where: { id: input.id },
         data: {
           name: input.name,
@@ -105,7 +105,7 @@ export const lessonRouter = createTRPCRouter({
       }),
     )
     .mutation(({ ctx, input }) => {
-      return ctx.prisma.lesson.create({
+      return ctx.lms.lesson.create({
         data: {
           name: input.name,
           slug: slugify(input.name),
@@ -123,7 +123,7 @@ export const lessonRouter = createTRPCRouter({
       }),
     )
     .mutation(({ ctx, input }) => {
-      return ctx.prisma.lesson.update({
+      return ctx.lms.lesson.update({
         where: { id: input.id },
         data: {
           html: input.html,
@@ -131,13 +131,13 @@ export const lessonRouter = createTRPCRouter({
       });
     }),
   delete: adminProcedure.input(z.number()).mutation(({ ctx, input }) => {
-    return ctx.prisma.lesson.update({
+    return ctx.lms.lesson.update({
       where: { id: input },
       data: { deleted: true },
     });
   }),
 	undelete: adminProcedure.input(z.number()).mutation(({ ctx, input }) => {
-    return ctx.prisma.lesson.update({
+    return ctx.lms.lesson.update({
       where: { id: input },
       data: { deleted: false },
     });

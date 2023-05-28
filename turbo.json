@@ -1,12 +1,20 @@
 {
   "$schema": "https://turborepo.org/schema.json",
   "pipeline": {
-		"db:generate": {
-      "inputs": ["prisma/schema.prisma"],
+		"site:push": {
+      "inputs": ["site/prisma/schema.prisma"],
       "cache": false
     },
-    "db:push": {
-      "inputs": ["prisma/schema.prisma"],
+		"site:generate": {
+      "inputs": ["site/prisma/schema.prisma"],
+      "cache": false
+    },
+		"lms:generate": {
+      "inputs": ["lms/prisma/schema.prisma"],
+      "cache": false
+    },
+    "lms:push": {
+      "inputs": ["lms/prisma/schema.prisma"],
       "cache": false
     },
     "db:proxy": {
@@ -17,11 +25,11 @@
       "cache": false
     },
     "build": {
-      "dependsOn": ["^build", "^db:generate"],
+      "dependsOn": ["^build"],
       "outputs": [".next/**", ".expo/**", ".vercel/**", "generated-wundergraph/**", "generated/**"]
     },
 		"build:docker": {
-      "dependsOn": ["^build:docker", "^db:generate"],
+      "dependsOn": ["^build:docker"],
       "outputs": [".next/**", ".expo/**", ".vercel/**", "generated-wundergraph/**", "generated/**"]
     },
     "lint": {},
@@ -58,6 +66,7 @@
 		"WG_TOKEN_AUTH_ENDPOINT",
 		"WG_DATABASE_URL",
     "DATABASE_URL",
+		"DATABASE_MONGODB_URL",
     "DATABASE_DIRECT_URL",
 		"PUBLIC_URL",
     "NEXTAUTH_SECRET",

@@ -5,7 +5,7 @@ import EmailProvider from "next-auth/providers/email";
 import { User } from "next-auth";
 // import FusionAuthProvider from "next-auth/providers/fusionauth";
 
-import { prisma } from "@o4s/db";
+import { lms } from "@o4s/db";
 
 import { sendVerificationRequest } from "./utils/sendVerificationRequest";
 
@@ -52,7 +52,7 @@ export const authOptions: NextAuthOptions = {
 	session: {
 		strategy: "jwt",
 	},
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(lms),
   providers: [
     EmailProvider({
       server: {

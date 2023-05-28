@@ -1,4 +1,4 @@
-import { prisma } from "@o4s/db";
+import { lms } from "@o4s/db";
 
 type Props = {
   identifier: string;
@@ -6,7 +6,7 @@ type Props = {
 }
 
 export const sendVerificationRequest = async ({ identifier, url }: Props) => {
-	const user = await prisma.user.findUnique({ 
+	const user = await lms.user.findUnique({ 
 		where: { email: identifier },
 		select: { id: true },
 	});

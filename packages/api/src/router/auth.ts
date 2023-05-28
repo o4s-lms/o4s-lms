@@ -8,7 +8,7 @@ export const authRouter = createTRPCRouter({
 		return ctx.session.session.findFirst();
 	}),*/
   deleteSession: protectedProcedure.mutation(({ ctx }) => {
-    return ctx.prisma.session.deleteMany({
+    return ctx.lms.session.deleteMany({
       where: { userId: ctx.session.user.id },
     });
   }),

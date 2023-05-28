@@ -11,6 +11,7 @@ coverage
 # database
 **/prisma/db.sqlite
 **/prisma/db.sqlite-journal
+**/generated
 
 # cerbos
 **/docker/cerbos/data/cerbos.sqlite
@@ -52,6 +53,7 @@ yarn-error.log*
 # Wundergraph
 **/generated-wundergraph/*
 !**/generated-wundergraph/package.json
+!**/generated-wundergraph/tsconfig.json
 
 # Git Workflows
 .github/workflows/

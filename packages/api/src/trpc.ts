@@ -13,7 +13,7 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { getServerSession, type Session } from "@o4s/auth";
-import { prisma } from "@o4s/db";
+import { lms } from "@o4s/db";
 
 /**
  * 1. CONTEXT
@@ -40,12 +40,12 @@ type CreateContextOptions = {
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
-    prisma,
+    lms,
   };
 };
 
 async function getDBSession(token: string) {
-  const dbSession = await prisma.session.findUnique({
+  const dbSession = await lms.session.findUnique({
     where: {
       sessionToken: token,
     },
@@ -110,10 +110,10 @@ export const createFastifyContext = async ({
     const session: Session | null = await getDBSession(token);
 
     console.log(JSON.stringify(session));
-    return { req, res, session, prisma };
+    return { req, res, session, lms };
   }
 
-  return { req, res, session, prisma };
+  return { req, res, session, lms };
 };
 
 /**

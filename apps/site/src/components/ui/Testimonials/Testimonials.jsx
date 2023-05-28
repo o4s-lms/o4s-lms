@@ -3,7 +3,7 @@ import SectionWrapper from "../../SectionWrapper";
 const Testimonials = () => {
   const testimonials = [
     {
-      avatar: "https://api.uifaces.co/our-content/donated/xZ4wg2Xj.jpg",
+      avatar: "https://randomuser.me/api/portraits/women/79.jpg",
       name: "Cláudia Carvalho",
       title: "Introdução à Permacultura",
       quote:

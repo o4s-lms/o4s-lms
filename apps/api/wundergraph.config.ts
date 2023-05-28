@@ -36,7 +36,12 @@ const countries = introspect.graphql({
 
 const lms = introspect.prisma({
   apiNamespace: 'lms',
-  prismaFilePath: './prisma/schema.prisma',
+  prismaFilePath: '../../packages/db/lms/prisma/schema.prisma',
+});
+
+const site = introspect.prisma({
+  apiNamespace: 'site',
+  prismaFilePath: '../../packages/db/site/prisma/schema.prisma',
 });
 
 /**const lms = introspect.postgresql({
@@ -47,7 +52,7 @@ const lms = introspect.prisma({
 // configureWunderGraph emits the configuration
 configureWunderGraphApplication({
 	s3UploadProvider: [aws],
-  apis: [countries, lms],
+  apis: [countries, lms, site],
   server,
 	operations,
   codeGenerators: [

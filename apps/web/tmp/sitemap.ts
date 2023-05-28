@@ -1,8 +1,8 @@
 import { type MetadataRoute } from "next";
-import { prisma } from "@o4s/db";
+import { lms } from "@o4s/db";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const users = await prisma.user.findMany({
+  const users = await lms.user.findMany({
     select: {
       id: true,
     },
