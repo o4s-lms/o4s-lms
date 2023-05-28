@@ -15,17 +15,16 @@
   },
   "dependencies": {
 		"@o4s/tsconfig": "^0.1.0",
-		"secure-webhooks": "^0.3.0",
-		"stripe": "^12.6.0",
+		"stripe": "^12.7.0",
 		"@novu/node": "^0.15.0",
-		"@wundergraph/nextjs": "^0.10.29",
-    "@wundergraph/sdk": "^0.158.1"
+		"@wundergraph/nextjs": "^0.11.1",
+    "@wundergraph/sdk": "^0.160.0"
   },
   "devDependencies": {
 		"@o4s/eslint-config": "^0.1.0",
-    "@types/node": "^20.1.7",
+    "@types/node": "^20.2.5",
 		"dotenv-cli": "^7.2.1",
-    "eslint": "^8.40.0",
+    "eslint": "^8.41.0",
     "typescript": "^5.0.4"
   }
 }
