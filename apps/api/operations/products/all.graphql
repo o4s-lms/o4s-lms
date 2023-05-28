@@ -1,7 +1,6 @@
-query ($deleted: Boolean = false, $userId: String! @fromClaim(name: USERID)) {
-	products: lms_findManyProduct(
+query ($deleted: Boolean = false) {
+	products: site_findManyProduct(
 		where: {
-			createdBy: { equals: $userId }
 			deleted: { equals: $deleted }
 		}) {
 		id
@@ -12,12 +11,8 @@ query ($deleted: Boolean = false, $userId: String! @fromClaim(name: USERID)) {
 		priceId
   	currency
 		active
-		createdBy
 		createdAt
 		updatedAt
-		_count {
-			courses
-			payments
-		}
+		deleted
 	}
 }

@@ -34,6 +34,12 @@ export default configureWunderGraphOperations<OperationsConfiguration>({
 					required: false,
 				},
 			}),
+			ProductsAll: (config) => ({
+				...config,
+				authentication: {
+					required: false,
+				},
+			}),
 			
 		},
   }

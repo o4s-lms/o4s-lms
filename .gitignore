@@ -12,6 +12,8 @@ coverage
 **/prisma/db.sqlite
 **/prisma/db.sqlite-journal
 **/generated
+mongodb_data
+key
 
 # cerbos
 **/docker/cerbos/data/cerbos.sqlite

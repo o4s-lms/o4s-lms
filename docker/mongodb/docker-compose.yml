@@ -1,19 +1,72 @@
 version: '3'
 services:
-  mongodb:
+  mongodb-primary:
     image: mongodb/mongodb-community-server:latest
-    container_name: mongodb
+    container_name: mongodb1
     restart: always
     logging:
       driver: 'none'
     environment:
       - PUID=1000
       - PGID=1000
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
+      #- MONGODB_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME}
+      #- MONGODB_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
     volumes:
-      - mongodb:/data/db
+      - ./mongodb_data/db1:/data/db
+    expose:
+      - 27017
     ports:
       - 27017:27017
-volumes:
-  mongodb: ~
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--keyFile", "/data/db/key" ]
+  mongodb-secondary-1:
+    image: mongodb/mongodb-community-server:latest
+    container_name: mongodb2
+    restart: always
+    logging:
+      driver: 'none'
+    environment:
+      - PUID=1000
+      - PGID=1000
+      #- MONGODB_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME}
+      #- MONGODB_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
+    volumes:
+      - ./mongodb_data/db2:/data/db
+    expose:
+      - 27017
+    ports:
+      - 27018:27017
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--keyFile", "/data/db/key" ]
+  mongodb-secondary-2:
+    image: mongodb/mongodb-community-server:latest
+    container_name: mongodb3
+    restart: always
+    logging:
+      driver: 'none'
+    environment:
+      - PUID=1000
+      - PGID=1000
+      #- MONGODB_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME}
+      #- MONGODB_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
+    volumes:
+      - ./mongodb_data/db3:/data/db
+    expose:
+      - 27017
+    ports:
+      - 27019:27017
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--keyFile", "/data/db/key" ]
+  #mongo-setup:
+  #  image: mongodb/mongodb-community-server:latest
+  #  depends_on:
+  #    - mongodb-primary
+  #    - mongodb-secondary-1
+  #    - mongodb-secondary-2
+  #  restart: "no"
+  #  volumes:
+  #    - ./scripts:/scripts
+  #  environment:
+  #    DB: modelDb
+  #  entrypoint: [ "bash", "-c", "sh /scripts/setup.sh"]
+#volumes:
+#  mongodb1: ~
+#  mongodb2: ~
+#  mongodb3: ~

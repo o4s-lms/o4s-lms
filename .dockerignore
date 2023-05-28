@@ -43,3 +43,4 @@ Dockerfile
 .github
 docker
 generated
+mongodb_data
