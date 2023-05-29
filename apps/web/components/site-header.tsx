@@ -24,7 +24,7 @@ export function SiteHeader() {
 
   return (
     <header className={`bg-background sticky top-0 z-40 w-full border-b
-											${scrolled ? "border-gray-200 bg-white/50 backdrop-blur-xl dark:border-gray-800 dark:bg-black/50" : "bg-white/0"}
+											${scrolled ? "border-gray-400 bg-white/50 backdrop-blur-xl dark:border-gray-800 dark:bg-gray-900" : "bg-white/0"}
 											transition-all`} >
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
         <MainNav items={siteConfig.mainNav} />

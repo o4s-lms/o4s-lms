@@ -1,5 +1,7 @@
 import Link from "next/link"
-import { Includes, Title, SubTitle } from "./"
+import { Includes } from "./includes"
+import { Title } from "./title"
+import { SubTitle } from "./sub-title"
 import { SiteGet_coursesResponseData } from "@o4s/generated-wundergraph/models"
 import React from "react"
 

@@ -1,19 +1,21 @@
+"use client"
+
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import Brand from "../Brand";
-import DarkModeHandler from "../DarkModeHandler";
-import NavLink from "../NavLink";
+import Brand from "./brand";
+import NavLink from "@/components/nav-link";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const Navbar = () => {
   const menuBtnEl = useRef();
   const [state, setState] = useState(false);
-  const { pathname } = useRouter();
+  // const { pathname } = useRouter();
 
   // array of all the paths that doesn't need dark navbar
-  const pathnames = ["/tutorials/[lesson]/[slug]"];
-  const isLightNeeded = pathnames.includes(pathname);
+  // const pathnames = ["/tutorials/[lesson]/[slug]"];
+  const isLightNeeded = false // pathnames.includes(pathname);
   // Method to add custom color based on the path
   const addColor = (lightColor, darkColor) =>
     isLightNeeded ? lightColor : darkColor;
@@ -39,7 +41,7 @@ const Navbar = () => {
     { name: "Ajuda", href: "/ajuda" },
     { name: "Preço", href: "/#pricing" },
     { name: "Blogue", href: "/blogue" },
-  ];
+  ]
 
   useEffect(() => {
     // Close the navbar menu when click outside the menu button or when scroll
@@ -49,16 +51,7 @@ const Navbar = () => {
         setState(false);
     };
     window.onscroll = () => setState(false);
-  }, []);
-
-  const DarkModeBtn = () => (
-    <DarkModeHandler
-      className={`dark:text-sky-500 ${addColor(
-        "text-blue-600 hover:bg-gray-50",
-        "text-sky-500 hover:bg-gray-800",
-      )}`}
-    />
-  );
+  }, [])
 
   return (
     <header>
@@ -74,7 +67,8 @@ const Navbar = () => {
             </Link>
 						Projeto Ser Sustentável
             <div className="flex items-center gap-x-3 md:hidden">
-              <DarkModeBtn />
+							<ThemeToggle />
+              {/**<DarkModeBtn />*/}
               <button
                 ref={menuBtnEl}
                 role="button"
@@ -141,12 +135,13 @@ const Navbar = () => {
                 ></span>
               </li>
               <li className="hidden md:block">
-                <DarkModeBtn />
+								<ThemeToggle />
               </li>
               <li>
                 <NavLink
                   href="/login"
                   className="flex items-center justify-center gap-x-1 rounded-full bg-gray-800 text-sm font-medium text-white hover:bg-gray-700 active:bg-gray-900"
+									scroll={false}
                 >
                   Sign in
                   <svg

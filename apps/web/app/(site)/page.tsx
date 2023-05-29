@@ -21,9 +21,9 @@ export default function Index() {
 
 	if (!session) { 
 		redirect("/signin")
-	} else {
-		redirect("/courses")
-	}
+	} // else {
+		// redirect("/courses")
+	// }
 
   return (
     <>

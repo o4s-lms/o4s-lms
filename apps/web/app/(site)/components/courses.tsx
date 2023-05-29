@@ -1,8 +1,8 @@
 import Link from "next/link"
 import { useSWRConfig } from "swr"
 import SectionWrapper from "@/components/section-wrapper"
-import { useQuery } from "@/lib/wundergraph";
-import { CourseCardGrid } from "./course-card-grid";
+import { useQuery } from "@/lib/wundergraph"
+import { CourseCardGrid } from "./course-card-grid"
 
 const Courses = () => {
 	const { mutate } = useSWRConfig();
