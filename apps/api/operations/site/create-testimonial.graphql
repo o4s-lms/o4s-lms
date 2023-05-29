@@ -5,7 +5,7 @@ mutation (
 	$quote: String!
 	$locale: String!
 ) @rbac(requireMatchAll: [admin]) {
-	testimonial: site_createOneTestimonials(
+	testimonial: site_createOneTestimonial(
 		data: {
 			avatar: $avatar
 			name: $name

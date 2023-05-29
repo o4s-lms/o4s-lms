@@ -10,7 +10,7 @@ mutation (
 	$order: Int!,
 	$locale: String!
 ) @rbac(requireMatchAll: [admin]) {
-	course: site_createOneCourses(
+	course: site_createOneCourse(
 		data: {
 			thumbnail: $thumbnail
 			price: $price

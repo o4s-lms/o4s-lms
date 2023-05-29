@@ -1,5 +1,5 @@
 query ($locale: String!) {
-	courses: site_findManyCourses(
+	courses: site_findManyCourse(
 		where: { locale: { equals: $locale } }
 		orderBy: { order: asc }
 	) {

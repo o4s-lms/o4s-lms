@@ -4,7 +4,7 @@ mutation (
 	$order: Int!,
 	$locale: String!
 ) @rbac(requireMatchAll: [admin]) {
-	faq: site_createOneFaqs(
+	faq: site_createOneFaq(
 		data: {
 			question: $question
 			answer: $answer

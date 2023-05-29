@@ -1,0 +1,42 @@
+mutation (
+	$title: String!,
+	$slug: String!,
+	$markdown: String
+	$html: String
+	$image: String,
+	$metaTitle: String,
+	$metaDescription: String,
+	$userId: String! @fromClaim(name: USERID)
+) @rbac(requireMatchAny: [editor, admin]) {
+	post: site_createOnePost(
+		data: {
+			title: $title
+			slug: $slug
+			markdown: $markdown
+			html: $html
+			image: $image
+			metaTitle: $metaTitle
+			metaDescription: $metaDescription
+			authorId: $userId
+			createdBy: $userId
+			updatedBy: $userId
+		}
+	) {
+		id
+		title
+		slug
+		markdown
+		html
+		image
+		featured
+		status
+		language
+		metaTitle
+		metaDescription
+		html
+		authorId
+		published
+		createdAt
+		createdBy
+	}
+}

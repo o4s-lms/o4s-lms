@@ -95,7 +95,7 @@ configureWunderGraphApplication({
     },
 	},
 	authorization: {
-    roles: ['admin', 'user'],
+    roles: ['admin', 'editor', 'user'],
   },
   cors: {
     ...cors.allowAll,
