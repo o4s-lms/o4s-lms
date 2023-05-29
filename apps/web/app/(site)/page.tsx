@@ -6,6 +6,11 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { useSession } from "next-auth/react"
 import { Loading } from "@/components/loading"
 import { redirect } from "next/navigation"
+import Hero from "./components/hero"
+import Features from "./components/features"
+import Courses from "./components/courses"
+import Testimonials from "./components/testimonials"
+import Pricing from "./components/pricing"
 
 export default function Index() {
 	const session = useSession()
@@ -21,8 +26,12 @@ export default function Index() {
 	}
 
   return (
-    <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
-      <p>HOME PAGE</p>
-    </section>
+    <>
+      <Hero />
+      <Features />
+      <Courses />
+      <Testimonials />
+      <Pricing />
+    </>
   )
 }

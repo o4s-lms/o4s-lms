@@ -1,0 +1,39 @@
+mutation (
+	$thumbnail: String!,
+	$price: String!,
+	$image: String!
+	$title: String!
+	$description: String!,
+	$slug: String!,
+	$include: String!,
+	$html: String,
+	$order: Int!,
+	$locale: String!
+) @rbac(requireMatchAll: [admin]) {
+	course: site_createOneCourses(
+		data: {
+			thumbnail: $thumbnail
+			price: $price
+			image: $image
+			title: $title
+			description: $description
+			slug: $slug
+			include: $include
+			html: $html
+			order: $order
+			locale: $locale
+		}
+	) {
+		id
+		thumbnail
+		price
+		image
+		title
+		description
+		slug
+		include
+		html
+		order
+		locale
+	}
+}

@@ -29,10 +29,10 @@ const aws = {
   },
 };
 
-const countries = introspect.graphql({
+/**const countries = introspect.graphql({
   apiNamespace: 'countries',
   url: 'https://countries.trevorblades.com/'
-});
+});*/
 
 const lms = introspect.prisma({
   apiNamespace: 'lms',
@@ -52,7 +52,7 @@ const site = introspect.prisma({
 // configureWunderGraph emits the configuration
 configureWunderGraphApplication({
 	s3UploadProvider: [aws],
-  apis: [countries, lms, site],
+  apis: [lms, site],
   server,
 	operations,
   codeGenerators: [
