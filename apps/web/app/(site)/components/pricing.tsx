@@ -1,5 +1,5 @@
-import GradientWrapper from "@/components/gradient-wrapper";
-import Button from "../Button";
+import GradientWrapper from "@/components/gradient-wrapper"
+import { Button } from "@/components/ui/button"
 
 const Pricing = () => {
     return (
