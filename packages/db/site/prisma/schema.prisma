@@ -12,14 +12,16 @@ model Post {
 	id          		String    @id @default(auto()) @map("_id") @db.ObjectId
 	title						String
 	slug						String		@unique
-	markdown				String?
+	mobiledoc				String?
 	html						String?
+	plaintext				String?
 	image						String?
 	featured				Boolean		@default(false)
 	status					String		@default("draft")
 	language				String		@default("pt")
 	metaTitle				String?		@map("meta_title")
 	metaDescription	String?		@map("meta_description")
+	excerpt					String?
 	estReadingTime	Int?			@map("est_reading_time")
 	authorId 				String		@map("author_id") @db.ObjectId
 	published				Boolean   @default(false)
@@ -29,6 +31,9 @@ model Post {
 	createdBy				String		@map("created_by")
 	updatedAt				DateTime  @updatedAt
 	updatedBy				String		@map("updated_by")
+	ogImage					String?		@map("og_image")
+	ogTitle					String?		@map("og_title")
+	ogDescription		String?		@map("og_description")
 	tagIDs 					String[]  @map("tag_ids") @db.ObjectId
   tags  					Tag[] 		@relation(fields: [tagIDs], references: [id])
 

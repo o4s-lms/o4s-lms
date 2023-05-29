@@ -4,7 +4,7 @@ import { cx } from "@/lib/utils"
 //import { urlForImage } from "@/lib/sanity/image";
 import { parseISO, format } from "date-fns";
 import { Image as PhotoIcon } from "lucide-react"
-import TagLabel from "./components/tag"
+import TagLabel from "./tag"
 import { BlogPostsResponseData } from "@o4s/generated-wundergraph/models";
 
 type Post = BlogPostsResponseData["posts"][number]
@@ -83,7 +83,7 @@ export default function PostList({
         <div className={cx(minimal && "flex items-center")}>
           <div>
             <TagLabel
-              categories={post.tags}
+              tags={post.tags}
               nomargin={minimal}
             />
             <h2
@@ -99,7 +99,7 @@ export default function PostList({
                 "mt-2    dark:text-white"
               )}>
               <Link
-                href={`/blog/post/${pathPrefix ? `${pathPrefix}/` : ""}${
+                href={`/blogue/post/${pathPrefix ? `${pathPrefix}/` : ""}${
                   post.slug
                 }`}>
                 <span
@@ -116,14 +116,14 @@ export default function PostList({
             </h2>
 
             <div className="hidden">
-              {post.metaDescription && (
+              {post.excerpt && (
                 <p className="mt-2 line-clamp-3 text-sm text-gray-500 dark:text-gray-400">
                   <Link
-                    href={`/blog/post/${
+                    href={`/blogue/post/${
                       pathPrefix ? `${pathPrefix}/` : ""
                     }${post.slug}`}
                     legacyBehavior>
-                    {post.metaDescription}
+                    {post.excerpt}
                   </Link>
                 </p>
               )}
