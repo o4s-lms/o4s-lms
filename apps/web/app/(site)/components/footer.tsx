@@ -23,7 +23,7 @@ const Footer = () => (
           ))}
         </ul>
         <p className="mt-6 sm:mt-0">
-          © 2023 José Cordeiro. Todos os direitos reservados.
+				Copyright © 2016-2023 José Cordeiro. Todos os direitos reservados.
         </p>
       </div>
     </div>

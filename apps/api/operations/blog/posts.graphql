@@ -1,0 +1,30 @@
+query ($language: String!, $published: Boolean = true) {
+	posts: site_findManyPost(
+		where: {
+			language: { equals: $language }
+			published: { equals: $published }
+			}
+		orderBy: { publishedAt: asc }
+	) {
+		id
+		title
+		slug
+		image
+		featured
+		status
+		language
+		metaTitle
+		metaDescription
+		estReadingTime
+		authorId
+		published
+		publishedAt
+		createdAt
+		tags {
+			id
+			name
+			slug
+			color
+		}
+	}
+}

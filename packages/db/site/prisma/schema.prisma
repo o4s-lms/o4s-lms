@@ -20,6 +20,7 @@ model Post {
 	language				String		@default("pt")
 	metaTitle				String?		@map("meta_title")
 	metaDescription	String?		@map("meta_description")
+	estReadingTime	Int?			@map("est_reading_time")
 	authorId 				String		@map("author_id") @db.ObjectId
 	published				Boolean   @default(false)
 	publishedAt			DateTime? @map("published_at")
@@ -40,6 +41,7 @@ model Tag {
 	slug						String		@unique
 	description			String?
 	image						String?
+	color						String?
 	hidden					Boolean		@default(false)
 	parentId 				String?		@map("parent_id") @db.ObjectId
 	language				String		@default("pt")

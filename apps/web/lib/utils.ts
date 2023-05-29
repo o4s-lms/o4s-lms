@@ -2,6 +2,15 @@ import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import ms from "ms"
 
+export const cx = (...classNames) =>
+  classNames.filter(Boolean).join(" ");
+
+// because we use sanity-next-image
+// vercel throws error when using normal imports
+export const myLoader = ({ src }) => {
+  return src;
+};
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
