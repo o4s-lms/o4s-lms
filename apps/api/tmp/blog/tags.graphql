@@ -3,7 +3,7 @@ query ($language: String!) {
 		where: {
 			language: { equals: $language }
 			}
-		orderBy: { created_at: asc }
+		orderBy: { createdAt: asc }
 	) {
 		id
 		name

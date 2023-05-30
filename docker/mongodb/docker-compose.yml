@@ -4,8 +4,8 @@ services:
     image: mongodb/mongodb-community-server:latest
     container_name: mongodb1
     restart: always
-    logging:
-      driver: 'none'
+    #logging:
+    #  driver: 'none'
     environment:
       - PUID=1000
       - PGID=1000
@@ -22,8 +22,8 @@ services:
     image: mongodb/mongodb-community-server:latest
     container_name: mongodb2
     restart: always
-    logging:
-      driver: 'none'
+    #logging:
+    #  driver: 'none'
     environment:
       - PUID=1000
       - PGID=1000
@@ -40,8 +40,8 @@ services:
     image: mongodb/mongodb-community-server:latest
     container_name: mongodb3
     restart: always
-    logging:
-      driver: 'none'
+    #logging:
+    #  driver: 'none'
     environment:
       - PUID=1000
       - PGID=1000

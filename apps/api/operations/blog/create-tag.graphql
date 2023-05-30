@@ -4,9 +4,9 @@ mutation (
 	$description: String
 	$image: String,
 	$color: String
-	$parentId: String,
-	$metaTitle: String,
-	$metaDescription: String,
+	$parent_id: String,
+	$meta_title: String,
+	$meta_description: String,
 	$userId: String! @fromClaim(name: USERID)
 ) @rbac(requireMatchAny: [editor, admin]) {
 	tag: site_createOneTag(
@@ -16,11 +16,11 @@ mutation (
 			description: $description
 			image: $image
 			color: $color
-			parentId: $parentId
-			metaTitle: $metaTitle
-			metaDescription: $metaDescription
-			createdBy: $userId
-			updatedBy: $userId
+			parent_id: $parent_id
+			meta_title: $meta_title
+			meta_description: $meta_description
+			created_by: $userId
+			updated_by: $userId
 		}
 	) {
 		id
@@ -30,12 +30,12 @@ mutation (
 		image
 		color
 		hidden
-		parentId
+		parent_id
 		visibility
 		language
-		metaTitle
-		metaDescription
-		createdAt
-		createdBy
+		meta_title
+		meta_description
+		created_at
+		created_by
 	}
 }

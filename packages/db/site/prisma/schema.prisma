@@ -9,56 +9,56 @@ datasource db {
 }
 
 model Post {
-	id          		String    @id @default(auto()) @map("_id") @db.ObjectId
-	title						String
-	slug						String		@unique
-	mobiledoc				String?
-	html						String?
-	plaintext				String?
-	image						String?
-	featured				Boolean		@default(false)
-	status					String		@default("draft")
-	language				String		@default("pt")
-	metaTitle				String?		@map("meta_title")
-	metaDescription	String?		@map("meta_description")
-	excerpt					String?
-	estReadingTime	Int?			@map("est_reading_time")
-	authorId 				String		@map("author_id") @db.ObjectId
-	published				Boolean   @default(false)
-	publishedAt			DateTime? @map("published_at")
-	publishedBy			String? 	@map("published_by")
-	createdAt				DateTime  @default(now())
-	createdBy				String		@map("created_by")
-	updatedAt				DateTime  @updatedAt
-	updatedBy				String		@map("updated_by")
-	ogImage					String?		@map("og_image")
-	ogTitle					String?		@map("og_title")
-	ogDescription		String?		@map("og_description")
-	tagIDs 					String[]  @map("tag_ids") @db.ObjectId
-  tags  					Tag[] 		@relation(fields: [tagIDs], references: [id])
+	id          			String    @id @default(auto()) @map("_id") @db.ObjectId
+	title							String
+	slug							String		@unique
+	mobiledoc					String?
+	html							String?
+	plaintext					String?
+	image							String?
+	featured					Boolean		@default(false)
+	status						String		@default("draft")
+	language					String		@default("pt")
+	meta_title				String?
+	meta_description	String?
+	excerpt						String?
+	est_reading_time	Int?
+	author_id 				String		@db.ObjectId
+	published					Boolean   @default(false)
+	published_at			DateTime?
+	published_by			String?
+	created_at				DateTime  @default(now())
+	created_by				String
+	updated_at				DateTime  @updatedAt
+	updated_by				String
+	og_image					String?
+	og_title					String?
+	og_description		String?
+	tag_ids 					String[]  @db.ObjectId
+  tags  						Tag[] 		@relation(fields: [tag_ids], references: [id])
 
 	@@map("posts")
 }
 
 model Tag {
-	id          		String    @id @default(auto()) @map("_id") @db.ObjectId
-	name						String
-	slug						String		@unique
-	description			String?
-	image						String?
-	color						String?
-	hidden					Boolean		@default(false)
-	parentId 				String?		@map("parent_id") @db.ObjectId
-	visibility			String		@default("public")
-	language				String		@default("pt")
-	metaTitle				String?		@map("meta_title")
-	metaDescription	String?		@map("meta_description")
-	createdAt				DateTime  @map("created_at") @default(now())
-	createdBy				String		@map("created_by")
-	updatedAt				DateTime  @map("updated_at") @updatedAt
-	updatedBy				String		@map("updated_by")
-	postIDs 				String[] 	@map("post_ids") @db.ObjectId
-  posts   				Post[]   	@relation(fields: [postIDs], references: [id])
+	id          			String    @id @default(auto()) @map("_id") @db.ObjectId
+	name							String
+	slug							String		@unique
+	description				String?
+	image							String?
+	color							String?
+	hidden						Boolean		@default(false)
+	parent_id 				String?		@db.ObjectId
+	visibility				String		@default("public")
+	language					String		@default("pt")
+	meta_title				String?		
+	meta_description	String?
+	created_at				DateTime  @default(now())
+	created_by				String
+	updated_at				DateTime  @updatedAt
+	updated_by				String
+	post_ids	 				String[] 	@db.ObjectId
+  posts   					Post[]   	@relation(fields: [post_ids], references: [id])
 
 	@@map("tags")
 }

@@ -1,33 +1,40 @@
 mutation (
-	$title: String!,
+	$name: String!,
 	$slug: String!,
+	$description: String
 	$image: String,
+	$color: String
+	$parent_id: String,
 	$meta_title: String,
 	$meta_description: String,
 	$userId: String! @fromClaim(name: USERID)
 ) @rbac(requireMatchAny: [editor, admin]) {
-	post: site_createOnePost(
+	tag: site_createOneTag(
 		data: {
-			title: $title
+			name: $name
 			slug: $slug
+			description: $description
 			image: $image
+			color: $color
+			parent_id: $parent_id
 			meta_title: $meta_title
 			meta_description: $meta_description
-			author_id: $userId
 			created_by: $userId
 			updated_by: $userId
 		}
 	) {
 		id
-		title
+		name
 		slug
+		description
 		image
-		status
+		color
+		hidden
+		parentId
+		visibility
 		language
 		meta_title
 		meta_description
-		author_id
-		published
 		created_at
 		created_by
 	}
