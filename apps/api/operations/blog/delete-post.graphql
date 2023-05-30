@@ -1,0 +1,8 @@
+mutation ($id: String!)
+ @rbac(requireMatchAny: [editor, admin]) {
+	post: site_deleteOnePost(
+		where: { id: $id }
+	) {
+		id
+	}
+}

@@ -5,10 +5,7 @@ function useDeleteTagMutation() {
 	const { mutate } = useSWRConfig();
 
 	const { data } = useQuery({
-		operationName: 'blog/tags',
-		input: {
-			language: 'pt',
-		}
+		operationName: 'blog/tags-all'
 	});
 
 	const deleteTag = useMutation({

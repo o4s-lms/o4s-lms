@@ -3,24 +3,24 @@ import { type NextPage } from 'next/types';
 
 import Header from "~/components/ui/layout/Header";
 import Nav from "~/components/ui/layout/Nav";
-import TagsTable from "~/components/ui/site/TagsTable";
+import PostsTable from "~/components/ui/site/PostsTable";
 import { useQuery } from "~/utils/wundergraph";
 import Loading from "~/components/ui/Loading";
 import TagsHeader from "~/components/ui/site/TagsHeader";
 
-const Tags: NextPage = () => {
+const Posts: NextPage = () => {
 	const { data, error, isLoading } = useQuery({
-		operationName: 'blog/tags-all',
+		operationName: 'blog/posts-all',
 		enabled: true,
 	})
 
 	return (
-		<><Header title="Blog - Tags - Admin" />
+		<><Header title="Blog - Posts - Admin" />
 			<Nav />
 			<SectionWrapper className="mt-0">
 				<TagsHeader />
 				{!isLoading ? (
-					<TagsTable tags={data?.tags} />
+					<PostsTable posts={data?.posts} />
 				) : (
 					<Loading />
 				)}
@@ -29,4 +29,4 @@ const Tags: NextPage = () => {
 	);
 };
 
-export default Tags;
+export default Posts;

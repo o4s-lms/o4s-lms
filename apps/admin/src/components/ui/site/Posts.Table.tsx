@@ -11,73 +11,73 @@ import { InputText } from 'primereact/inputtext';
 import { Toast } from "primereact/toast";
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import { type BlogTags_allResponseData } from "@o4s/generated-wundergraph/models";
+import { type BlogPosts_allResponseData } from "@o4s/generated-wundergraph/models";
 import slugify from "@sindresorhus/slugify";
-import useUpdateTagMutation from '~/hooks/useUpdateTagMutation';
-import useDeleteTagMutation from '~/hooks/useDeleteTagMutation';
+import useUpdatePostMutation from '~/hooks/useUpdatePostMutation';
+import useDeletePostMutation from '~/hooks/useDeletePostMutation';
 
-type Tags = BlogTags_allResponseData["tags"];
+type Posts = BlogPosts_allResponseData["posts"];
 
-const TagsTable: React.FC<{
-  tags: Tags | undefined;
-}> = ({ tags }) => {
+const PostsTable: React.FC<{
+  posts: Posts | undefined;
+}> = ({ posts }) => {
 
 	const toast = useRef<Toast>(null);
-	const [deleteTagDialog, setDeleteTagDialog] = useState<boolean>(false);
-	const [tagToDelete, setTagToDelete] = useState<string>("");
-	const updateTag = useUpdateTagMutation();
-	const deleteTag = useDeleteTagMutation();
+	const [deletePostDialog, setDeletePostDialog] = useState<boolean>(false);
+	const [postToDelete, setPostToDelete] = useState<string>("");
+	const updatePost = useUpdatePostMutation();
+	const deletePost = useDeletePostMutation();
 
-	const confirmDeleteTag = (id: string) => {
-		setTagToDelete(id);
-		setDeleteTagDialog(true);
+	const confirmDeletePost = (id: string) => {
+		setPostToDelete(id);
+		setDeletePostDialog(true);
 	};
 
-	const deleteTagBodyTemplate = (rowData) => {
+	const deletePostBodyTemplate = (rowData) => {
 		return <Button
-							onClick={() => confirmDeleteTag(rowData.id)}
+							onClick={() => confirmDeletePost(rowData.id)}
 							icon="pi pi-trash" rounded text
 							severity="danger" 
 							className="hover:bg-gray-200" aria-label="Delete" />;
 	};
 
-	const hideDeleteTagDialog = () => {
-		setDeleteTagDialog(false);
+	const hideDeletePostDialog = () => {
+		setDeletePostDialog(false);
 	};
 
-	const confirmedDeleteTag = async () => {
+	const confirmedDeletePost = async () => {
 
-		setDeleteTagDialog(false);
-		const deleted = await deleteTag.trigger(
+		setDeletePostDialog(false);
+		const deleted = await deletePost.trigger(
 			{
-				id: tagToDelete
+				id: postToDelete
 			}, { throwOnError: false });
 
 		if (!deleted) {
 			toast.current?.show({severity:'error', summary: 'Error', detail:'Something went wrong', life: 3000});
 		} else {
-			toast.current?.show({severity:'success', summary: 'Success', detail:'Tag deleted successfully', life: 3000});
+			toast.current?.show({severity:'success', summary: 'Success', detail:'Post deleted successfully', life: 3000});
 		}
 
-		setTagToDelete("");
+		setPostToDelete("");
 	};
 
-	const deleteTagDialogFooter = (
+	const deletePostDialogFooter = (
 		<React.Fragment>
-				<Button label="No" icon="pi pi-times" outlined onClick={hideDeleteTagDialog} />
-				<Button label="Yes" icon="pi pi-check" severity="danger" onClick={confirmedDeleteTag} />
+				<Button label="No" icon="pi pi-times" outlined onClick={hideDeletePostDialog} />
+				<Button label="Yes" icon="pi pi-check" severity="danger" onClick={confirmedDeletePost} />
 		</React.Fragment>
 	);
 
-  const onTagRowEditComplete = async (e: DataTableRowEditCompleteEvent) => {
+  const onPostRowEditComplete = async (e: DataTableRowEditCompleteEvent) => {
     const { newData, index } = e;
 
-		const updated = await updateTag.trigger(
+		const updated = await updatePost.trigger(
 			{
 				id: newData.id,
-				name: newData.name,
-				slug: slugify(newData.name),
-				description: newData.description,
+				title: newData.title,
+				slug: slugify(newData.title),
+				excerpt: newData.excerpt,
 				meta_title: newData.meta_title,
 				meta_description: newData.meta_description,
 			}, { throwOnError: false })
@@ -85,7 +85,7 @@ const TagsTable: React.FC<{
 		if (!updated) {
 			toast.current?.show({severity:'error', summary: 'Error', detail:'Something went wrong', life: 3000});
 		} else {
-			toast.current?.show({severity:'success', summary: 'Success', detail:'Tag updated successfully', life: 3000});
+			toast.current?.show({severity:'success', summary: 'Success', detail:'Post updated successfully', life: 3000});
 		}
 
   };
@@ -97,23 +97,23 @@ const TagsTable: React.FC<{
   return (
 		<><Toast ref={toast} />
 		<div className="card pt-2">
-			<DataTable value={tags}
+			<DataTable value={posts}
 									editMode="row"
 									dataKey="id"
-									onRowEditComplete={onTagRowEditComplete}
+									onRowEditComplete={onPostRowEditComplete}
                  	tableStyle={{ minWidth: '60rem' }}>
 				<Column field="id" header="#" style={{ width: '10%' }} />
-        <Column field="name" header="Name" editor={(options) => textEditor(options)} style={{ width: '15%' }} />
-				<Column field="description" header="Description" editor={(options) => textEditor(options)} style={{ width: '20%' }} />
+        <Column field="title" header="Title" editor={(options) => textEditor(options)} style={{ width: '15%' }} />
+				<Column field="excerpt" header="Excerpt" editor={(options) => textEditor(options)} style={{ width: '20%' }} />
 				<Column field="meta_title" header="Meta Title" editor={(options) => textEditor(options)} style={{ width: '15%' }} />
 				<Column field="meta_description" header="Meta Description" editor={(options) => textEditor(options)} style={{ width: '20%' }} />
 				<Column rowEditor headerStyle={{ width: '5%', minWidth: '5rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
-				<Column style={{ width: '3%', minWidth: '3rem' }} body={deleteTagBodyTemplate} bodyStyle={{ textAlign: 'center' }}/>
+				<Column style={{ width: '3%', minWidth: '3rem' }} body={deletePostBodyTemplate} bodyStyle={{ textAlign: 'center' }}/>
       </DataTable>
-			<Dialog visible={deleteTagDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deleteTagDialogFooter} onHide={hideDeleteTagDialog}>
+			<Dialog visible={deletePostDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deletePostDialogFooter} onHide={hideDeletePostDialog}>
         <div className="confirmation-content">
           <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
-            {tagToDelete && (
+            {postToDelete && (
               <span>
                 <b>Are you sure you want to delete?</b>
               </span>
@@ -125,4 +125,4 @@ const TagsTable: React.FC<{
   );
 };
 
-export default TagsTable;
+export default PostsTable;

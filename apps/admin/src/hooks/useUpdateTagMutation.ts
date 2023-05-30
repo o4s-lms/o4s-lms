@@ -12,10 +12,7 @@ function useUpdateTagMutation() {
 
 		return await mutate(
 			{
-				operationName: 'blog/tags',
-				input: {
-					languague: 'pt'
-				}
+				operationName: 'blog/tags-all'
 			},
 			() => {
 				return updateTag.trigger(input, options);

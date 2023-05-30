@@ -1,0 +1,30 @@
+mutation(
+	$id: String!,
+	$title: String,
+	$slug: String,
+	$excerpt: String,
+	$meta_title: String,
+	$meta_description: String,
+	$userId: String @fromClaim(name: USERID)
+) @rbac(requireMatchAny: [editor, admin]) {
+	post: site_updateOnePost(
+		where: { id: $id }
+		data: {
+			title: { set: $title }
+			slug: { set: $slug }
+			excerpt: { set: $excerpt }
+			meta_title: { set: $meta_title }
+			meta_description: { set: $meta_description }
+			updated_by: { set: $userId }
+		}
+	) {
+		id
+		title
+		slug
+		excerpt
+		meta_title
+		meta_description
+		updated_at
+		updated_by
+	}
+}

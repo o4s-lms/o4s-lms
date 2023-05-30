@@ -1,12 +1,6 @@
-query ($language: String!, $hidden: Boolean = false, $visibility: String = "public") {
-	tags: site_findManyTag(
-		where: {
-			language: { equals: $language }
-			hidden: { equals: $hidden }
-			visibility: { equals: $visibility }
-			}
-		orderBy: { created_at: asc }
-	) {
+query ()
+@rbac(requireMatchAny: [editor, admin]) {
+	tags: site_findManyTag() {
 		id
 		name
 		slug

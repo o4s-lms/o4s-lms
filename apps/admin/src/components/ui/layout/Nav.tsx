@@ -179,7 +179,8 @@ export default function Nav() {
 					items: [
 						{
 							label: 'Posts',
-							icon: 'pi pi-fw pi-calendar-plus'
+							icon: 'pi pi-fw pi-calendar-plus',
+							command: () => { void router.push("/site/blog/posts") },
 						},
 						{
 							label: 'Tags',

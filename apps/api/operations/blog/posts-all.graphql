@@ -1,0 +1,34 @@
+query ()
+@rbac(requireMatchAny: [editor, admin]) {
+	posts: site_findManyPost() {
+		id
+		title
+		slug
+		html
+		image
+		featured
+		status
+		language
+		meta_title
+		meta_description
+		excerpt
+		est_reading_time
+		author_id
+		published
+		published_at
+		published_by
+		created_at
+		created_by
+		updated_at
+		updated_by
+		og_image
+		og_title
+		og_description
+		tags {
+			id
+			name
+			slug
+			color
+		}
+	}
+}
