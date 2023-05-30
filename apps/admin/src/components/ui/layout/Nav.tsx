@@ -170,6 +170,38 @@ export default function Nav() {
 			]
 		},
 		{
+			label: 'Website',
+			icon: 'pi pi-fw pi-calendar',
+			items: [
+				{
+					label: 'Blog',
+					icon: 'pi pi-fw pi-pencil',
+					items: [
+						{
+							label: 'Posts',
+							icon: 'pi pi-fw pi-calendar-plus'
+						},
+						{
+							label: 'Tags',
+							icon: 'pi pi-fw pi-calendar-minus'
+						}
+					]
+				},
+				{
+					label: 'Courses/Products',
+					icon: 'pi pi-fw pi-calendar-times',
+				},
+				{
+					label: 'Faqs',
+					icon: 'pi pi-fw pi-calendar-times',
+				},
+				{
+					label: 'Testimonials',
+					icon: 'pi pi-fw pi-calendar-times',
+				}
+			]
+		},
+		{
 			label: 'Quit',
 			icon: 'pi pi-fw pi-power-off',
 			command: () => { void signOut(); },
