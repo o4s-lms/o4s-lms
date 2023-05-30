@@ -1,4 +1,4 @@
-mutation(
+mutation (
 	$id: String!,
 	$name: String,
 	$slug: String,
@@ -10,12 +10,12 @@ mutation(
 	tag: site_updateOneTag(
 		where: { id: $id }
 		data: {
-			name: { set: $name }
-			slug: { set: $slug }
-			description: { set: $description }
-			meta_title: { set: $meta_title }
-			meta_description: { set: $meta_description }
-			updated_by: { set: $userId }
+			name: $name
+			slug: $slug
+			description: $description
+			meta_title: $meta_title
+			meta_description: $meta_description
+			updated_by: $userId
 		}
 	) {
 		id

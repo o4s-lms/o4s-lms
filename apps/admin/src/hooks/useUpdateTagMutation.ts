@@ -1,7 +1,7 @@
 import { useSWRConfig } from 'swr';
 import { useMutation } from '~/utils/wundergraph';
 
-function () {
+function useUpdateTagMutation() {
 	const { mutate } = useSWRConfig();
 	
 	const updateTag = useMutation({
