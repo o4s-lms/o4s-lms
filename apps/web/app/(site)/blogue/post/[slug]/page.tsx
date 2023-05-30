@@ -1,18 +1,35 @@
 import { useQuery } from "@/lib/wundergraph"
 import PostPage from "./default"
+import { site } from "@o4s/db"
 
-import { getAllPostsSlugs, getPostBySlug } from "@/lib/sanity/client";
 import { Loading } from "@/components/loading";
 
 export async function generateStaticParams() {
-  return await getAllPostsSlugs();
+  return await site.post.findMany({
+		where: {
+			published: true,
+			language: "pt",
+		},
+		select: {
+			slug: true
+		},
+	})
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const post = await getPostBySlug(params.slug);
+	const metadata = await site.post.findUnique({
+		where: { slug: params.slug },
+		select: {
+			metaTitle: true,
+			metaDescription: true,
+			ogImage: true,
+			ogTitle: true,
+			ogDescription: true,
+		}
+	})
   return { 
-		title: post.title,
-		description: post.description
+		title: metadata?.metaTitle,
+		description: metadata?.metaDescription,
 	}
 }
 
