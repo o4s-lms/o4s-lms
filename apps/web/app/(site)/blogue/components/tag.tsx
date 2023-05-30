@@ -9,7 +9,7 @@ type Tag = {
 }
 
 interface TagLabelProps {
-	tags: Tag[]
+	tags: Tag[] | undefined
 	nomargin?: boolean
 }
 

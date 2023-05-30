@@ -3,7 +3,7 @@ import Container from "./components/container"
 import PostList from "./components/post-list"
 import { useQuery } from "@/lib/wundergraph"
 
-export default function Bog() {
+export default function Blogue() {
 	const { data } = useQuery({
 		operationName: 'blog/posts',
 		input: {
