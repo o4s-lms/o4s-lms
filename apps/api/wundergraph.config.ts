@@ -62,7 +62,8 @@ configureWunderGraphApplication({
         ...templates.typescript.all,
         templates.typescript.operations,
         templates.typescript.linkBuilder
-      ]
+      ],
+			path: '../../packages/generated-wundergraph'
     },
     {
       templates: [templates.typescript.client],

@@ -17,7 +17,7 @@ const PostsHeader = () => {
 	const toast = useRef<Toast>(null);
 	const [postDialog, setPostDialog] = useState<boolean>(false);
 	const [submittedPost, setPostSubmitted] = useState<boolean>(false);
-	const [name, setName] = useState<string>("");
+	const [title, setTitle] = useState<string>("");
 	const addPost = useAddPostMutation();
 
 	/** Add a post */
@@ -30,30 +30,30 @@ const PostsHeader = () => {
 		setPostDialog(true);
 	};
 
-	const onPostInputChange = (e: React.ChangeEvent<HTMLInputElement>, name: string) => {
+	const onPostInputChange = (e: React.ChangeEvent<HTMLInputElement>, title: string) => {
 		const val = (e.target && e.target.value) || '';
 
-		setName(val);
+		setTitle(val);
 	};
 
 	const submitPost = async () => {
 		setPostSubmitted(true);
 
-		if (!name.trim()) {
+		if (!title.trim()) {
 			return null;
 		}
 		
 		const postAdded = await addPost.trigger(
 				{
-					name: name,
-					slug: slugify(name),
+					title: title,
+					slug: slugify(title),
 				}, { throwOnError: false });
 
 		if (!postAdded) {
 			toast.current?.show({severity:'error', summary: 'Error', detail:'Something went wrong', life: 3000});
 		} else {
 			toast.current?.show({severity:'success', summary: 'Success', detail:'Post added successfully', life: 3000});
-			setName("");
+			setTitle("");
 			setPostDialog(false);
 		}
 	};
@@ -69,8 +69,8 @@ const PostsHeader = () => {
 		<><Toast ref={toast} />
 			<Dialog visible={postDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Create blog post" modal className="p-fluid" footer={postDialogFooter} onHide={hidePostDialog}>
         <div className="field">
-          <InputText id="name" value={name} onChange={(e) => onPostInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submittedPost && !name })} />
-          {submittedPost && !name && <small className="p-error">Name is required.</small>}
+          <InputText id="title" value={title} onChange={(e) => onPostInputChange(e, 'title')} required autoFocus className={classNames({ 'p-invalid': submittedPost && !title })} />
+          {submittedPost && !title && <small className="p-error">Title is required.</small>}
         </div>
       </Dialog>
 			<div className="surface-0">

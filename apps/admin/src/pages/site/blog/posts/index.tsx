@@ -6,7 +6,7 @@ import Nav from "~/components/ui/layout/Nav";
 import PostsTable from "~/components/ui/site/PostsTable";
 import { useQuery } from "~/utils/wundergraph";
 import Loading from "~/components/ui/Loading";
-import TagsHeader from "~/components/ui/site/TagsHeader";
+import PostsHeader from "~/components/ui/site/PostsHeader";
 
 const Posts: NextPage = () => {
 	const { data, error, isLoading } = useQuery({
@@ -18,7 +18,7 @@ const Posts: NextPage = () => {
 		<><Header title="Blog - Posts - Admin" />
 			<Nav />
 			<SectionWrapper className="mt-0">
-				<TagsHeader />
+				<PostsHeader />
 				{!isLoading ? (
 					<PostsTable posts={data?.posts} />
 				) : (
