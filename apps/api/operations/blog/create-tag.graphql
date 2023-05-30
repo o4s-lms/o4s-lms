@@ -3,17 +3,19 @@ mutation (
 	$slug: String!,
 	$description: String
 	$image: String,
+	$color: String
 	$parentId: String,
 	$metaTitle: String,
 	$metaDescription: String,
 	$userId: String! @fromClaim(name: USERID)
 ) @rbac(requireMatchAny: [editor, admin]) {
-	post: site_createOneTag(
+	tag: site_createOneTag(
 		data: {
 			name: $name
 			slug: $slug
 			description: $description
 			image: $image
+			color: $color
 			parentId: $parentId
 			metaTitle: $metaTitle
 			metaDescription: $metaDescription
@@ -26,8 +28,10 @@ mutation (
 		slug
 		description
 		image
+		color
 		hidden
 		parentId
+		visibility
 		language
 		metaTitle
 		metaDescription

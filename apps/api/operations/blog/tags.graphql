@@ -1,0 +1,40 @@
+query ($language: String!) {
+	tags: site_findManyTag(
+		where: {
+			language: { equals: $language }
+			}
+		orderBy: { createdAt: asc }
+	) {
+		id
+		name
+		slug
+		description
+		image
+		color
+		hidden
+		parentId
+		visibility
+		language
+		metaTitle
+		metaDescription
+		createdAt
+		createdBy
+		posts {
+			id
+			title
+			slug
+			image
+			featured
+			status
+			language
+			metaTitle
+			metaDescription
+			excerpt
+			estReadingTime
+			authorId
+			published
+			publishedAt
+			createdAt
+		}
+	}
+}

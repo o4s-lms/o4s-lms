@@ -49,12 +49,13 @@ model Tag {
 	color						String?
 	hidden					Boolean		@default(false)
 	parentId 				String?		@map("parent_id") @db.ObjectId
+	visibility			String		@default("public")
 	language				String		@default("pt")
 	metaTitle				String?		@map("meta_title")
 	metaDescription	String?		@map("meta_description")
-	createdAt				DateTime  @default(now())
+	createdAt				DateTime  @map("created_at") @default(now())
 	createdBy				String		@map("created_by")
-	updatedAt				DateTime  @updatedAt
+	updatedAt				DateTime  @map("updated_at") @updatedAt
 	updatedBy				String		@map("updated_by")
 	postIDs 				String[] 	@map("post_ids") @db.ObjectId
   posts   				Post[]   	@relation(fields: [postIDs], references: [id])
@@ -62,15 +63,15 @@ model Tag {
 	@@map("tags")
 }
 
-model PostTag {
-	id          String    @id @default(auto()) @map("_id") @db.ObjectId
-	postId			String		@map("post_id") @db.ObjectId
-	tagId				String		@map("tag_id") @db.ObjectId
+// model PostTag {
+//	id          String    @id @default(auto()) @map("_id") @db.ObjectId
+//	postId			String		@map("post_id") @db.ObjectId
+//	tagId				String		@map("tag_id") @db.ObjectId
 
-	@@unique([postId, tagId])
+//	@@unique([postId, tagId])
 
-	@@map("post_tags")
-}
+//	@@map("post_tags")
+// }
 
 model Faq {
 	id          String    @id @default(auto()) @map("_id") @db.ObjectId
