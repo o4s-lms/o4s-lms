@@ -17,6 +17,9 @@
       "inputs": ["lms/prisma/schema.prisma"],
       "cache": false
     },
+		"site:studio": {
+      "cache": false
+    },
     "db:proxy": {
       "cache": false
     },

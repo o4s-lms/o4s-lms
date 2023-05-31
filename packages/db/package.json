@@ -11,14 +11,15 @@
     "lms:generate": "pnpm with-env prisma generate --schema=./lms/prisma/schema.prisma",
 		"site:push": "pnpm with-env prisma db push --schema=./site/prisma/schema.prisma --accept-data-loss --skip-generate",
     "lms:push": "pnpm with-env prisma db push --schema=./lms/prisma/schema.prisma --accept-data-loss --skip-generate",
+		"site:studio": "pnpm with-env prisma studio --schema=./site/prisma/schema.prisma",
     "db:proxy": "pscale connect o4s-courses-apps main --port 3309",
     "dev": "pnpm with-env prisma studio --port 5556",
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@prisma/client": "^4.14.1",
+    "@prisma/client": "^4.15.0",
     "@planetscale/database": "^1.7.0",
-		"prisma-redis-middleware": "^4.7.0",
+		"prisma-redis-middleware": "^4.8.0",
 		"ioredis": "^5.3.2"
   },
   "devDependencies": {
@@ -26,7 +27,7 @@
 		"@types/node": "^18.16.3",
 		"eslint": "^8.40.0",
     "dotenv-cli": "^7.2.1",
-    "prisma": "^4.14.1",
+    "prisma": "^4.15.0",
     "typescript": "^5.0.4"
   }
 }

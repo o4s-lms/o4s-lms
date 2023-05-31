@@ -23,7 +23,7 @@ model Post {
 	meta_description	String?
 	excerpt						String?
 	est_reading_time	Int?
-	author_id 				String		@db.ObjectId
+	author_id 				String
 	published					Boolean   @default(false)
 	published_at			DateTime?
 	published_by			String?
@@ -34,8 +34,9 @@ model Post {
 	og_image					String?
 	og_title					String?
 	og_description		String?
-	tag_ids 					String[]  @db.ObjectId
-  tags  						Tag[] 		@relation(fields: [tag_ids], references: [id])
+	//tag_ids 					String[]  @db.ObjectId
+  //tags  						Tag[] 		@relation(fields: [tag_ids], references: [id])
+	post_tags					PostTag[]
 
 	@@map("posts")
 }
@@ -57,21 +58,25 @@ model Tag {
 	created_by				String
 	updated_at				DateTime  @updatedAt
 	updated_by				String
-	post_ids	 				String[] 	@db.ObjectId
-  posts   					Post[]   	@relation(fields: [post_ids], references: [id])
+	//post_ids	 				String[] 	@db.ObjectId
+  //posts   					Post[]   	@relation(fields: [post_ids], references: [id])
+	tag_posts					PostTag[]
 
 	@@map("tags")
 }
 
-// model PostTag {
-//	id          String    @id @default(auto()) @map("_id") @db.ObjectId
-//	postId			String		@map("post_id") @db.ObjectId
-//	tagId				String		@map("tag_id") @db.ObjectId
+model PostTag {
+	id          String    @id @default(auto()) @map("_id") @db.ObjectId
+	post_id			String		@db.ObjectId
+	tag_id			String		@db.ObjectId
+	post				Post			@relation(fields: [post_id], references: [id], onDelete: Cascade)
+	tag					Tag				@relation(fields: [tag_id], references: [id], onDelete: Cascade)
 
-//	@@unique([postId, tagId])
 
-//	@@map("post_tags")
-// }
+	@@unique([post_id, tag_id])
+
+	@@map("post_tag")
+}
 
 model Faq {
 	id          String    @id @default(auto()) @map("_id") @db.ObjectId

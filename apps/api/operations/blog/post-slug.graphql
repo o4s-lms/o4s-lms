@@ -15,11 +15,13 @@ query ($slug: String!) {
 		og_image
 		og_title
 		og_description
-		tags {
-			id
-			name
-			slug
-			color
+		post_tags {
+			tag {
+				id
+				name
+				slug
+				color
+			}
 		}
 	}
 }

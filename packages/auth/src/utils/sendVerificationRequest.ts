@@ -1,4 +1,5 @@
-import { lms } from "@o4s/db";
+// import { lms } from "@o4s/db";
+import { sendMagicLinkEmail } from "../email/sendMagicLink";
 
 type Props = {
   identifier: string;
@@ -6,7 +7,15 @@ type Props = {
 }
 
 export const sendVerificationRequest = async ({ identifier, url }: Props) => {
-	const user = await lms.user.findUnique({ 
+
+	try {
+    sendMagicLinkEmail({ url, to: identifier })
+  } catch (err) {
+    throw new Error(`Email(s) could not be sent`)
+  }
+
+
+	/** const user = await lms.user.findUnique({ 
 		where: { email: identifier },
 		select: { id: true },
 	});
@@ -25,12 +34,25 @@ export const sendVerificationRequest = async ({ identifier, url }: Props) => {
 		}
 	};
 	try {
+		
 		const response = await fetch(
 			`http://joseantcordeiro.hopto.org:3003/v1/events/trigger`,
 			{
 				body: JSON.stringify(data),
 				headers: {
-					'Authorization': 'ApiKey ' + `${process.env.NOVU_API_KEY}`,
+					'Authorization': 'ApiKey 846a77c201ca42671c1e1c37e47617cd' + `${process.env.NOVU_API_KEY}`,
+					'Content-Type': 'application/json',
+				},
+				method: 'POST'
+			}
+
+		);
+
+		const response = await fetch(
+			`http://joseantcordeiro.hopto.org:9991/webhooks/notification`,
+			{
+				body: JSON.stringify(data),
+				headers: {
 					'Content-Type': 'application/json',
 				},
 				method: 'POST'
@@ -45,5 +67,5 @@ export const sendVerificationRequest = async ({ identifier, url }: Props) => {
 	} catch (error) {
 		throw new Error('Failed to send email');
 	}
-	console.log({ status: 'ok' });
+	console.log({ status: 'ok' }); */
 }

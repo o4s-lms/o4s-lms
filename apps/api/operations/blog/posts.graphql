@@ -21,11 +21,13 @@ query ($language: String!, $published: Boolean = true) {
 		published
 		published_at
 		created_at
-		tags {
-			id
-			name
-			slug
-			color
+		post_tags {
+			tag {
+				id
+				name
+				slug
+				color
+			}
 		}
 	}
 }

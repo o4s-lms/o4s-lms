@@ -12,6 +12,7 @@
     "lms:push": "turbo lms:push",
 		"site:generate": "turbo site:generate",
     "site:push": "turbo site:push",
+		"site:studio": "turbo site:studio",
     "db:proxy": "pscale connect o4s-courses-apps main --port 3309",
     "dev": "turbo run dev --parallel",
     "generate": "turbo run generate"

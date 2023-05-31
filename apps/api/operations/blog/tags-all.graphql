@@ -15,22 +15,24 @@ query ()
 		meta_description
 		created_at
 		created_by
-		posts {
-			id
-			title
-			slug
-			image
-			featured
-			status
-			language
-			meta_title
-			meta_description
-			excerpt
-			est_reading_time
-			author_id
-			published
-			published_at
-			created_at
+		tag_posts {
+			post {
+				id
+				title
+				slug
+				image
+				featured
+				status
+				language
+				meta_title
+				meta_description
+				excerpt
+				est_reading_time
+				author_id
+				published
+				published_at
+				created_at
+			}
 		}
 	}
 }
