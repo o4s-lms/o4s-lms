@@ -5,7 +5,7 @@ export const SessionExpiredModal = forwardRef<HTMLDialogElement>(
   (props, ref) => {
 
     const redirectToLogin = useCallback(() => {
-      redirect("/auth/login");
+      redirect("/signin");
     }, []);
 
     return (

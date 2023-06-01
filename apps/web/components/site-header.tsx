@@ -15,10 +15,12 @@ import {
 	NovuProvider,
 } from "@novu/notification-center"
 import { UserNav } from "@/components/user-nav"
-import { useQuery } from "@/lib/wundergraph"
+import { useToast } from "@/hooks/use-toast"
+import { useQuery, withWunderGraph } from "@/lib/wundergraph"
 import { Loading } from "./loading"
 
-export async function SiteHeader() {
+function SiteHeader() {
+	const { toast } = useToast()
 	const { theme } = useTheme()
 	const scrolled = useScroll(50)
 
@@ -29,6 +31,18 @@ export async function SiteHeader() {
 
 	if (isLoading) {
 		return <Loading />
+	}
+
+	if (error) {
+		toast({
+			variant: "destructive",
+			title: "Uh oh! Something went wrong.",
+			description: (
+				<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+					<code className="text-white">{error.message}</code>
+				</pre>
+			),
+		})
 	}
 
 	const me = data?.me
@@ -98,3 +112,5 @@ export async function SiteHeader() {
     </header>
   )
 }
+
+export default withWunderGraph(SiteHeader)

@@ -1,5 +1,5 @@
 import { Hanko, register } from "@teamhanko/hanko-elements"
-import { useCallback, useEffect, useMemo } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { redirect } from "next/navigation"
 
 const hankoApi = 'http://joseantcordeiro.hopto.org:8000'
@@ -8,11 +8,16 @@ interface Props {
   setError(error: Error): void;
 }
 
+const queryProps = {
+	operationName: 'users/me',
+	enabled: true,
+}
+
 function HankoAuth({ setError }: Props) {
   const hanko = useMemo(() => new Hanko(hankoApi), [])
 
   const redirectToProfile = useCallback(() => {
-    redirect("/auth/profile")
+    redirect("/profile")
   }, [])
 
   useEffect(() => {

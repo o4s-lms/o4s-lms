@@ -91,7 +91,7 @@ configureWunderGraphApplication({
       providers: [
         {
 					// jwksURL: new EnvironmentVariable('WG_TOKEN_JWKS_ENDPOINT', 'http://localhost:8000/.well-known/jwks.json'),
-          userInfoEndpoint: new EnvironmentVariable('WG_TOKEN_AUTH_ENDPOINT', 'http://localhost:3000/api/auth/session'),
+          userInfoEndpoint: new EnvironmentVariable('WG_TOKEN_AUTH_ENDPOINT', 'http://localhost:8002/userInfo'),
         },
       ],
     },

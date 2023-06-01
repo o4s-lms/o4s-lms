@@ -1,4 +1,4 @@
-import { SiteHeader } from "@/components/site-header"
+import SiteHeader from "@/components/site-header"
 
 export default function CourseLayout({
   children, // will be a page or nested layout

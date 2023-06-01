@@ -3,7 +3,7 @@ import Image from "next/image"
 
 import { Separator } from "@/components/ui/separator"
 import { SidebarNav } from "@/app/profile/components/sidebar-nav"
-import { SiteHeader } from "@/components/site-header"
+import SiteHeader from "@/components/site-header"
 
 export const metadata: Metadata = {
   title: "Profile",
@@ -14,6 +14,10 @@ const sidebarNavItems = [
   {
     title: "Profile",
     href: "/profile",
+  },
+	{
+    title: "Authentication",
+    href: "/profile/settings/authentication",
   },
   {
     title: "Appearance",

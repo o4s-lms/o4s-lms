@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
 		"dev": "pnpm with-env ts-node src/server.ts",
-		"start": "pnpm with-env node --loader ts-node/esm src/server.ts",
+		"build": "tsc src/server.ts",
+		"start": "node src/server.js",
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {

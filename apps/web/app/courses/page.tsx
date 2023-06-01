@@ -1,8 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useSession } from "next-auth/react"
-import { useQuery } from "@/lib/wundergraph"
+import { useQuery, withWunderGraph } from "@/lib/wundergraph"
 
 import { siteConfig } from "@/config/site"
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -14,7 +13,7 @@ import { Item } from "@radix-ui/react-dropdown-menu"
 import { Separator } from "@/components/ui/separator"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
-export default function Courses() {
+function Courses() {
 	const { toast } = useToast()
 	
 	const { data, error, isLoading } = useQuery({
@@ -75,3 +74,5 @@ export default function Courses() {
 		</>
   )
 }
+
+export default withWunderGraph(Courses)

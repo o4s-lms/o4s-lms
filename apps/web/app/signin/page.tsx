@@ -61,7 +61,7 @@ export default function SignIn() {
                 helped me deliver stunning designs to my clients faster than
                 ever before. Highly recommended!&rdquo;
               </p>
-              <footer className="text-sm">Sofia Davis</footer>
+              <footer className="text-sm">José Cordeiro</footer>
             </blockquote>
           </div>
         </div>
