@@ -13,7 +13,7 @@ import Testimonials from "./components/testimonials"
 import Pricing from "./components/pricing"
 
 export default function Index() {
-	const session = useSession()
+	/**const session = useSession()
 
 	if (session.status === "loading") {
 		<Loading />
@@ -23,7 +23,7 @@ export default function Index() {
 		redirect("/signin")
 	} // else {
 		// redirect("/courses")
-	// }
+	// }*/
 
   return (
     <>

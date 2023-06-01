@@ -37,7 +37,7 @@ export default function PostPage({ post }: PostPageProps) {
       <Container className="!pt-0">
         <div className="mx-auto max-w-screen-md ">
           <div className="flex justify-center">
-            <TagLabel tags={post.tags} />
+            <TagLabel tags={post.post_tags} />
           </div>
 
           <h1 className="text-brand-primary mb-3 mt-2 text-center text-3xl font-semibold tracking-tight dark:text-white lg:text-4xl lg:leading-snug">
@@ -64,13 +64,13 @@ export default function PostPage({ post }: PostPageProps) {
                 <div className="flex items-center space-x-2 text-sm">
                   <time
                     className="text-gray-500 dark:text-gray-400"
-                    dateTime={post?.publishedAt || post.createdAt}>
+                    dateTime={post?.published_at || post.created_at}>
                     {format(
-                      parseISO(post?.publishedAt || post.createdAt),
+                      parseISO(post?.published_at || post.created_at),
                       "MMMM dd, yyyy"
                     )}
                   </time>
-                  <span>· {post.estReadingTime || "5"} min read</span>
+                  <span>· {post.est_reading_time || "5"} min read</span>
                 </div>
               </div>
             </div>

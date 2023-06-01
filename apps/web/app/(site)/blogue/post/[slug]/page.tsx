@@ -20,16 +20,16 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 	const metadata = await site.post.findUnique({
 		where: { slug: params.slug },
 		select: {
-			metaTitle: true,
-			metaDescription: true,
-			ogImage: true,
-			ogTitle: true,
-			ogDescription: true,
+			meta_title: true,
+			meta_description: true,
+			og_image: true,
+			og_title: true,
+			og_description: true,
 		}
 	})
   return { 
-		title: metadata?.metaTitle,
-		description: metadata?.metaDescription,
+		title: metadata?.meta_title,
+		description: metadata?.meta_description,
 	}
 }
 

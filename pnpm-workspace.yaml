@@ -1,5 +1,6 @@
 packages:
   - apps/api
+  - apps/user-info
   - apps/admin
   - apps/web
   - apps/site

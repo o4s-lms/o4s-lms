@@ -83,3 +83,76 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
+
+
+hanko-auth, hanko-profile {
+	/* Color Scheme */
+	--color: white;
+	--color-shade-1: #A6B6C0;
+	--color-shade-2: #355970;
+
+	--brand-color: #B3CDFF;
+	--brand-color-shade-1: #8EADDA;
+	--brand-contrast-color: #011726;
+
+	--background-color: 17 24 39;
+	--error-color: #FF6068;
+	--link-color: #B3CDFF;
+
+	/* Font Styles */
+	--font-weight: 400;
+	--font-size: 16px;
+	/* --font-family: "Inter", sans-serif; */
+
+	/* Border Styles */
+	--border-radius: 5px;
+	--border-style: solid;
+	--border-width: 1px;
+
+	/* Item Styles */
+	--item-height: 40px;
+	--item-margin: .75em 0;
+
+	/* Input Styles */
+	--input-min-width: 16em;
+
+	/* Button Styles */
+	--button-min-width: 6em;
+
+	/* Container Styles */
+	--container-padding: 0;
+	--container-max-width: 800px;
+
+	/* Headline Styles */
+	--headline1-font-size: 24px;
+	--headline1-margin: 0 0 1rem;
+
+	--headline2-font-size: 18px;
+	--headline2-margin: 1rem 0 .5rem;
+}
+
+.auth-container {
+	max-width: 360px;
+	min-width: 200px;
+	margin: auto;
+	border-radius: 16px;
+	padding: 25px;
+	justify-center: center;
+}
+
+.profile {
+	margin-bottom: 20px;
+}
+
+.profile-container {
+	max-width: 700px;
+	min-width: 200px;
+	margin: auto;
+	border-radius: 16px;
+	padding: 25px;
+}
+
+hanko-profile {
+	--headline1-margin: 2em 0 1em;
+	--input-min-width: 20em;
+}

@@ -8,7 +8,7 @@ import { SiteHeader } from "@/components/site-header"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
-import AuthContext from "@/context/AuthContext"
+// import AuthContext from "@/context/AuthContext"
 
 export const metadata: Metadata = {
   title: {
@@ -42,13 +42,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
             fontSans.variable
           )}
         >
-					<AuthContext>
+					{/**<AuthContext>*/}
 						<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
 								{children}
 							<Toaster />
 							<TailwindIndicator />
 						</ThemeProvider>
-					</AuthContext>
+					{/**</AuthContext>*/}
         </body>
       </html>
     </>

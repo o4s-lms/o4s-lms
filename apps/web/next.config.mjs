@@ -3,6 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   experimental: {
     appDir: true,
+		serverActions: true,
   },
 
 	/** Enables hot reloading for local packages without a build step */

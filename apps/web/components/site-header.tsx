@@ -9,18 +9,29 @@ import { MainNav } from "@/components/main-nav"
 import useScroll from "@/hooks/use-scroll"
 import { useTheme } from "next-themes"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { useSession } from "next-auth/react"
 import {
   PopoverNotificationCenter,
   NotificationBell,
 	NovuProvider,
 } from "@novu/notification-center"
 import { UserNav } from "@/components/user-nav"
+import { useQuery } from "@/lib/wundergraph"
+import { Loading } from "./loading"
 
-export function SiteHeader() {
-	const session = useSession()
+export async function SiteHeader() {
 	const { theme } = useTheme()
 	const scrolled = useScroll(50)
+
+	const { data, error, isLoading } = useQuery({
+		operationName: 'users/me',
+		enabled: true,
+	})
+
+	if (isLoading) {
+		return <Loading />
+	}
+
+	const me = data?.me
 
   return (
     <header className={`bg-background sticky top-0 z-40 w-full border-b
@@ -61,7 +72,7 @@ export function SiteHeader() {
               </div>
             </Link>
             <ThemeToggle />
-						{session && (
+						{me && (
 						<>{/**
 							<NovuProvider
 								subscriberId={session?.data?.user.id}
@@ -74,9 +85,9 @@ export function SiteHeader() {
 								</PopoverNotificationCenter>
 							</NovuProvider>  */}
 							<UserNav
-								name={session?.data?.user.name}
-								email={session?.data?.user.email}
-								image={session?.data?.user.image}
+								name={me.name}
+								email={me.email}
+								image={me.picture}
 							/>
 						</>
 						)}

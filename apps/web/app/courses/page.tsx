@@ -18,10 +18,10 @@ export default function Courses() {
 	const { toast } = useToast()
 	
 	const { data, error, isLoading } = useQuery({
-		operationName: 'members/courses',
-		input: {
-			role: 'STUDENT',
-		},
+		operationName: 'courses/all',
+		//input: {
+		//	role: 'STUDENT',
+		//},
 		enabled: true,
 	})
 
@@ -50,7 +50,7 @@ export default function Courses() {
 				<div className="pb-8 pt-6 md:py-10">
 					{!isLoading ? (
 						<>
-						{data?.courses.length > 0 ? (
+						{data?.courses?.length > 0 ? (
 							<div className="hidden items-start justify-center gap-6 rounded-lg p-8 md:grid lg:grid-cols-2 xl:grid-cols-3">
 								{data?.courses.map(item => (
 									<CourseCard item={item} />

@@ -1,0 +1,19 @@
+mutation($post_id: String!, $tag_id: String!)
+@rbac(requireMatchAny: [editor, admin]) {
+	post_tag: site_createOnePostTag(
+		data: {
+			post: $post_id
+			tag: $tag_id
+		}
+	) {
+		id
+		post {
+			id
+			title
+		}
+		tag {
+			id
+			name
+		}
+	}
+}

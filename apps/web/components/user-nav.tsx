@@ -14,7 +14,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
-import { signOut } from "next-auth/react"
+import { Hanko } from "@teamhanko/hanko-elements"
+import { useCallback, useEffect, useState } from "react"
+import { redirect } from "next/navigation"
+
+const hankoApi = 'http://joseantcordeiro.hopto.org:8000'
 
 interface Props {
 	name: string | null | undefined;
@@ -23,13 +27,40 @@ interface Props {
 }
 
 export function UserNav({ name, email, image}: Props) {
+	const [hanko, setHankoClient] = useState<Hanko>()
+	const [error, setError] = useState<Error | null>(null)
+
+	useEffect(() => {
+    import("@teamhanko/hanko-elements").then(({ Hanko }) => setHankoClient(new Hanko(hankoApi)));
+  }, [])
+
+	const logout = () => {
+    hanko?.user
+      .logout()
+      .catch((e) => {
+        setError(e)
+      })
+  }
+
+  const redirectToLogin = useCallback(() => {
+    redirect("/sigin")
+  }, [])
+
+  useEffect(() => hanko?.onUserLoggedOut(() => {
+    redirectToLogin()
+  }), [hanko, redirectToLogin])
+
+  useEffect(() => hanko?.onSessionNotPresent(() => {
+    redirectToLogin()
+  }), [hanko, redirectToLogin])
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
             <AvatarImage src={minioImage(image)} alt={name} />
-            <AvatarFallback>O4S</AvatarFallback>
+            <AvatarFallback>{name}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -63,7 +94,7 @@ export function UserNav({ name, email, image}: Props) {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => signOut({ callbackUrl: '/signin' })}>
+        <DropdownMenuItem onClick={logout}>
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>

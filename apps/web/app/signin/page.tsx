@@ -10,27 +10,34 @@ import { Command } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { UserAuthForm } from "./components/user-auth-form"
+import dynamic from "next/dynamic"
 
 /**export const metadata: Metadata = {
   title: "SignIn",
   description: "Authentication forms built using the components.",
 }*/
 
+const HankoAuth = dynamic(
+	() => import('@/components/auth/hanko-auth'),
+	{ ssr: false },
+)
+
 type Variant = 'LOGIN' | 'REGISTER';
 
 export default function SignIn() {
-	const router = useRouter();
-	const emailParam = useSearchParams();
-	const [variant, setVariant] = React.useState<Variant>('LOGIN');
-	const [email, setEmail] = React.useState<string>(emailParam.get('email') || '');
-
+	const [error, setError] = React.useState<Error | null>(null)
+	/**const router = useRouter()
+	const emailParam = useSearchParams()
+	const [variant, setVariant] = React.useState<Variant>('LOGIN')
+	const [email, setEmail] = React.useState<string>(emailParam.get('email') || '')
+	
 	const toggleVariant = React.useCallback(() => {
     if (variant === 'LOGIN') {
       setVariant('REGISTER');
     } else {
       setVariant('LOGIN');
     }
-  }, [variant]);
+  }, [variant]); */
 
   return (
     <>
@@ -61,14 +68,16 @@ export default function SignIn() {
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-center">
-              <h1 className="text-2xl font-semibold tracking-tight">
+              {/**<h1 className="text-2xl font-semibold tracking-tight">
 								{variant === 'LOGIN' ? 'Sign in to your account' : 'Create an account'}
-              </h1>
+							</h1>*/}
               <p className="text-muted-foreground text-sm">
-                Enter your email below to {variant === 'LOGIN' ? 'sign in to ' : 'create '} your account
+                {/**Enter your email below to {variant === 'LOGIN' ? 'sign in to ' : 'create '} your account*/}
+								Enter your email below to sign in or create your account
               </p>
             </div>
-            <UserAuthForm variant={variant} email={email} toogleVariant={() => toggleVariant()} />
+            {/**<UserAuthForm variant={variant} email={email} toogleVariant={() => toggleVariant()} />*/}
+						<HankoAuth setError={setError} />
             <p className="text-muted-foreground px-8 text-center text-sm">
               By clicking continue, you agree to our{" "}
               <Link
