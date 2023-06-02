@@ -1,12 +1,12 @@
-query ($id: Int!, $deleted: Boolean = false) {
-	course: lms_findUniqueCourse(where: { id: $id }) {
+query ($id: String!, $deleted: Boolean = false) {
+	course: site_findUniqueCourse(where: { id: $id }) {
 		id
 		name
 		description
 		image
 		published
-		createdBy
-		createdAt
+		created_by
+		created_at
 		modules(
 			where: { deleted: { equals: $deleted } }
 			orderBy: { pos: asc }
@@ -15,9 +15,9 @@ query ($id: Int!, $deleted: Boolean = false) {
 			name
 			slug
 			pos
-			courseId
-			createdBy
-			createdAt
+			course_id
+			created_by
+			created_at
 			lessons(
 				where: { deleted: { equals: $deleted } }
 				orderBy: { pos: asc }
@@ -27,11 +27,11 @@ query ($id: Int!, $deleted: Boolean = false) {
 				slug
 				pos
 				status
-				courseId
-				moduleId
-				createdBy
-				createdAt
-				updatedAt
+				course_id
+				module_id
+				created_by
+				created_at
+				updated_at
 			}
 		}
 	}

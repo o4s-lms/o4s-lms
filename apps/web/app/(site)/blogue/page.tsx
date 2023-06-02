@@ -3,9 +3,9 @@
 import Link from "next/link"
 import Container from "./components/container"
 import PostList from "./components/post-list"
-import { useQuery } from "@/lib/wundergraph"
+import { useQuery, withWunderGraph } from "@/lib/wundergraph"
 
-export default function Blogue() {
+function Blogue() {
 	const { data } = useQuery({
 		operationName: 'blog/posts',
 		input: {
@@ -44,3 +44,5 @@ export default function Blogue() {
     </>
   );
 }
+
+export default withWunderGraph(Blogue)

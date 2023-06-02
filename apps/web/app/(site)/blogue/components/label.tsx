@@ -10,6 +10,7 @@ interface LabelProps {
 export default function Label({ children, ...props }: LabelProps) {
   const color = {
     green: "text-emerald-700",
+		red: "text-red-700",
     blue: "text-blue-600",
     orange: "text-orange-700",
     purple: "text-purple-600",
@@ -17,6 +18,7 @@ export default function Label({ children, ...props }: LabelProps) {
   };
   const bgcolor = {
     green: "bg-emerald-50",
+		red: "bg-red-50",
     blue: "bg-blue-50",
     orange: "bg-orange-50",
     purple: "bg-purple-50",

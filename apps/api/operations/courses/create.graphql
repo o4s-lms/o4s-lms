@@ -3,19 +3,19 @@ mutation (
 	$description: String!,
 	$slug: String!,
 	$image: String!,
-	$role: lms_CourseRole! = AUTHOR,
-	$userId: String! @fromClaim(name: USERID)
+	$role: site_CourseRole! = AUTHOR,
+	$user_uuid: String! @fromClaim(name: USERID)
 ) {
-	createOneCourse: lms_createOneCourse(
+	course: site_createOneCourse(
 		data: {
 			name: $name
 			description: $description
 			slug: $slug
 			image: $image
-			createdBy: $userId
+			created_by: $user_uuid
 			members: {
 				create: {
-					user: { connect: { id: $userId } }
+					user: { connect: { uuid: $user_uuid } }
 					role: $role
 				}
 			}
@@ -25,7 +25,7 @@ mutation (
 		name
 		description
 		image
-		createdBy
-		createdAt
+		created_by
+		created_at
 	}
 }

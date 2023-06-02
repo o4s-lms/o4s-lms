@@ -1,19 +1,18 @@
-query ($id: Int!) {
-	lesson: lms_findUniqueLesson(
+query ($id: String!) {
+	lesson: site_findUniqueLesson(
 		where: { id: $id }
 	) {
 		id
 		name
 		slug
 		pos
-		courseId
-		moduleId
+		course_id
+		module_id
 		html
-		image
 		status
-		createdBy
-		createdAt
-		updatedAt
+		created_by
+		created_at
+		updated_at
 		deleted
 		course {
 			id

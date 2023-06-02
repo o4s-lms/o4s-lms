@@ -34,7 +34,7 @@ export default function PostList({
   /**const AuthorimageProps = post?.author?.image
     ? urlForImage(post.author.image)
     : null;*/
-	const imageProps = post?.image
+	const imageProps = 'http://joseantcordeiro.hopto.org:9000/web/blogue' + post?.image
 	const AuthorimageProps = 'http://joseantcordeiro.hopto.org:9000/uploads/b6d3616df6285312.jpeg'
   return (
     <>
@@ -83,7 +83,7 @@ export default function PostList({
         <div className={cx(minimal && "flex items-center")}>
           <div>
             <TagLabel
-              tags={post.tags}
+              tags={post.post_tags}
               nomargin={minimal}
             />
             <h2
@@ -156,9 +156,9 @@ export default function PostList({
               </span>
               <time
                 className="truncate text-sm"
-                dateTime={post?.publishedAt || post.createdAt}>
+                dateTime={post?.published_at || post.created_at}>
                 {format(
-                  parseISO(post?.publishedAt || post.createdAt),
+                  parseISO(post?.published_at || post.created_at),
                   "MMMM dd, yyyy"
                 )}
               </time>

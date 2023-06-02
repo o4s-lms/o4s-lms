@@ -1,17 +1,17 @@
 mutation (
-	$courseId: Int!,
-	$userId: String!,
+	$course_id: String!,
+	$user_uuid: String!,
 	) {
-	removeMemberCourse: lms_deleteOneMemberInCourse(
+	member: site_deleteOneCourseMember(
 		where: {
-			userId_courseId: {
-				userId: $userId
-				courseId: $courseId
+			user_uuid_course_id: {
+				user_uuid: $user_uuid
+				course_id: $course_id
 			}
 		}
 	) {
-		courseId
-		userId
+		course_id
+		user_uuid
 		role
 	}
 }

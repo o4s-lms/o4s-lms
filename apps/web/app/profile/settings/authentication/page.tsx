@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react"
 import dynamic from "next/dynamic"
 
 import styles from "@/styles/hanko.profile.css"
+import { useHanko } from "@/hooks/use-hanko"
 
 const hankoApi = 'http://joseantcordeiro.hopto.org:8000'
 
@@ -14,13 +15,14 @@ const HankoProfile = dynamic(() => import("@/components/auth/hanko-profile"), {
 })
 
 export default function SettingsAuthentication() {
-	const [hanko, setHankoClient] = useState<Hanko>()
+	//const [hanko, setHankoClient] = useState<Hanko>()
 	const modalRef = useRef<HTMLDialogElement>(null)
   const [error, setError] = useState<Error | null>(null)
+	const hanko = useHanko()
 
-  useEffect(() => {
-    import("@teamhanko/hanko-elements").then(({ Hanko }) => setHankoClient(new Hanko(hankoApi)));
-  }, [])
+  //useEffect(() => {
+  //  import("@teamhanko/hanko-elements").then(({ Hanko }) => setHankoClient(new Hanko(hankoApi)));
+  //}, [])
 
   return (
 		<><SessionExpiredModal ref={modalRef} />

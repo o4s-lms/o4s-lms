@@ -1,7 +1,7 @@
-query ($deleted: Boolean = false, $userId: String! @fromClaim(name: USERID)) {
-	courses: lms_findManyCourse(
+query ($deleted: Boolean = false, $user_uuid: String! @fromClaim(name: USERID)) {
+	courses: site_findManyCourse(
 		where: {
-			createdBy: { equals: $userId }
+			created_by: { equals: $user_uuid }
 			deleted: { equals: $deleted }
 		}) {
 		id
@@ -9,8 +9,8 @@ query ($deleted: Boolean = false, $userId: String! @fromClaim(name: USERID)) {
 		description
 		image
 		published
-		createdBy
-		createdAt
+		created_by
+		created_at
 		_count {
 			modules
 			lessons

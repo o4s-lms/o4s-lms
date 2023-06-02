@@ -1,6 +1,6 @@
 interface GradientWrapperProps {
 	children: React.ReactNode;
-  className: string;
+  className?: string;
 }
 
 const GradientWrapper = ({ children, className }: GradientWrapperProps ) => (

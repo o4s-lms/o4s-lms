@@ -5,9 +5,18 @@ import { ProfileForm } from "@/app/profile/components/profile-form"
 import { useToast } from "@/hooks/use-toast"
 import { useQuery } from "@/lib/wundergraph";
 import { Loading } from "@/components/loading";
+import { useHanko } from "@/hooks/use-hanko";
+import { redirect } from "next/navigation";
 
 export default function Profile() {
 	const { toast } = useToast()
+	const hanko = useHanko()
+
+	const currentUser = hanko?.user.getCurrent()
+
+	if (!currentUser) {
+		redirect("/signin")
+	}
 
 	const { data, error, isLoading } = useQuery({
 		operationName: 'users/me',

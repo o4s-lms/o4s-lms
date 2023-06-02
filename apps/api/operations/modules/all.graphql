@@ -1,5 +1,5 @@
 query ($deleted: Boolean = false) {
-	modules: lms_findManyModule(
+	modules: site_findManyModule(
 		where: { deleted: { equals: $deleted } }
 		orderBy: { pos: asc }
 	) {
@@ -7,9 +7,9 @@ query ($deleted: Boolean = false) {
 		name
 		slug
 		pos
-		courseId
-		createdBy
-		createdAt
+		course_id
+		created_by
+		created_at
 		lessons(
 			where: { deleted: { equals: $deleted } }
 			orderBy: { pos: asc }
@@ -19,11 +19,11 @@ query ($deleted: Boolean = false) {
 			slug
 			pos
 			status
-			courseId
-			moduleId
-			createdBy
-			createdAt
-			updatedAt
+			course_id
+			module_id
+			created_by
+			created_at
+			updated_at
 		}
 	}
 }

@@ -1,3 +1,5 @@
+"use client"
+
 import { createWunderGraphNext } from '@o4s/generated-wundergraph/nextjs';
 
 const { client, withWunderGraph, useQuery, useMutation, useSubscription, useUser, useAuth, useFileUpload } =

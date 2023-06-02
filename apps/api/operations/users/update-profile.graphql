@@ -1,18 +1,16 @@
-mutation ($id: String!, $name: String!, $phone: String!, $locale: String!)
+mutation ($uuid: String!, $name: String!, $locale: String!)
 @rbac(requireMatchAny: [user, admin]) {
-	user: lms_updateOneUser(
+	user: site_updateOneUser(
 		where: {
-			id: $id
+			uuid: $uuid
 			}
 			data: {
 				name: { set: $name }
-				phone: { set: $phone }
 				locale: { set: $locale }
 				}
 	) {
 		id
 		name
-		phone
 		locale
 	}
 }

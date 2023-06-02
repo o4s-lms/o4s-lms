@@ -1,19 +1,22 @@
 query ()
 @rbac(requireMatchAll: [admin]) {
-	users: lms_findManyUser() {
+	users: site_findManyUser() {
 		id
-		customerId
+		uuid
 		name
-		firstName
-		lastName
+		given_name
+		family_name
+		middle_name
+		nickname
+		bio
 		email
-		phone
+		gender
 		locale
-		emailVerified
-		image
+		email_verified
+		picture
 		roles
-		courses {
-			courseId
+		member_of {
+			course_id
 			role
 			course {
 				name

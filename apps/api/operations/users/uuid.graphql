@@ -1,6 +1,6 @@
-query ($email: String!)
+query ($uuid: String!)
 @rbac(requireMatchAny: [user, admin]) {
-	user: site_findUniqueUser(where: { email: $email }) {
+	user: site_findUniqueUser(where: { uuid: $uuid }) {
 		id
 		uuid
 		name

@@ -1,22 +1,22 @@
 mutation (
 	$name: String!,
 	$slug: String!,
-	$courseId: Int!,
-	$userId: String! @fromClaim(name: USERID)
+	$course_id: String!,
+	$user_id: String! @fromClaim(name: USERID)
 	) {
-	module: lms_createOneModule(
+	module: site_createOneModule(
 		data: {
 			name: $name
 			slug: $slug
-			createdBy: $userId
-			course: { connect: { id: $courseId } }
+			created_by: $user_id
+			course: { connect: { id: $course_id } }
 		}
 	) {
 		id
 		name
 		slug
-		courseId
-		createdBy
-		createdAt
+		course_id
+		created_by
+		created_at
 	}
 }

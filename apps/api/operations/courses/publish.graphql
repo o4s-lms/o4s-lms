@@ -1,5 +1,5 @@
-mutation ($id: Int!, $published: Boolean!) {
-	lms_updateOneCourse(
+mutation ($id: String!, $published: Boolean!) {
+	course: site_updateOneCourse(
 		where: { id: $id }
 		data: { published: { set: $published } }
 	) {

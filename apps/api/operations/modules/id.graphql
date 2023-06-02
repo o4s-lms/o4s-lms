@@ -1,14 +1,14 @@
-query ($id: Int!, $deleted: Boolean = false) {
-	module: lms_findUniqueModule(
+query ($id: String!, $deleted: Boolean = false) {
+	module: site_findUniqueModule(
 		where: { id: $id }
 	) {
 		id
 		name
 		slug
 		pos
-		courseId
-		createdBy
-		createdAt
+		course_id
+		created_by
+		created_at
 		lessons(
 			where: { deleted: { equals: $deleted } }
 			orderBy: { pos: asc }
@@ -18,11 +18,11 @@ query ($id: Int!, $deleted: Boolean = false) {
 			slug
 			pos
 			status
-			courseId
-			moduleId
-			createdBy
-			createdAt
-			updatedAt
+			course_id
+			module_id
+			created_by
+			created_at
+			updated_at
 		}
 	}
 }
