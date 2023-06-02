@@ -1,10 +1,11 @@
-import { useQuery } from "@/lib/wundergraph"
 import PostPage from "./default"
 import { site } from "@o4s/db"
+import { client } from "@/lib/client"
 
 import { Loading } from "@/components/loading";
 
 export async function generateStaticParams() {
+
   return await site.post.findMany({
 		where: {
 			published: true,
@@ -17,6 +18,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
+
 	const metadata = await site.post.findUnique({
 		where: { slug: params.slug },
 		select: {
@@ -34,7 +36,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function PostDefault({ params }: { params: { slug: string } }) {
-	const { data, error, isLoading } = useQuery({
+
+	const { data, error } = await client.query({
 		operationName: 'blog/post-slug',
 		input: {
 			slug: params.slug
@@ -45,11 +48,7 @@ export default async function PostDefault({ params }: { params: { slug: string }
 
   return (
 		<>
-		{!isLoading ? (
 			<PostPage post={post} />
-		) : (
-			<Loading />
-		)}
 		</>
 	)
 

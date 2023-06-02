@@ -23,8 +23,9 @@ import { Search } from "./components/search"
 import TeamSwitcher from "./components/team-switcher"
 import { UserNav } from "./components/user-nav"
 import { useToast } from "@/hooks/use-toast"
-import { Hanko } from "@teamhanko/hanko-elements"
 import { redirect } from "next/navigation"
+import { Loading } from "@/components/loading"
+import { useQuery, withWunderGraph } from "@/lib/wundergraph"
 
 const hankoApi = 'http://joseantcordeiro.hopto.org:8000'
 
@@ -33,152 +34,156 @@ const hankoApi = 'http://joseantcordeiro.hopto.org:8000'
   description: "Open source LMS Managment Dashboard",
 }*/
 
-export default async function DashboardPage() {
-	const [hanko, setHankoClient] = useState<Hanko>()
+function AdminDashboard() {
 	const { toast } = useToast()
 
-	useEffect(() => {
-    import("@teamhanko/hanko-elements").then(({ Hanko }) => setHankoClient(new Hanko(hankoApi)));
-  }, [])
+	const { data, error, isLoading } = useQuery({
+		operationName: 'users/me',
+		enabled: true,
+	})
 
-	const currentUser = await hanko?.user.getCurrent()
-
-	if (!currentUser) {
+	if (error) {
 		toast({
 			variant: "destructive",
 			title: "Uh oh! Something went wrong.",
-			description: "You need to be logged in",
-		})
-		//redirect("/signin")
-	} else {
-		toast({
-			title: "Welcome.",
-			description:(
-				<p>Welcome {currentUser.id}</p>
+			description: (
+				<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+					<code className="text-white">{error.message}</code>
+				</pre>
 			),
 		})
 	}
 
-	
+	if (!isLoading && !data?.me) {	
+		redirect("/signin")
+	}
+
   return (
     <>
       <div className="hidden flex-col md:flex">
-        <div className="border-b">
-          <div className="flex h-16 items-center px-4">
-            <TeamSwitcher />
-            <MainNav className="mx-6" />
-            <div className="ml-auto flex items-center space-x-4">
-              <Search />
-              <UserNav />
-            </div>
-          </div>
-        </div>
-        <div className="flex-1 space-y-4 p-8 pt-6">
-          <div className="flex items-center justify-between space-y-2">
-            <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-            <div className="flex items-center space-x-2">
-              <CalendarDateRangePicker />
-              <Button size="sm">
-                <Download className="mr-2 h-4 w-4" />
-                Download
-              </Button>
-            </div>
-          </div>
-          <Tabs defaultValue="overview" className="space-y-4">
-            <TabsList>
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="analytics" disabled>
-                Analytics
-              </TabsTrigger>
-              <TabsTrigger value="reports" disabled>
-                Reports
-              </TabsTrigger>
-              <TabsTrigger value="notifications" disabled>
-                Notifications
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="overview" className="space-y-4">
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Total Revenue
-                    </CardTitle>
-                    <DollarSign className="text-muted-foreground h-4 w-4" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">$45,231.89</div>
-                    <p className="text-muted-foreground text-xs">
-                      +20.1% from last month
-                    </p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Subscriptions
-                    </CardTitle>
-                    <Users className="text-muted-foreground h-4 w-4" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">+2350</div>
-                    <p className="text-muted-foreground text-xs">
-                      +180.1% from last month
-                    </p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Sales</CardTitle>
-                    <CreditCard className="text-muted-foreground h-4 w-4" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">+12,234</div>
-                    <p className="text-muted-foreground text-xs">
-                      +19% from last month
-                    </p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Active Now
-                    </CardTitle>
-                    <Activity className="text-muted-foreground h-4 w-4" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">+573</div>
-                    <p className="text-muted-foreground text-xs">
-                      +201 since last hour
-                    </p>
-                  </CardContent>
-                </Card>
-              </div>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-4">
-                  <CardHeader>
-                    <CardTitle>Overview</CardTitle>
-                  </CardHeader>
-                  <CardContent className="pl-2">
-                    <Overview />
-                  </CardContent>
-                </Card>
-                <Card className="col-span-3">
-                  <CardHeader>
-                    <CardTitle>Recent Sales</CardTitle>
-                    <CardDescription>
-                      You made 265 sales this month.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <RecentSales />
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-          </Tabs>
-        </div>
+				{!isLoading ? (        
+				<>
+				<div className="border-b">
+						<div className="flex h-16 items-center px-4">
+							<TeamSwitcher />
+							<MainNav className="mx-6" />
+							<div className="ml-auto flex items-center space-x-4">
+								<Search />
+								<UserNav />
+							</div>
+						</div>
+				</div>
+				<div className="flex-1 space-y-4 p-8 pt-6">
+							<div className="flex items-center justify-between space-y-2">
+								<h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+								<div className="flex items-center space-x-2">
+									<CalendarDateRangePicker />
+									<Button size="sm">
+										<Download className="mr-2 h-4 w-4" />
+										Download
+									</Button>
+								</div>
+							</div>
+							<Tabs defaultValue="overview" className="space-y-4">
+								<TabsList>
+									<TabsTrigger value="overview">Overview</TabsTrigger>
+									<TabsTrigger value="analytics" disabled>
+										Analytics
+									</TabsTrigger>
+									<TabsTrigger value="reports" disabled>
+										Reports
+									</TabsTrigger>
+									<TabsTrigger value="notifications" disabled>
+										Notifications
+									</TabsTrigger>
+								</TabsList>
+								<TabsContent value="overview" className="space-y-4">
+									<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+										<Card>
+											<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+												<CardTitle className="text-sm font-medium">
+													Total Revenue
+												</CardTitle>
+												<DollarSign className="text-muted-foreground h-4 w-4" />
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">$45,231.89</div>
+												<p className="text-muted-foreground text-xs">
+													+20.1% from last month
+												</p>
+											</CardContent>
+										</Card>
+										<Card>
+											<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+												<CardTitle className="text-sm font-medium">
+													Subscriptions
+												</CardTitle>
+												<Users className="text-muted-foreground h-4 w-4" />
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">+2350</div>
+												<p className="text-muted-foreground text-xs">
+													+180.1% from last month
+												</p>
+											</CardContent>
+										</Card>
+										<Card>
+											<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+												<CardTitle className="text-sm font-medium">Sales</CardTitle>
+												<CreditCard className="text-muted-foreground h-4 w-4" />
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">+12,234</div>
+												<p className="text-muted-foreground text-xs">
+													+19% from last month
+												</p>
+											</CardContent>
+										</Card>
+										<Card>
+											<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+												<CardTitle className="text-sm font-medium">
+													Active Now
+												</CardTitle>
+												<Activity className="text-muted-foreground h-4 w-4" />
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">+573</div>
+												<p className="text-muted-foreground text-xs">
+													+201 since last hour
+												</p>
+											</CardContent>
+										</Card>
+									</div>
+									<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+										<Card className="col-span-4">
+											<CardHeader>
+												<CardTitle>Overview</CardTitle>
+											</CardHeader>
+											<CardContent className="pl-2">
+												<Overview />
+											</CardContent>
+										</Card>
+										<Card className="col-span-3">
+											<CardHeader>
+												<CardTitle>Recent Sales</CardTitle>
+												<CardDescription>
+													You made 265 sales this month.
+												</CardDescription>
+											</CardHeader>
+											<CardContent>
+												<RecentSales />
+											</CardContent>
+										</Card>
+									</div>
+								</TabsContent>
+							</Tabs>
+				</div></>
+				) : (
+					<Loading />
+				)}
       </div>
     </>
   )
 }
+
+export default withWunderGraph(AdminDashboard)

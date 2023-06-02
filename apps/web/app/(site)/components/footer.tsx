@@ -8,7 +8,7 @@ const navigation = [
 ];
 
 const Footer = () => (
-  <footer className="pt-32 sm:pt-44">
+  <footer className="pt-32 dark:bg-gray-900 sm:pt-44">
     <div className="custom-screen text-gray-600 dark:text-gray-300">
       <Newsletter />
       <div className="mt-10 flex-row-reverse items-center justify-between border-t py-10 dark:border-gray-800 sm:flex">

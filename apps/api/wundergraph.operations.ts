@@ -46,7 +46,7 @@ export default configureWunderGraphOperations<OperationsConfiguration>({
 					required: false,
 				},
 			}),
-			SiteGet_courses: (config) => ({
+			SiteGet_products: (config) => ({
 				...config,
 				authentication: {
 					required: false,
@@ -59,6 +59,12 @@ export default configureWunderGraphOperations<OperationsConfiguration>({
 				},
 			}),
 			BlogTags: (config) => ({
+				...config,
+				authentication: {
+					required: false,
+				},
+			}),
+			BlogPost_slug: (config) => ({
 				...config,
 				authentication: {
 					required: false,

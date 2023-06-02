@@ -29,7 +29,7 @@ export default function PostPage({ post }: PostPageProps) {
     ? urlForImage(post.author.image)
     : null;*/
 
-	const imageProps = post?.image
+	const imageProps = 'http://joseantcordeiro.hopto.org:9000/web/blogue' + post?.image
 	const AuthorimageProps = 'http://joseantcordeiro.hopto.org:9000/uploads/b6d3616df6285312.jpeg'
 
   return (
@@ -93,7 +93,7 @@ export default function PostPage({ post }: PostPageProps) {
 
       <Container>
         <article className="mx-auto max-w-screen-md ">
-					{post.html && <div className="prose dark:prose-invert prose-a:text-blue-600 mx-auto my-3"
+					{post.html && <div className="prose dark:prose-invert prose-a:text-blue-600 mx-auto my-3 space-y-3"
 						dangerouslySetInnerHTML={{ __html: post.html }}
 					/>}
           <div className="my-7 flex justify-center">

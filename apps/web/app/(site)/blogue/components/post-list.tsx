@@ -1,11 +1,10 @@
 import Image from "next/image"
 import Link from "next/link"
 import { cx } from "@/lib/utils"
-//import { urlForImage } from "@/lib/sanity/image";
-import { parseISO, format } from "date-fns";
+import { parseISO, format } from "date-fns"
 import { Image as PhotoIcon } from "lucide-react"
 import TagLabel from "./tag"
-import { BlogPostsResponseData } from "@o4s/generated-wundergraph/models";
+import { BlogPostsResponseData } from "@o4s/generated-wundergraph/models"
 
 type Post = BlogPostsResponseData["posts"][number]
 
@@ -56,7 +55,7 @@ export default function PostList({
                 ? "aspect-[5/4]"
                 : "aspect-square"
             )}
-            href={`/post/${pathPrefix ? `${pathPrefix}/` : ""}${
+            href={`/blogue/post/${pathPrefix ? `${pathPrefix}/` : ""}${
               post.slug
             }`}>
             {imageProps ? (
@@ -130,9 +129,7 @@ export default function PostList({
             </div>
 
             <div className="mt-3 flex items-center space-x-3 text-gray-500 dark:text-gray-400">
-              <Link
-                href="#"
-                legacyBehavior>
+              
                 <div className="flex items-center gap-3">
                   <div className="relative h-5 w-5 shrink-0">
                     {AuthorimageProps && (
@@ -150,7 +147,7 @@ export default function PostList({
 										José Cordeiro
                   </span>
                 </div>
-              </Link>
+              
               <span className="text-xs text-gray-300 dark:text-gray-600">
                 &bull;
               </span>
@@ -159,7 +156,7 @@ export default function PostList({
                 dateTime={post?.published_at || post.created_at}>
                 {format(
                   parseISO(post?.published_at || post.created_at),
-                  "MMMM dd, yyyy"
+                  "dd-MMMM-yyyy"
                 )}
               </time>
             </div>

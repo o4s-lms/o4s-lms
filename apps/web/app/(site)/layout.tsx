@@ -11,7 +11,7 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
 	return (
 		<>
 		<Navbar />
-			<main>
+			<main className="dark:bg-gray-900">
 				{children}
 			</main>
 		<Footer /></>
