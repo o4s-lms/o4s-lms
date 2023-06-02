@@ -3,12 +3,11 @@
 import { siteConfig } from "@/config/site"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
-import { useSession } from "next-auth/react"
 import { Loading } from "@/components/loading"
 import { redirect } from "next/navigation"
 import Hero from "./components/hero"
 import Features from "./components/features"
-import Courses from "./components/courses"
+import Products from "./components/products"
 import Testimonials from "./components/testimonials"
 import Pricing from "./components/pricing"
 
@@ -29,7 +28,7 @@ export default function Index() {
     <>
       <Hero />
       <Features />
-      <Courses />
+      <Products />
       <Testimonials />
       <Pricing />
     </>

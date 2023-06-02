@@ -1,3 +1,7 @@
+"use client"
+
+import { useEffect, useRef, useState } from "react"
+
 import { Metadata } from "next"
 import Image from "next/image"
 import { Activity, CreditCard, DollarSign, Download, Users } from "lucide-react"
@@ -18,13 +22,44 @@ import { RecentSales } from "./components/recent-sales"
 import { Search } from "./components/search"
 import TeamSwitcher from "./components/team-switcher"
 import { UserNav } from "./components/user-nav"
+import { useToast } from "@/hooks/use-toast"
+import { Hanko } from "@teamhanko/hanko-elements"
+import { redirect } from "next/navigation"
 
-export const metadata: Metadata = {
+const hankoApi = 'http://joseantcordeiro.hopto.org:8000'
+
+/**export const metadata: Metadata = {
   title: "Dashboard",
   description: "Open source LMS Managment Dashboard",
-}
+}*/
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+	const [hanko, setHankoClient] = useState<Hanko>()
+	const { toast } = useToast()
+
+	useEffect(() => {
+    import("@teamhanko/hanko-elements").then(({ Hanko }) => setHankoClient(new Hanko(hankoApi)));
+  }, [])
+
+	const currentUser = await hanko?.user.getCurrent()
+
+	if (!currentUser) {
+		toast({
+			variant: "destructive",
+			title: "Uh oh! Something went wrong.",
+			description: "You need to be logged in",
+		})
+		//redirect("/signin")
+	} else {
+		toast({
+			title: "Welcome.",
+			description:(
+				<p>Welcome {currentUser.id}</p>
+			),
+		})
+	}
+
+	
   return (
     <>
       <div className="hidden flex-col md:flex">

@@ -1,18 +1,17 @@
 import Link from "next/link"
-import { useSWRConfig } from "swr"
-import SectionWrapper from "@/components/section-wrapper"
-import { useQuery } from "@/lib/wundergraph"
-import { CourseCardGrid } from "./course-card-grid"
 
-const Courses = () => {
-	const { mutate } = useSWRConfig();
-	const { data } = useQuery({
-		operationName: 'site/get-courses',
+import SectionWrapper from "@/components/section-wrapper"
+import { useQuery, withWunderGraph } from "@/lib/wundergraph"
+import { ProductCardGrid } from "./product-card-grid"
+import { Loading } from "@/components/loading"
+
+const Products = () => {
+	const { data, error, isLoading } = useQuery({
+		operationName: 'site/get-products',
 		input: {
 			locale: 'pt'
 		}
 	})
-	const courses = data?.courses
 
     return (
         <SectionWrapper>
@@ -31,24 +30,28 @@ const Courses = () => {
                         </Link>
                     </p>
                 </div>
+								{!isLoading ? (
                 <div className="mt-12">
-									{courses ? (
+									{data?.products ? (
                     <ul className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
                         {
-                            courses?.map((item, idx) => (
+                            data?.products?.map((item, idx) => (
                                 <li key={idx}>
-                                    <CourseCardGrid idx={idx} item={item} />
+                                    <ProductCardGrid idx={idx} item={item} />
                                 </li>
                             ))
                         }
                     </ul>
 									) : (
-										<div><p>Não existem cursos disponíveis</p></div>
+										<div><p>Não existem produtos disponíveis... A carregar</p></div>
 									)}
                 </div>
+								) : (
+									<Loading />
+								)}
             </div>
         </SectionWrapper>
     )
 }
 
-export default Courses
+export default withWunderGraph(Products)

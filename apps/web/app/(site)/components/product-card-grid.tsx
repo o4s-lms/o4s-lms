@@ -2,16 +2,16 @@ import Link from "next/link"
 import { Includes } from "./includes"
 import { Title } from "./title"
 import { SubTitle } from "./sub-title"
-import { SiteGet_coursesResponseData } from "@o4s/generated-wundergraph/models"
+import { SiteGet_productsResponseData } from "@o4s/generated-wundergraph/models"
 import React from "react"
 
-type Course = SiteGet_coursesResponseData["courses"][number]
-interface CourseCardGrid {
+type Product = SiteGet_productsResponseData["products"][number]
+interface ProductCardGrid {
 	idx: number
-	item: Course
+	item: Product
 }
 
-export const CourseCardGrid: React.FC<CourseCardGrid> = ({ idx, item: { thumbnail, price, title, description, include, slug } }) => {
+export const ProductCardGrid: React.FC<ProductCardGrid> = ({ idx, item: { thumbnail, price, title, description, include, slug } }) => {
 
     return (
         <div className="space-y-2 sm:max-w-sm">
@@ -23,7 +23,7 @@ export const CourseCardGrid: React.FC<CourseCardGrid> = ({ idx, item: { thumbnai
                 <Includes>{include}</Includes>
             </div>
             <Title>
-                <Link href={`/cursos/sustentabilidade/${slug}`}>
+                <Link href={`/produtos/sustentabilidade/${slug}`}>
                     {title}
                 </Link>
             </Title>

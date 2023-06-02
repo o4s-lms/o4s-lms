@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef, useState } from "react"
-import { useQuery } from "@/lib/wundergraph"
+import { useQuery, withWunderGraph } from "@/lib/wundergraph"
 
 import SectionWrapper from "@/components/section-wrapper";
 import { SiteGet_faqsResponseData } from "@o4s/generated-wundergraph/models";
@@ -84,14 +84,13 @@ const FAQS = () => {
 			locale: 'pt'
 		}
 	})
-	const faqs = data?.faqs
   
   return (
     <SectionWrapper id="faqs">
       <div className="custom-screen">
-				{faqs ? (
+				{data?.faqs ? (
 					<div className="mx-auto mt-14 max-w-2xl">
-						{faqs.map((item, idx) => (
+						{data?.faqs.map((item, idx) => (
 							<FaqsCard idx={idx} item={item} />
 						))}
 					</div>
@@ -103,4 +102,4 @@ const FAQS = () => {
   )
 }
 
-export default FAQS
+export default withWunderGraph(FAQS)
