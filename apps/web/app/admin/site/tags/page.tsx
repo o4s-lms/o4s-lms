@@ -1,5 +1,5 @@
 import { Separator } from "@/components/ui/separator"
-import Posts from "./components/posts"
+import Tags from "./components/tags"
 
 export default function SettingsProfilePage() {
   return (
@@ -7,11 +7,11 @@ export default function SettingsProfilePage() {
       <div>
         <h3 className="text-lg font-medium">Profile</h3>
         <p className="text-muted-foreground text-sm">
-          Manage your blog posts.
+          Manage the tags of your blog.
         </p>
       </div>
       <Separator />
-      <Posts />
+      <Tags />
     </div>
   )
 }

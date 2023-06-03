@@ -1,30 +1,32 @@
 {
-  "name": "api",
-  "version": "0.1.0",
-  "description": "Open source LMS.",
-  "author": "José Cordeiro <joseantcordeiro@gmail.com>",
-  "license": "MIT",
-	"type": "module",
-  "scripts": {
-		"clean": "rm -rf .turbo generated node_modules",
-    "dev": "pnpm with-env wunderctl up --logs --wundergraph-dir .",
-    "build": "pnpm with-env wunderctl generate --wundergraph-dir .",
-		"build:docker": "pnpm wunderctl generate --wundergraph-dir .",
-    "check": "tsc --noEmit",
-		"with-env": "dotenv -e ../../.env --"
-  },
-  "dependencies": {
-		"@o4s/tsconfig": "^0.1.0",
-		"stripe": "^12.7.0",
-		"@novu/node": "^0.15.0",
-		"@wundergraph/nextjs": "^0.11.1",
-    "@wundergraph/sdk": "^0.160.0"
-  },
-  "devDependencies": {
-		"@o4s/eslint-config": "^0.1.0",
-    "@types/node": "^20.2.5",
-		"dotenv-cli": "^7.2.1",
-    "eslint": "^8.41.0",
-    "typescript": "^5.0.4"
-  }
+		"name": "api",
+		"version": "0.1.0",
+		"description": "Open source LMS.",
+		"author": "José Cordeiro <joseantcordeiro@gmail.com>",
+		"license": "MIT",
+		"type": "module",
+		"scripts": {
+				"clean": "rm -rf .turbo generated node_modules",
+				"dev": "pnpm with-env wunderctl up --logs --wundergraph-dir .",
+				"build": "pnpm with-env wunderctl generate --wundergraph-dir .",
+				"build:docker": "pnpm wunderctl generate --wundergraph-dir .",
+				"check": "tsc --noEmit",
+				"with-env": "dotenv -e ../../.env --"
+		},
+		"dependencies": {
+				"@novu/node": "^0.15.0",
+				"@o4s/tsconfig": "^0.1.0",
+				"@tryghost/html-to-mobiledoc": "^2.0.18",
+				"@wundergraph/nextjs": "^0.11.6",
+				"@wundergraph/sdk": "^0.163.2",
+				"reading-time": "^1.5.0",
+				"stripe": "^12.8.0"
+		},
+		"devDependencies": {
+				"@o4s/eslint-config": "^0.1.0",
+				"@types/node": "^20.2.5",
+				"dotenv-cli": "^7.2.1",
+				"eslint": "^8.41.0",
+				"typescript": "^5.1.3"
+		}
 }

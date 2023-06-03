@@ -1,7 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import express from 'express';
+import winston from 'winston';
+import type { ErrorRequestHandler } from "express";
 import { type GetVerificationKey, expressjwt as jwt, type Request as JWTRequest } from "express-jwt";
 import jwksRsa from "jwks-rsa";
 import cors from "cors";
@@ -11,15 +15,43 @@ import { site } from "@o4s/db";
 const app = express();
 const jwksHost = process.env.PUBLIC_HANKO_API;
 
+const logger = winston.createLogger({
+  // Log only if level is less than (meaning more severe) or equal to this
+  level: "info",
+  defaultMeta: { service: 'user-info' },
+  format: winston.format.combine(
+		winston.format.colorize(),
+    winston.format.timestamp(),
+    winston.format.printf(
+      (info) => `${info.timestamp} ${info.level}: ${info.message}`
+    )
+  ),
+  // Log to the console and a file
+  transports: [
+    new winston.transports.Console(),
+    //new winston.transports.File({ filename: "logs/app.log" }),
+  ],
+});
+
 const corsOptions = {
   origin: "*",
   credentials: true,
   methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
 };
 
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+	logger.error(`${err.name}: ${err.message} - ${req.headers.host}`);
+  if (err.name === "UnauthorizedError") {
+    res.sendStatus(401);
+  } else {
+    next(err);
+  }
+};
+
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
+
 app.use(
   jwt({
     secret: jwksRsa.expressJwtSecret({
@@ -44,9 +76,9 @@ app.use(
 );
 
 app.get("/userInfo", async (req: JWTRequest, res: express.Response) => {
-	//console.log(JSON.stringify(res));
   const userUUID = req.auth?.sub;
 	if (userUUID) {
+		logger.info(`${userUUID}`);
 		const user = await site.user.findUnique({
 			where: { uuid: userUUID },
 			select: {
@@ -78,6 +110,8 @@ app.get("/userInfo", async (req: JWTRequest, res: express.Response) => {
 		);
 	} else res.sendStatus(401);
 });
+
+app.use(errorHandler);
 
 const server = app.listen(8002, () =>
   console.log(`

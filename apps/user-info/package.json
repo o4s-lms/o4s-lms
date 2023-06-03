@@ -1,26 +1,34 @@
 {
-  "name": "@o4s/user-info",
-  "private": true,
-  "scripts": {
-		"dev": "pnpm with-env ts-node src/server.ts",
-		"build": "tsc src/server.ts",
-		"start": "node src/server.js",
-    "with-env": "dotenv -e ../../.env --"
-  },
-  "dependencies": {
-		"@o4s/db": "^0.1.0",
-    "cookie-parser": "^1.4.6",
-		"@types/cookie-parser": "^1.4.3",
-		"@types/express": "4.17.17",
-		"@types/node": "^20.2.5",
-    "cors": "^2.8.5",
-    "dotenv": "^16.1.3",
-    "express": "^4.18.2",
-    "express-jwt": "^8.4.1",
-    "jwks-rsa": "^3.0.1",
-		"typescript": "5.0.4",
-		"dotenv-cli": "^7.2.1",
-		"tsc": "^2.0.4",
-		"ts-node": "^10.9.1"
-  }
+		"name": "@o4s/user-info",
+		"version": "0.1.0",
+		"description": "Open source LMS.",
+		"author": "José Cordeiro <joseantcordeiro@gmail.com>",
+		"license": "MIT",
+		"scripts": {
+			"clean": "rm -rf .turbo node_modules",
+			"dev": "pnpm with-env ts-node src/server.ts",
+			"build": "tsc src/server.ts",
+			"start": "node src/server.js",
+			"check": "tsc --noEmit",
+			"with-env": "dotenv -e ../../.env --"
+		},
+		"dependencies": {
+			"@o4s/db": "^0.1.0",
+			"cookie-parser": "^1.4.6",
+			"cors": "^2.8.5",
+			"express": "^4.18.2",
+			"express-jwt": "^8.4.1",
+			"jwks-rsa": "^3.0.1",
+			"winston": "^3.9.0"
+		},
+		"devDependencies": {
+			"@types/cookie-parser": "^1.4.3",
+			"@types/express": "4.17.17",
+			"@types/node": "^20.2.5",
+			"dotenv": "^16.1.3",
+			"dotenv-cli": "^7.2.1",
+			"ts-node": "^10.9.1",
+			"tsc": "^2.0.4",
+			"typescript": "5.0.4"
+		}
 }

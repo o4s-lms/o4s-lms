@@ -1,3 +1,5 @@
+"use client"
+
 import { Separator } from "@/components/ui/separator"
 
 import { SessionExpiredModal } from "@/components/auth/session-expired-modal"
