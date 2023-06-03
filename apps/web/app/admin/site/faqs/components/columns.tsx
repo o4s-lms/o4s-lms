@@ -1,7 +1,6 @@
 "use client"
 
-import Link from "next/link"
-import { BlogPosts_allResponseData } from "@o4s/generated-wundergraph/models"
+import { SiteGet_faqsResponseData } from "@o4s/generated-wundergraph/models"
 import { ColumnDef } from "@tanstack/react-table"
 import { MoreHorizontal } from "lucide-react"
  
@@ -26,30 +25,35 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import Link from "next/link"
 
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export type Post = BlogPosts_allResponseData["posts"][number]
+export type Faq = SiteGet_faqsResponseData["faqs"][number]
 
-export const columns: ColumnDef<Post>[] = [
+export const columns: ColumnDef<Faq>[] = [
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "question",
+    header: "Question",
   },
   {
-    accessorKey: "title",
-    header: "Title",
+    accessorKey: "answer",
+    header: "Answer",
   },
   {
-    accessorKey: "language",
-    header: "Languague",
+    accessorKey: "order",
+    header: "Order",
+  },
+	{
+    accessorKey: "locale",
+    header: "Locale",
   },
 	{
     id: "actions",
     cell: ({ row }) => {
-      const post = row.original
+      const faq = row.original
  
       return (
 				<Dialog>
@@ -62,41 +66,39 @@ export const columns: ColumnDef<Post>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(post.id)}
-            >
-              Copy post ID
-            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-							<Link href={`/blogue/post/${post.slug}`} target="_blank" >View post</Link>
+							<Link href="/ajuda" target="_blank" >View FAQS</Link>
 						</DropdownMenuItem>
             <DropdownMenuItem>
 							<DialogTrigger asChild>
-								<Button variant="outline">Edit Post</Button>
+								<Link href="#">Edit FAQ</Link>
 							</DialogTrigger>
+						</DropdownMenuItem>
+						<DropdownMenuItem>
+							<Link href="/ajuda" target="_blank" >Delete FAQ</Link>
 						</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 					<DialogContent className="sm:max-w-[425px]">
 						<DialogHeader>
-							<DialogTitle>Edit profile</DialogTitle>
+							<DialogTitle>Edit FAQ</DialogTitle>
 							<DialogDescription>
-								Make changes to your profile here. Click save when you're done.
+								Make changes to your FAQ. Click save when you're done.
 							</DialogDescription>
 						</DialogHeader>
 						<div className="grid gap-4 py-4">
 							<div className="grid grid-cols-4 items-center gap-4">
 								<Label htmlFor="name" className="text-right">
-									Name
+									Question
 								</Label>
-								<Input id="name" value={post.title} className="col-span-3" />
+								<Input id="question" value={faq.question} className="col-span-3" />
 							</div>
 							<div className="grid grid-cols-4 items-center gap-4">
 								<Label htmlFor="username" className="text-right">
-									Username
+									Answer
 								</Label>
-								<Input id="username" value="@peduarte" className="col-span-3" />
+								<Input id="answer" value={faq.answer} className="col-span-3" />
 							</div>
 						</div>
 						<DialogFooter>

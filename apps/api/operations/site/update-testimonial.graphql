@@ -1,0 +1,23 @@
+mutation(
+	$id: String!,
+	$name: String!,
+	$title: String!,
+	$quote: String!,
+	$locale: String!
+) @rbac(requireMatchAny: [editor, admin]) {
+	tag: site_updateOneTestimonial(
+		where: { id: $id }
+		data: {
+			name: { set: $name }
+			title: { set: $title }
+			quote: { set: $quote }
+			locale: { set: $locale }
+		}
+	) {
+		id
+		name
+		title
+		quote
+		locale
+	}
+}

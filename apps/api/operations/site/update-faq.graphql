@@ -1,0 +1,23 @@
+mutation(
+	$id: String!,
+	$question: String!,
+	$answer: String!,
+	$order: Int!,
+	$locale: String!
+) @rbac(requireMatchAny: [editor, admin]) {
+	tag: site_updateOneFaq(
+		where: { id: $id }
+		data: {
+			question: { set: $question }
+			answer: { set: $answer }
+			order: { set: $order }
+			locale: { set: $locale }
+		}
+	) {
+		id
+		question
+		answer
+		order
+		locale
+	}
+}
