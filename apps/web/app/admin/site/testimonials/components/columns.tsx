@@ -63,18 +63,18 @@ const testimonialFormSchema = z.object({
   title: z
 		.string()
 		.min(5, {
-			message: "Username must be at least 5 characters.",
+			message: "Title must be at least 5 characters.",
 		})
 		.max(50, {
-			message: "Username must not be longer than 50 characters.",
+			message: "Title must not be longer than 50 characters.",
 		}),
   quote: z
 		.string()
 		.min(50, {
-			message: "Username must be at least 50 characters.",
+			message: "Quote must be at least 50 characters.",
 		})
-		.max(300, {
-			message: "Username must not be longer than 300 characters.",
+		.max(1000, {
+			message: "Quote must not be longer than 1000 characters.",
 		}),
 	locale: z.string().length(2),
 })
@@ -82,7 +82,7 @@ const testimonialFormSchema = z.object({
 type Testimonial = SiteGet_testimonialsResponseData["testimonials"][number]
 type TestimonialFormValues = z.infer<typeof testimonialFormSchema>
 
-function DialogBody (testimonial: Testimonial) {
+function DialogBody ({ testimonial }: Testimonial) {
 	const { toast } = useToast()
 	const updateTestimonial = useUpdateTestimonialMutation()
 	const defaultValues: Partial<TestimonialFormValues> = {
@@ -104,20 +104,10 @@ function DialogBody (testimonial: Testimonial) {
 			toast({
 				variant: "destructive",
         title: "Uh oh! Something went wrong.",
-				description: (
-					<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-						<code className="text-white">{JSON.stringify(testimonial, null, 2)}</code>
-					</pre>
-				),
 			})
 		} else {
 			toast({
-				title: "You submitted the following values:",
-				description: (
-					<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-						<code className="text-white">{JSON.stringify(testimonial, null, 2)}</code>
-					</pre>
-				),
+				title: "Testimonial updated sucessfully.",
 			})
 		}
   }
@@ -141,14 +131,10 @@ function DialogBody (testimonial: Testimonial) {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Name</FormLabel>
               <FormControl>
                 <Input placeholder="shadcn" {...field} />
               </FormControl>
-              <FormDescription>
-                This is your public display name. It can be your real name or a
-                pseudonym. You can only change this once every 30 days.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -162,10 +148,6 @@ function DialogBody (testimonial: Testimonial) {
               <FormControl>
                 <Input placeholder="shadcn" {...field} />
               </FormControl>
-              <FormDescription>
-                This is your public display name. It can be your real name or a
-                pseudonym. You can only change this once every 30 days.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -183,10 +165,6 @@ function DialogBody (testimonial: Testimonial) {
                   {...field}
                 />
               </FormControl>
-              <FormDescription>
-                You can <span>@mention</span> other users and organizations to
-                link to them.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -200,19 +178,16 @@ function DialogBody (testimonial: Testimonial) {
               <FormControl>
                 <Input placeholder="pt" {...field} />
               </FormControl>
-              <FormDescription>
-                This is your public display name. It can be your real name or a
-                pseudonym. You can only change this once every 30 days.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Update testimonial</Button>
+				<div className="flex justify-end">
+        	<Button type="submit">Save</Button>
+				</div>
       </form>
     </Form>
   )
-
 }
 
 export const columns: ColumnDef<Testimonial>[] = [
@@ -262,22 +237,14 @@ export const columns: ColumnDef<Testimonial>[] = [
 						</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-					<DialogContent className="sm:max-w-[425px]">
+					<DialogContent className="sm:max-w-[625px]">
 						<DialogHeader>
 							<DialogTitle>Edit Testimonial</DialogTitle>
 							<DialogDescription>
 								Make changes to your Testimonial. Click save when you're done.
 							</DialogDescription>
 						</DialogHeader>
-						
-						<div className="grid gap-4 py-4">
-							<div className="grid grid-cols-4 items-center gap-4">
 								<DialogBody testimonial={testimonial} />
-							</div>
-						</div>
-						<DialogFooter>
-							<Button type="submit">Save changes</Button>
-						</DialogFooter>
 					</DialogContent>
 				</Dialog>
       )
