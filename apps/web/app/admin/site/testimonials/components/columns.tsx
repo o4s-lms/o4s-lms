@@ -2,7 +2,7 @@
 
 import { SiteGet_testimonialsResponseData } from "@o4s/generated-wundergraph/models"
 import { ColumnDef } from "@tanstack/react-table"
-import { MoreHorizontal } from "lucide-react"
+import { MoreHorizontal, Delete, Edit } from "lucide-react"
  
 import { Button } from "@/components/ui/button"
 import {
@@ -25,13 +25,6 @@ import {
 } from "@/components/ui/dialog"
 
 import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import {
@@ -104,6 +97,7 @@ function DialogBody ({ testimonial }: Testimonial) {
 			toast({
 				variant: "destructive",
         title: "Uh oh! Something went wrong.",
+				description: "There was a problem with your request.",
 			})
 		} else {
 			toast({
@@ -114,7 +108,7 @@ function DialogBody ({ testimonial }: Testimonial) {
 
 	return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
 				<FormField
           control={form.control}
           name="id"
@@ -133,7 +127,7 @@ function DialogBody ({ testimonial }: Testimonial) {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="jose" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -146,7 +140,7 @@ function DialogBody ({ testimonial }: Testimonial) {
             <FormItem>
               <FormLabel>Title</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="jose" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -160,7 +154,7 @@ function DialogBody ({ testimonial }: Testimonial) {
               <FormLabel>Quote</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Tell us a little bit about yourself"
+                  placeholder="Tell us a little bit about your experience"
                   className="resize-none"
                   {...field}
                 />
@@ -229,11 +223,17 @@ export const columns: ColumnDef<Testimonial>[] = [
 						</DropdownMenuItem>
             <DropdownMenuItem>
 							<DialogTrigger asChild>
-								<Button variant="outline">Edit</Button>
+								<Button variant="ghost">
+									<Edit className="h-4 w-4" />
+									Edit
+								</Button>
 							</DialogTrigger>
 						</DropdownMenuItem>
 						<DropdownMenuItem>
-							<Button variant="outline">Delete</Button>
+							<Button variant="ghost">
+								<Delete className="h-4 w-4" />
+								Delete
+							</Button>
 						</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -244,7 +244,7 @@ export const columns: ColumnDef<Testimonial>[] = [
 								Make changes to your Testimonial. Click save when you're done.
 							</DialogDescription>
 						</DialogHeader>
-								<DialogBody testimonial={testimonial} />
+						<DialogBody testimonial={testimonial} />
 					</DialogContent>
 				</Dialog>
       )

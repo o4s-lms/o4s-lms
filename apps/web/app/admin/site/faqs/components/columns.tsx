@@ -2,7 +2,7 @@
 
 import { SiteGet_faqsResponseData } from "@o4s/generated-wundergraph/models"
 import { ColumnDef } from "@tanstack/react-table"
-import { MoreHorizontal } from "lucide-react"
+import { MoreHorizontal, Delete, Edit } from "lucide-react"
  
 import { Button } from "@/components/ui/button"
 import {
@@ -23,15 +23,164 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { useToast } from "@/hooks/use-toast"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+
 import Link from "next/link"
-
-
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
+import useUpdateFaqMutation from "@/hooks/site/use-update-faq-mutation"
 
 export type Faq = SiteGet_faqsResponseData["faqs"][number]
+
+const faqFormSchema = z.object({
+	id: z.string(),
+  question: z
+    .string()
+    .min(50, {
+      message: "Question must be at least 50 characters.",
+    })
+    .max(1000, {
+      message: "Question must not be longer than 1000 characters.",
+    }),
+	answer: z
+		.string()
+		.min(50, {
+			message: "Answer must be at least 50 characters.",
+		})
+		.max(1000, {
+			message: "Answer must not be longer than 1000 characters.",
+		}),
+	order: z.number().min(0),
+	locale: z.string().length(2),
+})
+
+type FaqFormValues = z.infer<typeof faqFormSchema>
+
+function DialogBody ({ faq }: Faq) {
+	const { toast } = useToast()
+	const updateFaq = useUpdateFaqMutation()
+	const defaultValues: Partial<FaqFormValues> = {
+		id: faq.id,
+		question: faq.question,
+		answer: faq.answer,
+		order: faq.order,
+		locale: faq.locale,
+	}
+	const form = useForm<FaqFormValues>({
+		resolver: zodResolver(faqFormSchema),
+		defaultValues,
+		mode: "onChange",
+	})
+
+	function onSubmit(data: FaqFormValues) {
+		const faq = updateFaq.trigger(data, { throwOnError: false })
+    if (!faq) {
+			toast({
+				variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+				description: "There was a problem with your request.",
+			})
+		} else {
+			toast({
+				title: "Faq updated sucessfully.",
+			})
+		}
+  }
+
+	return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+				<FormField
+          control={form.control}
+          name="id"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input type="hidden" {...field} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="question"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Question</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Question"
+                  className="resize-none"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="answer"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Answer</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Answer"
+                  className="resize-none"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+				<FormField
+          control={form.control}
+          name="order"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Order</FormLabel>
+              <FormControl>
+                <Input placeholder="0" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+				<FormField
+          control={form.control}
+          name="locale"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Locale</FormLabel>
+              <FormControl>
+                <Input placeholder="pt" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+				<div className="flex justify-end">
+					<Button type="submit">Save</Button>
+				</div>
+      </form>
+    </Form>
+  )
+}
 
 export const columns: ColumnDef<Faq>[] = [
   {
@@ -72,38 +221,28 @@ export const columns: ColumnDef<Faq>[] = [
 						</DropdownMenuItem>
             <DropdownMenuItem>
 							<DialogTrigger asChild>
-								<Link href="#">Edit FAQ</Link>
+								<Button variant="ghost">
+									<Edit className="h-4 w-4" />
+									Edit
+								</Button>
 							</DialogTrigger>
 						</DropdownMenuItem>
 						<DropdownMenuItem>
-							<Link href="/ajuda" target="_blank" >Delete FAQ</Link>
+							<Button variant="ghost">
+								<Delete className="h-4 w-4" />
+								Delete
+							</Button>
 						</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-					<DialogContent className="sm:max-w-[425px]">
+					<DialogContent className="sm:max-w-[625px]">
 						<DialogHeader>
 							<DialogTitle>Edit FAQ</DialogTitle>
 							<DialogDescription>
 								Make changes to your FAQ. Click save when you're done.
 							</DialogDescription>
 						</DialogHeader>
-						<div className="grid gap-4 py-4">
-							<div className="grid grid-cols-4 items-center gap-4">
-								<Label htmlFor="name" className="text-right">
-									Question
-								</Label>
-								<Input id="question" value={faq.question} className="col-span-3" />
-							</div>
-							<div className="grid grid-cols-4 items-center gap-4">
-								<Label htmlFor="username" className="text-right">
-									Answer
-								</Label>
-								<Input id="answer" value={faq.answer} className="col-span-3" />
-							</div>
-						</div>
-						<DialogFooter>
-							<Button type="submit">Save changes</Button>
-						</DialogFooter>
+						<DialogBody faq={faq} />
 					</DialogContent>
 				</Dialog>
       )
