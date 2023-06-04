@@ -6,11 +6,19 @@ import { useRouter } from "next/router";
 
 import Brand from "./brand";
 import NavLink from "@/components/nav-link";
-import { ThemeToggle } from "@/components/theme-toggle";
+import DarkModeHandler from "./dark-mode-handler";
+import { useQuery } from "@/lib/wundergraph";
 
 const Navbar = () => {
   const menuBtnEl = useRef();
   const [state, setState] = useState(false);
+
+  const { data, error, isLoading } = useQuery({
+		operationName: 'users/me',
+		enabled: true,
+	})
+
+  const me = data?.me
   // const { pathname } = useRouter();
 
   // array of all the paths that doesn't need dark navbar
@@ -43,6 +51,15 @@ const Navbar = () => {
     { name: "Blogue", href: "/blogue" },
   ]
 
+  const DarkModeBtn = () => (
+    <DarkModeHandler
+      className={`dark:text-sky-500 ${addColor(
+        "text-blue-600 hover:bg-gray-50",
+        "text-sky-500 hover:bg-gray-800",
+      )}`}
+    />
+  );
+
   useEffect(() => {
     // Close the navbar menu when click outside the menu button or when scroll
     document.onclick = (e) => {
@@ -65,10 +82,9 @@ const Navbar = () => {
             <Link href="/" aria-label="Logo">
               <Brand className={`dark:text-white ${brandColor}`} />
             </Link>
-						Projeto Ser Sustentável
+						<span className="light:text-white">Projeto Ser Sustentável</span>
             <div className="flex items-center gap-x-3 md:hidden">
-							<ThemeToggle />
-              {/**<DarkModeBtn />*/}
+              <DarkModeBtn />
               <button
                 ref={menuBtnEl}
                 role="button"
@@ -135,15 +151,15 @@ const Navbar = () => {
                 ></span>
               </li>
               <li className="hidden md:block">
-								<ThemeToggle />
+                <DarkModeBtn />
               </li>
               <li>
                 <NavLink
-                  href="/login"
+                  href={me ? "/admin" : "/signin"}
                   className="flex items-center justify-center gap-x-1 rounded-full bg-gray-800 text-sm font-medium text-white hover:bg-gray-700 active:bg-gray-900"
 									scroll={false}
                 >
-                  Sign in
+                  {me ? 'Dashboard' : 'Sign in'}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"

@@ -3,8 +3,8 @@ import Link from "next/link";
 import Newsletter from "./newsletter";
 
 const navigation = [
-  { name: "Termos e Condições", href: "/termos" },
-  { name: "Política de Privacidade", href: "/privacidade" },
+  { name: "Termos e Condições", href: "/legal/termos" },
+  { name: "Política de Privacidade", href: "/legal/privacidade" },
 ];
 
 const Footer = () => (
@@ -18,7 +18,7 @@ const Footer = () => (
               key={idx}
               className="text-gray-700 duration-150 hover:text-blue-600 dark:text-gray-200 dark:hover:text-sky-500 md:font-medium"
             >
-              <Link href={item.href}>{item.name}</Link>
+              <Link href={item.href} target="_blank">{item.name}</Link>
             </li>
           ))}
         </ul>
