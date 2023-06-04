@@ -16,7 +16,7 @@ import {
 } from "@novu/notification-center"
 import { UserNav } from "@/components/user-nav"
 import { useToast } from "@/hooks/use-toast"
-import { useQuery, withWunderGraph } from "@/lib/wundergraph"
+import { useUser, withWunderGraph } from "@/lib/wundergraph"
 import { Loading } from "./loading"
 
 function SiteHeader() {
@@ -24,10 +24,7 @@ function SiteHeader() {
 	const { theme } = useTheme()
 	const scrolled = useScroll(50)
 
-	const { data, error, isLoading } = useQuery({
-		operationName: 'users/me',
-		enabled: true,
-	})
+  const { data: user, error, isLoading } = useUser()
 
 	if (isLoading) {
 		return <Loading />
@@ -44,8 +41,6 @@ function SiteHeader() {
 			),
 		})
 	}
-
-	const me = data?.me
 
   return (
     <header className={`bg-background sticky top-0 z-40 w-full border-b
@@ -86,7 +81,7 @@ function SiteHeader() {
               </div>
             </Link>
             <ThemeToggle />
-						{me && (
+						{user && (
 						<>{/**
 							<NovuProvider
 								subscriberId={session?.data?.user.id}
@@ -99,9 +94,9 @@ function SiteHeader() {
 								</PopoverNotificationCenter>
 							</NovuProvider>  */}
 							<UserNav
-								name={me.name}
-								email={me.email}
-								image={me.picture}
+								name={user.name}
+								email={user.email}
+								image={user.picture}
 							/>
 						</>
 						)}

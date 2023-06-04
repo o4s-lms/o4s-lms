@@ -1,0 +1,19 @@
+mutation(
+	$id: String!,
+	$html: String!,
+  $est_reading_time: Int!,
+	$userId: String @fromClaim(name: USERID)
+) @rbac(requireMatchAny: [editor, admin]) {
+	post: site_updateOnePost(
+		where: { id: $id }
+		data: {
+			html: { set: $html }
+      est_reading_time: { set: $est_reading_time }
+			updated_by: { set: $userId }
+		}
+	) {
+		id
+		updated_at
+		updated_by
+	}
+}

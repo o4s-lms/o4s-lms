@@ -17,8 +17,8 @@
 				"@novu/node": "^0.15.0",
 				"@o4s/tsconfig": "^0.1.0",
 				"@tryghost/html-to-mobiledoc": "^2.0.18",
-				"@wundergraph/nextjs": "^0.11.6",
-				"@wundergraph/sdk": "^0.163.2",
+				"@wundergraph/nextjs": "^0.11.7",
+				"@wundergraph/sdk": "^0.163.3",
 				"reading-time": "^1.5.0",
 				"stripe": "^12.8.0"
 		},

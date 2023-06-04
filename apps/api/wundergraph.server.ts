@@ -8,7 +8,7 @@ export default configureWunderGraphServer<HooksConfig, InternalClient>(() => ({
   hooks: {
 		authentication: {
 			mutatingPostAuthentication: async ({ user }) => {
-				user.roles = user.customClaims.roles;
+				user.roles = user.customClaims?.roles;
         return {
           user: user,
           status: 'ok',

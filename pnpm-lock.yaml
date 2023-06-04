@@ -81,7 +81,7 @@ importers:
         version: 10.23.1
       '@wundergraph/nextjs':
         specifier: ^0.10.29
-        version: 0.10.29(@wundergraph/sdk@0.163.2)(next@13.4.2)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5)
+        version: 0.10.29(@wundergraph/sdk@0.163.3)(next@13.4.2)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5)
       cors:
         specifier: ^2.8.5
         version: 2.8.5
@@ -171,11 +171,11 @@ importers:
         specifier: ^2.0.18
         version: 2.0.18
       '@wundergraph/nextjs':
-        specifier: ^0.11.6
-        version: 0.11.6(@wundergraph/sdk@0.163.2)(next@13.4.4)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5)
+        specifier: ^0.11.7
+        version: 0.11.7(@wundergraph/sdk@0.163.3)(next@13.4.4)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5)
       '@wundergraph/sdk':
-        specifier: ^0.163.2
-        version: 0.163.2(@graphql-mesh/store@0.93.1)(react-native@0.71.8)(typescript@5.1.3)
+        specifier: ^0.163.3
+        version: 0.163.3(@graphql-mesh/store@0.93.1)(react-native@0.71.8)(typescript@5.1.3)
       reading-time:
         specifier: ^1.5.0
         version: 1.5.0
@@ -362,6 +362,9 @@ importers:
       '@teamhanko/hanko-elements':
         specifier: ^0.5.5-beta
         version: 0.5.5-beta
+      '@tinymce/tinymce-react':
+        specifier: ^4.3.0
+        version: 4.3.0(react-dom@18.2.0)(react@18.2.0)
       class-variance-authority:
         specifier: ^0.6.0
         version: 0.6.0(typescript@5.0.4)
@@ -398,6 +401,9 @@ importers:
       react-hook-form:
         specifier: ^7.43.9
         version: 7.43.9(react@18.2.0)
+      reading-time:
+        specifier: ^1.5.0
+        version: 1.5.0
       recharts:
         specifier: ^2.6.2
         version: 2.6.2(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
@@ -707,8 +713,8 @@ importers:
         specifier: ^0.1.0
         version: link:../config/tsconfig
       '@wundergraph/sdk':
-        specifier: ^0.163.2
-        version: 0.163.2(@graphql-mesh/store@0.93.1)(react-native@0.71.8)(typescript@5.0.4)
+        specifier: ^0.163.3
+        version: 0.163.3(@graphql-mesh/store@0.93.1)(react-native@0.71.8)(typescript@5.0.4)
       api:
         specifier: ^5.0.8
         version: 5.0.8(openapi-types@12.1.3)
@@ -717,8 +723,8 @@ importers:
         specifier: ^0.1.0
         version: link:../config/eslint
       eslint:
-        specifier: ^8.40.0
-        version: 8.40.0
+        specifier: ^8.42.0
+        version: 8.42.0
       typescript:
         specifier: ^5.0.4
         version: 5.0.4
@@ -2470,6 +2476,16 @@ packages:
       eslint-visitor-keys: 3.4.1
     dev: true
 
+  /@eslint-community/eslint-utils@4.4.0(eslint@8.42.0):
+    resolution: {integrity: sha512-1/sA4dwrzBAyeUoQ6oxahHKmrZvsnLCg4RfxW3ZFGGmQkSNQPFNLV9CUEFQP1x9EYXHTo5p6xdhZM1Ne9p/AfA==}
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    peerDependencies:
+      eslint: ^6.0.0 || ^7.0.0 || >=8.0.0
+    dependencies:
+      eslint: 8.42.0
+      eslint-visitor-keys: 3.4.1
+    dev: true
+
   /@eslint-community/regexpp@4.5.1:
     resolution: {integrity: sha512-Z5ba73P98O1KUYCCJTUeVpja9RcGoMdncZ6T49FCUl2lN38JtCJ+3WgIDBv0AuY4WChU5PmtJmOCTlN6FZTFKQ==}
     engines: {node: ^12.0.0 || ^14.0.0 || >=16.0.0}
@@ -2496,6 +2512,11 @@ packages:
 
   /@eslint/js@8.41.0:
     resolution: {integrity: sha512-LxcyMGxwmTh2lY9FwHPGWOHmYFCZvbrFCBZL4FzSSsxsRPuhrYUg/49/0KDfW8tnIEaEHtfmn6+NPN+1DqaNmA==}
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    dev: true
+
+  /@eslint/js@8.42.0:
+    resolution: {integrity: sha512-6SWlXpWU5AvId8Ac7zjzmIOqMOba/JWY8XZ4A7q7Gn1Vlfg/SFFIlrtHXt9nPn4op9ZPAkl91Jao+QQv3r/ukw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
@@ -2866,6 +2887,17 @@ packages:
     dependencies:
       react-hook-form: 7.43.9(react@18.2.0)
     dev: false
+
+  /@humanwhocodes/config-array@0.11.10:
+    resolution: {integrity: sha512-KVVjQmNUepDVGXNuoRRdmmEjruj0KfiGSbS8LVc12LMsWDQzRXJ0qdhN8L8uUigKpfEHRhlaQFY0ib1tnUbNeQ==}
+    engines: {node: '>=10.10.0'}
+    dependencies:
+      '@humanwhocodes/object-schema': 1.2.1
+      debug: 4.3.4
+      minimatch: 3.1.2
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
 
   /@humanwhocodes/config-array@0.11.8:
     resolution: {integrity: sha512-UybHIJzJnR5Qc/MsD9Kr+RpO2h+/P1GhOwdiLPXK5TWk5sgTdu88bTD9UP+CKbPPh5Rni1u0GjAdYQLemG8g+g==}
@@ -6183,7 +6215,7 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /@wundergraph/nextjs@0.10.29(@wundergraph/sdk@0.163.2)(next@13.4.2)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5):
+  /@wundergraph/nextjs@0.10.29(@wundergraph/sdk@0.163.3)(next@13.4.2)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5):
     resolution: {integrity: sha512-R+/8mZk5U1Sng95HioafjrHPba2d0J3OOGOdl6Bh5rdYA23Jl2HvNTAH1I8/IFnmX8dSeYmlGmLfc1vJV7G2Hw==}
     peerDependencies:
       '@wundergraph/sdk': '>=0.91.0'
@@ -6193,8 +6225,8 @@ packages:
       swr: ^2.0.0
     dependencies:
       '@wundergraph/protobuf': 0.112.0
-      '@wundergraph/sdk': 0.163.2(@graphql-mesh/store@0.93.1)(react-native@0.71.8)(typescript@5.0.4)
-      '@wundergraph/swr': 0.14.33(@wundergraph/sdk@0.163.2)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5)
+      '@wundergraph/sdk': 0.163.3(@graphql-mesh/store@0.93.1)(react-native@0.71.8)(typescript@5.0.4)
+      '@wundergraph/swr': 0.14.33(@wundergraph/sdk@0.163.3)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5)
       handlebars: 4.7.7
       next: 13.4.2(@babel/core@7.21.8)(react-dom@18.2.0)(react@18.2.0)
       object-hash: 2.2.0
@@ -6204,8 +6236,8 @@ packages:
       swr: 2.1.5(react@18.2.0)
     dev: false
 
-  /@wundergraph/nextjs@0.11.6(@wundergraph/sdk@0.163.2)(next@13.4.4)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5):
-    resolution: {integrity: sha512-XVwdtfHZYh6A5J0xznvmABlbdrZZhxuDQePqojP+ZwPfaqvkMqYwo1/yKNCO1pLeoxl9mzUsavh9fF2FpySCOA==}
+  /@wundergraph/nextjs@0.11.7(@wundergraph/sdk@0.163.3)(next@13.4.4)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5):
+    resolution: {integrity: sha512-fJeHuI4+FiY1hbeNiRoUb3X1X8zJsmlPI7NXKE1m8mpy1l5bzwyeZOApFVgV5DCTD148a1kNUT6dGaYf5Q5vqA==}
     peerDependencies:
       '@wundergraph/sdk': '>=0.91.0'
       next: ^12.1.0 || ^13.0.0
@@ -6214,8 +6246,8 @@ packages:
       swr: ^2.1.5
     dependencies:
       '@wundergraph/protobuf': 0.116.0
-      '@wundergraph/sdk': 0.163.2(@graphql-mesh/store@0.93.1)(react-native@0.71.8)(typescript@5.1.3)
-      '@wundergraph/swr': 0.15.6(@wundergraph/sdk@0.163.2)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5)
+      '@wundergraph/sdk': 0.163.3(@graphql-mesh/store@0.93.1)(react-native@0.71.8)(typescript@5.1.3)
+      '@wundergraph/swr': 0.15.7(@wundergraph/sdk@0.163.3)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5)
       handlebars: 4.7.7
       next: 13.4.4(@babel/core@7.21.8)(@opentelemetry/api@1.4.1)(react-dom@18.2.0)(react@18.2.0)
       object-hash: 2.2.0
@@ -6271,8 +6303,8 @@ packages:
       ts-proto: 1.147.2
     dev: false
 
-  /@wundergraph/sdk@0.163.2(@graphql-mesh/store@0.93.1)(react-native@0.71.8)(typescript@5.0.4):
-    resolution: {integrity: sha512-i39jSsDQSfXHv+oW+7daoXctwoLIMTAwOYFoSVgbY/swxS37V7KIkRgMqne3anZTCnIGg9znn/wBDkunungyyQ==}
+  /@wundergraph/sdk@0.163.3(@graphql-mesh/store@0.93.1)(react-native@0.71.8)(typescript@5.0.4):
+    resolution: {integrity: sha512-AXleXen7PxeAXAs6S4BTjXQpJgW/RRCqfO+vgq7JMGl1E9p+sqkT2j+Nwrc88SiwBhrNzTbZsGdUa3eHYgCoZA==}
     hasBin: true
     dependencies:
       '@fastify/formbody': 7.4.0
@@ -6296,7 +6328,7 @@ packages:
       '@wundergraph/orm': 0.0.3(typescript@5.0.4)
       '@wundergraph/protobuf': 0.116.0
       '@wundergraph/straightforward': 4.2.5
-      '@wundergraph/wunderctl': 0.157.1
+      '@wundergraph/wunderctl': 0.157.2
       axios: 0.26.1(debug@4.3.4)
       axios-retry: 3.4.0
       close-with-grace: 1.2.0
@@ -6344,8 +6376,8 @@ packages:
       - typescript
     dev: false
 
-  /@wundergraph/sdk@0.163.2(@graphql-mesh/store@0.93.1)(react-native@0.71.8)(typescript@5.1.3):
-    resolution: {integrity: sha512-i39jSsDQSfXHv+oW+7daoXctwoLIMTAwOYFoSVgbY/swxS37V7KIkRgMqne3anZTCnIGg9znn/wBDkunungyyQ==}
+  /@wundergraph/sdk@0.163.3(@graphql-mesh/store@0.93.1)(react-native@0.71.8)(typescript@5.1.3):
+    resolution: {integrity: sha512-AXleXen7PxeAXAs6S4BTjXQpJgW/RRCqfO+vgq7JMGl1E9p+sqkT2j+Nwrc88SiwBhrNzTbZsGdUa3eHYgCoZA==}
     hasBin: true
     dependencies:
       '@fastify/formbody': 7.4.0
@@ -6369,7 +6401,7 @@ packages:
       '@wundergraph/orm': 0.0.3(typescript@5.1.3)
       '@wundergraph/protobuf': 0.116.0
       '@wundergraph/straightforward': 4.2.5
-      '@wundergraph/wunderctl': 0.157.1
+      '@wundergraph/wunderctl': 0.157.2
       axios: 0.26.1(debug@4.3.4)
       axios-retry: 3.4.0
       close-with-grace: 1.2.0
@@ -6428,7 +6460,7 @@ packages:
       - supports-color
     dev: false
 
-  /@wundergraph/swr@0.14.33(@wundergraph/sdk@0.163.2)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5):
+  /@wundergraph/swr@0.14.33(@wundergraph/sdk@0.163.3)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5):
     resolution: {integrity: sha512-BuJQkVxgYAv1n1t8i22rrdFwDhyTEfUScuc4sf4HFQFE+9w9lm6Ez76Q7XpfR8qxOfosi+i30lUvyTD/rcgN2A==}
     peerDependencies:
       '@wundergraph/sdk': '>=0.110.0'
@@ -6436,30 +6468,30 @@ packages:
       react-dom: ^16.8.0 || ^17.0.2 || ^18.0.0
       swr: ^2.0.0
     dependencies:
-      '@wundergraph/sdk': 0.163.2(@graphql-mesh/store@0.93.1)(react-native@0.71.8)(typescript@5.0.4)
+      '@wundergraph/sdk': 0.163.3(@graphql-mesh/store@0.93.1)(react-native@0.71.8)(typescript@5.0.4)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-ssr-prepass: 1.5.0(react@18.2.0)
       swr: 2.1.5(react@18.2.0)
     dev: false
 
-  /@wundergraph/swr@0.15.6(@wundergraph/sdk@0.163.2)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5):
-    resolution: {integrity: sha512-nvbPuyf8ApmRi+PTBJBM4fch6spQczwCuGwXs3CMyQJ42u0Pg45OIEIv2z5hIdlN1Wd/bg/cs3jf8A/NGBocSw==}
+  /@wundergraph/swr@0.15.7(@wundergraph/sdk@0.163.3)(react-dom@18.2.0)(react@18.2.0)(swr@2.1.5):
+    resolution: {integrity: sha512-XnRbJHdEm8gaeWiCFiFQLxavRO0pqPcalItd1zhEAbbynRCu/GspyfhzvnmScDcKauPOXoeDzhxovGw2IxB7+Q==}
     peerDependencies:
       '@wundergraph/sdk': '>=0.110.0'
       react: ^16.8.0 || ^17.0.2 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.2 || ^18.0.0
       swr: ^2.1.5
     dependencies:
-      '@wundergraph/sdk': 0.163.2(@graphql-mesh/store@0.93.1)(react-native@0.71.8)(typescript@5.1.3)
+      '@wundergraph/sdk': 0.163.3(@graphql-mesh/store@0.93.1)(react-native@0.71.8)(typescript@5.1.3)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-ssr-prepass: 1.5.0(react@18.2.0)
       swr: 2.1.5(react@18.2.0)
     dev: false
 
-  /@wundergraph/wunderctl@0.157.1:
-    resolution: {integrity: sha512-miVB74vFDd/kl8sq5+3GrMTCy53YOjwuV5TX9/j7+CwF9u9rX08B5D3O4H3RaQgronD53UAa7vG+h6GkrUnpOg==}
+  /@wundergraph/wunderctl@0.157.2:
+    resolution: {integrity: sha512-5YrQbyqr3bGvVgrKMIo253AL0PzUSO5u8/wv8wIeoOo+eIrKeJgStHE4A5KQ/jKUHu4k0kBfVI4D12QkRo6r4w==}
     hasBin: true
     requiresBuild: true
     dependencies:
@@ -8998,7 +9030,7 @@ packages:
       eslint-import-resolver-webpack:
         optional: true
     dependencies:
-      '@typescript-eslint/parser': 5.59.7(eslint@8.41.0)(typescript@5.1.3)
+      '@typescript-eslint/parser': 5.59.7(eslint@8.41.0)(typescript@5.0.4)
       debug: 3.2.7
       eslint: 8.41.0
       eslint-import-resolver-node: 0.3.7
@@ -9251,6 +9283,54 @@ packages:
       '@eslint/eslintrc': 2.0.3
       '@eslint/js': 8.41.0
       '@humanwhocodes/config-array': 0.11.8
+      '@humanwhocodes/module-importer': 1.0.1
+      '@nodelib/fs.walk': 1.2.8
+      ajv: 6.12.6
+      chalk: 4.1.2
+      cross-spawn: 7.0.3
+      debug: 4.3.4
+      doctrine: 3.0.0
+      escape-string-regexp: 4.0.0
+      eslint-scope: 7.2.0
+      eslint-visitor-keys: 3.4.1
+      espree: 9.5.2
+      esquery: 1.5.0
+      esutils: 2.0.3
+      fast-deep-equal: 3.1.3
+      file-entry-cache: 6.0.1
+      find-up: 5.0.0
+      glob-parent: 6.0.2
+      globals: 13.20.0
+      graphemer: 1.4.0
+      ignore: 5.2.4
+      import-fresh: 3.3.0
+      imurmurhash: 0.1.4
+      is-glob: 4.0.3
+      is-path-inside: 3.0.3
+      js-yaml: 4.1.0
+      json-stable-stringify-without-jsonify: 1.0.1
+      levn: 0.4.1
+      lodash.merge: 4.6.2
+      minimatch: 3.1.2
+      natural-compare: 1.4.0
+      optionator: 0.9.1
+      strip-ansi: 6.0.1
+      strip-json-comments: 3.1.1
+      text-table: 0.2.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /eslint@8.42.0:
+    resolution: {integrity: sha512-ulg9Ms6E1WPf67PHaEY4/6E2tEn5/f7FXGzr3t9cBMugOmf1INYvuUwwh1aXQN4MfJ6a5K2iNwP3w4AColvI9A==}
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    hasBin: true
+    dependencies:
+      '@eslint-community/eslint-utils': 4.4.0(eslint@8.42.0)
+      '@eslint-community/regexpp': 4.5.1
+      '@eslint/eslintrc': 2.0.3
+      '@eslint/js': 8.42.0
+      '@humanwhocodes/config-array': 0.11.10
       '@humanwhocodes/module-importer': 1.0.1
       '@nodelib/fs.walk': 1.2.8
       ajv: 6.12.6

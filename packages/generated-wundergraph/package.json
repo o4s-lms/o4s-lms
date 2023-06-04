@@ -9,12 +9,12 @@
 	},
   "dependencies": {
 		"@o4s/tsconfig": "^0.1.0",
-		"@wundergraph/sdk": "^0.163.2",
+		"@wundergraph/sdk": "^0.163.3",
     "api": "^5.0.8"
   },
 	"devDependencies": {
     "@o4s/eslint-config": "^0.1.0",
-    "eslint": "^8.40.0",
+    "eslint": "^8.42.0",
     "typescript": "^5.0.4"
   }
 }
