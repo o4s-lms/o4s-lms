@@ -67,4 +67,6 @@ tinymce
 *.env
 !example*.env
 
+config.yaml
+
 .idea

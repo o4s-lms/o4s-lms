@@ -1,0 +1,27 @@
+services:
+  hanko-migrate:
+    build: ../../../hanko/backend
+    container_name: hanko_migrate
+    volumes:
+      - type: bind
+        source: ./config.yaml
+        target: /etc/config/config.yaml
+    command: --config /etc/config/config.yaml migrate up
+    restart: on-failure
+  hanko:
+    depends_on:
+      hanko-migrate:
+        condition: service_completed_successfully
+    build: ../../../hanko/backend
+    container_name: hanko
+    ports:
+      - '0.0.0.0:8000:8000' # public
+      - '0.0.0.0:8001:8001' # admin
+    restart: always
+    command: serve --config /etc/config/config.yaml all
+    volumes:
+      - type: bind
+        source: ./config.yaml
+        target: /etc/config/config.yaml
+    environment:
+      - PASSWORD_ENABLED
