@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import PostEditor from "./post-editor"
 
 
 // This type is used to define the shape of our data.
@@ -78,27 +79,14 @@ export const columns: ColumnDef<Post>[] = [
 						</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-					<DialogContent className="sm:max-w-[425px]">
+					<DialogContent className="sm:max-w-full">
 						<DialogHeader>
-							<DialogTitle>Edit profile</DialogTitle>
+							<DialogTitle>Edit blog post</DialogTitle>
 							<DialogDescription>
-								Make changes to your profile here. Click save when you're done.
+								Make changes to your post here. Click save when you're done.
 							</DialogDescription>
 						</DialogHeader>
-						<div className="grid gap-4 py-4">
-							<div className="grid grid-cols-4 items-center gap-4">
-								<Label htmlFor="name" className="text-right">
-									Name
-								</Label>
-								<Input id="name" value={post.title} className="col-span-3" />
-							</div>
-							<div className="grid grid-cols-4 items-center gap-4">
-								<Label htmlFor="username" className="text-right">
-									Username
-								</Label>
-								<Input id="username" value="@peduarte" className="col-span-3" />
-							</div>
-						</div>
+              <PostEditor post={post} />
 						<DialogFooter>
 							<Button type="submit">Save changes</Button>
 						</DialogFooter>

@@ -4,12 +4,14 @@ import readingTime from "reading-time"
 
 import SectionWrapper from "@/components/section-wrapper"
 
-import { BlogPost_idResponseData } from "@o4s/generated-wundergraph/models"
+import { BlogPosts_allResponseData, BlogUpdate_htmlInput } from "@o4s/generated-wundergraph/models"
 import useUpdateHtmlMutation from "@/hooks/site/use-update-html-mutation"
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 
-type Post = BlogPost_idResponseData["post"]
+type Post = BlogPosts_allResponseData["posts"][number]
+type Data = BlogUpdate_htmlInput
+
 const PostEditor: React.FC<{
 	post: Post;
 }> = ({ post }) => {
@@ -24,28 +26,28 @@ const PostEditor: React.FC<{
     if (editorRef.current) {
 			const html = editorRef.current.getContent()
       const { minutes } = readingTime(html as string)
-      const post = updateHtml.trigger({ id, html, minutes }, { throwOnError: false })
+      const data = {
+        id: id,
+        html: html as string,
+        est_reading_time: minutes,
+      }
+      const post = updateHtml.trigger(data, { throwOnError: false })
+      if (!post) {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "There was a problem with your request.",
+        })
+      } else {
+        toast({
+          title: "Post updated sucessfully.",
+        })
+      }
     }
   }
 
   return (
     <>
-		<SectionWrapper className="mt-0">
-      <div className="mt-3 lg:mt-0">
-					<Button
-						onClick={save}
-						label="Save"
-						severity="success"
-						className="p-button-outlined mr-2"
-						icon="pi pi-save" />
-					<Button
-						onClick={confirm}
-						label="Delete"
-						severity="danger"
-						className="p-button-outlined mr-2"
-						icon="pi pi-trash" />
-					<Button label={post?.status === 'draft' ? ("Publish") : ("Unpublish")} icon="pi pi-check" />
-			</div>
       <Editor
         tinymceScriptSrc='/tinymce/tinymce.min.js'
         onInit={(evt, editor) => editorRef.current = editor}
@@ -68,7 +70,11 @@ const PostEditor: React.FC<{
           content_style: 'body { font-size:14px }'
         }}
       />
-		</SectionWrapper>
+		  <div className="mt-3 lg:mt-0">
+        <Button onClick={save} className="p-1">Save</Button>
+        <Button	variant="destructive" className="p-1">Delete</Button>
+        <Button variant="secondary" className="p-1">{post?.status === 'draft' ? ("Publish") : ("Unpublish")}</Button>
+			</div>
     </>
   )
 }
