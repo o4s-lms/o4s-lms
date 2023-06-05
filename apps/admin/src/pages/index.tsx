@@ -1,5 +1,4 @@
 import SectionWrapper from "~/components/SectionWrapper";
-import { useUser, withWunderGraph } from "~/utils/wundergraph";
 
 import Header from "~/components/ui/layout/Header";
 import Nav from "~/components/ui/layout/Nav";

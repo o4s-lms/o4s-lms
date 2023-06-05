@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Menubar } from 'primereact/menubar';
-import { useUser } from "~/utils/wundergraph";
+import { useUser } from "@o4s/generated-wundergraph/nextjs";
 import {
   PopoverNotificationCenter,
   NotificationBell,
@@ -55,7 +58,7 @@ export default function Nav() {
     void router.push('/signin')
   }
 
-  if (user && !user?.roles.includes('admin')) {
+  if (user && !user?.roles?.includes('admin')) {
     void router.push('/unauthorized')
   }
 

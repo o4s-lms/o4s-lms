@@ -1,4 +1,7 @@
-import { useRef, useState } from "react";
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { useRef } from "react";
 import { useRouter } from "next/router";
 
 import Header from "~/components/ui/layout/Header";
@@ -8,7 +11,7 @@ import Loading from "~/components/ui/Loading";
 import { Toast } from "primereact/toast";
 import ProductHeader from "~/components/ui/products/ProductHeader";
 import CoursesList from "~/components/ui/products/CoursesList";
-import { useQuery } from "~/utils/wundergraph";
+import { useQuery } from "@o4s/generated-wundergraph/nextjs";
 
 const ManageProduct = () => {
 	const toast = useRef<Toast>(null);
@@ -31,14 +34,14 @@ const ManageProduct = () => {
 	}
 
 	return (
-		<><Toast ref={toast} />
+		<Toast ref={toast} />
 			{!isLoading ? (
-				<><Header title={data?.product?.name} />
+				<><Header title={data?.product?.title} />
 					<Nav />
 					<ProductHeader
 						id={data?.product?.id}
-						name={data?.product?.name}
-						image={data?.product?.image}
+						name={data?.product?.title}
+						image={data?.product?.thumbnail}
 						active={data?.product?.active}
 					/>
 					<SectionWrapper className="mt-0">
@@ -48,7 +51,6 @@ const ManageProduct = () => {
 			) : (
 				<Loading />
 			)}
-		</>
 	);
 
 };

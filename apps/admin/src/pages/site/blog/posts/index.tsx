@@ -4,7 +4,7 @@ import { type NextPage } from 'next/types';
 import Header from "~/components/ui/layout/Header";
 import Nav from "~/components/ui/layout/Nav";
 import PostsTable from "~/components/ui/site/PostsTable";
-import { useQuery } from "~/utils/wundergraph";
+import { useQuery } from "@o4s/generated-wundergraph/nextjs";
 import Loading from "~/components/ui/Loading";
 import PostsHeader from "~/components/ui/site/PostsHeader";
 

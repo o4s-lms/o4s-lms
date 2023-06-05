@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import React, { useState } from 'react';
 import Image from "next/image";
-import { useQuery } from '~/utils/wundergraph';
+import { useQuery } from '@o4s/generated-wundergraph/nextjs';
 import { Button } from 'primereact/button';
 import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
 import { Tag } from 'primereact/tag';
@@ -35,7 +36,7 @@ const CoursesList = () => {
 	});
 
 	if (error) {
-		return <p>{error.message}</p>;
+		return <p>{error?.message}</p>;
 	}
 
 	const getSeverity = (course: Course) => {

@@ -9,7 +9,7 @@
 	},
   "dependencies": {
 		"@o4s/tsconfig": "^0.1.0",
-		"@wundergraph/sdk": "^0.163.3",
+		"@wundergraph/sdk": "^0.164.0",
     "api": "^5.0.8"
   },
 	"devDependencies": {
