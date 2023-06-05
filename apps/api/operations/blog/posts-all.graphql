@@ -5,12 +5,10 @@ query ()
 		title
 		slug
 		html
-		image
+		feature_image
 		featured
 		status
 		language
-		meta_title
-		meta_description
 		excerpt
 		est_reading_time
 		author_id
@@ -21,9 +19,13 @@ query ()
 		created_by
 		updated_at
 		updated_by
-		og_image
-		og_title
-		og_description
+    post_meta {
+      meta_title
+		  meta_description
+      og_image
+		  og_title
+		  og_description
+    }
 		post_tags {
 			tag {
 				id

@@ -24,18 +24,5 @@ mutation (
 		}
 	) {
 		id
-		name
-		slug
-		description
-		image
-		color
-		hidden
-		parent_id
-		visibility
-		language
-		meta_title
-		meta_description
-		created_at
-		created_by
 	}
 }

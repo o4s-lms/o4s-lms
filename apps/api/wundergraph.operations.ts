@@ -46,7 +46,7 @@ export default configureWunderGraphOperations<OperationsConfiguration>({
 					required: false,
 				},
 			}),
-			SiteGet_products: (config) => ({
+			ProductsAll: (config) => ({
 				...config,
 				authentication: {
 					required: false,

@@ -9,18 +9,23 @@ query ($language: String!, $published: Boolean = true) {
 		id
 		title
 		slug
-		image
+		feature_image
 		featured
 		status
 		language
-		meta_title
-		meta_description
 		excerpt
 		est_reading_time
 		author_id
 		published
 		published_at
 		created_at
+    post_meta {
+      meta_title
+		  meta_description
+      og_image
+		  og_title
+		  og_description
+    }
 		post_tags {
 			tag {
 				id

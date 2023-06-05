@@ -38,7 +38,7 @@ const corsOptions = {
 };
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-	logger.error(`${err.name}: ${err.message} - ${req.headers.host}`);
+	logger.error(`${err.name}: ${err.message}`);
   if (err.name === "UnauthorizedError") {
     res.sendStatus(401);
   } else {

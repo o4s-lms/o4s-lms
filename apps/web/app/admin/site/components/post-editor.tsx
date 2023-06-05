@@ -2,8 +2,6 @@ import React, { useRef } from "react"
 import { Editor } from "@tinymce/tinymce-react"
 import readingTime from "reading-time"
 
-import SectionWrapper from "@/components/section-wrapper"
-
 import { BlogPosts_allResponseData, BlogUpdate_htmlInput } from "@o4s/generated-wundergraph/models"
 import useUpdateHtmlMutation from "@/hooks/site/use-update-html-mutation"
 import { useToast } from "@/hooks/use-toast"
@@ -70,10 +68,10 @@ const PostEditor: React.FC<{
           content_style: 'body { font-size:14px }'
         }}
       />
-		  <div className="mt-3 lg:mt-0">
-        <Button onClick={save} className="p-1">Save</Button>
-        <Button	variant="destructive" className="p-1">Delete</Button>
-        <Button variant="secondary" className="p-1">{post?.status === 'draft' ? ("Publish") : ("Unpublish")}</Button>
+		  <div className="flex justify-end p-2">
+        <Button onClick={save} >Save</Button>
+        <Button	variant="destructive" >Delete</Button>
+        <Button variant="secondary" >{post?.status === 'draft' ? ("Publish") : ("Unpublish")}</Button>
 			</div>
     </>
   )

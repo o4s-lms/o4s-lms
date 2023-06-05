@@ -26,12 +26,10 @@ query ($language: String!, $hidden: Boolean = false, $visibility: String = "publ
 				id
 				title
 				slug
-				image
+				feature_image
 				featured
 				status
 				language
-				meta_title
-				meta_description
 				excerpt
 				est_reading_time
 				author_id

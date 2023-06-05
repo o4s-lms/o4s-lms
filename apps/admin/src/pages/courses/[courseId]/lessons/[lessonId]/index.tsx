@@ -16,7 +16,7 @@ const EditLesson = () => {
 	const { data, error, isLoading } = useQuery({
 		operationName: 'lessons/id',
 		input: {
-			id: parseInt(lessonId),
+			id: lessonId,
 		},
 		enabled: true,
 	});

@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Menubar } from 'primereact/menubar';
-import { useSession, signOut } from "next-auth/react";
+import { useUser } from "~/utils/wundergraph";
 import {
   PopoverNotificationCenter,
   NotificationBell,
@@ -10,16 +10,54 @@ import {
 
 import Brand from "./Brand";
 import UserAvatar from './Avatar';
+import Loading from '../Loading';
+
+import { type Hanko } from "@teamhanko/hanko-elements";
+
+
+const hankoApi = 'http://joseantcordeiro.hopto.org:8000';
 
 export default function Nav() {
-	const session = useSession();
+	const { data: user, isLoading } = useUser()
 	const router = useRouter();
+  const [hanko, setHankoClient] = useState<Hanko>()
+	const [error, setError] = useState<Error | null>(null)
 
 	useEffect(() => {
-    if (session?.status === 'unauthenticated') {
-      void router.push('/api/auth/signin')
-    }
-  }, [session?.status, router]);
+    void import("@teamhanko/hanko-elements").then(({ Hanko }) => setHankoClient(new Hanko(hankoApi)));
+  }, [])
+
+	const logout = () => {
+    hanko?.user
+      .logout()
+      .catch((e) => {
+        setError(e)
+      })
+  }
+
+  const redirectToLogin = useCallback(() => {
+    void router.push('/signin')
+  }, [router])
+
+  useEffect(() => hanko?.onUserLoggedOut(() => {
+    redirectToLogin()
+  }), [hanko, redirectToLogin])
+
+  useEffect(() => hanko?.onSessionNotPresent(() => {
+    redirectToLogin()
+  }), [hanko, redirectToLogin])
+
+  if (isLoading) {
+    return <Loading />
+  }
+
+  if (!user && !isLoading) {
+    void router.push('/signin')
+  }
+
+  if (user && !user?.roles.includes('admin')) {
+    void router.push('/unauthorized')
+  }
 
 	const items = [
 		{
@@ -206,7 +244,7 @@ export default function Nav() {
 		{
 			label: 'Quit',
 			icon: 'pi pi-fw pi-power-off',
-			command: () => { void signOut(); },
+			command: () => {logout},
 		}
 	];
 
@@ -225,7 +263,7 @@ export default function Nav() {
 		<header>
 			<div className="card">
 				<NovuProvider
-					subscriberId={session?.data?.user.id}
+					subscriberId={user?.id}
 					applicationIdentifier={'Gvw8rwb0Q9vt'}
 					backendUrl={'http://joseantcordeiro.hopto.org:3003'}
 					socketUrl={'http://joseantcordeiro.hopto.org:3002'}

@@ -21,7 +21,7 @@ const ManageProduct = () => {
 	const { data, error, isLoading } = useQuery({
 		operationName: 'products/id',
 		input: {
-			id: parseInt(productId)
+			id: productId
 		},
 		enabled: true,
 	});

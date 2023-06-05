@@ -3,18 +3,20 @@ query ($id: String!) {
 		id
 		title
 		slug
-		image
+		feature_image
 		html
-		meta_title
-		meta_description
 		est_reading_time
 		author_id
 		published
 		published_at
 		created_at
-		og_image
-		og_title
-		og_description
+    post_meta {
+      meta_title
+		  meta_description
+      og_image
+		  og_title
+		  og_description
+    }
 		post_tags {
 			tag {
 				id

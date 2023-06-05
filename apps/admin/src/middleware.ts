@@ -7,9 +7,10 @@ export const config = {
 };
 
 export function middleware(request: NextRequest) {
-	const secureCookie = process.env.NEXTAUTH_URL?.startsWith("https://") ?? !!process.env.VERCEL;
-	const cookieName = secureCookie ? "__Secure-next-auth.session-token" : "next-auth.session-token";
-	const token = request.cookies.get(cookieName)?.value;
+	//const secureCookie = process.env.NEXTAUTH_URL?.startsWith("https://") ?? !!process.env.VERCEL;
+	//const cookieName = secureCookie ? "__Secure-next-auth.session-token" : "next-auth.session-token";
+	const cookieName = 'hanko';
+  const token = request.cookies.get(cookieName)?.value;
 
 	let pathname = request.nextUrl.pathname.replace('/api/wg', '');
 

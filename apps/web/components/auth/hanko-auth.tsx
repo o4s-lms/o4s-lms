@@ -8,16 +8,11 @@ interface Props {
   setError(error: Error): void;
 }
 
-const queryProps = {
-	operationName: 'users/me',
-	enabled: true,
-}
-
 function HankoAuth({ setError }: Props) {
   const hanko = useMemo(() => new Hanko(hankoApi), [])
 
   const redirectToProfile = useCallback(() => {
-    redirect("/profile")
+    redirect("/lms")
   }, [])
 
   useEffect(() => {

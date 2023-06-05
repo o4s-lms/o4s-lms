@@ -1,0 +1,21 @@
+query (
+  $id: String!,
+  ) {
+	product: site_findUniqueProduct(where: { id: $id }) {
+		id
+    thumbnail
+    price
+		price_id
+    currency
+		title
+		description
+    slug
+		include
+		html
+  	order
+		active
+    locale
+		created_at
+		updated_at
+	}
+}

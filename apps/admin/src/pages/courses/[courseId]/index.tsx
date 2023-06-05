@@ -22,7 +22,7 @@ const ManageCourse = () => {
 	const { data, error, isLoading } = useQuery({
 		operationName: 'courses/id',
 		input: {
-			id: parseInt(courseId)
+			id: courseId
 		},
 		enabled: true,
 	});

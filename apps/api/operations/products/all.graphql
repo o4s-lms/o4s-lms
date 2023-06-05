@@ -1,11 +1,15 @@
-query ($locale: String!) {
+query ($locale: String!, $active: Boolean = true) {
 	products: site_findManyProduct(
-		where: { locale: { equals: $locale } }
+		where: {
+      locale: { equals: $locale }
+      active: { equals: $active }
+    }
 		orderBy: { order: asc }
 	) {
 		id
 		thumbnail
 		price
+    currency
 		image
 		title
 		description
