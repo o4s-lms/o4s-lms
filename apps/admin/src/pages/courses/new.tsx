@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { useRef, useState } from "react";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
-import { api } from "~/utils/api";
+import useAddCourseMutation from "~/hooks/useAddCourseMutation";
+import slugify from "@sindresorhus/slugify";
 import { Toast } from "primereact/toast";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
@@ -12,6 +12,7 @@ import Nav from "~/components/ui/layout/Nav";
 import SectionWrapper from "~/components/SectionWrapper";
 import { type NotificationPayload, sendToNotificationWebhook } from "~/utils/novu";
 import { useFileUpload } from "~/utils/wundergraph";
+import { z } from "zod";
 
 const Upload = () => {
 
@@ -74,15 +75,37 @@ const Upload = () => {
 	);
 };
 
+const data = z.object({
+  name: z.string().nonempty(),
+	slug: z.string().nonempty(),
+  description: z.string().nonempty(),
+	image: z.string().nonempty(),
+});
+
 const CreateCourseForm: React.FC = () => {
-	const { data: session } = useSession();
+	const createCourse = useAddCourseMutation();
 	const router = useRouter();
 	const toast = useRef<Toast>(null);
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
 	const [image, setImage] = useState("");
 
-	const { mutate, error } = api.course.create.useMutation({
+	const addCourse = async () => {
+		const data = {
+			name: name,
+			slug: slugify(name),
+			description: description,
+			image: image,
+		};
+		const course = await createCourse.trigger(data, { throwOnError: false });
+		if (course) {
+			toast.current?.show({ severity: 'success', summary: 'Success', detail: `Course ${data.name} created successfully`, life: 3000 });
+		} else {
+			toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Something went wrong', life: 3000 });
+		}
+	}
+
+	/**const { mutate, error } = api.course.create.useMutation({
 		onSuccess(data) {
 			setName("");
 			setDescription("");
@@ -108,7 +131,7 @@ const CreateCourseForm: React.FC = () => {
 			console.error(error);
 			toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Something went wrong', life: 3000 });
 		},
-	});
+	});*/
 
 	return (
 		<><Toast ref={toast} />
@@ -119,43 +142,39 @@ const CreateCourseForm: React.FC = () => {
 						<label htmlFor="name">Course name</label>
 					</span>
 				</div>
-				{error?.data?.zodError?.fieldErrors.name && (
+				{/**{error?.data?.zodError?.fieldErrors.name && (
 					<span className="mb-2 text-red-500">
 						{error.data.zodError.fieldErrors.name}
 					</span>
-				)}
+				)}*/}
 				<div className="field card flex">
 					<span className="p-float-label">
 						<InputTextarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} rows={5} cols={30} />
 						<label htmlFor="description">Description</label>
 					</span>
 				</div>
-				{error?.data?.zodError?.fieldErrors.description && (
+				{/**{error?.data?.zodError?.fieldErrors.description && (
 					<span className="mb-2 text-red-500">
 						{error.data.zodError.fieldErrors.description}
 					</span>
-				)}
+				)}*/}
 				<div className="field card flex">
 					<span className="p-float-label">
 						<InputText id="image" value={image} onChange={(e) => setImage(e.target.value)} />
 						<label htmlFor="image">Image</label>
 					</span>
 				</div>
-				{error?.data?.zodError?.fieldErrors.image && (
+				{/**{error?.data?.zodError?.fieldErrors.image && (
 					<span className="mb-2 text-red-500">
 						{error.data.zodError.fieldErrors.image}
 					</span>
-				)}
+				)}*/}
 
 				<Upload />
 
 				<div className="field card flex">
 					<Button
-						onClick={() => mutate({
-							name,
-							description,
-							image,
-						})}
+						onClick={addCourse}
 						label="Add new course" raised />
 				</div>
 

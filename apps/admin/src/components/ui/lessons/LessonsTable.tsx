@@ -11,22 +11,26 @@ import { Dropdown, type DropdownChangeEvent } from 'primereact/dropdown';
 import { Toolbar } from 'primereact/toolbar';
 import { Tag } from 'primereact/tag';
 import { Toast } from "primereact/toast";
-import { api } from '~/utils/api';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
+import slugify from '@sindresorhus/slugify';
 import { type ModulesAllResponseData } from "@o4s/generated-wundergraph/models";
+import useCreateModuleMutation from '~/hooks/useCreateModuleMutation';
+import useCreateLessonMutation from '~/hooks/useCreateLessonMutation';
+import useDeleteModuleMutation from '~/hooks/useDeleteModuleMutation';
+import useDeleteLessonMutation from '~/hooks/useDeleteLessonMutation';
 
 type Module = ModulesAllResponseData["modules"][number];
 type Modules = ModulesAllResponseData["modules"];
 
 type ModuleDTO = {
-	courseId: number;
+	course_id: string;
 	name: string;
 };
 
 type LessonDTO = {
-	courseId: number;
-	moduleId: number;
+	course_id: string;
+	module_id: string;
 	name: string;
 };
 
@@ -38,30 +42,32 @@ const LessonsTable: React.FC<{
   modules: Modules;
 }> = ({ modules }) => {
 	let emptyModule: ModuleDTO = {
-		courseId: modules[0].courseId,
+		course_id: modules[0].course_id,
 		name: '',
 	};
 
 	let emptyLesson: LessonDTO = {
-		courseId: modules[0].courseId,
-		moduleId: 0,
+		course_id: modules[0].course_id,
+		module_id: '',
     name: '',
   };
 
 	const toast = useRef<Toast>(null);
+	const createModule = useCreateModuleMutation();
+	const createLesson = useCreateLessonMutation();
+	const deleteModule = useDeleteModuleMutation();
+	const deleteLesson = useDeleteLessonMutation();
   const [expandedRows, setExpandedRows] = useState<DataTableExpandedRows>(null);
 	const [deleteModuleDialog, setDeleteModuleDialog] = useState<boolean>(false);
 	const [module, setModule] = useState<ModuleDTO>(emptyModule);
-	const [moduleToDelete, setModuleToDelete] = useState<number>(0);
-	const [moduleToInsert, setModuleToInsert] = useState<number>(0);
+	const [moduleToDelete, setModuleToDelete] = useState<string>('');
+	const [moduleToInsert, setModuleToInsert] = useState<string>('');
 	const [moduleDialog, setModuleDialog] = useState<boolean>(false);
 	const [submittedModule, setModuleSubmitted] = useState<boolean>(false);
 	const [lesson, setLesson] = useState<LessonDTO>(emptyLesson);
 	const [lessonDialog, setLessonDialog] = useState<boolean>(false);
 	const [submittedLesson, setLessonSubmitted] = useState<boolean>(false);
   const [statuses] = useState<string[]>(['published', 'draft']);
-
-	const utils = api.useContext();
 
 	/** Add a module */
 
@@ -87,7 +93,7 @@ const LessonsTable: React.FC<{
 		)
 	};
 
-	const saveModule = () => {
+	const saveModule = async () => {
 		setModuleSubmitted(true);
 
 		if (module.name.trim()) {
@@ -95,10 +101,17 @@ const LessonsTable: React.FC<{
 
 				setModuleDialog(false);
 				setModule(emptyModule);
-				createModule.mutate({
-					courseId: _module.courseId,
+				const data = {
 					name: _module.name,
-				});
+					slug: slugify(_module.name),
+					course_id: _module.course_id
+				}
+				const moduleCreated = await createModule.trigger(data, { throwOnError: false });
+				if (moduleCreated) {
+					toast.current?.show({severity:'success', summary: 'Success', detail:'Module created successfully', life: 3000});
+				} else {
+					toast.current?.show({severity:'error', summary: 'Error', detail:'Something went wrong', life: 3000});
+				}
 
 		}
 	};
@@ -116,17 +129,6 @@ const LessonsTable: React.FC<{
 		setModuleDialog(true);
 	};
 
-	const createModule = api.module.create.useMutation({
-    async onSuccess() {
-			toast.current?.show({severity:'success', summary: 'Success', detail:'Module created successfully', life: 3000});
-      await utils.course.byId.invalidate();
-    },
-		onError(error) {
-			console.error(error);
-      toast.current?.show({severity:'error', summary: 'Error', detail:'Something went wrong', life: 3000});
-		},
-  });
-
 	const onModuleInputChange = (e: React.ChangeEvent<HTMLInputElement>, name: string) => {
 		const val = (e.target && e.target.value) || '';
 		let _module = { ...module };
@@ -140,7 +142,7 @@ const LessonsTable: React.FC<{
 
 	/** Delete a module */
 
-	const confirmDeleteModule = (id: number) => {
+	const confirmDeleteModule = (id: string) => {
 		setModuleToDelete(id);
 		setDeleteModuleDialog(true);
 	};
@@ -157,11 +159,16 @@ const LessonsTable: React.FC<{
 		setDeleteModuleDialog(false);
 	};
 
-	const confirmedDeleteModule = () => {
+	const confirmedDeleteModule = async () => {
 
 		setDeleteModuleDialog(false);
-		setModuleToDelete(0);
-		deleteModule.mutate(moduleToDelete);
+		setModuleToDelete('');
+		const moduleDeleted = await deleteModule.trigger({ id: moduleToDelete }, { throwOnError: false });
+		if (moduleDeleted) {
+			toast.current?.show({severity:'success', summary: 'Success', detail:'Module deleted successfully', life: 3000});
+		} else {
+			toast.current?.show({severity:'error', summary: 'Error', detail:'Something went wrong', life: 3000});
+		}
 	};
 
 	const deleteModuleDialogFooter = (
@@ -170,17 +177,6 @@ const LessonsTable: React.FC<{
 				<Button label="Yes" icon="pi pi-check" severity="danger" onClick={confirmedDeleteModule} />
 		</React.Fragment>
 	);
-
-	const deleteModule = api.module.delete.useMutation({
-    async onSuccess() {
-			toast.current?.show({severity:'success', summary: 'Success', detail:'Lesson deleted successfully', life: 3000});
-      await utils.course.byId.invalidate();
-    },
-		onError: (error) => {
-			console.error(error);
-			toast.current?.show({severity:'error', summary: 'Error', detail:`${error}`, life: 6000});
-		},
-  });
 
 	/** End delete a module */
 
@@ -192,14 +188,14 @@ const LessonsTable: React.FC<{
 
 	const addLessonBodyTemplate = (rowData) => {
 		return <Button
-							onClick={() => openNewLesson(rowData.moduleId)}
+							onClick={() => openNewLesson(rowData.module_id)}
 							icon="pi pi-plus" rounded text
 							severity="warning" 
 							className="hover:bg-gray-200" aria-label="Add" />;
 	};
 
-	const openNewLesson = (moduleId: number) => {
-		setModuleToInsert(moduleId);
+	const openNewLesson = (module_id: string) => {
+		setModuleToInsert(module_id);
 		setLesson(emptyLesson);
 		setLessonSubmitted(false);
 		setLessonDialog(true);
@@ -214,7 +210,7 @@ const LessonsTable: React.FC<{
 		setLesson(_lesson);
 	};
 
-	const saveLesson = () => {
+	const saveLesson = async () => {
 		setLessonSubmitted(true);
 
 		if (lesson.name.trim()) {
@@ -222,11 +218,18 @@ const LessonsTable: React.FC<{
 
 				setLessonDialog(false);
 				setLesson(emptyLesson);
-				createLesson.mutate({
-					courseId: _lesson.courseId,
-					moduleId: moduleToInsert,
+				const data = {
 					name: _lesson.name,
-				});
+					slug: slugify(_lesson.name),
+					course_id: _lesson.course_id,
+					module_id: moduleToInsert,
+				}
+				const lessonCreated = await createLesson.trigger(data, { throwOnError: false })
+				if (lessonCreated) {
+					toast.current?.show({severity:'success', summary: 'Success', detail:'Lesson created successfully', life: 3000});
+				} else {
+					toast.current?.show({severity:'error', summary: 'Error', detail:'Something went wrong', life: 3000});
+				}
 
 		}
 	};
@@ -237,17 +240,6 @@ const LessonsTable: React.FC<{
 				<Button label="Save" icon="pi pi-check" onClick={saveLesson} />
 		</React.Fragment>
 	);
-
-	const createLesson = api.lesson.create.useMutation({
-    async onSuccess() {
-			toast.current?.show({severity:'success', summary: 'Success', detail:'Lesson created successfully', life: 3000});
-      await utils.course.byId.invalidate();
-    },
-		onError(error) {
-			console.error(error);
-      toast.current?.show({severity:'error', summary: 'Error', detail:'Something went wrong', life: 3000});
-		},
-  });
 
 	/** End add lesson */
 
@@ -400,7 +392,7 @@ const LessonsTable: React.FC<{
 							tableStyle={{ minWidth: '50rem' }}
 						>
 						<Column rowReorder style={{ width: '3%', minWidth: '3rem' }} />
-						<Column field="id" header="#" style={{ width: '5%' }}></Column>
+						<Column field="id" header="_id" style={{ width: '5%' }}></Column>
 						<Column field="pos" header="Pos" sortable style={{ width: '5%' }}></Column>
 						<Column field="name" header="Lesson" editor={(options) => textEditor(options)} style={{ width: '45%' }}></Column>
 						<Column field="status" header="Status" body={statusBodyTemplate} editor={(options) => statusEditor(options)} style={{ width: '10%' }}></Column>
@@ -438,7 +430,7 @@ const LessonsTable: React.FC<{
                  	tableStyle={{ minWidth: '60rem' }}>
 				<Column rowReorder style={{ width: '3%', minWidth: '3rem' }} />
         <Column expander={allowExpansion} style={{ width: '5rem' }} />
-				<Column field="id" header="#" style={{ width: '10%' }} />
+				<Column field="id" header="_id" style={{ width: '10%' }} />
 				<Column field="pos" header="Pos" style={{ width: '10%' }} />
         <Column field="name" header="Module" editor={(options) => textEditor(options)} style={{ width: '65%' }} />
 				<Column rowEditor headerStyle={{ width: '9%', minWidth: '6rem' }} bodyStyle={{ textAlign: 'center' }}></Column>

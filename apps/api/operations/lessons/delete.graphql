@@ -1,0 +1,12 @@
+mutation ($id: String!, $deleted: Boolean = true)
+@rbac(requireMatchAll: [admin]) {
+	course: site_updateOneLesson(
+		where: { id: $id }
+		data: {
+      deleted: { set: $deleted }
+    }
+	) {
+		id
+		deleted
+	}
+}

@@ -7,7 +7,7 @@ import React from "react";
 import useDeleteCourseMutation from '~/hooks/useDeleteCourseMutation';
 
 type Props = {
-	id: number;
+	id: string;
 	name: string;
 	published: boolean;
 }
