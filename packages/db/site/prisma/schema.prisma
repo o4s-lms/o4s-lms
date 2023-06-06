@@ -78,6 +78,7 @@ model Module {
 	course_id      String		@db.ObjectId
 	created_by   	 String
 	created_at		 DateTime @default(now())
+	tmp					 	 String?
 	course         Course   @relation(fields: [course_id], references: [id])
 	lessons     	 Lesson[]
 
@@ -100,6 +101,7 @@ model Lesson {
 	created_at		 DateTime 						@default(now())
 	updated_at		 DateTime?						@updatedAt
 	deleted				 Boolean							@default(false)
+	tmp					 	 String?
 	course         Course               @relation(fields: [course_id], references: [id])
 	module				 Module								@relation(fields: [module_id], references: [id])
   completed 		 LessonProgress[]

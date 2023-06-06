@@ -19,6 +19,8 @@ import useCreateModuleMutation from '~/hooks/useCreateModuleMutation';
 import useCreateLessonMutation from '~/hooks/useCreateLessonMutation';
 import useDeleteModuleMutation from '~/hooks/useDeleteModuleMutation';
 import useDeleteLessonMutation from '~/hooks/useDeleteLessonMutation';
+import useUpdateModuleMutation from '~/hooks/useUpdateModuleMutation';
+import useUpdateLessonMutation from '~/hooks/useUpdateLessonMutation';
 
 type Module = ModulesAllResponseData["modules"][number];
 type Modules = ModulesAllResponseData["modules"];
@@ -33,6 +35,11 @@ type LessonDTO = {
 	module_id: string;
 	name: string;
 };
+
+type ToDTO = {
+	id: string;
+	course_id: string;
+}
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -57,14 +64,18 @@ const LessonsTable: React.FC<{
 	const createLesson = useCreateLessonMutation();
 	const deleteModule = useDeleteModuleMutation();
 	const deleteLesson = useDeleteLessonMutation();
-  const [expandedRows, setExpandedRows] = useState<DataTableExpandedRows>(null);
+	const updateModule = useUpdateModuleMutation();
+	const updateLesson = useUpdateLessonMutation();
+  const [expandedRows, setExpandedRows] = useState<DataTableExpandedRows | undefined>(undefined);
 	const [deleteModuleDialog, setDeleteModuleDialog] = useState<boolean>(false);
 	const [module, setModule] = useState<ModuleDTO>(emptyModule);
-	const [moduleToDelete, setModuleToDelete] = useState<string>('');
+	const [moduleToDelete, setModuleToDelete] = useState<ToDTO>({ id: '', course_id: '' });
 	const [moduleToInsert, setModuleToInsert] = useState<string>('');
 	const [moduleDialog, setModuleDialog] = useState<boolean>(false);
 	const [submittedModule, setModuleSubmitted] = useState<boolean>(false);
 	const [lesson, setLesson] = useState<LessonDTO>(emptyLesson);
+	const [lessonToDelete, setLessonToDelete] = useState<ToDTO>({ id: '', course_id: '' });
+	const [deleteLessonDialog, setDeleteLessonDialog] = useState<boolean>(false);
 	const [lessonDialog, setLessonDialog] = useState<boolean>(false);
 	const [submittedLesson, setLessonSubmitted] = useState<boolean>(false);
   const [statuses] = useState<string[]>(['published', 'draft']);
@@ -142,14 +153,14 @@ const LessonsTable: React.FC<{
 
 	/** Delete a module */
 
-	const confirmDeleteModule = (id: string) => {
-		setModuleToDelete(id);
+	const confirmDeleteModule = (rowData) => {
+		setModuleToDelete({ id: rowData.id, course_id: rowData.course_id });
 		setDeleteModuleDialog(true);
 	};
 
 	const deleteModuleBodyTemplate = (rowData) => {
 		return <Button
-							onClick={() => confirmDeleteModule(rowData.id)}
+							onClick={() => confirmDeleteModule(rowData)}
 							icon="pi pi-trash" rounded text
 							severity="danger" 
 							className="hover:bg-gray-200" aria-label="Delete" />;
@@ -162,13 +173,13 @@ const LessonsTable: React.FC<{
 	const confirmedDeleteModule = async () => {
 
 		setDeleteModuleDialog(false);
-		setModuleToDelete('');
-		const moduleDeleted = await deleteModule.trigger({ id: moduleToDelete }, { throwOnError: false });
+		const moduleDeleted = await deleteModule.trigger(moduleToDelete, { throwOnError: false });
 		if (moduleDeleted) {
 			toast.current?.show({severity:'success', summary: 'Success', detail:'Module deleted successfully', life: 3000});
 		} else {
 			toast.current?.show({severity:'error', summary: 'Error', detail:'Something went wrong', life: 3000});
-		}
+		};
+		setModuleToDelete({ id: '', course_id: '' });
 	};
 
 	const deleteModuleDialogFooter = (
@@ -243,31 +254,49 @@ const LessonsTable: React.FC<{
 
 	/** End add lesson */
 
+	/** Delete a lesson */
+
+	const confirmDeleteLesson = (rowData) => {
+		setLessonToDelete({ id: rowData.id, course_id: rowData.course_id });
+		setDeleteLessonDialog(true);
+	};
+
+	const deleteLessonBodyTemplate = (rowData) => {
+		return <Button
+							onClick={() => confirmDeleteLesson(rowData)}
+							icon="pi pi-trash" rounded text
+							severity="danger" 
+							className="hover:bg-gray-200" aria-label="Delete" />;
+	};
+
+	const hideDeleteLessonDialog = () => {
+		setDeleteLessonDialog(false);
+	};
+
+	const confirmedDeleteLesson = async () => {
+
+		setDeleteLessonDialog(false);
+		const lessonDeleted = await deleteLesson.trigger(lessonToDelete, { throwOnError: false });
+		if (lessonDeleted) {
+			toast.current?.show({severity:'success', summary: 'Success', detail:'Module deleted successfully', life: 3000});
+		} else {
+			toast.current?.show({severity:'error', summary: 'Error', detail:'Something went wrong', life: 3000});
+		};
+		setLessonToDelete({ id: '', course_id: '' });
+	};
+
+	const deleteLessonDialogFooter = (
+		<React.Fragment>
+				<Button label="No" icon="pi pi-times" outlined onClick={hideDeleteLessonDialog} />
+				<Button label="Yes" icon="pi pi-check" severity="danger" onClick={confirmedDeleteLesson} />
+		</React.Fragment>
+	);
+
+	/** End delete a lesson */
+
 	const exportCSV = () => {
 		dt.current.exportCSV();
 	};
-
-	const updateModule = api.module.update.useMutation({
-    async onSuccess() {
-			toast.current?.show({severity:'success', summary: 'Success', detail:'Module updated successfully', life: 3000});
-      await utils.course.byId.invalidate();
-    },
-		onError(error) {
-			console.error(error);
-      toast.current?.show({severity:'error', summary: 'Error', detail: 'Something went wrong', life: 6000});
-		},
-  });
-
-	const updateLesson = api.lesson.update.useMutation({
-    async onSuccess() {
-			toast.current?.show({severity:'success', summary: 'Success', detail:'Lesson updated successfully', life: 3000});
-      await utils.course.byId.invalidate();
-    },
-		onError(error) {
-			console.error(error);
-      toast.current?.show({severity:'error', summary: 'Error', detail: 'Something went wrong', life: 6000});
-		},
-  });
 
 	const openInNewTab = (url: string) => {
 		const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
@@ -287,23 +316,40 @@ const LessonsTable: React.FC<{
     }
   };
 
-  const onLessonRowEditComplete = (e: DataTableRowEditCompleteEvent) => {
+  const onLessonRowEditComplete = async (e: DataTableRowEditCompleteEvent) => {
     const { newData, index } = e;
 
-		updateLesson.mutate({
+		const data = {
 			id: newData.id,
 			name: newData.name,
+			slug: slugify(newData.name),
 			status: newData.status,
-		});
+			course_id: modules[0]?.course_id as string,
+		}
+		const lessonUpdated = await updateLesson.trigger(data, { throwOnError: false });
+		if (lessonUpdated) {
+			toast.current?.show({severity:'success', summary: 'Success', detail:'Lesson updated successfully', life: 3000});
+		} else {
+			toast.current?.show({severity:'error', summary: 'Error', detail: 'Something went wrong', life: 3000});
+		};
   };
 
-	const onModuleRowEditComplete = (e: DataTableRowEditCompleteEvent) => {
+	const onModuleRowEditComplete = async (e: DataTableRowEditCompleteEvent) => {
 		const { newData, index } = e;
 
-		updateModule.mutate({
+		const data = {
 			id: newData.id,
 			name: newData.name,
-		});
+			slug: slugify(newData.name),
+			course_id: modules[index]?.course_id
+		};
+		const moduleUpdated = await updateModule.trigger(data, { throwOnError: false });
+		if (moduleUpdated) {
+			toast.current?.show({severity:'success', summary: 'Success', detail:'Module updated successfully', life: 3000});
+		} else {
+			toast.current?.show({severity:'error', summary: 'Error', detail: 'Something went wrong', life: 3000});
+		};
+
 	};
 
   const textEditor = (options) => {
@@ -330,17 +376,9 @@ const LessonsTable: React.FC<{
 
 	const htmlBodyTemplate = (rowData) => {
 		return <Button
-							onClick={() => openInNewTab(`/courses/${rowData.courseId}/lessons/${rowData.id}`)}
+							onClick={() => openInNewTab(`/courses/${rowData.course_id}/lessons/${rowData.id}`)}
 							icon="pi pi-file-edit" rounded text
 							severity="success"
-							className="hover:bg-gray-200" aria-label="Delete" />;
-	};
-
-	const deleteBodyTemplate = (rowData) => {
-		return <Button
-							onClick={() => confirm(rowData.id)}
-							icon="pi pi-trash" rounded text
-							severity="danger" 
 							className="hover:bg-gray-200" aria-label="Delete" />;
 	};
 
@@ -353,7 +391,7 @@ const LessonsTable: React.FC<{
 	};
 
 	const collapseAll = () => {
-			setExpandedRows(null);
+			setExpandedRows(undefined);
 	};
 
 	const allowExpansion = (rowData: Module) => {
@@ -399,8 +437,18 @@ const LessonsTable: React.FC<{
 						<Column rowEditor headerStyle={{ width: '10%', minWidth: '6rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
 						<Column style={{ width: '3%', minWidth: '3rem' }} body={htmlBodyTemplate} bodyStyle={{ textAlign: 'center' }}/>
 						<Column style={{ width: '3%', minWidth: '3rem' }} body={addLessonBodyTemplate} bodyStyle={{ textAlign: 'center' }}/>
-						<Column style={{ width: '3%', minWidth: '3rem' }} body={deleteBodyTemplate} bodyStyle={{ textAlign: 'center' }}/>
+						<Column style={{ width: '3%', minWidth: '3rem' }} body={deleteLessonBodyTemplate} bodyStyle={{ textAlign: 'center' }}/>
 					</DataTable>
+					<Dialog visible={deleteLessonDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deleteLessonDialogFooter} onHide={hideDeleteLessonDialog}>
+						<div className="confirmation-content">
+							<i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
+								{lesson && (
+									<span>
+										<b>Are you sure you want to delete?</b>
+									</span>
+								)}
+						</div>
+					</Dialog>
 					<Dialog visible={lessonDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Create lesson" modal className="p-fluid" footer={lessonDialogFooter} onHide={hideLessonDialog}>
                 <div className="field">
                     <label htmlFor="name" className="font-bold">

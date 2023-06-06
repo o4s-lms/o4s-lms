@@ -1,13 +1,13 @@
-mutation ($id: String!, $deleted: Boolean = true, , $course_id: String!)
+mutation ($id: String!, $name: String!, $slug: String!, $course_id: String!)
 @rbac(requireMatchAny: [author, admin]) {
 	course: site_updateOneModule(
 		where: { id: $id }
 		data: {
-      deleted: { set: $deleted }
+      name: { set: $name }
+			slug: { set: $slug }
 			tmp: { set: $course_id }
     }
 	) {
 		id
-		deleted
 	}
 }

@@ -3,7 +3,8 @@ mutation (
 	$slug: String!,
 	$course_id: String!,
 	$user_id: String! @fromClaim(name: USERID)
-	) {
+	)
+@rbac(requireMatchAny: [author, admin]) {
 	module: site_createOneModule(
 		data: {
 			name: $name

@@ -1,0 +1,14 @@
+mutation ($id: String!, $name: String!, $slug: String!, $status: String!, $course_id: String!)
+@rbac(requireMatchAny: [author, admin]) {
+	lesson: site_updateOneLesson(
+		where: { id: $id }
+		data: {
+      name: { set: $name }
+			slug: { set: $slug }
+			status: { set: $status }
+			tmp: { set: $course_id }
+    }
+	) {
+		id
+	}
+}
