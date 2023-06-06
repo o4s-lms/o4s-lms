@@ -4,7 +4,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Menubar } from 'primereact/menubar';
-import { useUser } from "@o4s/generated-wundergraph/nextjs";
+import { useUser } from "~/utils/wundergraph";
 import {
   PopoverNotificationCenter,
   NotificationBell,
@@ -30,7 +30,7 @@ export default function Nav() {
     void import("@teamhanko/hanko-elements").then(({ Hanko }) => setHankoClient(new Hanko(hankoApi)));
   }, [])
 
-	const logout = () => {
+	function logout() {
     hanko?.user
       .logout()
       .catch((e) => {
@@ -39,7 +39,7 @@ export default function Nav() {
   }
 
   const redirectToLogin = useCallback(() => {
-    void router.push('/signin')
+    void router.push('/auth/signin')
   }, [router])
 
   useEffect(() => hanko?.onUserLoggedOut(() => {
@@ -55,7 +55,7 @@ export default function Nav() {
   }
 
   if (!user && !isLoading) {
-    void router.push('/signin')
+    void router.push('/auth/signin')
   }
 
   if (user && !user?.roles?.includes('admin')) {
@@ -247,7 +247,7 @@ export default function Nav() {
 		{
 			label: 'Quit',
 			icon: 'pi pi-fw pi-power-off',
-			command: () => {logout},
+			command: () => { void logout() },
 		}
 	];
 
@@ -266,7 +266,7 @@ export default function Nav() {
 		<header>
 			<div className="card">
 				<NovuProvider
-					subscriberId={user?.id}
+					subscriberId={user?.userId}
 					applicationIdentifier={'Gvw8rwb0Q9vt'}
 					backendUrl={'http://joseantcordeiro.hopto.org:3003'}
 					socketUrl={'http://joseantcordeiro.hopto.org:3002'}

@@ -3,6 +3,5 @@ packages:
   - apps/user-info
   - apps/admin
   - apps/web
-  - apps/site
   - packages/*
   - packages/config/*

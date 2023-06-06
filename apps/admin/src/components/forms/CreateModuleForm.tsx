@@ -5,7 +5,7 @@ import { Toast } from "primereact/toast";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 
-const CreateModuleForm: React.FC<{ courseId: number; }> = ({ courseId }) => {
+const CreateModuleForm: React.FC<{ courseId: string; }> = ({ courseId }) => {
 	const toast = useRef<Toast>(null);
 	const utils = api.useContext();
 

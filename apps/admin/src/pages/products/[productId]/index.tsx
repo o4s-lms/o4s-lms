@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { useRef } from "react";
 import { useRouter } from "next/router";
 
@@ -34,13 +31,13 @@ const ManageProduct = () => {
 	}
 
 	return (
-		<Toast ref={toast} />
+		<><Toast ref={toast} />
 			{!isLoading ? (
 				<><Header title={data?.product?.title} />
 					<Nav />
 					<ProductHeader
 						id={data?.product?.id}
-						name={data?.product?.title}
+						title={data?.product?.title}
 						image={data?.product?.thumbnail}
 						active={data?.product?.active}
 					/>
@@ -51,6 +48,7 @@ const ManageProduct = () => {
 			) : (
 				<Loading />
 			)}
+		</>
 	);
 
 };

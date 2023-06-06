@@ -21,14 +21,14 @@ type Courses = CoursesAuthorResponseData["courses"];
 type Course = CoursesAuthorResponseData["courses"][number];
 
 type Props = {
-	id: number | undefined;
-	name: string | undefined;
+	id: string | undefined;
+	title: string | undefined;
 	image: string | undefined;
 	active: boolean | undefined;
 	coursesToAdd?: Courses | undefined;
 }
 
-const ProductHeader: React.FC<Props> = ({ id, name, image, active, coursesToAdd }) => {
+const ProductHeader = ({ id, title, image, active, coursesToAdd }: Props) => {
 	const router = useRouter();
 	const toast = useRef<Toast>(null);
 	const [dialogVisible, setDialogVisible] = useState<boolean>(false);
@@ -111,7 +111,7 @@ const ProductHeader: React.FC<Props> = ({ id, name, image, active, coursesToAdd 
 			<Dialog header="Flex Scroll" visible={dialogVisible} style={{ width: '75vw' }} maximizable
               modal contentStyle={{ height: '300px' }} onHide={() => setDialogVisible(false)} footer={dialogFooterTemplate}>
         <DataTable value={coursesToAdd} header={outHeader} footer={outFooter} tableStyle={{ minWidth: '60rem' }}>
-					<Column field="name" header="Name"></Column>
+					<Column field="title" header="Title"></Column>
 					<Column header="Image" body={imageBodyTemplate}></Column>            
 					<Column header="Status" body={statusBodyTemplate}></Column>
 					<Column style={{ width: '3%', minWidth: '3rem' }} body={addBodyTemplate} bodyStyle={{ textAlign: 'center' }}/>
@@ -142,7 +142,7 @@ const ProductHeader: React.FC<Props> = ({ id, name, image, active, coursesToAdd 
 						<i className="pi pi-angle-right text-500 line-height-3"></i>
 					</li>
 					<li>
-						<span className="text-900 line-height-3">{name}</span>
+						<span className="text-900 line-height-3">{title}</span>
 					</li>
 				</ul>
 				<div className="flex align-items-start flex-column lg:justify-content-between lg:flex-row">
@@ -156,7 +156,7 @@ const ProductHeader: React.FC<Props> = ({ id, name, image, active, coursesToAdd 
 									image={image}
 									className="flex align-items-center justify-content-center mr-2" size="large" shape="circle"
 								/>
-								<span>{id} : {name}</span>
+								<span>{id} : {title}</span>
 								
 							</div>
 						</div>

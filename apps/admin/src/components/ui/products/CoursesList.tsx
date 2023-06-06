@@ -5,7 +5,7 @@ import { type CoursesAuthorResponseData } from "@o4s/generated-wundergraph/model
 type Courses = CoursesAuthorResponseData["courses"];
 
 const CoursesList: React.FC<{
-	productId: number | undefined;
+	productId: string | undefined;
 	courses: Courses | undefined;
 }> = ({ productId, courses }) => {
 

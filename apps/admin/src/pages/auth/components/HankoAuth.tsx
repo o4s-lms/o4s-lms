@@ -2,7 +2,7 @@ import { Hanko, register } from "@teamhanko/hanko-elements";
 import { useCallback, useEffect, useMemo } from "react";
 import { useRouter } from "next/router";
 
-const api = process.env.PUBLIC_HANKO_API!;
+const api = 'http://joseantcordeiro.hopto.org:8000';
 
 interface Props {
   setError(error: Error): void;
@@ -12,8 +12,8 @@ function HankoAuth({ setError }: Props) {
   const router = useRouter();
   const hankoClient = useMemo(() => new Hanko(api), []);
 
-  const redirectToIndex = useCallback(() => {
-    router.replace("/").catch(setError);
+  const redirectToProfile = useCallback(() => {
+    router.replace("/auth/profile").catch(setError);
   }, [router, setError]);
 
   useEffect(() => {
@@ -21,8 +21,8 @@ function HankoAuth({ setError }: Props) {
   }, [setError]);
 
   useEffect(() => hankoClient.onAuthFlowCompleted(() => {
-    redirectToIndex()
-  }), [hankoClient, redirectToIndex]);
+    redirectToProfile()
+  }), [hankoClient, redirectToProfile]);
 
   return <hanko-auth />;
 }
