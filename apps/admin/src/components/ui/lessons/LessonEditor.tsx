@@ -25,7 +25,7 @@ const LessonEditor: React.FC<{
 			const html = editorRef.current.getContent();
 			const updatedHtml = await updateHtml.trigger({
 				id: id,
-				html: html,
+				html: html as string,
 			}, { throwOnError: false });
 			if (updatedHtml) {
 				toast.current?.show({severity:'success', summary: 'Success', detail:'Lesson updated successfully', life: 3000});
