@@ -7,7 +7,7 @@
 		"scripts": {
 			"clean": "rm -rf .turbo node_modules",
 			"dev": "pnpm with-env ts-node src/server.ts",
-			"build": "tsc src/server.ts",
+			"build": "tsc",
 			"start": "node src/server.js",
 			"check": "tsc --noEmit",
 			"with-env": "dotenv -e ../../.env --"

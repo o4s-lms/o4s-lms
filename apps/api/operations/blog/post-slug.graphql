@@ -11,11 +11,12 @@ query ($slug: String!) {
 		published_at
 		created_at
     post_meta {
-      meta_title
-		  meta_description
-      og_image
-		  og_title
-		  og_description
+			twitter_image
+			twitter_title
+			twitter_description
+			email_subject
+			feature_image_alt
+			feature_image_caption
     }
 		post_tags {
 			tag {

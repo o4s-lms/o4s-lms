@@ -33,13 +33,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <html lang="en" suppressHydrationWarning>
         <head />
         <body className="bg-background min-h-screen">
-					{/**<AuthContext>*/}
-						<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-								{children}
-							<Toaster />
-							<TailwindIndicator />
-						</ThemeProvider>
-					{/**</AuthContext>*/}
+					<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+						{children}
+						<Toaster />
+						<TailwindIndicator />
+					</ThemeProvider>
         </body>
       </html>
     </>

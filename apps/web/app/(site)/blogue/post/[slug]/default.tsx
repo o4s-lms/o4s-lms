@@ -13,6 +13,12 @@ interface PostPageProps {
 	post: Post
 }
 
+interface MainImageProps {
+	image: string;
+	feature_image_alt: string;
+	feature_image_caption: string;
+}
+
 export default function PostPage({ post }: PostPageProps) {
 
   const slug = post?.slug;
@@ -29,7 +35,7 @@ export default function PostPage({ post }: PostPageProps) {
     ? urlForImage(post.author.image)
     : null;*/
 
-	const imageProps = 'http://joseantcordeiro.hopto.org:9000/web/blogue' + post?.image
+	const imageProps = 'http://joseantcordeiro.hopto.org:9000/web/blogue' + post?.feature_image
 	const AuthorimageProps = 'http://joseantcordeiro.hopto.org:9000/uploads/b6d3616df6285312.jpeg'
 
   return (
@@ -82,7 +88,7 @@ export default function PostPage({ post }: PostPageProps) {
         {imageProps && (
           <Image
             src={imageProps}
-            alt={post.title || "Thumbnail"}
+            alt={post.post_meta.feature_image_caption || "Thumbnail"}
             loading="eager"
             fill
             sizes="100vw"
@@ -110,17 +116,17 @@ export default function PostPage({ post }: PostPageProps) {
   )
 }
 
-const MainImage = ({ image }) => {
+const MainImage = ({ image, feature_image_alt, feature_image_caption }: MainImageProps) => {
   return (
     <div className="my-12">
-      <Image src={image} alt={image.title || "Thumbnail"} />
-      {/**<figcaption className="text-center ">
-        {image.caption && (
+      <Image src={image} alt={feature_image_alt || "Thumbnail"} />
+      <figcaption className="text-center ">
+        {feature_image_caption && (
           <span className="text-sm italic text-gray-600 dark:text-gray-400">
-            {image.caption}
+            {feature_image_caption}
           </span>
         )}
-				</figcaption>*/}
+				</figcaption>
     </div>
   )
 }

@@ -1,0 +1,11 @@
+query ($slug: String!) {
+	post: site_findUniquePost(where: { slug: $slug }) {
+    post_meta {
+      meta_title
+		  meta_description
+      og_image
+		  og_title
+		  og_description
+    }
+	}
+}

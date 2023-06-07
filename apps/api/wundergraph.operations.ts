@@ -70,7 +70,7 @@ export default configureWunderGraphOperations<OperationsConfiguration>({
 					required: false,
 				},
 			}),
-			BlogUpdate_html: (config) => ({
+			BlogMetadata: (config) => ({
 				...config,
 				authentication: {
 					required: false,
