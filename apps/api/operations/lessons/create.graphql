@@ -3,13 +3,13 @@ mutation (
 	$slug: String!,
 	$course_id: String!,
 	$module_id: String!,
-	$user_id: String! @fromClaim(name: USERID)
+	$user_uuid: String! @fromClaim(name: USERID)
 	) {
 	lesson: site_createOneLesson(
 		data: {
 			name: $name
 			slug: $slug
-			created_by: $user_id
+			created_by: $user_uuid
 			course: { connect: { id: $course_id } }
 			module: { connect: { id: $module_id } }
 		}

@@ -21,17 +21,18 @@ import useDeleteModuleMutation from '~/hooks/useDeleteModuleMutation';
 import useDeleteLessonMutation from '~/hooks/useDeleteLessonMutation';
 import useUpdateModuleMutation from '~/hooks/useUpdateModuleMutation';
 import useUpdateLessonMutation from '~/hooks/useUpdateLessonMutation';
+import CreateLessonForm from '~/components/forms/CreateLessonForm';
 
 type Module = ModulesAllResponseData["modules"][number];
 type Modules = ModulesAllResponseData["modules"];
 
 type ModuleDTO = {
-	course_id: string;
+	course_id: string | undefined;
 	name: string;
 };
 
 type LessonDTO = {
-	course_id: string;
+	course_id: string | undefined;
 	module_id: string;
 	name: string;
 };
@@ -49,12 +50,12 @@ const LessonsTable: React.FC<{
   modules: Modules;
 }> = ({ modules }) => {
 	let emptyModule: ModuleDTO = {
-		course_id: modules[0].course_id,
+		course_id: modules[0]?.course_id,
 		name: '',
 	};
 
 	let emptyLesson: LessonDTO = {
-		course_id: modules[0].course_id,
+		course_id: modules[0]?.course_id,
 		module_id: '',
     name: '',
   };
@@ -192,6 +193,15 @@ const LessonsTable: React.FC<{
 	/** End delete a module */
 
 	/** Add a lesson */
+
+	const leftLessonToolbarTemplate = () => {
+		return (
+				<div className="flex flex-wrap gap-2">
+						<Button label="Module" icon="pi pi-plus" severity="success" onClick={openNewLesson} />
+				</div>
+		);
+	};
+
 	const hideLessonDialog = () => {
 		setLessonSubmitted(false);
 		setLessonDialog(false);
@@ -421,6 +431,9 @@ const LessonsTable: React.FC<{
 		return (
 				<div className="p-1">
 					<h5>Lessons for {data.name}</h5>
+					{data.lessons?.length === 0 ? (
+						<CreateLessonForm courseId={data.course_id} moduleID={data.id} />
+					) : (
 					<DataTable
 							value={data.lessons}
 							editMode="row"
@@ -439,6 +452,7 @@ const LessonsTable: React.FC<{
 						<Column style={{ width: '3%', minWidth: '3rem' }} body={addLessonBodyTemplate} bodyStyle={{ textAlign: 'center' }}/>
 						<Column style={{ width: '3%', minWidth: '3rem' }} body={deleteLessonBodyTemplate} bodyStyle={{ textAlign: 'center' }}/>
 					</DataTable>
+					)}
 					<Dialog visible={deleteLessonDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deleteLessonDialogFooter} onHide={hideDeleteLessonDialog}>
 						<div className="confirmation-content">
 							<i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />

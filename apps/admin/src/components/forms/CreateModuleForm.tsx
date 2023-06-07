@@ -1,27 +1,32 @@
 import { useRef, useState } from "react";
-import { api } from "~/utils/api";
 
 import { Toast } from "primereact/toast";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
+import slugify from "@sindresorhus/slugify";
+import useCreateModuleMutation from "~/hooks/useCreateModuleMutation";
 
 const CreateModuleForm: React.FC<{ courseId: string; }> = ({ courseId }) => {
 	const toast = useRef<Toast>(null);
-	const utils = api.useContext();
+	const createModule = useCreateModuleMutation();
 
 	const [name, setName] = useState("");
 
-	const { mutate, error } = api.module.create.useMutation({
-		async onSuccess() {
-			setName("");
-			toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Module created successfully', life: 3000 });
-			await utils.course.byId.invalidate();
-		},
-		onError(error) {
-			console.error(error);
-			toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Something went wrong', life: 3000 });
-		},
-	});
+	const saveModule = async () => {
+
+		const data = {
+			name: name,
+			slug: slugify(name),
+			course_id: courseId
+		}
+		const moduleCreated = await createModule.trigger(data, { throwOnError: false });
+		if (moduleCreated) {
+			toast.current?.show({severity:'success', summary: 'Success', detail:'Module created successfully', life: 3000});
+		} else {
+			toast.current?.show({severity:'error', summary: 'Error', detail:'Something went wrong', life: 3000});
+		};
+		setName("");
+	};
 
 	return (
 		<><Toast ref={toast} />
@@ -32,18 +37,13 @@ const CreateModuleForm: React.FC<{ courseId: string; }> = ({ courseId }) => {
 					value={name}
 					onChange={(e) => setName(e.target.value)}
 					className="w-full px-2" />
-				{error?.data?.zodError?.fieldErrors.name && (
+				 {/**{error?.data?.zodError?.fieldErrors.name && (
 					<span className="mb-2 text-red-500">
 						{error.data.zodError.fieldErrors.name}
-					</span>
-				)}
+				 </span>
+				)}*/}
 				<Button
-					onClick={() => {
-						mutate({
-							courseId,
-							name,
-						});
-					}}
+					onClick={saveModule}
 					label="Module"
 					icon="pi pi-plus"
 					className="p-button-success px-2"
