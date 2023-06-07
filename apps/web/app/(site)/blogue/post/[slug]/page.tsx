@@ -4,6 +4,7 @@ import { createClient } from "@o4s/generated-wundergraph/client"
 
 import { Loading } from "@/components/loading";
 import { BlogMetadataResponseData } from "@o4s/generated-wundergraph/models";
+import { useEffectOnce } from "usehooks-ts";
 type Post = BlogMetadataResponseData["post"]
 
 const client = createClient()
@@ -64,6 +65,15 @@ export default async function PostDefault({ params }: { params: { slug: string }
 	})
 
   const post = data?.post
+
+	useEffectOnce(() => {
+		const _res = client.mutate({
+			operationName: 'blog/views',
+			input: {
+				id: post?.id as string,
+			},
+		})
+  })
 
   return (
 		<>

@@ -86,14 +86,10 @@ export default function PostPage({ post }: PostPageProps) {
 
       <div className="relative z-0 mx-auto aspect-video max-w-screen-lg overflow-hidden lg:rounded-lg">
         {imageProps && (
-          <Image
-            src={imageProps}
-            alt={post.post_meta.feature_image_caption || "Thumbnail"}
-            loading="eager"
-            fill
-            sizes="100vw"
-            className="object-cover"
-          />
+					<MainImage
+					 image={imageProps}
+					 feature_image_alt={post?.post_meta?.feature_image_caption as string}
+					 feature_image_caption={post?.post_meta?.feature_image_caption as string} />
         )}
       </div>
 
@@ -118,15 +114,20 @@ export default function PostPage({ post }: PostPageProps) {
 
 const MainImage = ({ image, feature_image_alt, feature_image_caption }: MainImageProps) => {
   return (
-    <div className="my-12">
-      <Image src={image} alt={feature_image_alt || "Thumbnail"} />
-      <figcaption className="text-center ">
-        {feature_image_caption && (
-          <span className="text-sm italic text-gray-600 dark:text-gray-400">
-            {feature_image_caption}
-          </span>
-        )}
-				</figcaption>
-    </div>
+    <>
+			<Image
+				src={image} alt={feature_image_alt || "Thumbnail" }
+				loading="eager"
+				fill
+        sizes="100vw"
+        className="object-cover" />
+			<figcaption className="text-center ">
+				{feature_image_caption && (
+					<span className="text-sm italic text-gray-600 dark:text-gray-400">
+						{feature_image_caption}
+					</span>
+				)}
+			</figcaption>
+		</>
   )
 }

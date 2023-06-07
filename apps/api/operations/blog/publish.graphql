@@ -1,0 +1,17 @@
+mutation(
+	$id: String!,
+	$published: Boolean!,
+	$published_at: DateTime! @injectCurrentDateTime,
+	$user_uuid: String @fromClaim(name: USERID)
+) @rbac(requireMatchAny: [editor, admin]) {
+	post: site_updateOnePost(
+		where: { id: $id }
+		data: {
+			published: { set: $published }
+			published_at: { set: $published_at }
+			published_by: { set: $user_uuid }
+		}
+	) {
+		id
+	}
+}

@@ -1,0 +1,8 @@
+mutation($id: String!) {
+	post: site_updateOnePost(
+		where: { id: $id }
+		data: { views: { increment: 1 } }
+	) {
+		id
+	}
+}

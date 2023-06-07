@@ -76,6 +76,12 @@ export default configureWunderGraphOperations<OperationsConfiguration>({
 					required: false,
 				},
 			}),
+			BlogViews: (config) => ({
+				...config,
+				authentication: {
+					required: false,
+				},
+			}),
 			UsersCreate: (config) => ({
 				...config,
 				authentication: {
