@@ -12,6 +12,7 @@ import { Calendar } from "primereact/calendar";
 import { Toast } from "primereact/toast";
 import { useRef, useState } from "react";
 import { type UsersAllResponseData } from "@o4s/generated-wundergraph/models";
+import { minioImage } from '~/utils/image';
 
 type Users = UsersAllResponseData["users"];
 
@@ -70,7 +71,7 @@ const UsersTable: React.FC<{
 	};
 
 	const dateBodyTemplate = (rowData) => {
-		return formatDate(rowData.emailVerified);
+		return formatDate(rowData.created_at);
 	};
 
 	const dateFilterTemplate = (options) => {
@@ -91,7 +92,7 @@ const UsersTable: React.FC<{
 
 	const allowExpansion = (rowData) => {
 		// return true;
-		return rowData.courses.length > 0;
+		return rowData.member_of.length > 0;
 	};
 
 	const renderHeader = () => {
@@ -111,10 +112,10 @@ const UsersTable: React.FC<{
 	};
 
 	const imageBodyTemplate = (rowData) => {
-
+		const image = minioImage(rowData.picture);
 		return (
 			<div className="flex align-items-center gap-2">
-				<img alt={rowData.name} src={rowData.image} width="32" />
+				<img alt={rowData.name} src={image} width="32" />
 			</div>
 		);
 	};
@@ -138,11 +139,11 @@ const UsersTable: React.FC<{
 			<div className="px-5">
 				<h5>User Roles</h5>
 				<DataTable
-					value={data.courses}
+					value={data.member_of}
 					dataKey="id"
 					tableStyle={{ minWidth: '50rem' }}
 				>
-					<Column field="courseId" header="#" style={{ width: '5%' }}></Column>
+					<Column field="course_id" header="#" style={{ width: '5%' }}></Column>
 					<Column field="course.name" header="Course" style={{ width: '50%' }}></Column>
 					<Column field="role" header="Role" style={{ minWidth: '12rem' }} body={roleBodyTemplate} />
 				</DataTable>
@@ -161,10 +162,10 @@ const UsersTable: React.FC<{
 					emptyMessage="No users found." currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
 					<Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
 					<Column expander={allowExpansion} style={{ width: '3rem' }} />
-					<Column field="image" style={{ minWidth: '3rem' }} body={imageBodyTemplate} />
+					<Column field="picture" style={{ minWidth: '3rem' }} body={imageBodyTemplate} />
 					<Column field="name" header="Name" sortable filter filterPlaceholder="Search by name" style={{ minWidth: '14rem' }} />
 					<Column field="email" header="Email" sortable filter filterPlaceholder="Search by email" style={{ minWidth: '14rem' }} />
-					<Column field="emailVerified" header="Date" sortable filterField="date" dataType="date" style={{ minWidth: '12rem' }} body={dateBodyTemplate} filter filterElement={dateFilterTemplate} />
+					<Column field="created_at" header="Date" sortable filterField="date" dataType="date" style={{ minWidth: '12rem' }} body={dateBodyTemplate} filter filterElement={dateFilterTemplate} />
 					<Column headerStyle={{ width: '5rem', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible' }} body={actionBodyTemplate} />
 				</DataTable>
 			</div>

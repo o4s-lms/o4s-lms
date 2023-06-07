@@ -13,23 +13,24 @@ const CreateLessonForm: React.FC<{
 }> = ({ courseId, moduleId }) => {
 	const toast = useRef<Toast>(null);
 	const createLesson = useCreateLessonMutation();
-
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
 
 	const saveLesson = async () => {
-		const data = {
-			name: name,
-			slug: slugify(name),
-			course_id: courseId,
-			module_id: moduleId,
-		}
-		const lessonCreated = await createLesson.trigger(data, { throwOnError: false })
-		if (lessonCreated) {
-			toast.current?.show({severity:'success', summary: 'Success', detail:'Lesson created successfully', life: 3000});
-		} else {
-			toast.current?.show({severity:'error', summary: 'Error', detail:'Something went wrong', life: 3000});
+		if (name.trim()) {
+			const data = {
+				name: name,
+				slug: slugify(name),
+				course_id: courseId,
+				module_id: moduleId,
+			}
+			const lessonCreated = await createLesson.trigger(data, { throwOnError: false });
+			if (lessonCreated) {
+				toast.current?.show({severity:'success', summary: 'Success', detail:'Lesson created successfully', life: 3000});
+			} else {
+				toast.current?.show({severity:'error', summary: 'Error', detail:'Something went wrong', life: 3000});
+			};
+			setName('');
 		};
-		setName("");
 	};
 
   return (

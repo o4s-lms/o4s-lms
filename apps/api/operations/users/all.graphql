@@ -15,6 +15,7 @@ query ()
 		email_verified
 		picture
 		roles
+		created_at
 		member_of {
 			course_id
 			role

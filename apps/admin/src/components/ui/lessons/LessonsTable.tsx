@@ -192,7 +192,7 @@ const LessonsTable: React.FC<{
 
 	/** End delete a module */
 
-	/** Add a lesson */
+	/** Add a lesson 
 
 	const leftLessonToolbarTemplate = () => {
 		return (
@@ -200,7 +200,7 @@ const LessonsTable: React.FC<{
 						<Button label="Module" icon="pi pi-plus" severity="success" onClick={openNewLesson} />
 				</div>
 		);
-	};
+	};*/
 
 	const hideLessonDialog = () => {
 		setLessonSubmitted(false);
@@ -432,7 +432,7 @@ const LessonsTable: React.FC<{
 				<div className="p-1">
 					<h5>Lessons for {data.name}</h5>
 					{data.lessons?.length === 0 ? (
-						<CreateLessonForm courseId={data.course_id} moduleID={data.id} />
+						<CreateLessonForm courseId={data.course_id} moduleId={data.id} />
 					) : (
 					<DataTable
 							value={data.lessons}

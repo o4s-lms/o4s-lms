@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "@o4s/generated-wundergraph/nextjs";
+import { useQuery } from "~/utils/wundergraph";
 
 import Header from "~/components/ui/layout/Header";
 import Nav from "~/components/ui/layout/Nav";

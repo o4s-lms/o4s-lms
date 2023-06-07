@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import React, { useRef } from 'react';
+/* eslint-disable @typescript-eslint/no-misused-promises */
+import React, { useRef, useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { Toast } from 'primereact/toast';
 
@@ -18,17 +18,17 @@ const LessonEditor: React.FC<{
 	const toast = useRef<Toast>(null);
 	const updateHtml = useUpdateHtmlMutation();
 	const id = lesson?.id as string;
-	const initialHTML = lesson?.html;
+	const initialHtml = lesson?.html as string;
 
-  async function save() {
+  const save = async () => {
     if (editorRef.current) {
-			const html = editorRef.current.getContent();
+			const html = await editorRef.current.getContent() as string;
 			const updatedHtml = await updateHtml.trigger({
 				id: id,
-				html: html as string,
+				html: html,
 			}, { throwOnError: false });
 			if (updatedHtml) {
-				toast.current?.show({severity:'success', summary: 'Success', detail:'Lesson updated successfully', life: 3000});
+				toast.current?.show({severity:'success', summary: 'Success', detail:`Lesson updated successfully ${html}`, life: 3000});
 			} else {
 				toast.current?.show({severity:'error', summary: 'Error', detail:'Something went wrong', life: 3000});
 			};
@@ -37,12 +37,12 @@ const LessonEditor: React.FC<{
 
   return (
     <><Toast ref={toast} />
-		<LessonHeader lesson={lesson} saveLessonHTML={() => void save()} />
+		<LessonHeader lesson={lesson} saveLessonHTML={save} />
 		<SectionWrapper className="mt-0">
       <Editor
         tinymceScriptSrc='/tinymce/tinymce.min.js'
         onInit={(evt, editor) => editorRef.current = editor}
-        initialValue={initialHTML}
+        initialValue={initialHtml}
         init={{
           height: 500,
           menubar: true,
