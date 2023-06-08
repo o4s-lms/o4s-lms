@@ -1,6 +1,6 @@
 mutation ($id: String!, $html: String!)
 @rbac(requireMatchAny: [author, admin]) {
-	lesson: site_updateOneLesson(
+	lesson: lms_updateOneLesson(
 		where: { id: $id }
 		data: {
       html: { set: $html }

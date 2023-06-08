@@ -33,7 +33,7 @@ export default function PostList({
   /**const AuthorimageProps = post?.author?.image
     ? urlForImage(post.author.image)
     : null;*/
-	const imageProps = 'http://joseantcordeiro.hopto.org:9000/web/blogue' + post?.image
+	const imageProps = 'http://joseantcordeiro.hopto.org:9000/web/blogue' + post?.feature_image
 	const AuthorimageProps = 'http://joseantcordeiro.hopto.org:9000/uploads/b6d3616df6285312.jpeg'
   return (
     <>
@@ -61,9 +61,9 @@ export default function PostList({
             {imageProps ? (
               <Image
                 src={imageProps}
-                {...(post.image && {
+                {...(post.feature_image && {
                   placeholder: "blur",
-                  blurDataURL: post.image
+                  blurDataURL: imageProps
                 })}
                 alt={post.title || "Thumbnail"}
                 priority={preloadImage ? true : false}

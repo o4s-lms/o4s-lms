@@ -1,5 +1,5 @@
-query ($role: site_CourseRole!) {
-	users: site_findManyCourseMember(
+query ($role: lms_CourseRole!) {
+	users: lms_findManyCourseMember(
 		where: { role: { equals: $role } }
 	) {
 		role

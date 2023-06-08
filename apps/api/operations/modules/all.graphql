@@ -1,5 +1,5 @@
 query ($deleted: Boolean = false) {
-	modules: site_findManyModule(
+	modules: lms_findManyModule(
 		where: { deleted: { equals: $deleted } }
 		orderBy: { pos: asc }
 	) {

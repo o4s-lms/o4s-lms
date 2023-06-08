@@ -1,5 +1,5 @@
 query ($deleted: Boolean = false) {
-	courses: site_findManyCourse(where: { deleted: { equals: $deleted } } ) {
+	courses: lms_findManyCourse(where: { deleted: { equals: $deleted } } ) {
 		id
 		name
 		description

@@ -1,5 +1,5 @@
 mutation ($id: String!, $published: Boolean!) {
-	course: site_updateOneCourse(
+	course: lms_updateOneCourse(
 		where: { id: $id }
 		data: { published: { set: $published } }
 	) {

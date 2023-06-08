@@ -8,7 +8,7 @@ import { type GetVerificationKey, expressjwt as jwt, type Request as JWTRequest 
 import jwksRsa from "jwks-rsa";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { site } from "@o4s/db";
+import { lms } from "@o4s/db";
 
 const app = express();
 const jwksHost = process.env.PUBLIC_HANKO_API;
@@ -77,7 +77,7 @@ app.get("/userInfo", async (req: JWTRequest, res: express.Response) => {
   const userUUID = req.auth?.sub;
 	if (userUUID) {
 		logger.info(`${userUUID}`);
-		const user = await site.user.findUnique({
+		const user = await lms.user.findUnique({
 			where: { uuid: userUUID },
 			select: {
 				name: true,

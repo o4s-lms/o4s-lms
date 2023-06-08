@@ -1,5 +1,5 @@
 query ($id: String!, $deleted: Boolean = false) {
-	course: site_findUniqueCourse(where: { id: $id }) {
+	course: lms_findUniqueCourse(where: { id: $id }) {
 		id
 		name
 		description

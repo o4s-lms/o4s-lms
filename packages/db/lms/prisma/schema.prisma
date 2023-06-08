@@ -5,243 +5,207 @@ generator client {
 }
 
 datasource db {
-  provider     			= "postgresql"
-  url          			= env("DATABASE_URL")
+  provider     			= "mongodb"
+  url          			= env("DATABASE_LMS_DEV")
 	// shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
   // directUrl    = env("DATABASE_DIRECT_URL")
   // relationMode = "prisma"
 }
 
-model Account {
-  id                String  @id @default(cuid()) @db.VarChar(50)
-  userId            String  @db.VarChar(50)
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-  @@index([userId])
-}
-
-model Session {
-  id           String   @id @default(cuid()) @db.VarChar(50)
-  sessionToken String   @unique
-  userId       String		@db.VarChar(50)
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-}
-
 model User {
-  id               String               @id @default(cuid()) @db.VarChar(50)
-	customerId			 String?              @unique @db.VarChar(50)
-  name             String?							@db.VarChar(100)
-	firstName				 String?							@db.VarChar(50)
-	lastName				 String?							@db.VarChar(50)
-  email            String?              @unique @db.VarChar(100)
-	phone						 String?							@db.VarChar(50)
-	locale					 String?							@db.VarChar(5)
-  emailVerified    DateTime?
-  image            String?							@db.VarChar(50)
-  roles            String[]             @default(["user"])
-  accounts         Account[]
-  sessions         Session[]
-	payments         Payment[]
-  courses          MemberInCourse[]
-  completedLessons UserLessonProgress[]
-	assignments      StudentAssignment[]
+	id          			String    				@id @default(auto()) @map("_id") @db.ObjectId
+	uuid							String 						@unique
+	name							String?
+	given_name				String?
+	family_name			 	String?
+	middle_name			 	String?
+	nickname					String?
+	bio								String?
+  email            	String						@unique
+	email_verified		Boolean?
+	gender						String?
+	locale					 	String?
+  picture          	String?
+	roles							String[]
+	created_at				DateTime 					@default(now())
+	updated_at				DateTime 					@updatedAt
+	member_of         CourseMember[]
+	progress					LessonProgress[]
+	assignments				StudentAssignment[]
+
+	@@map("users")
 }
 
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
+model CourseMember {
+	id					 	String				@id @default(auto()) @map("_id") @db.ObjectId
+  created_at   	DateTime      @default(now())
+	last_activity DateTime?
+  user_uuid     String
+  course_id     String				@db.ObjectId
+	certification	Boolean				@default(false)
+	facilitation	Boolean				@default(false)
+  role         	CourseRole
+  user         	User          @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+  course       	Course        @relation(fields: [course_id], references: [id], onDelete: Cascade)
 
-  @@unique([identifier, token])
-}
+  @@unique([user_uuid, course_id])
+	@@index([user_uuid])
+  @@index([course_id])
 
-model MemberInCourse {
-  createdAt    DateTime      @default(now())
-	lastActivity DateTime?
-  userId       String				 @db.VarChar(50)
-  courseId     Int
-  role         CourseRole
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course       Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, courseId])
-	@@index([userId])
-  @@index([courseId])
+	@@map("course_members")
 }
 
 model Course {
-  id          Int      				@id @default(autoincrement())
-  name        String					@db.VarChar(100)
-  description String					@db.VarChar(500)
-  slug        String					@db.VarChar(150)
-	image				String?					@db.VarChar(50)
-	published   Boolean  				@default(false)
-	createdBy   String					@db.VarChar(50)
-	createdAt		DateTime 				@default(now())
+  id					String					@id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  slug        String
+	image				String?
+	published   Boolean					@default(false)
 	deleted			Boolean					@default(false)
+	created_by  String
+	created_at	DateTime 				@default(now())
 	modules			Module[]
   lessons     Lesson[]
-	members     MemberInCourse[]
-  products    Product[]
+	members     CourseMember[]
+
+	@@map("courses")
 }
 
 model Module {
-	id             Int      @id @default(autoincrement())
-  name           String		@db.VarChar(100)
-	slug           String		@db.VarChar(150)
+	id					 	 String		@id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+	slug           String
 	pos						 Int			@default(0)
 	deleted				 Boolean	@default(false)
-	createdBy   	 String		@db.VarChar(50)
-	createdAt			 DateTime @default(now())
-	course         Course   @relation(fields: [courseId], references: [id])
-  courseId       Int
+	course_id      String		@db.ObjectId
+	created_by   	 String
+	created_at		 DateTime @default(now())
+	tmp					 	 String?
+	course         Course   @relation(fields: [course_id], references: [id])
 	lessons     	 Lesson[]
 
-  @@index([courseId])
+  @@index([course_id])
+
+	@@map("modules")
 }
 
 model Lesson {
-  id             Int                  @id @default(autoincrement())
+  id					 	 String								@id @default(auto()) @map("_id") @db.ObjectId
   name           String
   slug           String
 	pos						 Int									@default(0)
-  course         Course               @relation(fields: [courseId], references: [id])
-  courseId       Int
-	module				 Module								@relation(fields: [moduleId], references: [id])
-	moduleId			 Int
-  html       		 String?  						@db.Text
-  image 				 String?  						@db.VarChar(50)
-  status     		 String   						@default("draft") @db.VarChar(20)
-	createdBy   	 String								@db.VarChar(50)
-	createdAt			 DateTime 						@default(now())
-	updatedAt			 DateTime?						@updatedAt
+  course_id      String								@db.ObjectId
+	module_id      String								@db.ObjectId
+	mobiledoc			 String?
+  html       		 String?
+  status     		 String   						@default("draft")
+	created_by   	 String
+	created_at		 DateTime 						@default(now())
+	updated_at		 DateTime?						@updatedAt
 	deleted				 Boolean							@default(false)
-  usersCompleted UserLessonProgress[]
+	tmp					 	 String?
+	course         Course               @relation(fields: [course_id], references: [id])
+	module				 Module								@relation(fields: [module_id], references: [id])
+  completed 		 LessonProgress[]
 	assignments    Assignment[]
 	links          Link[]
 	files          File[]
 
-  @@index([courseId])
-	@@index([moduleId])
+  @@index([course_id])
+	@@index([module_id])
+
+	@@map("lessons")
 }
 
-model UserLessonProgress {
-  user        User     @relation(fields: [userId], references: [id])
-  userId      String	 @db.VarChar(50)
-  lesson      Lesson   @relation(fields: [lessonId], references: [id])
-  lessonId    Int
-  completedAt DateTime @default(now())
+model LessonProgress {
+	id						String	 @id @default(auto()) @map("_id") @db.ObjectId
+	user_uuid     String
+	lesson_id   	String	 @db.ObjectId
+	completed_at 	DateTime @default(now())
+  user        	User     @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+  lesson      	Lesson   @relation(fields: [lesson_id], references: [id], onDelete: Cascade)
 
-  @@id([userId, lessonId])
-  @@index([userId])
-  @@index([lessonId])
+  @@unique([user_uuid, lesson_id])
+  @@index([user_uuid])
+  @@index([lesson_id])
+
+	@@map("lesson_progress")
 }
 
 model Assignment {
-	id                 Int               @id @default(autoincrement())
-	title              String						 @db.VarChar(100)
-	type               String						 @db.VarChar(50)
-	dueDate            DateTime?
-	priority           Int
-	lessonId           Int
-	lesson             Lesson            @relation(fields: [lessonId], references: [id])
+	id								 String	 					 @id @default(auto()) @map("_id") @db.ObjectId
+	title              String
+	type               String
+	due								 Int							 @default(0)
+	priority           Int							 @default(0)
+	weight						 Int							 @default(0)
+	lesson_id          String						 @db.ObjectId
+	lesson             Lesson            @relation(fields: [lesson_id], references: [id])
 	files              File[]
 	links              Link[]
-	studentAssignments StudentAssignment[]
+	students 					 StudentAssignment[]
   
-  @@index([lessonId])
+  @@index([lesson_id])
+
+	@@map("assignments")
 }
 
 model StudentAssignment {
-  user         User             @relation(fields: [userId], references: [id])
-  userId       String						@db.VarChar(50)
-	assignmentId Int
-  asignment    Assignment       @relation(fields: [assignmentId], references: [id])
-	status       AssignmentStatus @default(INPROGRESS)
-	startedAt    DateTime         @default(now())
-  completedAt  DateTime?
+  id						String	 					@id @default(auto()) @map("_id") @db.ObjectId
+  user_uuid     String
+	assignment_id String						@db.ObjectId
+	started_at   	DateTime         	@default(now())
+	due_date      DateTime?
+  completed_at 	DateTime?
+	status       	AssignmentStatus 	@default(INPROGRESS)
+	user         	User             	@relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+  asignment    	Assignment       	@relation(fields: [assignment_id], references: [id], onDelete: Cascade)
 
-  @@id([userId, assignmentId])
-  @@index([userId])
-  @@index([assignmentId])
+  @@unique([user_uuid, assignment_id])
+  @@index([user_uuid])
+  @@index([assignment_id])
+
+	@@map("student_assignments")
 }
 
 model File {
-	id           Int         @id @default(autoincrement())
-	name         String			 @db.VarChar(50)
-  url          String      @db.VarChar(1000)
-	downloads    Int         @default(0)
-	lessonId     Int?
-	lesson       Lesson?     @relation(fields: [lessonId], references: [id])
-	assignmentId Int?
-	assignment   Assignment? @relation(fields: [assignmentId], references: [id])
+	id						String	 		@id @default(auto()) @map("_id") @db.ObjectId
+	name         	String
+  key          	String
+	downloads    	Int         @default(0)
+	lesson_id     String?			@db.ObjectId
+	assignment_id	String?			@db.ObjectId
+	created_by   	String
+	created_at		DateTime 		@default(now())
+	updated_at		DateTime?		@updatedAt
+	lesson       	Lesson?     @relation(fields: [lesson_id], references: [id])
+	assignment   	Assignment? @relation(fields: [assignment_id], references: [id])
 
-	@@index([lessonId])
-	@@index([assignmentId])
+	@@index([lesson_id])
+	@@index([assignment_id])
+
+	@@map("files")
 }
 
 model Link {
-	id           Int        @id @default(autoincrement())
-	name         String			@db.VarChar(50)
-	ref          String     @db.VarChar(50)
-	isExternal   Boolean    @default(true)
-	clicks       Int        @default(0)
-	lessonId     Int?
-	lesson       Lesson?     @relation(fields: [lessonId], references: [id])
-	assignmentId Int?
-	assignment   Assignment? @relation(fields: [assignmentId], references: [id])
+	id						String	 		@id @default(auto()) @map("_id") @db.ObjectId
+	name         	String
+	ref          	String
+	is_external  	Boolean    	@default(true)
+	clicks       	Int        	@default(0)
+	lesson_id     String?			@db.ObjectId
+	assignment_id	String?			@db.ObjectId
+	created_by   	String
+	created_at		DateTime 		@default(now())
+	updated_at		DateTime?		@updatedAt
+	lesson       	Lesson?     @relation(fields: [lesson_id], references: [id])
+	assignment   	Assignment? @relation(fields: [assignment_id], references: [id])
 
-	@@index([lessonId])
-	@@index([assignmentId])
-}
+	@@index([lesson_id])
+	@@index([assignment_id])
 
-model Product {
-  id          Int       @id @default(autoincrement())
-  name        String		@db.VarChar(100)
-  description String		@db.VarChar(500)
-	image 			String?   @db.VarChar(50)
-  price       Int?
-	priceId			String?		@db.VarChar(50)
-  currency    String    @default("eur")
-	active			Boolean		@default(false)
-	createdBy   String		@db.VarChar(50)
-	createdAt		DateTime 	@default(now())
-	updatedAt		DateTime?	@updatedAt
-	deleted			Boolean		@default(false)
-  courses     Course[]
-	payments    Payment[]
-}
-
-model Payment {
-	id          String  	    @id @default(cuid())
-	createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @default(now()) @updatedAt
-	status      PaymentStatus
-	value       Int
-	type				PaymentType
-	gateway			String				@db.VarChar(20)
-	customerId  String				@db.VarChar(50)
-	paymentId   String				@db.VarChar(50)
-	userId      String				@db.VarChar(50)
-	payedBy     User          @relation(fields: [userId], references: [id])
-	products    Product[]
-
-	@@index([userId])
+	@@map("links")
 }
 
 enum CourseRole {

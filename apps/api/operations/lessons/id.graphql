@@ -1,5 +1,5 @@
 query ($id: String!) {
-	lesson: site_findUniqueLesson(
+	lesson: lms_findUniqueLesson(
 		where: { id: $id }
 	) {
 		id

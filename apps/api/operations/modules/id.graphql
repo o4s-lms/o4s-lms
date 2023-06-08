@@ -1,5 +1,5 @@
 query ($id: String!, $deleted: Boolean = false) {
-	module: site_findUniqueModule(
+	module: lms_findUniqueModule(
 		where: { id: $id }
 	) {
 		id

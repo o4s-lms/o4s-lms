@@ -1,6 +1,6 @@
 query ()
 @rbac(requireMatchAll: [admin]) {
-	users: site_findManyUser() {
+	users: lms_findManyUser() {
 		id
 		uuid
 		name

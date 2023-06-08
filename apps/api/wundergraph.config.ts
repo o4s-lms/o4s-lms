@@ -36,7 +36,7 @@ const aws = {
 
 const lms = introspect.prisma({
   apiNamespace: 'lms',
-  prismaFilePath: './prisma/schema.prisma',
+  prismaFilePath: '../../packages/db/lms/prisma/schema.prisma',
 });
 
 const site = introspect.prisma({

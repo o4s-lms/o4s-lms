@@ -1,6 +1,6 @@
 mutation ($id: String!, $deleted: Boolean = true, $course_id: String!)
 @rbac(requireMatchAll: [admin]) {
-	course: site_updateOneLesson(
+	course: lms_updateOneLesson(
 		where: { id: $id }
 		data: {
       deleted: { set: $deleted }

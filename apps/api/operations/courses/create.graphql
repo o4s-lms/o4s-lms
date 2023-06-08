@@ -3,10 +3,10 @@ mutation (
 	$description: String!,
 	$slug: String!,
 	$image: String!,
-	$role: site_CourseRole! = AUTHOR,
+	$role: lms_CourseRole! = AUTHOR,
 	$user_uuid: String! @fromClaim(name: USERID)
 ) {
-	course: site_createOneCourse(
+	course: lms_createOneCourse(
 		data: {
 			name: $name
 			description: $description

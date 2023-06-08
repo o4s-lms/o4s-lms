@@ -1,6 +1,6 @@
 mutation ($uuid: String!, $name: String!, $locale: String!)
 @rbac(requireMatchAny: [user, admin]) {
-	user: site_updateOneUser(
+	user: lms_updateOneUser(
 		where: {
 			uuid: $uuid
 			}

@@ -1,6 +1,6 @@
 mutation ($id: String!, $name: String!, $slug: String!, $course_id: String!)
 @rbac(requireMatchAny: [author, admin]) {
-	course: site_updateOneModule(
+	course: lms_updateOneModule(
 		where: { id: $id }
 		data: {
       name: { set: $name }

@@ -1,5 +1,5 @@
 query ($deleted: Boolean = false) {
-	lessons: site_findManyLesson(
+	lessons: lms_findManyLesson(
 		where: { deleted: { equals: $deleted } }
 		orderBy: { pos: asc }
 	) {

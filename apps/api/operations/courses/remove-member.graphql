@@ -2,7 +2,7 @@ mutation (
 	$course_id: String!,
 	$user_uuid: String!,
 	) {
-	member: site_deleteOneCourseMember(
+	member: lms_deleteOneCourseMember(
 		where: {
 			user_uuid_course_id: {
 				user_uuid: $user_uuid

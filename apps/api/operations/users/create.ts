@@ -11,7 +11,7 @@ export default createOperation.mutation({
 		input.email_verified = true
 		input.roles = ['user']
 		const user = await graph
-			.from('site')
+			.from('lms')
 			.mutate('createOneUser')
 			.where({ data: {
 				uuid: input.uuid,

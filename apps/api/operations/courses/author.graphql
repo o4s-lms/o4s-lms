@@ -1,5 +1,5 @@
 query ($deleted: Boolean = false, $user_uuid: String! @fromClaim(name: USERID)) {
-	courses: site_findManyCourse(
+	courses: lms_findManyCourse(
 		where: {
 			created_by: { equals: $user_uuid }
 			deleted: { equals: $deleted }

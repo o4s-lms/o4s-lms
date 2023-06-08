@@ -1,5 +1,5 @@
 mutation ($id: String!, $deleted: Boolean = true) {
-	course: site_updateOneCourse(
+	course: lms_updateOneCourse(
 		where: { id: $id }
 		data: {
       deleted: { set: $deleted }

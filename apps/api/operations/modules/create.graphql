@@ -5,7 +5,7 @@ mutation (
 	$user_id: String! @fromClaim(name: USERID)
 	)
 @rbac(requireMatchAny: [author, admin]) {
-	module: site_createOneModule(
+	module: lms_createOneModule(
 		data: {
 			name: $name
 			slug: $slug

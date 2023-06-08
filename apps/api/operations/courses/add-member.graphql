@@ -1,9 +1,9 @@
 mutation (
 	$course_id: String!,
 	$user_uuid: String!,
-	$role: site_CourseRole!
+	$role: lms_CourseRole!
 	) {
-	member: site_createOneCourseMember(
+	member: lms_createOneCourseMember(
 		data: {
 			course: { connect: { id: $course_id } }
 			user: { connect: { uuid: $user_uuid } }

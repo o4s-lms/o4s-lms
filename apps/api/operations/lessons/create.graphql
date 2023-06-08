@@ -5,7 +5,7 @@ mutation (
 	$module_id: String!,
 	$user_uuid: String! @fromClaim(name: USERID)
 	) {
-	lesson: site_createOneLesson(
+	lesson: lms_createOneLesson(
 		data: {
 			name: $name
 			slug: $slug
