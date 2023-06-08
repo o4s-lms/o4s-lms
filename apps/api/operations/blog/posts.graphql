@@ -1,9 +1,16 @@
-query ($language: String!, $published: Boolean = true) {
+query (
+	$language: String!,
+	$published: Boolean = true,
+	$skip: Int = 0,
+	$take: Int = 8
+) {
 	posts: site_findManyPost(
 		where: {
 			language: { equals: $language }
 			published: { equals: $published }
 			}
+		skip: $skip,
+  	take: $take,
 		orderBy: { published_at: asc }
 	) {
 		id

@@ -1,15 +1,11 @@
 generator client {
   provider        = "prisma-client-js"
-	//output   				= "../../generated/lms"
 	output  				= "../../../../node_modules/@prisma/client/lms"
 }
 
 datasource db {
   provider     			= "mongodb"
   url          			= env("DATABASE_LMS_DEV")
-	// shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
-  // directUrl    = env("DATABASE_DIRECT_URL")
-  // relationMode = "prisma"
 }
 
 model User {

@@ -32,7 +32,7 @@ export const site =
 				: ["error"],
 		datasources: {
 			db: {
-				url: process.env.DATABASE_MONGODB_URL,
+				url: process.env.DATABASE_SITE_PROD,
 			},
 		},
   });
@@ -46,7 +46,7 @@ export const lms =
 				: ["error"],
 		datasources: {
 			db: {
-				url: process.env.DATABASE_URL,
+				url: process.env.DATABASE_LMS_DEV,
 			},
 		},
   });
