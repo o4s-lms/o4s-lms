@@ -6,6 +6,8 @@ query ($uuid: String! @fromClaim(name: USERID))
 		name
 		given_name
 		family_name
+		nickname
+		bio
 		gender
 		email
 		email_verified

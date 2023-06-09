@@ -1,16 +1,31 @@
-mutation ($uuid: String!, $name: String!, $locale: String!)
-@rbac(requireMatchAny: [user, admin]) {
+mutation (
+	$name: String!,
+	$given_name: String!,
+	$family_name: String!,
+	$nickname: String!,
+	$bio: String!,
+	$locale: String!,
+	$uuid: String! @fromClaim(name: USERID)
+) @rbac(requireMatchAny: [user, admin]) {
 	user: lms_updateOneUser(
 		where: {
 			uuid: $uuid
 			}
 			data: {
 				name: { set: $name }
+				given_name: { set: $given_name }
+				family_name: { set: $family_name }
+				nickname: { set: $nickname }
+				bio: { set: $bio }
 				locale: { set: $locale }
 				}
 	) {
 		id
 		name
+		given_name
+		family_name
+		nickname
+		bio
 		locale
 	}
 }

@@ -1,27 +1,18 @@
 "use client"
 
 import { Separator } from "@/components/ui/separator"
-import { ProfileForm } from "@/app/profile/components/profile-form"
+import { ProfileForm } from "./components/profile-form"
 import { useToast } from "@/hooks/use-toast"
-import { useQuery } from "@/lib/wundergraph";
-import { Loading } from "@/components/loading";
-import { useHanko } from "@/hooks/use-hanko";
-import { redirect } from "next/navigation";
+import { useQuery } from "@/lib/wundergraph"
+import { Loading } from "@/components/loading"
 
 export default function Profile() {
 	const { toast } = useToast()
-	const hanko = useHanko()
-
-	const currentUser = hanko?.user.getCurrent()
-
-	if (!currentUser) {
-		redirect("/signin")
-	}
 
 	const { data, error, isLoading } = useQuery({
 		operationName: 'users/me',
 		enabled: true,
-	});
+	})
 
 	if (error) {
 		toast({
@@ -34,7 +25,7 @@ export default function Profile() {
 			),
 		})
 	}
-	
+
   return (
 		<>
     <div className="space-y-6">
@@ -46,7 +37,11 @@ export default function Profile() {
       </div>
       <Separator />
 			{!isLoading ? (
-      	<ProfileForm userId={data?.me?.id} name={data?.me?.name} phone={data?.me?.phone} locale={data?.me?.locale} />
+				<>
+				{data?.me && (
+      		<ProfileForm profile={data?.me} />
+				)}
+				</>
 			) : (
 				<Loading />
 			)}
