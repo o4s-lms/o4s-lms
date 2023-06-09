@@ -1,0 +1,25 @@
+mutation (
+	$name: String!,
+	$description: String!,
+	$slug: String!,
+	$sender_name: String!,
+	$sender_email: String!,
+	$sender_reply_to: String!,
+	$locale: String,
+	$user_uuid: String! @fromClaim(name: USERID)
+) @rbac(requireMatchAll: [admin]) {
+	newsletter: lms_createOneNewsletter(
+		data: {
+			name: $name
+			description: $description
+			slug: $slug
+			sender_name: $sender_name
+			sender_email: $sender_email
+			sender_reply_to: $sender_reply_to
+			locale: $locale
+			created_by: $user_uuid
+		}
+	) {
+		id
+	}
+}

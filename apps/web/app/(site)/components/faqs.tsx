@@ -88,7 +88,7 @@ const FAQS = async () => {
 	})
   
   return (
-    <SectionWrapper id="faqs">
+    <SectionWrapper>
       <div className="custom-screen">
 				{data?.faqs ? (
 					<div className="mx-auto mt-14 max-w-2xl">

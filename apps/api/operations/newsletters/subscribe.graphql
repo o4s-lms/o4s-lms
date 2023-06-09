@@ -1,0 +1,13 @@
+mutation (
+	$member_id: String!,
+	$newsletter_id: String!
+	) {
+	subscribe: lms_createOneNewsletterMembers(
+		data: {
+			member: { connect: { id: $member_id } }
+			newsletter: { connect: { id: $newsletter_id } }
+		}
+	) {
+		id
+	}
+}

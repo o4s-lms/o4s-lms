@@ -1,0 +1,16 @@
+mutation (
+	$member_id: String!,
+	$newsletter_id: String!
+	) {
+	member: lms_deleteOneNewsletterMembers(
+		where: {
+			member_id_newsletter_id: {
+				member_id: $member_id
+				newsletter_id: $newsletter_id
+			}
+		}
+	) {
+		member_id
+		newsletter_id
+	}
+}
