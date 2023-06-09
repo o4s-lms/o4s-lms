@@ -1,13 +1,15 @@
 import Link from "next/link"
 
 import SectionWrapper from "@/components/section-wrapper"
-import { useQuery, withWunderGraph } from "@/lib/wundergraph"
 import { ProductCardGrid } from "./product-card-grid"
 import { Loading } from "@/components/loading"
+import { createClient } from "@o4s/generated-wundergraph/client"
 
-const Products = () => {
-	const { data, error, isLoading } = useQuery({
-		operationName: 'site/get-products',
+const client = createClient()
+
+const Products = async () => {
+	const { data, error } = await client.query({
+		operationName: 'products/all',
 		input: {
 			locale: 'pt'
 		}
@@ -30,7 +32,7 @@ const Products = () => {
                         </Link>
                     </p>
                 </div>
-								{!isLoading ? (
+								{data?.products ? (
                 <div className="mt-12">
 									{data?.products ? (
                     <ul className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
@@ -54,4 +56,4 @@ const Products = () => {
     )
 }
 
-export default withWunderGraph(Products)
+export default Products

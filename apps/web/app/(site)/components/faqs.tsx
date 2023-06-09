@@ -1,10 +1,12 @@
 "use client"
 
 import { useRef, useState } from "react"
-import { useQuery, withWunderGraph } from "@/lib/wundergraph"
+import { createClient } from "@o4s/generated-wundergraph/client"
 
 import SectionWrapper from "@/components/section-wrapper";
 import { SiteGet_faqsResponseData } from "@o4s/generated-wundergraph/models";
+
+const client = createClient()
 
 type Faq = SiteGet_faqsResponseData["faqs"][number]
 interface FaqCard {
@@ -77,8 +79,8 @@ const FaqsCard: React.FC<FaqCard> = ({ idx, item }) => {
   );
 };
 
-const FAQS = () => {
-	const { data } = useQuery({
+const FAQS = async () => {
+	const { data, error } = await client.query({
 		operationName: 'site/get-faqs',
 		input: {
 			locale: 'pt'
@@ -102,4 +104,4 @@ const FAQS = () => {
   )
 }
 
-export default withWunderGraph(FAQS)
+export default FAQS

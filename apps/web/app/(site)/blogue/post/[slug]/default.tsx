@@ -6,6 +6,7 @@ import { parseISO, format } from "date-fns"
 
 import TagLabel from "../../components/tag"
 import { BlogPost_slugResponseData } from "@o4s/generated-wundergraph/models"
+import readingTime from "reading-time"
 
 type Post = BlogPost_slugResponseData["post"]
 
@@ -37,6 +38,7 @@ export default function PostPage({ post }: PostPageProps) {
 
 	const imageProps = 'http://joseantcordeiro.hopto.org:9000/web/blogue' + post?.feature_image
 	const AuthorimageProps = 'http://joseantcordeiro.hopto.org:9000/uploads/b6d3616df6285312.jpeg'
+	const { minutes } = readingTime(post.html as string)
 
   return (
     <>
@@ -76,7 +78,7 @@ export default function PostPage({ post }: PostPageProps) {
                       "MMMM dd, yyyy"
                     )}
                   </time>
-                  <span>· {post.est_reading_time || "5"} min read</span>
+                  <span>· {Math.ceil(minutes) || "5"} min read</span>
                 </div>
               </div>
             </div>
@@ -100,7 +102,7 @@ export default function PostPage({ post }: PostPageProps) {
 					/>}
           <div className="my-7 flex justify-center">
             <Link
-              href="/"
+              href="/blogue/archive"
               className="bg-brand-secondary/20 rounded-full px-5 py-2 text-sm text-blue-600 dark:text-blue-500 ">
               ← View all posts
             </Link>

@@ -1,13 +1,16 @@
 import SectionWrapper from "@/components/section-wrapper"
-import { useQuery } from "@/lib/wundergraph"
+import { createClient } from "@o4s/generated-wundergraph/client"
 
-const Testimonials = () => {
-	const { data } = useQuery({
+const client = createClient()
+
+const Testimonials = async () => {
+	const { data, error } = await client.query({
 		operationName: 'site/get-testimonials',
 		input: {
 			locale: 'pt'
 		}
 	})
+	
 	const testimonials = data?.testimonials
 
   return (
