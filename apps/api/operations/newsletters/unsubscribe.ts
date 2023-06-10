@@ -10,6 +10,12 @@ const config = {
 }
 const novu = new Novu(process.env.NOVU_API_KEY as string, config)
 
+export class MemberNotFoundError extends OperationError {
+  statusCode = 400;
+  code = 'MemberNotFoundError' as const;
+  message = 'Member not found error';
+}
+
 export class NewsletterSubscritionError extends OperationError {
   statusCode = 400;
   code = 'NewsletterSubscritionError' as const;
@@ -24,32 +30,36 @@ export class TopicSubscritionError extends OperationError {
 
 export default createOperation.mutation({
   input: z.object({
-		member_id: z.string(),
+		email: z.string().email(),
+		//member_id: z.string(),
 		newsletter_id: z.string(),
   }),
   handler: async ({ input, graph }) => {
+		const member = await graph
+			.from('lms')
+			.query('findUniqueMember')
+			.where({ where: { email: input.email } })
+			.exec()
+		if (!member) {
+			throw new MemberNotFoundError()
+		}
 		const newsletter = await graph
 			.from('lms')
-			.mutate('upsertOneNewsletterMembers')
+			.mutate('deleteOneNewsletterMembers')
 			.where({
 				where: {
 					member_id_newsletter_id: {
-						member_id: input.member_id,
+						member_id: member.id,
 						newsletter_id: input.newsletter_id,
 					}
-				},
-				update: {},
-				create: {
-					member: { connect: { id: input.member_id } },
-					newsletter: { connect: { id: input.newsletter_id } },
 				},
 			})
 			.exec()
 		if (!newsletter) {
 			throw new NewsletterSubscritionError()
 		}
-		const response = await novu.topics.addSubscribers(input.newsletter_id, {
-			subscribers: [input.member_id],
+		const response = await novu.topics.removeSubscribers(input.newsletter_id, {
+			subscribers: [member.id],
 		})
 		//if (response.statusText === 'OK') {
 			return {

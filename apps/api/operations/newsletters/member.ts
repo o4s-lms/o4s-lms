@@ -27,13 +27,14 @@ export default createOperation.mutation({
 		email: z.string().email(),
   }),
   handler: async ({ input, graph }) => {
-		await graph.from('lms').query('findUniqueMember').where({ email: input.email }).exec()
 		const member = await graph
 			.from('lms')
-			.mutate('createOneMember')
-			.where({ data: {
-				email: input.email,
-			}})
+			.mutate('upsertOneMember')
+			.where({
+				where: { email: input.email },
+				update: {},
+				create: {	email: input.email },
+			})
 			.exec()
 		if (!member) {
 			throw new MemberCreationError()
