@@ -1,6 +1,6 @@
 import { Hanko, register } from "@teamhanko/hanko-elements"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { createClient } from "@o4s/generated-wundergraph/client"
 
 const client = createClient()
@@ -12,15 +12,16 @@ interface Props {
 }
 
 function HankoAuth({ setError }: Props) {
+	const router = useRouter()
   const hanko = useMemo(() => new Hanko(hankoApi), [])
 
   const redirectToProfile = useCallback(() => {
-    redirect("/profile")
-  }, [])
+		router.replace("/profile")
+  }, [router])
 
 	const redirectToLms = useCallback(() => {
-    redirect("/lms")
-  }, [])
+		router.replace("/app")
+  }, [router])
 
   useEffect(() => {
     register(hankoApi).catch(setError)
