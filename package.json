@@ -19,13 +19,13 @@
   },
 	"dependencies": {
 		"@o4s/eslint-config": "^0.1.0",
-    "@ianvs/prettier-plugin-sort-imports": "^3.7.2",
-    "@manypkg/cli": "^0.20.0",
-    "@types/prettier": "^2.7.2",
-    "eslint": "^8.38.0",
+    "@ianvs/prettier-plugin-sort-imports": "^4.0.2",
+    "@manypkg/cli": "^0.21.0",
+    "@types/prettier": "^2.7.3",
+    "eslint": "^8.42.0",
     "prettier": "^2.8.8",
-    "turbo": "^1.9.3",
-    "typescript": "^5.0.4"
+    "turbo": "^1.10.3",
+    "typescript": "^5.1.3"
   },
   "engines": {
     "node": ">=18.0.0"
