@@ -209,7 +209,6 @@ model Newsletter {
 	name								String
 	description					String
 	feedback_enabled		Boolean 	@default(false)
-	slug								String
 	sender_name					String
 	sender_email				String
 	sender_reply_to			String
@@ -227,7 +226,7 @@ model Newsletter {
 
 model Member {
 	id									String		@id @default(auto()) @map("_id") @db.ObjectId
-	email								String
+	email								String		@unique
 	name								String?
 	email_count					Int				@default(0)
 	email_opened_count	Int				@default(0)

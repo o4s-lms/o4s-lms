@@ -82,6 +82,18 @@ export default configureWunderGraphOperations<OperationsConfiguration>({
 					required: false,
 				},
 			}),
+			NewslettersMember: (config) => ({
+				...config,
+				authentication: {
+					required: false,
+				},
+			}),
+			NewslettersSubscribe: (config) => ({
+				...config,
+				authentication: {
+					required: false,
+				},
+			}),
 			UsersCreate: (config) => ({
 				...config,
 				authentication: {
