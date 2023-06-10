@@ -7,18 +7,15 @@ import { useRouter } from "next/router";
 import Brand from "./brand";
 import NavLink from "@/components/nav-link";
 import DarkModeHandler from "./dark-mode-handler";
-import { useQuery } from "@/lib/wundergraph";
+import { Icons } from "@/components/icons";
+import { useUser, withWunderGraph } from "@/lib/wundergraph";
 
 const Navbar = () => {
   const menuBtnEl = useRef();
   const [state, setState] = useState(false);
 
-  const { data, error, isLoading } = useQuery({
-		operationName: 'users/me',
-		enabled: true,
-	})
+  const { data: user, error, isLoading } = useUser();
 
-  const me = data?.me
   // const { pathname } = useRouter();
 
   // array of all the paths that doesn't need dark navbar
@@ -44,10 +41,8 @@ const Navbar = () => {
   );
 
   const navigation = [
-    { name: "MOOC O4S", href: "/#features" },
-    { name: "Cursos", href: "/cursos/sustentabilidade" },
+    { name: "Cursos", href: "/cursos" },
     { name: "Ajuda", href: "/ajuda" },
-    { name: "Preço", href: "/#pricing" },
     { name: "Blogue", href: "/blogue" },
   ]
 
@@ -82,7 +77,7 @@ const Navbar = () => {
             <Link href="/" aria-label="Logo">
               <Brand className={`dark:text-white ${brandColor}`} />
             </Link>
-						<span className="light:text-white">Projeto Ser Sustentável</span>
+						<span className="dark:text-white">Projeto Ser Sustentável</span>
             <div className="flex items-center gap-x-3 md:hidden">
               <DarkModeBtn />
               <button
@@ -154,12 +149,16 @@ const Navbar = () => {
                 <DarkModeBtn />
               </li>
               <li>
+								{isLoading ? (
+									<Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+								) : (
+								<>
                 <NavLink
-                  href={me ? "/admin" : "/signin"}
+                  href={user ? "/admin" : "/signin"}
                   className="flex items-center justify-center gap-x-1 rounded-full bg-gray-800 text-sm font-medium text-white hover:bg-gray-700 active:bg-gray-900"
 									scroll={false}
                 >
-                  {me ? 'Dashboard' : 'Sign in'}
+                  {user ? 'Dashboard' : 'Sign in'}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
@@ -173,6 +172,8 @@ const Navbar = () => {
                     />
                   </svg>
                 </NavLink>
+								</>
+								)}
               </li>
             </ul>
           </div>
@@ -182,4 +183,4 @@ const Navbar = () => {
   )
 }
 
-export default Navbar
+export default withWunderGraph(Navbar)

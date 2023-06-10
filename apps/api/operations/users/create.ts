@@ -1,15 +1,14 @@
+import { UserCreaterolesInput } from '../../generated/orm/schemas/lms'
 import { createOperation, z } from '../../generated/wundergraph.factory'
 
 export default createOperation.mutation({
   input: z.object({
 		uuid: z.string().uuid().length(36),
 		email: z.string().email(),
-		email_verified: z.boolean().default(true),
-		roles: z.string().array().default(['user']),
+		email_verified: z.boolean(),
+		roles: z.string().array(),
   }),
   handler: async ({ input, graph }) => {
-		input.email_verified = true
-		input.roles = ['user']
 		const user = await graph
 			.from('lms')
 			.mutate('createOneUser')
@@ -17,7 +16,7 @@ export default createOperation.mutation({
 				uuid: input.uuid,
 				email: input.email,
 				email_verified: input.email_verified,
-				roles: input.roles,
+				roles: input.roles as unknown as UserCreaterolesInput,
 			}})
 			.exec()
 		return user

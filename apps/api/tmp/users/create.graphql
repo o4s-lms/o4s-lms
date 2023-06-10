@@ -1,0 +1,17 @@
+mutation (
+	$uuid: String!,
+	$email: String!,
+	$email_verified: Boolean!,
+	$roles: lms_UserCreaterolesInput
+	) {
+	user: lms_createOneUser(
+		data: {
+			uuid: $uuid
+			email: $email
+			email_verified: $email_verified
+			roles: $roles
+		}
+	) {
+		id
+	}
+}

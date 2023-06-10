@@ -1,19 +1,6 @@
-query ($uuid: String!)
-@rbac(requireMatchAny: [user, admin]) {
+query ($uuid: String!) {
 	user: lms_findUniqueUser(where: { uuid: $uuid }) {
 		id
 		uuid
-		name
-		given_name
-		family_name
-		middle_name
-		nickname
-		bio
-		email
-		gender
-		locale
-		email_verified
-		picture
-		roles
 	}
 }

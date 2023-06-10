@@ -94,6 +94,12 @@ export default configureWunderGraphOperations<OperationsConfiguration>({
 					required: false,
 				},
 			}),
+			UsersUuid: (config) => ({
+				...config,
+				authentication: {
+					required: false,
+				},
+			}),
 			UsersCreate: (config) => ({
 				...config,
 				authentication: {

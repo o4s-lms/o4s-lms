@@ -113,5 +113,5 @@ app.use(errorHandler);
 
 const server = app.listen(8002, () =>
   console.log(`
-🚀 Server ready at: http://localhost:8002`),
+🚀 Server ready at: http://0.0.0.0:8002`),
 );
