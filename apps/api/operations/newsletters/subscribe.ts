@@ -10,6 +10,12 @@ const config = {
 }
 const novu = new Novu(process.env.NOVU_API_KEY as string, config)
 
+export class MemberCreationError extends OperationError {
+  statusCode = 400;
+  code = 'MemberCreationError' as const;
+  message = 'Member creation error';
+}
+
 export class NewsletterSubscritionError extends OperationError {
   statusCode = 400;
   code = 'NewsletterSubscritionError' as const;
@@ -24,23 +30,35 @@ export class TopicSubscritionError extends OperationError {
 
 export default createOperation.mutation({
   input: z.object({
-		member_id: z.string(),
+		email: z.string().email(),
 		newsletter_id: z.string(),
   }),
   handler: async ({ input, graph }) => {
+		const member = await graph
+			.from('lms')
+			.mutate('upsertOneMember')
+			.where({
+				where: { email: input.email },
+				update: {},
+				create: {	email: input.email },
+			})
+			.exec()
+		if (!member) {
+			throw new MemberCreationError()
+		}
 		const newsletter = await graph
 			.from('lms')
 			.mutate('upsertOneNewsletterMembers')
 			.where({
 				where: {
 					member_id_newsletter_id: {
-						member_id: input.member_id,
+						member_id: member.id,
 						newsletter_id: input.newsletter_id,
 					}
 				},
 				update: {},
 				create: {
-					member: { connect: { id: input.member_id } },
+					member: { connect: { id: member.id } },
 					newsletter: { connect: { id: input.newsletter_id } },
 				},
 			})
@@ -48,16 +66,24 @@ export default createOperation.mutation({
 		if (!newsletter) {
 			throw new NewsletterSubscritionError()
 		}
-		const response = await novu.topics.addSubscribers(input.newsletter_id, {
-			subscribers: [input.member_id],
+		const trigger = await novu.trigger('welcome-newsletter-pt', {
+			to: {
+				subscriberId: member.id,
+				email: member.email,
+				locale: 'pt'
+			},
+			payload: {}
 		})
-		//if (response.statusText === 'OK') {
+		const response = await novu.topics.addSubscribers(input.newsletter_id, {
+			subscribers: [member.id],
+		})
+		//if (response.data.succeeded) {
 			return {
 				newsletter: newsletter,
 				topic: response.data,
 			}
 		//} else {
-			//throw new TopicSubscritionError()
+		//	throw new TopicSubscritionError()
 		//}
   },
 })

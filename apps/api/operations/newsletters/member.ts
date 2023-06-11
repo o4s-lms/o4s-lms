@@ -45,7 +45,7 @@ export default createOperation.mutation({
 		})
 		//if (response.status === 200) {
 			return {
-				member: member.id,
+				member_id: member.id,
 				subscriber: response.data,
 			}
 		//} else {
