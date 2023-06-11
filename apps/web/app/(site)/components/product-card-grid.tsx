@@ -16,7 +16,7 @@ export const ProductCardGrid: React.FC<ProductCardGrid> = ({ idx, item: { thumbn
 
     return (
         <div className="space-y-2 sm:max-w-sm">
-            <Link href={`/cursos/sustentabilidade/${slug}`}>
+            <Link href={`/cursos/${slug}`}>
                 <img src={thumbnail} className="w-full rounded-lg" alt={title} />
             </Link>
             <div className="flex items-center justify-between pt-2 text-sm">
@@ -24,7 +24,7 @@ export const ProductCardGrid: React.FC<ProductCardGrid> = ({ idx, item: { thumbn
                 <Includes>{include}</Includes>
             </div>
             <Title>
-                <Link href={`/produtos/sustentabilidade/${slug}`}>
+                <Link href={`/cursos/${slug}`}>
                     {title}
                 </Link>
             </Title>

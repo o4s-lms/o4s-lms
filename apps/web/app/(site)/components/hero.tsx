@@ -19,14 +19,14 @@ const Hero = () => {
             </p>
             <div className="items-center gap-x-3 text-sm font-medium sm:flex sm:justify-center xl:justify-start">
               <NavLink
-                href="#pricing"
+                href="/cursos"
                 className="block bg-sky-500 text-white hover:bg-sky-600 active:bg-sky-700"
                 scroll={false}
               >
                 Começar Agora
               </NavLink>
               <NavLink
-                href="#cta"
+                href="/ajuda"
                 className="mt-3 block bg-gray-700 text-gray-100 hover:bg-gray-800 sm:mt-0"
                 scroll={false}
               >
@@ -37,11 +37,11 @@ const Hero = () => {
           <div className="w-full flex-1 sm:max-w-2xl xl:max-w-xl">
             <div className="relative">
               <Image
-                src="/hero-thumbnail.png"
+                src="/home_hero.jpg"
                 className="w-full rounded-lg"
                 alt="Cursos O4S"
-                width={490}
-                height={284}
+                width={600}
+                height={314}
               />
             </div>
           </div>

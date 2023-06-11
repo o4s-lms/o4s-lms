@@ -1,0 +1,10 @@
+query (
+  $slug: String!,
+  ) {
+	product: site_findUniqueProduct(where: { slug: $slug }) {
+		id
+		title
+		description
+		image
+	}
+}

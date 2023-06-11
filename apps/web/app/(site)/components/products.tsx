@@ -5,7 +5,9 @@ import { ProductCardGrid } from "./product-card-grid"
 import { Loading } from "@/components/loading"
 import { createClient } from "@o4s/generated-wundergraph/client"
 
-const client = createClient()
+const client = createClient({
+  customFetch: fetch,
+})
 
 const Products = async () => {
 	const { data, error } = await client.query({

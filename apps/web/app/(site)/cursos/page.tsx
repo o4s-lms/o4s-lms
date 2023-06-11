@@ -1,7 +1,23 @@
-import GradientWrapper from "@/components/gradient-wrapper";
-import SectionWrapper from "@/components/section-wrapper";
+import GradientWrapper from "@/components/gradient-wrapper"
+import SectionWrapper from "@/components/section-wrapper"
+import { ProductCardList } from "../components/product-card-list"
+import { createClient } from "@o4s/generated-wundergraph/client"
+import { ProductsAllResponseData } from "@o4s/generated-wundergraph/models"
 
-export function Cursos() {
+const client = createClient({
+  customFetch: fetch,
+})
+
+type Product = ProductsAllResponseData["products"][number]
+
+export default async function Cursos() {
+	const { data, error } = await client.query({
+		operationName: 'products/all',
+		input: {
+			locale: 'pt'
+		}
+	})
+	const products = data?.products
 	return (
     <>
       <GradientWrapper>
@@ -24,9 +40,9 @@ export function Cursos() {
             Todos os cursos
           </h2>
           <ul className='mt-8 space-y-12 dark:divide-gray-800 sm:space-y-0 sm:divide-y'>
-            {cursos.map((item, idx) => (
+            {products?.map((item: Product, idx) => (
               <li key={idx} className='sm:py-8'>
-                <LessonCardList idx={idx} item={item} />
+                <ProductCardList idx={idx} item={item} />
               </li>
             ))}
           </ul>
