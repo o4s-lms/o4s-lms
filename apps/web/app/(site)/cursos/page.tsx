@@ -1,7 +1,7 @@
 import GradientWrapper from "@/components/gradient-wrapper";
 import SectionWrapper from "@/components/section-wrapper";
 
-export function Products() {
+export function Cursos() {
 	return (
     <>
       <GradientWrapper>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { OperationError } from '@wundergraph/sdk/operations'
 import { createOperation, z } from '../../generated/wundergraph.factory'
@@ -66,11 +67,14 @@ export default createOperation.mutation({
 		if (!newsletter) {
 			throw new NewsletterSubscritionError()
 		}
-		const trigger = await novu.trigger('welcome-newsletter-pt', {
+		const subscriber = await novu.subscribers.identify(member.id, {
+			email: member.email,
+			locale: member.locale,
+		})
+		const welcome = `welcome-newsletter-${member.locale}` 
+		const trigger = await novu.trigger(welcome, {
 			to: {
 				subscriberId: member.id,
-				email: member.email,
-				locale: 'pt'
 			},
 			payload: {}
 		})

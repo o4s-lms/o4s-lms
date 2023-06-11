@@ -12,7 +12,7 @@ import Brand from "@/components/brand"
 }*/
 
 const HankoAuth = dynamic(
-	() => import('@/components/auth/hanko-auth'),
+	() => import('./components/hanko-auth'),
 	{ ssr: false },
 )
 

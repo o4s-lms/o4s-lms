@@ -231,6 +231,7 @@ model Member {
 	email_count					Int				@default(0)
 	email_opened_count	Int				@default(0)
 	email_open_rate			Int				@default(0)
+	locale							String		@default("pt")
 	created_at					DateTime 	@default(now())
 	updated_at					DateTime?	@updatedAt
 	newsletters					NewsletterMembers[]

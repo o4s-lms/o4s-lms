@@ -2,7 +2,7 @@
 
 import { Separator } from "@/components/ui/separator"
 
-import { SessionExpiredModal } from "@/components/auth/session-expired-modal"
+import { SessionExpiredModal } from "../../components/session-expired-modal"
 import { Hanko } from "@teamhanko/hanko-elements"
 import { useEffect, useRef, useState } from "react"
 import dynamic from "next/dynamic"
@@ -12,7 +12,7 @@ import { useHanko } from "@/hooks/use-hanko"
 
 const hankoApi = 'http://joseantcordeiro.hopto.org:8000'
 
-const HankoProfile = dynamic(() => import("@/components/auth/hanko-profile"), {
+const HankoProfile = dynamic(() => import("../../components/hanko-profile"), {
   ssr: false,
 })
 

@@ -8,7 +8,7 @@ import { Button, buttonVariants } from "@/components/ui/button"
 import { Loading } from "@/components/loading"
 
 import { useToast } from "@/hooks/use-toast"
-import { CourseCard } from "@/app/courses/components/course-card"
+import { CourseCard } from "@/app/(lms)/app/courses/components/course-card"
 import { Item } from "@radix-ui/react-dropdown-menu"
 import { Separator } from "@/components/ui/separator"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"

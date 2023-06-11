@@ -8,7 +8,9 @@ import { toast } from "@/hooks/use-toast"
 import { ToastAction } from "@/components/ui/toast"
 import { createClient } from "@o4s/generated-wundergraph/client"
 
-const client = createClient()
+const client = createClient({
+  customFetch: fetch,
+})
 const NEWSLETTER = "6483d38fd40acdca0f4164bf"
 
 const Newsletter = () => {
@@ -50,10 +52,10 @@ const Newsletter = () => {
     return (
         <div className="mt-6 md:mt-0">
             <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-50 sm:text-2xl">
-                Sign up for our newsletter.
+							Assine a nossa newsletter.
             </h3>
             <p className="mt-3 max-w-xl">
-                Sign up for our newsletter to stay updated on the latest news. Don't miss out, join our newsletter today!
+							Inscreva-se em nossa newsletter para se manter atualizado sobre as últimas notícias. Não perca, assine agora!
             </p>
             <form onSubmit={onSubmit} className="mt-6 flex items-center gap-x-3">
                 <div className="relative">
@@ -64,7 +66,7 @@ const Newsletter = () => {
                         type="email"
 												value={email}
                         required
-                        placeholder="Enter your email"
+                        placeholder="O seu email"
 												disabled={isLoading}
                         className="w-full pl-12 pr-3 focus:border-blue-600 dark:border-gray-800 dark:bg-gray-800 dark:text-gray-300 dark:focus:bg-gray-700"
 												onChange={onChange}
@@ -74,7 +76,7 @@ const Newsletter = () => {
 										{isLoading && (
 											<Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
 										)}
-										Subscribe
+										Subscrever
                 </Button>
             </form>
         </div>
