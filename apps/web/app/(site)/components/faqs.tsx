@@ -6,7 +6,9 @@ import { createClient } from "@o4s/generated-wundergraph/client"
 import SectionWrapper from "@/components/section-wrapper";
 import { SiteGet_faqsResponseData } from "@o4s/generated-wundergraph/models";
 
-const client = createClient()
+const client = createClient({
+  customFetch: fetch,
+})
 
 type Faq = SiteGet_faqsResponseData["faqs"][number]
 interface FaqCard {

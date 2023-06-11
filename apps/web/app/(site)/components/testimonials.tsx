@@ -1,7 +1,9 @@
 import SectionWrapper from "@/components/section-wrapper"
 import { createClient } from "@o4s/generated-wundergraph/client"
 
-const client = createClient()
+const client = createClient({
+  customFetch: fetch,
+})
 
 const Testimonials = async () => {
 	const { data, error } = await client.query({

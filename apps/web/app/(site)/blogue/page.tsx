@@ -3,10 +3,14 @@
 import Link from "next/link"
 import Container from "./components/container"
 import PostList from "./components/post-list"
-import { useQuery, withWunderGraph } from "@/lib/wundergraph"
+import { createClient } from "@o4s/generated-wundergraph/client"
 
-function Blogue() {
-	const { data } = useQuery({
+const client = createClient({
+  customFetch: fetch,
+})
+
+export default async function Blogue() {
+	const { data } = await client.query({
 		operationName: 'blog/posts',
 		input: {
 			language: 'pt'
@@ -44,5 +48,3 @@ function Blogue() {
     </>
   );
 }
-
-export default withWunderGraph(Blogue)

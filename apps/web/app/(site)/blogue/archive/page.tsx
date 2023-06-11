@@ -6,7 +6,9 @@ import Archive from "../components/archive"
 
 import { createClient } from "@o4s/generated-wundergraph/client"
 
-const client = createClient()
+const client = createClient({
+  customFetch: fetch,
+})
 const POSTS_PER_PAGE = 6
 
 export default async function ArchivePage() {

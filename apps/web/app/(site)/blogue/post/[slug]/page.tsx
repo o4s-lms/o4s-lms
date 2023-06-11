@@ -1,5 +1,4 @@
 import PostPage from "./default"
-import { site } from "@o4s/db"
 import { createClient } from "@o4s/generated-wundergraph/client"
 
 import { Loading } from "@/components/loading";
@@ -8,9 +7,11 @@ import { useEffectOnce } from "usehooks-ts";
 import { useEffect } from "react";
 type Post = BlogMetadataResponseData["post"]
 
-const client = createClient()
+const client = createClient({
+  customFetch: fetch,
+})
 
-export async function generateStaticParams() {
+/**export async function generateStaticParams() {
 
   return await site.post.findMany({
 		where: {
@@ -21,7 +22,7 @@ export async function generateStaticParams() {
 			slug: true
 		},
 	})
-}
+}*/
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
 	const { data } = await client.query({
