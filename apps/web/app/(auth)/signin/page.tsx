@@ -29,19 +29,19 @@ export default function SignIn() {
             </div>
 						<HankoAuth setError={setError} />
             <p className="text-muted-foreground px-8 text-center text-sm">
-              By clicking continue, you agree to our{" "}
+							Ao clicar em continuar, você concorda com nossos{" "}
               <Link
                 href="/legal/termos" target="_blank"
                 className="hover:text-primary underline underline-offset-4"
               >
-                Terms of Service
+                Termos e Condições
               </Link>{" "}
-              and{" "}
+              e{" "}
               <Link
                 href="/legal/privacidade" target="_blank"
                 className="hover:text-primary underline underline-offset-4"
               >
-                Privacy Policy
+                Política de Privacidade
               </Link>
               .
             </p>

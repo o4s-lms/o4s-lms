@@ -54,8 +54,8 @@ const Curso = async ({ params }: { params: { slug: string } }) => {
             src={product?.image as string}
             className="w-full rounded-lg"
             alt={product?.title as string}
-            width={1640}
-            height={924}
+            width={1200}
+            height={628}
           />
         </div>
         <div className="mx-auto mt-12 justify-between gap-8 lg:flex lg:max-w-screen-xl lg:px-8">

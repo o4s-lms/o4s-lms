@@ -1,10 +1,8 @@
-import "@/styles/globals.css"
+import "@/styles/auth.css"
 import { Metadata } from "next"
 
 import { siteConfig } from "@/config/site"
-import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
-import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
   title: {
@@ -23,20 +21,18 @@ export const metadata: Metadata = {
   },
 }
 
-interface RootLayoutProps {
+interface LmsLayoutProps {
   children: React.ReactNode
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function AuthLayout({ children }: LmsLayoutProps) {
   return (
     <>
       <html lang="en" suppressHydrationWarning>
         <head />
-        <body className="bg-background min-h-screen">
+        <body className="dark:bg-gray-900">
 					<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
 						{children}
-						<Toaster />
-						<TailwindIndicator />
 					</ThemeProvider>
         </body>
       </html>

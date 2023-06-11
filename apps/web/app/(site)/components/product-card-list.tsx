@@ -5,6 +5,7 @@ import { SubTitle } from "./sub-title"
 import { ProductsAllResponseData } from "@o4s/generated-wundergraph/models"
 import { capitalize } from "@/lib/utils"
 import { createClient } from "@o4s/generated-wundergraph/client"
+import NavLink from "@/components/nav-link"
 
 const client = createClient()
 
@@ -49,6 +50,22 @@ export const ProductCardList: React.FC<ProductCardList> = ({ idx, item: { thumbn
                 <Includes className="hidden sm:block">
                     {include}
                 </Includes>
+								<div className="items-center gap-x-3 text-sm font-medium sm:flex sm:justify-center xl:justify-start">
+									<NavLink
+										href="/cursos"
+										className="block bg-sky-500 text-white hover:bg-sky-600 active:bg-sky-700"
+										scroll={false}
+									>
+										Comprar Agora
+									</NavLink>
+									<NavLink
+										href={`/cursos/${slug}`}
+										className="mt-3 block bg-gray-700 text-gray-100 hover:bg-gray-800 sm:mt-0"
+										scroll={false}
+									>
+										Saber Mais
+									</NavLink>
+								</div>
             </div>
         </div>
     )
