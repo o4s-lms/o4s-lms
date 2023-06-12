@@ -204,53 +204,6 @@ model Link {
 	@@map("links")
 }
 
-model Newsletter {
-	id									String		@id @default(auto()) @map("_id") @db.ObjectId
-	name								String
-	description					String
-	feedback_enabled		Boolean 	@default(false)
-	sender_name					String
-	sender_email				String
-	sender_reply_to			String
-	status							String		@default("active")
-	visibility					String		@default("members")
-	subscribe_on_signup	Boolean 	@default(false)
-	locale							String		@default("pt")
-	created_by   				String
-	created_at					DateTime 	@default(now())
-	updated_at					DateTime?	@updatedAt
-	members							NewsletterMembers[]
-
-	@@map("newsletters")
-}
-
-model Member {
-	id									String		@id @default(auto()) @map("_id") @db.ObjectId
-	email								String		@unique
-	name								String?
-	email_count					Int				@default(0)
-	email_opened_count	Int				@default(0)
-	email_open_rate			Int				@default(0)
-	locale							String		@default("pt")
-	created_at					DateTime 	@default(now())
-	updated_at					DateTime?	@updatedAt
-	newsletters					NewsletterMembers[]
-
-	@@map("members")
-}
-
-model NewsletterMembers {
-	id						String 			@id @default(auto()) @map("_id") @db.ObjectId
-	member_id			String 			@db.ObjectId
-	newsletter_id	String 			@db.ObjectId
-	member        Member 			@relation(fields: [member_id], references: [id], onDelete: Cascade)
-  newsletter   	Newsletter  @relation(fields: [newsletter_id], references: [id], onDelete: Cascade)
-
-	@@unique([member_id, newsletter_id])
-
-	@@map("newsletters_members")
-}
-
 enum CourseRole {
   ADMIN
 	AUTHOR

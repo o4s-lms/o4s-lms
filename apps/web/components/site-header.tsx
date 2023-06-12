@@ -92,6 +92,7 @@ function SiteHeader() {
 									applicationIdentifier={'ff5UcyJv0woS'}
 									backendUrl={'http://joseantcordeiro.hopto.org:3003'}
 									socketUrl={'http://joseantcordeiro.hopto.org:3002'}
+									i18n="pt"
 								>
 									<PopoverNotificationCenter colorScheme={theme}>
 										{({ unseenCount }) => <NotificationBell unseenCount={unseenCount} />}

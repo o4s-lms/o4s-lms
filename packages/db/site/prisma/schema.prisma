@@ -90,36 +90,74 @@ model PostTag {
 	@@map("post_tag")
 }
 
-model Faq {
-	id          String    @id @default(auto()) @map("_id") @db.ObjectId
-	question		String
-	answer			String
-	order				Int
-	locale			String
+model Newsletter {
+	id									String		@id @default(auto()) @map("_id") @db.ObjectId
+	name								String
+	description					String
+	feedback_enabled		Boolean 	@default(false)
+	sender_name					String
+	sender_email				String
+	sender_reply_to			String
+	status							String		@default("active")
+	visibility					String		@default("members")
+	subscribe_on_signup	Boolean 	@default(false)
+	locale							String		@default("pt")
+	created_by   				String
+	created_at					DateTime 	@default(now())
+	updated_at					DateTime	@updatedAt
+	members							NewsletterMembers[]
 
-	@@map("faqs")
+	@@map("newsletters")
+}
+
+model Member {
+	id									String		@id @default(auto()) @map("_id") @db.ObjectId
+	email								String		@unique
+	name								String?
+	email_count					Int				@default(0)
+	email_opened_count	Int				@default(0)
+	email_open_rate			Int				@default(0)
+	locale							String		@default("pt")
+	created_at					DateTime 	@default(now())
+	updated_at					DateTime?	@updatedAt
+	newsletters					NewsletterMembers[]
+
+	@@map("members")
+}
+
+model NewsletterMembers {
+	id						String 			@id @default(auto()) @map("_id") @db.ObjectId
+	member_id			String 			@db.ObjectId
+	newsletter_id	String 			@db.ObjectId
+	member        Member 			@relation(fields: [member_id], references: [id], onDelete: Cascade)
+  newsletter   	Newsletter  @relation(fields: [newsletter_id], references: [id], onDelete: Cascade)
+
+	@@unique([member_id, newsletter_id])
+
+	@@map("newsletters_members")
 }
 
 model Product {
-	id          String    @id @default(auto()) @map("_id") @db.ObjectId
-	thumbnail		String
-	price				Int
-  price_id    String?
-  currency    String    @default("eur")
-	image				String
-	title				String
-	description	String
-	slug				String		@unique
-	include			String
-	html				String?
-	order				Int
-  active      Boolean   @default(false)
-	locale			String
-  created_at	DateTime  @default(now())
-	created_by	String
-	updated_at	DateTime  @updatedAt
-	updated_by	String
+	id          		String    @id @default(auto()) @map("_id") @db.ObjectId
+	thumbnail				String
+	price						Int
+  price_id    		String?
+  currency    		String    @default("eur")
+	image						String
+	title						String
+	description			String
+	slug						String		@unique
+	include					String
+	html						String?
+	order						Int
+  active      		Boolean   @default(false)
+	locale					String
+  created_at			DateTime  @default(now())
+	created_by			String
+	updated_at			DateTime  @updatedAt
+	updated_by			String
   product_courses	ProductCourse[]
+	product_orders	OrderItems[]
 
 	@@map("products")
 }
@@ -135,6 +173,53 @@ model ProductCourse {
 	@@map("product_course")
 }
 
+model Order {
+	id									String 			@id @default(auto()) @map("_id") @db.ObjectId
+	created_at					DateTime  	@default(now())
+	updated_at					DateTime  	@updatedAt
+	currency    				String    	@default("eur")
+	type								String?
+	status							OrderStatus @default(PENDING)
+	customer_uuid				String?
+	customer_email			String
+	customer_stripe_id	String?
+	tax									Int					@default(0)
+	sub_total						Int 				@default(0)
+	sub_total_with_tax	Int 				@default(0)
+	items								OrderItems[]
+	Payment							Payment?
+}
+
+model OrderItems {
+	id						String 			@id @default(auto()) @map("_id") @db.ObjectId
+	order_id			String			@db.ObjectId
+	product_id		String			@db.ObjectId
+	quantity			Int 				@default(1)
+	tax						Int 				@default(0)
+	order					Order				@relation(fields: [order_id], references: [id], onDelete: Cascade)
+	product				Product			@relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+	@@unique([order_id, product_id])
+
+	@@map("order_items")
+}
+
+model Payment {
+	id					String 				@id @default(auto()) @map("_id") @db.ObjectId
+	createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt
+	status      PaymentStatus	@default(PENDING)
+	value       Int
+	type				PaymentType   @default(SEPA)
+	gateway			String?
+	customer_id String?
+	payment_id  String?
+	order_id 		String				@unique @db.ObjectId
+	order       Order				  @relation(fields: [order_id], references: [id])
+
+	@@map("payments")
+}
+
 model Testimonial {
 	id          String    @id @default(auto()) @map("_id") @db.ObjectId
 	avatar			String
@@ -144,4 +229,39 @@ model Testimonial {
 	locale			String
 
 	@@map("testimonials")
+}
+
+model Faq {
+	id          String    @id @default(auto()) @map("_id") @db.ObjectId
+	question		String
+	answer			String
+	order				Int
+	locale			String
+
+	@@map("faqs")
+}
+
+enum OrderStatus {
+	PENDING
+	COMPLETED
+	ARCHIVED
+	CANCELLED
+	REQUIRES_ACTION
+}
+
+enum PaymentStatus {
+	PAID
+	PENDING
+	AWAITING
+	REFUNDED
+	CANCELLED
+	ERROR
+}
+
+enum PaymentType {
+	CC
+	SEPA
+	PAYPAL
+	BOLETO
+	PIX
 }

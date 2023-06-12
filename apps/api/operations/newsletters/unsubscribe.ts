@@ -36,7 +36,7 @@ export default createOperation.mutation({
   }),
   handler: async ({ input, graph }) => {
 		const member = await graph
-			.from('lms')
+			.from('site')
 			.query('findUniqueMember')
 			.where({ where: { email: input.email } })
 			.exec()
@@ -44,7 +44,7 @@ export default createOperation.mutation({
 			throw new MemberNotFoundError()
 		}
 		const newsletter = await graph
-			.from('lms')
+			.from('site')
 			.mutate('deleteOneNewsletterMembers')
 			.where({
 				where: {

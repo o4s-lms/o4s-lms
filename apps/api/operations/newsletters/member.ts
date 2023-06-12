@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { OperationError } from '@wundergraph/sdk/operations'
 import { createOperation, z } from '../../generated/wundergraph.factory'
@@ -28,7 +29,7 @@ export default createOperation.mutation({
   }),
   handler: async ({ input, graph }) => {
 		const member = await graph
-			.from('lms')
+			.from('site')
 			.mutate('upsertOneMember')
 			.where({
 				where: { email: input.email },

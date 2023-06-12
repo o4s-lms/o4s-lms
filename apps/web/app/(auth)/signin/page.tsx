@@ -2,9 +2,9 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { Command } from "lucide-react"
 import dynamic from "next/dynamic"
 import Brand from "@/components/brand"
+import { useSearchParams } from "next/navigation"
 
 /**export const metadata: Metadata = {
   title: "SignIn",
@@ -18,6 +18,8 @@ const HankoAuth = dynamic(
 
 export default function SignIn() {
 	const [error, setError] = React.useState<Error | null>(null)
+	const searchParams = useSearchParams()
+  const callback = searchParams.get("callback") || '/app'
 
   return (
     <>
@@ -27,7 +29,7 @@ export default function SignIn() {
             <div className="flex flex-col space-y-2 text-center">
               <Brand />
             </div>
-						<HankoAuth setError={setError} />
+						<HankoAuth callback={callback} setError={setError} />
             <p className="text-muted-foreground px-8 text-center text-sm">
 							Ao clicar em continuar, você concorda com nossos{" "}
               <Link

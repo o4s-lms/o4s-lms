@@ -1,5 +1,5 @@
 import { Hanko, register } from "@teamhanko/hanko-elements"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import * as React from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@o4s/generated-wundergraph/client"
 
@@ -10,26 +10,27 @@ const client = createClient({
 const hankoApi = 'http://joseantcordeiro.hopto.org:8000'
 
 interface Props {
+	callback: string;
   setError(error: Error): void;
 }
 
-function HankoAuth({ setError }: Props) {
+function HankoAuth({ callback, setError }: Props) {
 	const router = useRouter()
-  const hanko = useMemo(() => new Hanko(hankoApi), [])
+  const hanko = React.useMemo(() => new Hanko(hankoApi), [])
 
-  const redirectToProfile = useCallback(() => {
+  const redirectToProfile = React.useCallback(() => {
 		router.replace("/app/profile")
   }, [router])
 
-	const redirectToLms = useCallback(() => {
-		router.replace("/app")
-  }, [router])
+	const redirectToCallback = React.useCallback(() => {
+		router.replace(callback)
+  }, [router, callback])
 
-  useEffect(() => {
+  React.useEffect(() => {
     register(hankoApi).catch(setError)
   }, [setError])
 
-  useEffect(() => hanko.onAuthFlowCompleted(async () => {
+  React.useEffect(() => hanko.onAuthFlowCompleted(async () => {
 		const currentUser = await hanko.user.getCurrent()
 		const user = await client.query({
 			operationName: 'users/uuid',
@@ -49,9 +50,9 @@ function HankoAuth({ setError }: Props) {
 			})
 			redirectToProfile()
 		} else {
-    	redirectToLms()
+    	redirectToCallback()
 		}
-  }), [hanko, redirectToLms, redirectToProfile])
+  }), [hanko, redirectToCallback, redirectToProfile])
 
   return <hanko-auth />
 }

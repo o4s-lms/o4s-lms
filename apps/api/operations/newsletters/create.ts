@@ -36,7 +36,7 @@ export default createOperation.mutation({
   },
   handler: async ({ input, user, graph }) => {
 		const newsletter = await graph
-			.from('lms')
+			.from('site')
 			.mutate('createOneNewsletter')
 			.where({ data: {
 				name: input.name,

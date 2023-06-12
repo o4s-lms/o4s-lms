@@ -17,7 +17,7 @@ export default configureWunderGraphServer<HooksConfig, InternalClient>(() => ({
 			postAuthentication: async ({ user, log }) => {
 				// user.roles = user.customClaims.roles;
 				log.info(JSON.stringify(user));
-				log.info(`User ${user.userId} has been authenticated`);
+				log.info(`${user.name} has been authenticated`);
 			},
 		},
     queries: {
