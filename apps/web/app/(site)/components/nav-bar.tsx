@@ -154,7 +154,7 @@ const Navbar = () => {
 								) : (
 								<>
                 <NavLink
-                  href={user ? "/admin" : "/signin"}
+                  href={user ? "/app" : "/signin"}
                   className="flex items-center justify-center gap-x-1 rounded-full bg-gray-800 text-sm font-medium text-white hover:bg-gray-700 active:bg-gray-900"
 									scroll={false}
                 >

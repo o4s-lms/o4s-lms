@@ -11,7 +11,7 @@ const client = createClient({
 })
 const POSTS_PER_PAGE = 6
 
-export default async function ArchivePage({ params }: { params: { slug: string } }) {
+export default async function TagArchivePage({ params }: { params: { slug: string } }) {
 	const searchParams = useSearchParams()
   const page = searchParams.get("page")
   const pageIndex = parseInt(page) || 1

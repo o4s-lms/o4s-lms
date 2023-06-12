@@ -11,6 +11,7 @@ import {
 import { useState, useEffect } from "react"
 
 import { BlogTag_slugResponseData } from "@o4s/generated-wundergraph/models"
+import Label from "./label"
 
 type Tag = BlogTag_slugResponseData["tag"]
 
@@ -26,15 +27,15 @@ export default function TagArchive({ tag, pageIndex }: ArchiveProps) {
 	const [isFirstPage, setIsFirstPage] = useState(false)
   const [isLastPage, setIsLastPage] = useState(false)
 
-	const slug = tag.slug
-	const posts = tag.tag_posts
+	const slug = tag?.slug
+	const posts = tag?.tag_posts
 
 	useEffect(() => {
     setIsFirstPage(pageIndex < 2);
   }, [pageIndex])
 
   useEffect(() => {
-    setIsLastPage(posts.length < POSTS_PER_PAGE);
+    setIsLastPage(posts?.length < POSTS_PER_PAGE);
   }, [posts])
 
   const handleNextPage = () => {
@@ -48,12 +49,14 @@ export default function TagArchive({ tag, pageIndex }: ArchiveProps) {
   return (
     <>
       <Container>
-        <h1 className="text-center text-3xl font-semibold tracking-tight dark:text-white lg:text-4xl lg:leading-snug">
-          {tag.name}
-        </h1>
+				<div className="text-center">
+					<Label archive={true} nomargin={true} color={tag?.color}>
+						{tag?.name}
+					</Label>
+				</div>
         <div className="text-center">
           <p className="mt-2 text-lg">
-						Veja todos os artigos que já escrevemos.
+						Veja todos os artigos que já escrevemos catalogados por {tag?.name}.
           </p>
         </div>
         {posts && posts?.length === 0 && (

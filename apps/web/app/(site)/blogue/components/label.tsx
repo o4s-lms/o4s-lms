@@ -1,6 +1,7 @@
 import { cx } from "@/lib/utils"
 
 interface LabelProps {
+	archive?: boolean
 	pill?: boolean
 	nomargin?: boolean
 	color?: string
@@ -36,6 +37,19 @@ export default function Label({ children, ...props }: LabelProps) {
       </div>
     );
   }
+
+	if (props.archive) {
+		return (
+			<h1
+      className={cx(
+        "text-3xl font-semibold tracking-tight lg:text-4xl lg:leading-snug inline-block uppercase ",
+        !margin && " mt-5",
+        color[props.color] || color[pink]
+      )}>
+      {children}
+    </h1>
+		)
+	}
 
   return (
     <span
