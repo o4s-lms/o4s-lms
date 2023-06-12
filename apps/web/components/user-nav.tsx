@@ -16,7 +16,7 @@ import {
 import Link from "next/link"
 import { Hanko } from "@teamhanko/hanko-elements"
 import { useCallback, useEffect, useState } from "react"
-import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 const hankoApi = 'http://joseantcordeiro.hopto.org:8000'
 
@@ -27,6 +27,7 @@ interface Props {
 }
 
 export function UserNav({ name, email, image}: Props) {
+	const router = useRouter()
 	const [hanko, setHankoClient] = useState<Hanko>()
 	const [error, setError] = useState<Error | null>(null)
 
@@ -43,8 +44,8 @@ export function UserNav({ name, email, image}: Props) {
   }
 
   const redirectToLogin = useCallback(() => {
-    redirect("/sigin")
-  }, [])
+    router.replace("/signin")
+  }, [router])
 
   useEffect(() => hanko?.onUserLoggedOut(() => {
     redirectToLogin()
@@ -59,7 +60,7 @@ export function UserNav({ name, email, image}: Props) {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={minioImage(image)} alt={name} />
+            <AvatarImage src={minioImage(image as string)} alt={name as string} />
             <AvatarFallback>{name}</AvatarFallback>
           </Avatar>
         </Button>
@@ -77,7 +78,7 @@ export function UserNav({ name, email, image}: Props) {
         <DropdownMenuGroup>
 					<DropdownMenuItem>
 						<User className="mr-2 h-4 w-4" />
-						<Link href={"/x/profile"} >
+						<Link href={"/app/profile"} >
 							<span>Profile</span>
 						</Link>
 						<DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>

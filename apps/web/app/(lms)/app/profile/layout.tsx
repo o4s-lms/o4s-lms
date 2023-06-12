@@ -2,30 +2,29 @@ import { Metadata } from "next"
 import Image from "next/image"
 
 import { Separator } from "@/components/ui/separator"
-import { SidebarNav } from "@/app/(auth)/profile/components/sidebar-nav"
-import SiteHeader from "@/components/site-header"
+import { SidebarNav } from "./components/sidebar-nav"
 
 export const metadata: Metadata = {
-  title: "Profile",
+  title: "Perfil",
   description: "Open Source Learning Managment System.",
 }
 
 const sidebarNavItems = [
   {
     title: "Profile",
-    href: "/profile",
+    href: "/app/profile",
   },
 	{
     title: "Authentication",
-    href: "/profile/settings/authentication",
+    href: "/app/profile/settings/authentication",
   },
   {
     title: "Appearance",
-    href: "/profile/settings/appearance",
+    href: "/app/profile/settings/appearance",
   },
   {
     title: "Notifications",
-    href: "/profile/settings/notifications",
+    href: "/app/profile/settings/notifications",
   },
 ]
 
@@ -36,7 +35,6 @@ interface SettingsLayoutProps {
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
   return (
 		<div className="relative flex min-h-screen flex-col">
-			<SiteHeader />
 			<div className="flex-1">
 				<div className="container grid items-center space-y-6 p-10 pb-16 md:block">
 					<div className="space-y-0.5">

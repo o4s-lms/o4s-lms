@@ -3,7 +3,9 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@o4s/generated-wundergraph/client"
 
-const client = createClient()
+const client = createClient({
+  customFetch: fetch,
+})
 
 const hankoApi = 'http://joseantcordeiro.hopto.org:8000'
 
@@ -16,7 +18,7 @@ function HankoAuth({ setError }: Props) {
   const hanko = useMemo(() => new Hanko(hankoApi), [])
 
   const redirectToProfile = useCallback(() => {
-		router.replace("/profile")
+		router.replace("/app/profile")
   }, [router])
 
 	const redirectToLms = useCallback(() => {

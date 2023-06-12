@@ -8,7 +8,6 @@ import { useEffect, useRef, useState } from "react"
 import dynamic from "next/dynamic"
 
 import styles from "@/styles/hanko.profile.css"
-import { useHanko } from "@/hooks/use-hanko"
 
 const hankoApi = 'http://joseantcordeiro.hopto.org:8000'
 

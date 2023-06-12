@@ -16,19 +16,17 @@ import {
 } from "@novu/notification-center"
 import { UserNav } from "@/components/user-nav"
 import { useToast } from "@/hooks/use-toast"
-import { useUser, withWunderGraph } from "@/lib/wundergraph"
-import { Loading } from "./loading"
+import { useQuery, withWunderGraph } from "@/lib/wundergraph"
 
 function SiteHeader() {
 	const { toast } = useToast()
 	const { theme } = useTheme()
 	const scrolled = useScroll(50)
 
-  const { data: user, error, isLoading } = useUser()
-
-	if (isLoading) {
-		return <Loading />
-	}
+	const { data, error, isLoading } = useQuery({
+		operationName: 'users/me',
+		enabled: true,
+	})
 
 	if (error) {
 		toast({
@@ -41,6 +39,8 @@ function SiteHeader() {
 			),
 		})
 	}
+
+	const user = data?.me
 
   return (
     <header className={`bg-background sticky top-0 z-40 w-full border-b
@@ -81,26 +81,31 @@ function SiteHeader() {
               </div>
             </Link>
             <ThemeToggle />
-						{user && (
-						<>{/**
-							<NovuProvider
-								subscriberId={session?.data?.user.id}
-								applicationIdentifier={'ff5UcyJv0woS'}
-								backendUrl={'http://joseantcordeiro.hopto.org:3003'}
-								socketUrl={'http://joseantcordeiro.hopto.org:3002'}
-							>
-								<PopoverNotificationCenter colorScheme={theme}>
-									{({ unseenCount }) => <NotificationBell unseenCount={unseenCount} />}
-								</PopoverNotificationCenter>
-							</NovuProvider>  */}
-							<UserNav
-								name={user.name}
-								email={user.email}
-								image={user.picture}
-							/>
+						{isLoading ? (
+							<Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+						) : (
+						<>
+							{user && (
+								<>
+								{/**<NovuProvider
+									subscriberId={user.id}
+									applicationIdentifier={'ff5UcyJv0woS'}
+									backendUrl={'http://joseantcordeiro.hopto.org:3003'}
+									socketUrl={'http://joseantcordeiro.hopto.org:3002'}
+								>
+									<PopoverNotificationCenter colorScheme={theme}>
+										{({ unseenCount }) => <NotificationBell unseenCount={unseenCount} />}
+									</PopoverNotificationCenter>
+								</NovuProvider>*/}
+								<UserNav
+									name={user.name}
+									email={user.email}
+									image={user.picture}
+								/>
+								</>
+							)}
 						</>
 						)}
-						
           </nav>
         </div>
       </div>

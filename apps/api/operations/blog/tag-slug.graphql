@@ -1,0 +1,37 @@
+query ($slug: String!) {
+	tag: site_findUniqueTag(
+		where: { slug: $slug }
+	) {
+		id
+		name
+		slug
+		description
+		image
+		color
+		hidden
+		parent_id
+		visibility
+		language
+		meta_title
+		meta_description
+		created_at
+		created_by
+		tag_posts {
+			post {
+				id
+				title
+				slug
+				feature_image
+				featured
+				status
+				language
+				excerpt
+				est_reading_time
+				author_id
+				published
+				published_at
+				created_at
+			}
+		}
+	}
+}

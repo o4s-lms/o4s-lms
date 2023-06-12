@@ -70,6 +70,12 @@ export default configureWunderGraphOperations<OperationsConfiguration>({
 					required: false,
 				},
 			}),
+			BlogTag_slug: (config) => ({
+				...config,
+				authentication: {
+					required: false,
+				},
+			}),
 			BlogPost_slug: (config) => ({
 				...config,
 				authentication: {
