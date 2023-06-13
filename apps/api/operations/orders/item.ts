@@ -15,33 +15,25 @@ export class ItemCreationError extends OperationError {
 
 export default createOperation.mutation({
   input: z.object({
+		order_id: z.string(),
 		product_id: z.string(),
   }),
-  handler: async ({ input, user, graph, operations }) => {
-		const order = await graph
-			.from('site')
-			.mutate('createOneOrder')
-			.where({ data: {
-				customer_uuid: user?.userId as string,
-				customer_email: user?.email as string,
-			}})
-			.exec()
-		if (!order) {
-			throw new OrderCreationError()
-		}
+  handler: async ({ input, graph, operations }) => {
 		const item = await graph
 			.from('site')
 			.mutate('upsertOneOrderItems')
 			.where({
 				where: {
 					order_id_product_id: {
-						order_id: order.id,
+						order_id: input.order_id,
 						product_id: input.product_id,
 					}
 				},
-				update: {},
+				update: {
+					quantity: { increment: 1 },
+				},
 				create: {
-					order: { connect: { id: order.id } },
+					order: { connect: { id: input.order_id } },
 					product: { connect: { id: input.product_id } },
 				},
 			})
@@ -52,11 +44,11 @@ export default createOperation.mutation({
 		const { data, error } = operations.mutate({
 			operationName: 'orders/subtotal',
 			input: {
-				order_id: order.id,
+				order_id: input.order_id,
 			}
 		})
 		return { order: {
-				id: order.id,
+				id: input.order_id,
 				item: item,
 			}
 		}

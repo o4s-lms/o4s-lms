@@ -56,8 +56,8 @@ export default createOperation.mutation({
 			.where({
 				where: { id: input.order_id },
 				data: {
-					sub_total: subTotal,
-					sub_total_with_tax: subTotalWithTax ,
+					sub_total: { set: subTotal },
+					sub_total_with_tax: { set: subTotalWithTax },
 				},
 			})
 			.exec()
