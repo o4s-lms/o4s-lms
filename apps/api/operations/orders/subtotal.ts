@@ -41,7 +41,7 @@ export default createOperation.mutation({
 				subTotalWithTax = subTotalWithTax + (item.quantity * (realPrice * (item.tax / 100)))
 				tax = tax + (item.quantity * (realPrice * (item.tax / 100)))
 			} else {
-				subTotalWithTax = subTotalWithTax + subTotal
+				subTotalWithTax = subTotalWithTax + (item.quantity * realPrice)
 			}
 		})
 		const item = await graph
@@ -62,6 +62,8 @@ export default createOperation.mutation({
 		}
 		return { order: {
 				id: data?.order?.id,
+				tax_total: item.tax_total,
+				discount_total: item.discount_total,
 				sub_total: item.sub_total,
 				sub_total_with_tax: item.sub_total_with_tax,
 			}

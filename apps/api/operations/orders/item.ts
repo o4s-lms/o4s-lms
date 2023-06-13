@@ -17,9 +17,9 @@ export default createOperation.mutation({
   input: z.object({
 		order_id: z.string(),
 		product_id: z.string(),
-		price: z.number(),
-		discount: z.number(),
-		tax: z.number(),
+		price: z.number().int(),
+		discount: z.number().int(),
+		tax: z.number().int(),
   }),
   handler: async ({ input, graph, operations }) => {
 		const item = await graph

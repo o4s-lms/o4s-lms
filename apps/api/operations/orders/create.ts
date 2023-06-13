@@ -16,9 +16,9 @@ export class ItemCreationError extends OperationError {
 export default createOperation.mutation({
   input: z.object({
 		product_id: z.string(),
-		price: z.number(),
-		discount: z.number(),
-		tax: z.number(),
+		price: z.number().int(),
+		discount: z.number().int(),
+		tax: z.number().int(),
   }),
   handler: async ({ input, user, graph, operations }) => {
 		const order = await graph
@@ -55,7 +55,7 @@ export default createOperation.mutation({
 		if (!item) {
 			throw new ItemCreationError()
 		}
-		const { data, error } = operations.mutate({
+		const { data, error } = await operations.mutate({
 			operationName: 'orders/subtotal',
 			input: {
 				order_id: order.id,

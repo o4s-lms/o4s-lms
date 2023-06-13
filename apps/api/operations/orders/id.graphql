@@ -5,6 +5,7 @@ query ($id: String!) {
 			id
 			order_id
 			product_id
+			price
 			quantity
 			discount
 			tax
