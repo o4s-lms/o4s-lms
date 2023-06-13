@@ -188,6 +188,8 @@ model Order {
 	sub_total_with_tax	Int 				@default(0)
 	items								OrderItems[]
 	Payment							Payment?
+
+	@@map("orders")
 }
 
 model OrderItems {

@@ -2,6 +2,8 @@ query ($id: String!) {
 	order: site_findUniqueOrder(where: { id: $id }) {
 		id
 		items {
+			id
+			order_id
 			product_id
 			quantity
 			tax
