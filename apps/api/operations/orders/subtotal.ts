@@ -64,10 +64,11 @@ export default createOperation.mutation({
 		if (!item) {
 			throw new OrderUpdateError()
 		}
-		return {
-			id: input.order_id,
-			sub_total: subTotal,
-			sub_total_with_tax: subTotalWithTax,
+		return { order: {
+				id: input.order_id,
+				sub_total: subTotal,
+				sub_total_with_tax: subTotalWithTax,
+			}
 		}
   },
 })
