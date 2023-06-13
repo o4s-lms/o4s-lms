@@ -16,6 +16,9 @@ export class ItemCreationError extends OperationError {
 export default createOperation.mutation({
   input: z.object({
 		product_id: z.string(),
+		price: z.number(),
+		discount: z.number(),
+		tax: z.number(),
   }),
   handler: async ({ input, user, graph, operations }) => {
 		const order = await graph
@@ -43,6 +46,9 @@ export default createOperation.mutation({
 				create: {
 					order: { connect: { id: order.id } },
 					product: { connect: { id: input.product_id } },
+					price: input.price,
+					discount: input.discount,
+					tax: input.tax
 				},
 			})
 			.exec()

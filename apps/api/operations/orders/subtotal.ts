@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { OperationError } from '@wundergraph/sdk/operations'
 import { createOperation, z } from '../../generated/wundergraph.factory'
-import { type OrdersIdResponseData } from '~/generated/models';
 
 export class OrderNotFoundError extends OperationError {
   statusCode = 400;
@@ -14,8 +13,6 @@ export class OrderUpdateError extends OperationError {
   code = 'ItemUpdateError' as const;
   message = 'Update subtotal value error';
 }
-
-type Order = OrdersIdResponseData["order"]
 
 export default createOperation.mutation({
   input: z.object({
@@ -34,20 +31,17 @@ export default createOperation.mutation({
 		const items = data?.order?.items
 		let subTotal = 0
 		let subTotalWithTax = 0
-		items?.forEach(async function(item) {
-			const { data, error } = await operations.query({
-				operationName: 'products/id',
-				input: {
-					id: item.product_id
-				}
-			})
-			if (data) {
-				subTotal = subTotal + (item.quantity * data?.product?.price)
-				if (item.tax > 0) {
-					subTotalWithTax = subTotal + (subTotal * item.tax / 100)
-				} else {
-					subTotalWithTax = subTotal
-				}
+		let discount = 0
+		let tax = 0
+		items?.forEach(function(item) {
+			const realPrice = item.price - item.discount
+			subTotal = subTotal + (item.quantity * realPrice)
+			discount = discount + (item.quantity * item.discount)
+			if (item.tax > 0) {
+				subTotalWithTax = subTotalWithTax + (item.quantity * (realPrice * (item.tax / 100)))
+				tax = tax + (item.quantity * (realPrice * (item.tax / 100)))
+			} else {
+				subTotalWithTax = subTotalWithTax + subTotal
 			}
 		})
 		const item = await graph
@@ -56,8 +50,10 @@ export default createOperation.mutation({
 			.where({
 				where: { id: input.order_id },
 				data: {
-					sub_total: { set: subTotal },
-					sub_total_with_tax: { set: subTotalWithTax },
+					tax_total: { set: Math.round(tax) },
+					discount_total: { set: Math.round(discount) },
+					sub_total: { set: Math.round(subTotal) },
+					sub_total_with_tax: { set: Math.round(subTotalWithTax) },
 				},
 			})
 			.exec()
@@ -65,9 +61,9 @@ export default createOperation.mutation({
 			throw new OrderUpdateError()
 		}
 		return { order: {
-				id: input.order_id,
-				sub_total: subTotal,
-				sub_total_with_tax: subTotalWithTax,
+				id: data?.order?.id,
+				sub_total: item.sub_total,
+				sub_total_with_tax: item.sub_total_with_tax,
 			}
 		}
   },

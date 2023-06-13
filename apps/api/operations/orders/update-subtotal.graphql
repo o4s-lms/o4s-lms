@@ -1,0 +1,17 @@
+mutation (
+	$id: String!,
+	$sub_total: Int!,
+	$sub_total_with_tax: Int!
+) {
+	order: site_updateOneOrder(
+		where: { id: $id }
+		data: {
+			sub_total: { set: $sub_total }
+			sub_total_with_tax: { set: $sub_total_with_tax }
+		}
+	) {
+		id
+		sub_total
+		sub_total_with_tax
+	}
+}
