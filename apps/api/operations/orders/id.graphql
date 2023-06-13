@@ -1,0 +1,10 @@
+query ($id: String!) {
+	order: site_findUniqueOrder(where: { id: $id }) {
+		id
+		items {
+			product_id
+			quantity
+			tax
+		}
+	}
+}
