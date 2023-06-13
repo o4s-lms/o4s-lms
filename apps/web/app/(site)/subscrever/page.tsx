@@ -2,10 +2,13 @@
 
 import * as React from "react"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 
 export default function Subscrever() {
 	const stepsItems = ["Identificação", "Cursos", "Pagamento", "Conclusão"]
 	const [currentStep, setCurrentStep] = React.useState<number>(2)
+	const searchParams = useSearchParams()
+  const courseId = searchParams.get("course")
 
     return (
 			<><section className="bg-gray-50 py-4 dark:bg-gray-900">

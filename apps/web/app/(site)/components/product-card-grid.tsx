@@ -5,6 +5,7 @@ import { SubTitle } from "./sub-title"
 import { ProductsAllResponseData } from "@o4s/generated-wundergraph/models"
 import React from "react"
 import { capitalize } from "@/lib/utils"
+import Price from "./price"
 
 type Product = ProductsAllResponseData["products"][number]
 interface ProductCardGrid {
@@ -20,7 +21,13 @@ export const ProductCardGrid: React.FC<ProductCardGrid> = ({ idx, item: { thumbn
                 <img src={thumbnail} className="w-full rounded-lg" alt={title} />
             </Link>
             <div className="flex items-center justify-between pt-2 text-sm">
-                <SubTitle>Preço: {String(price/100)} {capitalize(currency)}</SubTitle>
+								<SubTitle>
+									<Price
+										currency={currency}
+										num={price}
+										numSize="text-lg"
+									/>
+								</SubTitle>
                 <Includes>{include}</Includes>
             </div>
             <Title>

@@ -6,6 +6,7 @@ import { ProductsAllResponseData } from "@o4s/generated-wundergraph/models"
 import { capitalize } from "@/lib/utils"
 import { createClient } from "@o4s/generated-wundergraph/client"
 import NavLink from "@/components/nav-link"
+import Price from "./price"
 
 const client = createClient()
 
@@ -15,7 +16,7 @@ interface ProductCardList {
 	item: Product
 }
 
-export const ProductCardList: React.FC<ProductCardList> = ({ idx, item: { thumbnail, price, currency, title, description, include, slug } }) => {
+export const ProductCardList: React.FC<ProductCardList> = ({ idx, item: { id, thumbnail, price, currency, title, description, include, slug } }) => {
 
     return (
         <div className="gap-x-6 sm:flex">
@@ -32,7 +33,13 @@ export const ProductCardList: React.FC<ProductCardList> = ({ idx, item: { thumbn
             </Link>
             <div className="space-y-2 pt-4 sm:pt-0">
                 <div className="flex items-center justify-between text-sm">
-                    <SubTitle>Preço: {String(price/100)} {capitalize(currency)}</SubTitle>
+                    <SubTitle>
+											<Price
+												currency={currency}
+												num={price}
+												numSize="text-lg"
+											/>
+										</SubTitle>
                     <Includes className="sm:hidden">
                         {include}
                     </Includes>
@@ -52,7 +59,7 @@ export const ProductCardList: React.FC<ProductCardList> = ({ idx, item: { thumbn
                 </Includes>
 								<div className="items-center gap-x-3 text-sm font-medium sm:flex sm:justify-center xl:justify-start">
 									<NavLink
-										href="/cursos"
+										href={`/subscrever?course=${id}`}
 										className="block bg-sky-500 text-white hover:bg-sky-600 active:bg-sky-700"
 										scroll={false}
 									>

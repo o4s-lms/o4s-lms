@@ -20,11 +20,7 @@ body {
     border-radius: 8px;
 }
 
-hanko-auth::part(form-item) {
-  min-width: 100%; /* input fields and buttons are on top of each other  */
-}
-
-hanko-auth, hanko-profile {
+hanko-profile {
 	/* Color Scheme */
 	--color: white;
 	--color-shade-1: #A6B6C0;
@@ -63,20 +59,9 @@ hanko-auth, hanko-profile {
 	--container-max-width: 800px;
 
 	/* Headline Styles */
-	--headline1-display: none;
 	--headline1-font-size: 24px;
 	--headline1-margin: 0 0 1rem;
 
-	--headline2-display: none;
 	--headline2-font-size: 18px;
 	--headline2-margin: 1rem 0 .5rem;
-}
-
-.auth-container {
-	max-width: 360px;
-	min-width: 200px;
-	margin: auto;
-	border-radius: 16px;
-	padding: 25px;
-	justify-center: center;
 }
