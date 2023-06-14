@@ -1,34 +1,33 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import { OperationError } from '@wundergraph/sdk/operations'
 import { createOperation, z } from '../../generated/wundergraph.factory'
 
-export class OrderNotFoundError extends OperationError {
+export class CartNotFoundError extends OperationError {
   statusCode = 400;
-  code = 'OrderNotFoundError' as const;
-  message = 'Order not found error';
+  code = 'CartNotFoundError' as const;
+  message = 'Cart not found error';
 }
 
-export class OrderUpdateError extends OperationError {
+export class CartUpdateError extends OperationError {
   statusCode = 400;
-  code = 'OrderUpdateError' as const;
+  code = 'CartUpdateError' as const;
   message = 'Update subtotal value error';
 }
 
 export default createOperation.mutation({
   input: z.object({
-		order_id: z.string(),
+		cart_id: z.string(),
   }),
   handler: async ({ input, graph, operations }) => {
 		const { data, error } = await operations.query({
-			operationName: 'orders/id',
+			operationName: 'cart/id',
 			input: {
-				id: input.order_id,
+				id: input.cart_id,
 			}
 		})
 		if (!data || error) {
-			throw new OrderNotFoundError()
+			throw new CartNotFoundError()
 		}
-		const items = data?.order?.items
+		const items = data?.cart?.items
 		let subTotal = 0
 		let subTotalWithTax = 0
 		let discount = 0
@@ -46,9 +45,9 @@ export default createOperation.mutation({
 		})
 		const item = await graph
 			.from('site')
-			.mutate('updateOneOrder')
+			.mutate('updateOneCart')
 			.where({
-				where: { id: input.order_id },
+				where: { id: input.cart_id },
 				data: {
 					tax_total: { set: Math.round(tax) },
 					discount_total: { set: Math.round(discount) },
@@ -58,10 +57,10 @@ export default createOperation.mutation({
 			})
 			.exec()
 		if (!item) {
-			throw new OrderUpdateError()
+			throw new CartUpdateError()
 		}
-		return { order: {
-				id: data?.order?.id,
+		return { cart: {
+				id: data?.cart?.id,
 				tax_total: item.tax_total,
 				discount_total: item.discount_total,
 				sub_total: item.sub_total,

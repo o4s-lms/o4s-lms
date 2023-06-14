@@ -5,31 +5,31 @@ import { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
 import Link from 'next/link'
 import Price from './price'
-import { enqueueSnackbar } from "notistack"
-import { OrdersIdResponseData } from "@o4s/generated-wundergraph/models"
+import { SnackbarProvider, enqueueSnackbar } from "notistack"
+import { CartIdResponseData } from "@o4s/generated-wundergraph/models"
 import { useQuery } from '@/lib/wundergraph'
 import useRemoveItemMutation from '@/hooks/orders/use-remove-item-mutation'
 
-type Cart = OrdersIdResponseData["order"]
+type Cart = CartIdResponseData["cart"]
 
 interface Props {
-	orderId: string;
+	cartId: string;
 }
 
-function CartTable({ orderId }: Props) {
+function CartTable({ cartId }: Props) {
   //const updateCartQuantity = useUpdateCartQuantityContext()
   const [cartItems, setCartItems] = useState([])
   const [subtotal, setSubtotal] = useState(0)
 	const removeItem = useRemoveItemMutation()
 
 	const { data, isLoading } = useQuery({
-		operationName: 'orders/id',
+		operationName: 'cart/id',
 		input: {
-			id: orderId,
+			id: cartId,
 		}
 	})
 
-	const cart: Cart = data?.order
+	const cart: Cart = data?.cart
 
   //function updateItem(id, quantity) {
     //updateCartQuantity(id, quantity)
@@ -37,7 +37,7 @@ function CartTable({ orderId }: Props) {
 
 	async function remove(orderId: string, productId: string) {
 		const removed = await removeItem.trigger({
-			order_id: orderId,
+			cart_id: cartId,
 			product_id: productId,
 		}, { throwOnError: false })
 		if (removed) {
@@ -99,7 +99,7 @@ function CartTable({ orderId }: Props) {
                 <button
                   aria-label="delete-item"
                   className=""
-                  onClick={() => remove(orderId, item.product.id)}
+                  onClick={() => remove(cartId, item.product.id)}
                 >
 									<X className="text-palette-primary border-palette-primary hover:bg-palette-lighter h-8 w-8 border p-1" />
     

@@ -118,6 +118,36 @@ export default configureWunderGraphOperations<OperationsConfiguration>({
 					required: false,
 				},
 			}),
+			CartCreate: (config) => ({
+				...config,
+				authentication: {
+					required: false,
+				},
+			}),
+			CartId: (config) => ({
+				...config,
+				authentication: {
+					required: false,
+				},
+			}),
+			CartAdd_item: (config) => ({
+				...config,
+				authentication: {
+					required: false,
+				},
+			}),
+			CartRemove_item: (config) => ({
+				...config,
+				authentication: {
+					required: false,
+				},
+			}),
+			CartSubtotal: (config) => ({
+				...config,
+				authentication: {
+					required: false,
+				},
+			}),
 			
 		},
   }

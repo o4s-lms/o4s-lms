@@ -1,14 +1,14 @@
 import { useSWRConfig } from 'swr';
 import { useMutation } from '@/lib/wundergraph';
 
-function useRemoveItemMutation() {
+function useAddItemMutation() {
 	const { mutate } = useSWRConfig();
 
-	const deleteItem = useMutation({
-		operationName: 'cart/remove-item'
+	const addItem = useMutation({
+		operationName: 'cart/add-item'
 	});
 
-	const trigger: typeof deleteItem.trigger = async (input, options) => {
+	const trigger: typeof addItem.trigger = async (input, options) => {
 
 		return await mutate(
 			{
@@ -18,7 +18,7 @@ function useRemoveItemMutation() {
 				}
 			},
 			() => {
-				return deleteItem.trigger(input, options);
+				return addItem.trigger(input, options);
 			},
 			{
 				populateCache: false,
@@ -29,9 +29,9 @@ function useRemoveItemMutation() {
 	};
 
 	return {
-		...deleteItem,
+		...addItem,
 		trigger,
 	}
 }
 
-export default useRemoveItemMutation
+export default useAddItemMutation

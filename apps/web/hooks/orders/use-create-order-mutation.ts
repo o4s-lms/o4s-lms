@@ -6,7 +6,7 @@ function useCreateOrderMutation() {
 
 	const trigger: typeof createOrder.trigger = async (input, options) => {
 
-		return createOrder.trigger(input, options)
+		return await createOrder.trigger(input, options)
 
 	}
 

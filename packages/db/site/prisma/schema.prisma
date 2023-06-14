@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider     			= "mongodb"
-  url          			= env("DATABASE_SITE_PROD")
+  url          			= env("DATABASE_SITE_DEV")
 }
 
 model Post {
@@ -159,6 +159,7 @@ model Product {
 	updated_by			String
   product_courses	ProductCourse[]
 	product_orders	OrderItems[]
+	product_carts		CartItems[]
 
 	@@map("products")
 }
@@ -172,6 +173,36 @@ model ProductCourse {
 	@@unique([product_id, course_id])
 
 	@@map("product_course")
+}
+
+model Cart {
+	id									String 			@id @default(auto()) @map("_id") @db.ObjectId
+	created_at					DateTime  	@default(now())
+	updated_at					DateTime  	@updatedAt
+	currency    				String    	@default("eur")
+	tax_total						Int					@default(0)
+	discount_total			Int					@default(0)
+	sub_total						Int 				@default(0)
+	sub_total_with_tax	Int 				@default(0)
+	items								CartItems[]
+
+	@@map("carts")
+}
+
+model CartItems {
+	id						String 			@id @default(auto()) @map("_id") @db.ObjectId
+	cart_id				String			@db.ObjectId
+	product_id		String			@db.ObjectId
+	quantity			Int 				@default(1)
+	price					Int
+	discount			Int					@default(0)
+	tax						Int 				@default(0)
+	cart					Cart				@relation(fields: [cart_id], references: [id], onDelete: Cascade)
+	product				Product			@relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+	@@unique([cart_id, product_id])
+
+	@@map("cart_items")
 }
 
 model Order {

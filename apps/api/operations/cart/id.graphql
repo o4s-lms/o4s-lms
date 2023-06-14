@@ -1,0 +1,26 @@
+query ($id: String!) {
+	cart: site_findUniqueCart(where: { id: $id }) {
+		id
+		currency
+		tax_total
+		discount_total
+		sub_total
+		sub_total_with_tax
+		items {
+			id
+			cart_id
+			product_id
+			price
+			quantity
+			discount
+			tax
+			product {
+				id
+				thumbnail
+				title
+				slug
+				include
+			}
+		}
+	}
+}

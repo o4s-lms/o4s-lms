@@ -3,12 +3,14 @@
 import * as React from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+
 import { enqueueSnackbar } from "notistack"
 import { createClient } from "@o4s/generated-wundergraph/client"
 import useCreateOrderMutation from "@/hooks/orders/use-create-order-mutation"
 import { ProductsAllResponseData, OrdersIdResponseData } from "@o4s/generated-wundergraph/models"
 import CartTable from "../components/cart-table"
 import { Loading } from "@/components/loading"
+import { createCart } from "@/actions/orders"
 
 type Product = ProductsAllResponseData["products"][number] | undefined
 type Cart = OrdersIdResponseData["order"]
@@ -17,39 +19,37 @@ const client = createClient({
   customFetch: fetch,
 })
 
+/**function getCookie(name: string) {
+  if (document.cookie && document.cookie !== '') {
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        const cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}*/
+
+function getCookie(key: string) {
+  var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+  return b ? b.pop() : "";
+}
+
 export default async function Subscrever() {
-	const createOrder = useCreateOrderMutation()
-	const stepsItems = ["Identificação", "Cursos", "Pagamento", "Conclusão"]
+	const stepsItems = ["Carrinho", "Pagamento", "Identificação", "Conclusão"]
 	const [isMutating, setIsMutating] = React.useState<boolean>(false)
-	const [currentStep, setCurrentStep] = React.useState<number>(2)
-	const [orderId, setOrderId] = React.useState<string | undefined>(undefined)
+	const [currentStep, setCurrentStep] = React.useState<number>(1)
+	const [cartId, setCartId] = React.useState(getCookie('cartId'))
 	const searchParams = useSearchParams()
-  const courseId = searchParams.get("course")
+  const productId = searchParams.get("course")
 
-	const { data, error } = await client.query({
-		operationName: 'products/all',
-		input: {
-			locale: 'pt'
-		}
-	})
-
-	const products = data?.products
-	const product: Product = products?.find((t) => t.id === courseId)
-
-  if (product?.id && !orderId) {
+	if (!cartId) {
 		setIsMutating(true)
-		const order = await createOrder.trigger({
-			product_id: product?.id,
-			price: product?.price,
-			discount: 0,
-			tax: product?.tax,
-		})
-		if (!order) {
-			enqueueSnackbar('Something went wrong!', { variant: 'error' })
-		} else {
-			enqueueSnackbar('Order created successfully!')
-			setOrderId(order.id)
-		}
+		const newCartId = await createCart(productId)
+		setCartId(newCartId)
 		setIsMutating(false)
 	}
 
@@ -82,17 +82,21 @@ export default async function Subscrever() {
 						))}
 					</ul>
 				</div>
-				<div className={`${currentStep == 1 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
-
-					
-				</div>
-
-			<div className={`${currentStep == 2 ? "" : "hidden"} {steps.currentStep == 1 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
+			<div className={`${currentStep == 1 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
 				{isMutating ? (
 					<Loading />
 				) : (
-					<CartTable orderId={orderId} />
+					<CartTable cartId={cartId} />
 				)}
+				<a
+					onClick={() => setCurrentStep(2)}	className="hover:text-primary underline underline-offset-4"
+					>
+					Step 2
+				</a>
+			</div>
+
+			<div className={`${currentStep == 2 ? "" : "hidden"} {steps.currentStep == 1 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
+				<p>Step 2</p>
 				<a
 					onClick={() => setCurrentStep(3)}	className="hover:text-primary underline underline-offset-4"
 					>
