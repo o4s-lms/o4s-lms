@@ -6,9 +6,12 @@ import { useSearchParams } from "next/navigation"
 import { enqueueSnackbar } from "notistack"
 import { createClient } from "@o4s/generated-wundergraph/client"
 import useCreateOrderMutation from "@/hooks/orders/use-create-order-mutation"
-import { ProductsAllResponseData } from "@o4s/generated-wundergraph/models"
+import { ProductsAllResponseData, OrdersIdResponseData } from "@o4s/generated-wundergraph/models"
+import CartTable from "../components/cart-table"
+import { Loading } from "@/components/loading"
 
 type Product = ProductsAllResponseData["products"][number] | undefined
+type Cart = OrdersIdResponseData["order"]
 
 const client = createClient({
   customFetch: fetch,
@@ -17,8 +20,9 @@ const client = createClient({
 export default async function Subscrever() {
 	const createOrder = useCreateOrderMutation()
 	const stepsItems = ["Identificação", "Cursos", "Pagamento", "Conclusão"]
+	const [isMutating, setIsMutating] = React.useState<boolean>(false)
 	const [currentStep, setCurrentStep] = React.useState<number>(2)
-	const [orderId, setOrderId] = React.useState<string | undefined>()
+	const [orderId, setOrderId] = React.useState<string | undefined>(undefined)
 	const searchParams = useSearchParams()
   const courseId = searchParams.get("course")
 
@@ -30,21 +34,23 @@ export default async function Subscrever() {
 	})
 
 	const products = data?.products
-	const item: Product = products?.find((t) => t.id === courseId)
+	const product: Product = products?.find((t) => t.id === courseId)
 
-  if (item?.id && !orderId) {
-		const { data, isMutating } = createOrder.trigger({
-			product_id: item?.id,
-			price: item?.price,
+  if (product?.id && !orderId) {
+		setIsMutating(true)
+		const order = await createOrder.trigger({
+			product_id: product?.id,
+			price: product?.price,
 			discount: 0,
-			tax: item?.tax,
+			tax: product?.tax,
 		})
-		if (!data) {
+		if (!order) {
 			enqueueSnackbar('Something went wrong!', { variant: 'error' })
 		} else {
 			enqueueSnackbar('Order created successfully!')
-			setOrderId(data.id)
+			setOrderId(order.id)
 		}
+		setIsMutating(false)
 	}
 
     return (
@@ -82,7 +88,11 @@ export default async function Subscrever() {
 				</div>
 
 			<div className={`${currentStep == 2 ? "" : "hidden"} {steps.currentStep == 1 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
-				<p>Step 2</p>
+				{isMutating ? (
+					<Loading />
+				) : (
+					<CartTable orderId={orderId} />
+				)}
 				<a
 					onClick={() => setCurrentStep(3)}	className="hover:text-primary underline underline-offset-4"
 					>

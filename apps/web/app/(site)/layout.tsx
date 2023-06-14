@@ -1,6 +1,5 @@
 import "@/styles/site.css"
 import { ThemeProvider } from "@/components/theme-provider"
-import { SnackbarProvider } from "notistack"
 import { Metadata } from "next"
 import { siteConfig } from "@/config/site"
 import Footer from "./components/footer"
@@ -34,7 +33,6 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
 			<body className="dark:bg-gray-900">
 				<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
 					<Navbar />
-						<SnackbarProvider />
 						{children}
 					<Footer />
 				</ThemeProvider>
