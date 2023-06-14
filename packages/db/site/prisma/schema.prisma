@@ -141,6 +141,7 @@ model Product {
 	id          		String    @id @default(auto()) @map("_id") @db.ObjectId
 	thumbnail				String
 	price						Int
+	tax							Int				@default(0)
   price_id    		String?
   currency    		String    @default("eur")
 	image						String

@@ -3,12 +3,49 @@
 import * as React from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+import { enqueueSnackbar } from "notistack"
+import { createClient } from "@o4s/generated-wundergraph/client"
+import useCreateOrderMutation from "@/hooks/orders/use-create-order-mutation"
+import { ProductsAllResponseData } from "@o4s/generated-wundergraph/models"
 
-export default function Subscrever() {
+type Product = ProductsAllResponseData["products"][number] | undefined
+
+const client = createClient({
+  customFetch: fetch,
+})
+
+export default async function Subscrever() {
+	const createOrder = useCreateOrderMutation()
 	const stepsItems = ["Identificação", "Cursos", "Pagamento", "Conclusão"]
 	const [currentStep, setCurrentStep] = React.useState<number>(2)
+	const [orderId, setOrderId] = React.useState<string | undefined>()
 	const searchParams = useSearchParams()
   const courseId = searchParams.get("course")
+
+	const { data, error } = await client.query({
+		operationName: 'products/all',
+		input: {
+			locale: 'pt'
+		}
+	})
+
+	const products = data?.products
+	const item: Product = products?.find((t) => t.id === courseId)
+
+  if (item?.id && !orderId) {
+		const { data, isMutating } = createOrder.trigger({
+			product_id: item?.id,
+			price: item?.price,
+			discount: 0,
+			tax: item?.tax,
+		})
+		if (!data) {
+			enqueueSnackbar('Something went wrong!', { variant: 'error' })
+		} else {
+			enqueueSnackbar('Order created successfully!')
+			setOrderId(data.id)
+		}
+	}
 
     return (
 			<><section className="bg-gray-50 py-4 dark:bg-gray-900">
@@ -18,7 +55,7 @@ export default function Subscrever() {
 							<li key={idx} aria-current={currentStep == idx + 1 ? "step" : false} className="flex flex-1 gap-x-2 last:flex-none md:items-center">
 								<div className="flex flex-col items-center gap-x-2">
 									<div className={`flex h-8 w-8 flex-none items-center justify-center rounded-full border-2 ${currentStep > idx + 1 ? "border-indigo-600 bg-indigo-600" : "" || currentStep == idx + 1 ? "border-indigo-600" : ""}`}>
-										<span className={` ${currentStep > idx + 1 ? "hidden" : "" || currentStep == idx + 1 ? "text-indigo-600" : ""}`}>
+										<span className={`${currentStep > idx + 1 ? "hidden" : "" || currentStep == idx + 1 ? "text-indigo-600" : ""}`}>
 											{idx + 1}
 										</span>
 										{currentStep > idx + 1 ? (

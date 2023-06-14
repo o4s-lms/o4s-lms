@@ -13,6 +13,12 @@ export class ItemCreationError extends OperationError {
   message = 'Add to cart creation error';
 }
 
+export class UpdateSubTotalError extends OperationError {
+  statusCode = 400;
+  code = 'UpdateSubTotalError' as const;
+  message = 'Update subtotal error';
+}
+
 export default createOperation.mutation({
   input: z.object({
 		product_id: z.string(),
@@ -55,16 +61,21 @@ export default createOperation.mutation({
 		if (!item) {
 			throw new ItemCreationError()
 		}
-		const { data, error } = await operations.mutate({
+		const subtotal = await operations.mutate({
 			operationName: 'orders/subtotal',
 			input: {
 				order_id: order.id,
 			}
 		})
-		return { order: {
-				id: order.id,
-				item: item,
-			}
+		if (!subtotal) {
+			throw new UpdateSubTotalError()
 		}
+		const { data, error } = await operations.query({
+			operationName: 'orders/id',
+			input: {
+				id: order.id,
+			}
+		})
+		return data?.order
   },
 })

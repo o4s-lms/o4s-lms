@@ -5,18 +5,12 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Price from './price'
 //import { getCartSubTotal } from '@/utils/helpers'
+import { OrdersIdResponseData } from "@o4s/generated-wundergraph/models"
 
-type Item = {
-	id: string;
-	quantity: number;
-}
+type Cart = OrdersIdResponseData["order"]
 
-interface Props {
-	cart: Item[];
-}
-
-function CartTable({ cart }: Props) {
-  /**const updateCartQuantity = useUpdateCartQuantityContext()
+function CartTable({ cart }: Cart) {
+  const updateCartQuantity = useUpdateCartQuantityContext()
   const [cartItems, setCartItems] = useState([])
   const [subtotal, setSubtotal] = useState(0)
 
@@ -108,7 +102,7 @@ function CartTable({ cart }: Props) {
         </tbody>
       </table>
     </div>
-  )*/
+  )
 }
 
 export default CartTable

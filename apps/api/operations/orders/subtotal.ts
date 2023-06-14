@@ -35,13 +35,13 @@ export default createOperation.mutation({
 		let tax = 0
 		items?.forEach(function(item) {
 			const realPrice = item.price - item.discount
-			subTotal = subTotal + (item.quantity * realPrice)
-			discount = discount + (item.quantity * item.discount)
+			subTotal += (item.quantity * realPrice)
+			discount += (item.quantity * item.discount)
 			if (item.tax > 0) {
-				subTotalWithTax = subTotalWithTax + (item.quantity * (realPrice * (item.tax / 100)))
-				tax = tax + (item.quantity * (realPrice * (item.tax / 100)))
+				subTotalWithTax += (item.quantity * (realPrice + (realPrice * (item.tax / 100))))
+				tax += (item.quantity * (realPrice * (item.tax / 100)))
 			} else {
-				subTotalWithTax = subTotalWithTax + (item.quantity * realPrice)
+				subTotalWithTax += (item.quantity * realPrice)
 			}
 		})
 		const item = await graph

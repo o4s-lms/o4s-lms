@@ -5,6 +5,7 @@ query (
 		id
     thumbnail
     price
+		tax
 		price_id
     currency
 		title

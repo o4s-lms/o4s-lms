@@ -9,6 +9,7 @@ query ($locale: String!, $active: Boolean = true) {
 		id
 		thumbnail
 		price
+		tax
     currency
 		image
 		title
