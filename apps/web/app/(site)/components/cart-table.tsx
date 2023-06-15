@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
 import Link from 'next/link'
 import Price from './price'
+import { Loading } from "@/components/loading"
 import { SnackbarProvider, enqueueSnackbar } from "notistack"
 import { CartIdResponseData } from "@o4s/generated-wundergraph/models"
 import { useQuery } from '@/lib/wundergraph'
@@ -49,6 +50,8 @@ function CartTable({ cartId }: Props) {
 
   return (
     <div className="min-h-80 mx-auto my-4 w-full max-w-2xl sm:my-8">
+			<SnackbarProvider />
+			{!isLoading ? (
       <table className="mx-auto">
         <thead>
           <tr className="text-palette-primary border-palette-light border-b text-xs uppercase sm:text-sm">
@@ -69,7 +72,7 @@ function CartTable({ cartId }: Props) {
                   width={64}
                   className={`hidden sm:inline-flex`}
                 />
-                <Link passHref href={`/cursos/${item.product.slug}`}>
+                <Link passHref href={`/cursos/${item.product.slug}`} legacyBehavior>
                   <a className="hover:text-palette-dark pt-1">
                     {item.product.title}, {item.product.include}
                   </a>
@@ -107,6 +110,23 @@ function CartTable({ cartId }: Props) {
               </td>
             </tr>
           ))}
+					{
+            cart?.discount_total === 0 ?
+              null
+              :
+              <tr className="text-center">
+                <td></td>
+                <td className="font-primary p-4 text-base font-semibold uppercase text-gray-600 sm:px-6">Descontos</td>
+                <td className="font-primary text-palette-primary p-4 text-lg font-medium sm:px-6">
+                  <Price
+                    currency="eur"
+                    num={cart?.discount_total}
+                    numSize="text-xl"
+                  />
+                </td>
+                <td></td>
+              </tr>
+          }
           {
             cart?.sub_total === 0 ?
               null
@@ -126,6 +146,9 @@ function CartTable({ cartId }: Props) {
           }
         </tbody>
       </table>
+			) : (
+				<Loading />
+			)}
     </div>
   )
 }

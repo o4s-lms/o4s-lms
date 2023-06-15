@@ -14,7 +14,7 @@ function Price({currency, num, numSize }: Props) {
 	}
   return (
     <>
-      Preço: {currency.toUpperCase()} <span className={numSize}>{num/100}</span>
+      {currency.toUpperCase()} <span className={numSize}>{num/100}</span>
     </>
   )
 }

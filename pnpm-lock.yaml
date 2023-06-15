@@ -367,6 +367,9 @@ importers:
       tailwindcss-animate:
         specifier: ^1.0.6
         version: 1.0.6(tailwindcss@3.3.2)
+      use-local-storage:
+        specifier: ^3.0.0
+        version: 3.0.0(react@18.2.0)
       usehooks-ts:
         specifier: ^2.9.1
         version: 2.9.1(react-dom@18.2.0)(react@18.2.0)
@@ -15909,6 +15912,14 @@ packages:
       '@types/react': 18.2.10
       react: 18.2.0
       use-isomorphic-layout-effect: 1.1.2(@types/react@18.2.10)(react@18.2.0)
+    dev: false
+
+  /use-local-storage@3.0.0(react@18.2.0):
+    resolution: {integrity: sha512-wlPNnBCG3ULIJMr5A+dvWqLiPWCfsN1Kwijq+sAhT5yV4ex0u6XmZuNwP+RerIOfzBuz1pwSZuzhZMiluGQHfQ==}
+    peerDependencies:
+      react: '>=16.8.1'
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /use-sidecar@1.1.2(@types/react@18.2.10)(react@18.2.0):

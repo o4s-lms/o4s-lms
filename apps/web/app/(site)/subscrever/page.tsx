@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation"
 import { enqueueSnackbar } from "notistack"
 import { createClient } from "@o4s/generated-wundergraph/client"
 import useCreateOrderMutation from "@/hooks/orders/use-create-order-mutation"
+import { MoveRight } from 'lucide-react'
 import { ProductsAllResponseData, OrdersIdResponseData } from "@o4s/generated-wundergraph/models"
 import CartTable from "../components/cart-table"
 import { Loading } from "@/components/loading"
@@ -33,25 +34,31 @@ const client = createClient({
   return cookieValue;
 }*/
 
-function getCookie(key: string) {
-  var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
-  return b ? b.pop() : "";
+async function getCookie(key: string) {
+	if(typeof document !== 'undefined') {
+		var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+		return b ? b.pop() : "";
+	}
 }
 
 export default async function Subscrever() {
 	const stepsItems = ["Carrinho", "Pagamento", "Identificação", "Conclusão"]
-	const [isMutating, setIsMutating] = React.useState<boolean>(false)
+	//const [isMutating, setIsMutating] = React.useState<boolean>(false)
 	const [currentStep, setCurrentStep] = React.useState<number>(1)
-	const [cartId, setCartId] = React.useState(getCookie('cartId'))
+	//const [cartId, setCartId] = React.useState<string | undefined>(getCookie("cartId"))
 	const searchParams = useSearchParams()
   const productId = searchParams.get("course")
+	const cartId = await getCookie("cartId")
 
-	if (!cartId) {
-		setIsMutating(true)
-		const newCartId = await createCart(productId)
-		setCartId(newCartId)
-		setIsMutating(false)
+	const checkCart = async () => {
+		if (!cartId) {
+			//setIsMutating(true)
+			const newCartId = await createCart(productId)
+			// setCartId(newCartId)
+			//setIsMutating(false)
+		}
 	}
+
 
     return (
 			<><section className="bg-gray-50 py-4 dark:bg-gray-900">
@@ -83,16 +90,17 @@ export default async function Subscrever() {
 					</ul>
 				</div>
 			<div className={`${currentStep == 1 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
-				{isMutating ? (
-					<Loading />
-				) : (
-					<CartTable cartId={cartId} />
-				)}
+				<CartTable cartId={cartId} />
 				<a
-					onClick={() => setCurrentStep(2)}	className="hover:text-primary underline underline-offset-4"
-					>
-					Step 2
+					onClick={() => setCurrentStep(2)}
+					aria-label="checkout-products"
+					className="bg-palette-primary font-primary focus:ring-palette-light hover:bg-palette-dark flex w-full items-center justify-center rounded-sm 
+					pb-1 pt-2 text-lg font-semibold leading-relaxed text-white focus:outline-none focus:ring-1"
+				>
+					Pagamento
+					<MoveRight className="ml-2 inline-flex w-4"/>
 				</a>
+				
 			</div>
 
 			<div className={`${currentStep == 2 ? "" : "hidden"} {steps.currentStep == 1 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
