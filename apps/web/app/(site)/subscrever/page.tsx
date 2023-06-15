@@ -57,6 +57,7 @@ export default async function Subscrever() {
 
 	React.useEffect(() => {
 		async function fetchCart() {
+			setCartId(null)
 			const id = await createCart(productId)
 			if (!ignore) {
         setCartId(id)

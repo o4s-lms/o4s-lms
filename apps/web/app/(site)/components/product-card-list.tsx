@@ -59,7 +59,7 @@ export const ProductCardList: React.FC<ProductCardList> = ({ idx, item: { id, th
                 </Includes>
 								<div className="items-center gap-x-3 text-sm font-medium sm:flex sm:justify-center xl:justify-start">
 									<NavLink
-										href={`/subscrever?course=${id}`}
+										href={`/subscrever?product=${id}`}
 										className="block bg-sky-500 text-white hover:bg-sky-600 active:bg-sky-700"
 										scroll={false}
 									>
