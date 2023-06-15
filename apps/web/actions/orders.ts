@@ -10,8 +10,7 @@ const client = createClient({
 
 type Product = ProductsAllResponseData["products"][number] | undefined
 
-async function newCart(productId: string) {
-
+export async function getProduct(productId: string) {
 	const { data, error } = await client.query({
 		operationName: 'products/all',
 		input: {
@@ -21,16 +20,22 @@ async function newCart(productId: string) {
 
 	const products = data?.products
 	const product: Product = products?.find((t) => t.id === productId)
+	return product
+}
+
+async function newCart(productId: string) {
+
+	const product = await getProduct(productId)
 	
 	if (product) {
 
 		const { data: cart, error } = await client.mutate({
 			operationName: 'cart/create',
 			input: {
-				product_id: product?.id,
-				price: product?.price,
+				product_id: product.id,
+				price: product.price,
 				discount: 0,
-				tax: product?.tax,
+				tax: product.tax,
 			}
 		})
 		if (cart) {

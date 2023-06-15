@@ -59,6 +59,10 @@ export default async function Subscrever() {
 		}
 	}
 
+	function BackToCartButton() {
+
+	}
+
 
     return (
 			<><section className="bg-gray-50 py-4 dark:bg-gray-900">
@@ -105,6 +109,16 @@ export default async function Subscrever() {
 
 			<div className={`${currentStep == 2 ? "" : "hidden"} {steps.currentStep == 1 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
 				<p>Step 2</p>
+				<Link href="/" passHref>
+					<a
+						aria-label="back-to-products"
+						className="border-palette-primary text-palette-primary font-primary focus:ring-palette-light hover:bg-palette-lighter flex w-full items-center justify-center rounded-sm 
+					border pb-1 pt-2 text-lg font-semibold leading-relaxed focus:outline-none focus:ring-1"
+					>
+						<FontAwesomeIcon icon={faArrowLeft} className="mr-2 inline-flex w-4" />
+						Back To All Products
+					</a>
+				</Link>
 				<a
 					onClick={() => setCurrentStep(3)}	className="hover:text-primary underline underline-offset-4"
 					>
