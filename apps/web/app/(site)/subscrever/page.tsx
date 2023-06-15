@@ -46,14 +46,26 @@ export default async function Subscrever() {
 	const stepsItems = ["Carrinho", "Pagamento", "Identificação", "Conclusão"]
 	//const [isMutating, setIsMutating] = React.useState<boolean>(false)
 	const [currentStep, setCurrentStep] = React.useState<number>(1)
-	//const [cartId, setCartId] = React.useState<string | undefined>(getCookie("cartId"))
+	const [cartId, setCartId] = React.useState<string | undefined>()
 	const searchParams = useSearchParams()
-  const productId = searchParams.get("course")
-	let cartId = await getCookie("cartId")
+  //const productId = searchParams.get("product")
+	//let cartId = await getCookie("cartId")
 
 	/**if (!cartId) {
 		cartId = await createCart(productId)
 	}*/
+
+	React.useEffect(() => {
+		async function fetchCart() {
+			let cartId = await getCookie("cartId")
+			const productId = searchParams.get("product")
+			if (!cartId) {
+				cartId = await createCart(productId)
+			}
+			setCartId(cartId)
+		}
+		fetchCart()
+  }, [searchParams])
 
 	function BackToCartButton() {
 
