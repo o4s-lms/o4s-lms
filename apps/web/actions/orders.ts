@@ -2,13 +2,15 @@
 
 import { cookies } from "next/headers"
 import { createClient } from "@o4s/generated-wundergraph/client"
-import { ProductsAllResponseData } from "@o4s/generated-wundergraph/models"
+import { CartIdResponseData, ProductsAllResponseData } from "@o4s/generated-wundergraph/models"
+import { undefined } from "zod"
 
 const client = createClient({
   customFetch: fetch,
 })
 
 type Product = ProductsAllResponseData["products"][number] | undefined
+type Cart = CartIdResponseData["cart"]
 
 export async function getProduct(productId: string) {
 	const { data, error } = await client.query({
@@ -21,6 +23,20 @@ export async function getProduct(productId: string) {
 	const products = data?.products
 	const product: Product = products?.find((t) => t.id === productId)
 	return product
+}
+
+export async function getProductsToAdd(cart: Cart) {
+	const { data, error } = await client.query({
+		operationName: 'products/all',
+		input: {
+			locale: 'pt'
+		}
+	})
+
+	let products = data?.products
+	//productIds.forEach((productId) => products = products?.filter((t) => t.id !== productId))
+	cart?.items?.forEach((item) => products = products?.filter((t) => t.id !== item.product_id))
+	return products
 }
 
 async function newCart(productId: string) {
