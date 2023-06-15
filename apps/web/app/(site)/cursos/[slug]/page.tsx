@@ -2,6 +2,7 @@ import Image from "next/image"
 
 import { PlayList } from "../../components/play-list"
 import { createClient } from "@o4s/generated-wundergraph/client"
+import { PrincingCourse } from "../../components/pricing-course"
 
 const client = createClient({
   customFetch: fetch,
@@ -77,6 +78,7 @@ const Curso = async ({ params }: { params: { slug: string } }) => {
             <PlayList items={products} slug={params.slug} className="sticky top-3 w-full" />
           </div>
         </div>
+				<PrincingCourse />
       </div>
 
       <style></style>

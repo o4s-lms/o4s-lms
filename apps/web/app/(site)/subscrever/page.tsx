@@ -7,9 +7,10 @@ import { useSearchParams } from "next/navigation"
 import { enqueueSnackbar } from "notistack"
 import { createClient } from "@o4s/generated-wundergraph/client"
 import useCreateOrderMutation from "@/hooks/orders/use-create-order-mutation"
-import { MoveRight } from 'lucide-react'
+import { MoveRight, MoveLeft } from 'lucide-react'
 import { ProductsAllResponseData, OrdersIdResponseData } from "@o4s/generated-wundergraph/models"
 import CartTable from "../components/cart-table"
+import PromosTable from "../components/promos-table"
 import { Loading } from "@/components/loading"
 import { createCart } from "@/actions/orders"
 
@@ -48,16 +49,11 @@ export default async function Subscrever() {
 	//const [cartId, setCartId] = React.useState<string | undefined>(getCookie("cartId"))
 	const searchParams = useSearchParams()
   const productId = searchParams.get("course")
-	const cartId = await getCookie("cartId")
+	let cartId = await getCookie("cartId")
 
-	const checkCart = async () => {
-		if (!cartId) {
-			//setIsMutating(true)
-			const newCartId = await createCart(productId)
-			// setCartId(newCartId)
-			//setIsMutating(false)
-		}
-	}
+	/**if (!cartId) {
+		cartId = await createCart(productId)
+	}*/
 
 	function BackToCartButton() {
 
@@ -95,6 +91,7 @@ export default async function Subscrever() {
 				</div>
 			<div className={`${currentStep == 1 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
 				<CartTable cartId={cartId} />
+				{/**<PromosTable card={card} />*/}
 				<a
 					onClick={() => setCurrentStep(2)}
 					aria-label="checkout-products"
@@ -109,13 +106,13 @@ export default async function Subscrever() {
 
 			<div className={`${currentStep == 2 ? "" : "hidden"} {steps.currentStep == 1 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
 				<p>Step 2</p>
-				<Link href="/" passHref>
+				<Link href="/" passHref legacyBehavior>
 					<a
 						aria-label="back-to-products"
 						className="border-palette-primary text-palette-primary font-primary focus:ring-palette-light hover:bg-palette-lighter flex w-full items-center justify-center rounded-sm 
 					border pb-1 pt-2 text-lg font-semibold leading-relaxed focus:outline-none focus:ring-1"
 					>
-						<FontAwesomeIcon icon={faArrowLeft} className="mr-2 inline-flex w-4" />
+						<MoveLeft className="ml-2 inline-flex w-4"/>
 						Back To All Products
 					</a>
 				</Link>
