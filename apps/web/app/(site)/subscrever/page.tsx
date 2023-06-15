@@ -46,9 +46,9 @@ export default async function Subscrever() {
 	const stepsItems = ["Carrinho", "Pagamento", "Identificação", "Conclusão"]
 	//const [isMutating, setIsMutating] = React.useState<boolean>(false)
 	const [currentStep, setCurrentStep] = React.useState<number>(1)
-	const [cartId, setCartId] = React.useState<string | undefined>()
+	const [cartId, setCartId] = React.useState<string | null>(null)
 	const searchParams = useSearchParams()
-  //const productId = searchParams.get("product")
+  const productId = searchParams.get("product") || ''
 	//let cartId = await getCookie("cartId")
 
 	/**if (!cartId) {
@@ -57,15 +57,17 @@ export default async function Subscrever() {
 
 	React.useEffect(() => {
 		async function fetchCart() {
-			let cartId = await getCookie("cartId")
-			const productId = searchParams.get("product")
-			if (!cartId) {
-				cartId = await createCart(productId)
-			}
-			setCartId(cartId)
+			const id = await createCart(productId)
+			if (!ignore) {
+        setCartId(id)
+      }
 		}
+		let ignore = false
 		fetchCart()
-  }, [searchParams])
+		return () => {
+      ignore = true
+    }
+  }, [cartId, productId])
 
 	function BackToCartButton() {
 
@@ -102,7 +104,12 @@ export default async function Subscrever() {
 					</ul>
 				</div>
 			<div className={`${currentStep == 1 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
-				<CartTable cartId={cartId} />
+				{cartId ? (
+					<CartTable cartId={cartId} />
+				) : (
+					'Loading...'
+				)}
+				
 				{/**<PromosTable card={card} />*/}
 				<a
 					onClick={() => setCurrentStep(2)}

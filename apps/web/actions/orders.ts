@@ -3,7 +3,6 @@
 import { cookies } from "next/headers"
 import { createClient } from "@o4s/generated-wundergraph/client"
 import { CartIdResponseData, ProductsAllResponseData } from "@o4s/generated-wundergraph/models"
-import { undefined } from "zod"
 
 const client = createClient({
   customFetch: fetch,
@@ -70,6 +69,7 @@ export async function createCart(productId: string) {
 			cookies().set('cartId', newCartId)
 			return newCartId
 		}
+		return null
 	}
 	return cartId
 }

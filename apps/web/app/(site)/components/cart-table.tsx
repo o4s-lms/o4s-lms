@@ -16,7 +16,7 @@ type Cart = CartIdResponseData["cart"]
 type Products = ProductsAllResponseData["products"] | undefined
 
 interface Props {
-	cartId: string | undefined;
+	cartId: string | null;
 }
 
 function CartTable({ cartId }: Props) {
