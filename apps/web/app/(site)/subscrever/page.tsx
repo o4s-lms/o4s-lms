@@ -11,7 +11,7 @@ import { MoveRight, MoveLeft } from 'lucide-react'
 import { ProductsAllResponseData, OrdersIdResponseData } from "@o4s/generated-wundergraph/models"
 import CartTable from "../components/cart-table"
 import PromosTable from "../components/promos-table"
-import { Loading } from "@/components/loading"
+import { Icons } from "@/components/icons"
 import { createCart } from "@/actions/orders"
 import { useEffectOnce } from "usehooks-ts"
 
@@ -124,7 +124,7 @@ export default function Subscrever() {
 				{cartId ? (
 					<CartTable cartId={cartId} />
 				) : (
-					<Loading />
+					<Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
 				)}
 				
 				{/**<PromosTable card={card} />*/}

@@ -20,8 +20,6 @@ interface Props {
 }
 
 function CartTable({ cartId }: Props) {
-  const [cartItems, setCartItems] = React.useState([])
-  const [subtotal, setSubtotal] = React.useState(0)
 	const [isDeleting, setIsDeleting] = React.useState(false)
 	const removeItem = useRemoveItemMutation()
 	const addItem = useAddItemMutation()
@@ -155,7 +153,7 @@ function CartTable({ cartId }: Props) {
 					</tbody>
 				</table>
 			) : (
-				<Loading />
+				<Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
 			)}
     </div>
   )

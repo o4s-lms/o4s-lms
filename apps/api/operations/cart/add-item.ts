@@ -32,9 +32,7 @@ export default createOperation.mutation({
 						product_id: input.product_id,
 					}
 				},
-				update: {
-					quantity: { increment: 1 },
-				},
+				update: {},
 				create: {
 					cart: { connect: { id: input.cart_id } },
 					product: { connect: { id: input.product_id } },

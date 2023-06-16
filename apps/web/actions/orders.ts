@@ -60,16 +60,41 @@ async function newCart(productId: string) {
 	}
 }
 
+async function addItem(cartId: string, productId: string) {
+
+	const product = await getProduct(productId)
+	
+	if (product) {
+
+		const { data: cart, error } = await client.mutate({
+			operationName: 'cart/add-item',
+			input: {
+				cart_id: cartId,
+				product_id: product.id,
+				price: product.price,
+				discount: 0,
+				tax: product.tax,
+			}
+		})
+		if (cart) {
+			return cart.id
+		}
+	}
+}
+
 export async function createCart(productId: string) {
 
-	const cartId = cookies().get('cartId')?.value
+	let cartId = cookies().get('cartId')?.value
 	if (!cartId) {
-		const newCartId = await newCart(productId)
-		if (newCartId) {
-			cookies().set('cartId', newCartId)
-			return newCartId
+		const cartId = await newCart(productId)
+		if (cartId) {
+			cookies().set('cartId', cartId)
+			return cartId
 		}
 		return
 	}
-	return cartId
+	cartId = await addItem(cartId, productId)
+	if (cartId) {
+		return cartId
+	}
 }
