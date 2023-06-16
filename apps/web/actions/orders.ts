@@ -69,7 +69,7 @@ export async function createCart(productId: string) {
 			cookies().set('cartId', newCartId)
 			return newCartId
 		}
-		return null
+		return
 	}
 	return cartId
 }

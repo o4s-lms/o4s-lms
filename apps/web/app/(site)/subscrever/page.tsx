@@ -13,6 +13,7 @@ import CartTable from "../components/cart-table"
 import PromosTable from "../components/promos-table"
 import { Loading } from "@/components/loading"
 import { createCart } from "@/actions/orders"
+import { useEffectOnce } from "usehooks-ts"
 
 type Product = ProductsAllResponseData["products"][number] | undefined
 type Cart = OrdersIdResponseData["order"]
@@ -33,20 +34,20 @@ const client = createClient({
     }
   }
   return cookieValue;
-}*/
+}
 
 async function getCookie(key: string) {
 	if(typeof document !== 'undefined') {
 		var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
 		return b ? b.pop() : "";
 	}
-}
+}*/
 
-export default async function Subscrever() {
+export default function Subscrever() {
 	const stepsItems = ["Carrinho", "Pagamento", "Identificação", "Conclusão"]
 	//const [isMutating, setIsMutating] = React.useState<boolean>(false)
 	const [currentStep, setCurrentStep] = React.useState<number>(1)
-	const [cartId, setCartId] = React.useState<string | null>(null)
+	const [cartId, setCartId] = React.useState<string>()
 	const searchParams = useSearchParams()
   const productId = searchParams.get("product") || ''
 	//let cartId = await getCookie("cartId")
@@ -55,9 +56,24 @@ export default async function Subscrever() {
 		cartId = await createCart(productId)
 	}*/
 
-	React.useEffect(() => {
+	useEffectOnce(() => {
+    async function fetchCart() {
+			const id = await createCart(productId)
+			if (!ignore) {
+				console.log(`Fetching cart: ${id}`)
+        setCartId(id)
+				console.log(`CartId: ${cartId}`)
+      }
+		}
+		let ignore = false
+		fetchCart()
+		return () => {
+      ignore = true
+    }
+  })
+
+	/**React.useEffect(() => {
 		async function fetchCart() {
-			setCartId(null)
 			const id = await createCart(productId)
 			if (!ignore) {
         setCartId(id)
@@ -68,7 +84,7 @@ export default async function Subscrever() {
 		return () => {
       ignore = true
     }
-  }, [cartId, productId])
+  }, [productId])*/
 
 	function BackToCartButton() {
 
@@ -108,7 +124,7 @@ export default async function Subscrever() {
 				{cartId ? (
 					<CartTable cartId={cartId} />
 				) : (
-					'Loading...'
+					<Loading />
 				)}
 				
 				{/**<PromosTable card={card} />*/}
