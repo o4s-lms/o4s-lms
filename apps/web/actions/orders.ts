@@ -11,6 +11,21 @@ const client = createClient({
 type Product = ProductsAllResponseData["products"][number] | undefined
 type Cart = CartIdResponseData["cart"]
 
+export async function createOrder(cartId: string, paymentMethod: string) {
+
+	const { data: order, error } = await client.mutate({
+		operationName: 'orders/create',
+		input: {
+			cart_id: cartId,
+			payment_method: paymentMethod,
+		}
+	})
+	/**if (order) {
+		return order
+	}*/
+	return order
+}
+
 export async function getProduct(productId: string) {
 	const { data, error } = await client.query({
 		operationName: 'products/all',

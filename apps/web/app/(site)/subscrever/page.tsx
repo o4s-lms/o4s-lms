@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
 import { enqueueSnackbar } from "notistack"
 import { createClient } from "@o4s/generated-wundergraph/client"
@@ -45,6 +45,7 @@ async function getCookie(key: string) {
 }*/
 
 export default function Subscrever() {
+	const router = useRouter()
 	const stepsItems = ["Carrinho", "Pagamento", "Identificação", "Conclusão"]
 	const [currentStep, setCurrentStep] = React.useState<number>(1)
 	const [cartId, setCartId] = React.useState<string>()
@@ -80,8 +81,8 @@ export default function Subscrever() {
   }, [productId])*/
 
 	const save = async (method_id: string | undefined) => {
-		console.log(`Method ID: ${method_id}`)
-
+		const callback = `/signin?callback=/subscrever/concluido?cartId=${cartId}&paymentMethod=${method_id}`
+		router.replace(callback)
 	}
 
 
@@ -135,7 +136,7 @@ export default function Subscrever() {
 			</div>
 
 			<div className={`${currentStep == 2 ? "" : "hidden"} {steps.currentStep == 1 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
-				<PaymentMethod saveOrder={save} />
+				<PaymentMethod saveOrder={(method_id) => save(method_id)} />
 					
 					<button
 						onClick={() => setCurrentStep(1)}

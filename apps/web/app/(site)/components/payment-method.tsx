@@ -2,7 +2,7 @@ import * as React from "react"
 import Image from "next/image"
 import { Icons } from "@/components/icons"
 import { useQuery } from "@o4s/generated-wundergraph/nextjs"
-import { MoveLeft } from "lucide-react";
+import { MoveRight } from "lucide-react";
 
 interface Props {
 	saveOrder: (method_id: string | undefined) => void;
@@ -24,8 +24,9 @@ function PaymentMethod({ saveOrder }: Props) {
 	const radios = data?.methods
 
 	return (
-		<div className="mx-auto w-full max-w-md px-4">
-			<h2 className="font-medium text-gray-800">Select your payment method</h2>
+		<div className="min-h-80 mx-auto my-4 w-full max-w-2xl sm:my-8">
+			<div className="mx-auto">
+			<h2 className="font-medium text-gray-800">Selecione o método de pagamento</h2>
 			{isLoading ? (
 				<Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
 			) : (
@@ -37,13 +38,12 @@ function PaymentMethod({ saveOrder }: Props) {
 							<label htmlFor={item.name} className="relative block">
 								<input
 									onChange={radioHandler}
-									id={item.id}
+									id={item.name}
 									type="radio"
-									defaultChecked={idx == 1 ? true : false}
 									value={item.id}
 									name="payment"
 									className="peer sr-only" />
-								<div className="flex w-full cursor-pointer items-start gap-x-3 rounded-lg border bg-white p-4 shadow-sm ring-indigo-600 duration-200 peer-checked:ring-2">
+								<div className="flex w-full cursor-pointer items-start gap-x-3 rounded-lg border p-4 shadow-sm ring-indigo-600 duration-200 peer-checked:ring-2">
 									<div className="flex-none">
 										<Image src={item.icon} width={48} height={48} alt={item.name}/>
 									</div>
@@ -51,9 +51,9 @@ function PaymentMethod({ saveOrder }: Props) {
 										<h3 className="pr-3 font-medium leading-none text-gray-800">
 											{item.name}
 										</h3>
-										{/**<p className="mt-1 text-sm text-gray-600">
+										<p className="mt-1 text-sm text-gray-600">
 											{item.description}
-										</p>*/}
+										</p>
 									</div>
 								</div>
 								<div className="absolute right-4 top-4 flex h-4 w-4 flex-none items-center justify-center rounded-full border text-white duration-200 peer-checked:bg-indigo-600 peer-checked:text-white">
@@ -66,15 +66,13 @@ function PaymentMethod({ saveOrder }: Props) {
 			</ul>
 			<button
 				onClick={() => saveOrder(selectedMethod)}
-				aria-label="back-to-products"
-				className="border-palette-primary text-palette-primary font-primary focus:ring-palette-light hover:bg-palette-lighter flex w-full items-center justify-center rounded-sm 
-			border pb-1 pt-2 text-lg font-semibold leading-relaxed focus:outline-none focus:ring-1"
-			>
-				<MoveLeft className="ml-2 inline-flex w-4"/>
-				Concluir
+				className='mt-4 w-full rounded-lg bg-indigo-600 p-3 text-sm font-semibold text-white duration-150 hover:bg-indigo-500 active:bg-indigo-700'>
+				Começa Agora
+				<MoveRight className="ml-2 inline-flex w-4"/>
 			</button>
 			</>
 			)}
+			</div>
 		</div>
 	)
 }
