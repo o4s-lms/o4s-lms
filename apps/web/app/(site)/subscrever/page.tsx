@@ -45,16 +45,10 @@ async function getCookie(key: string) {
 
 export default function Subscrever() {
 	const stepsItems = ["Carrinho", "Pagamento", "Identificação", "Conclusão"]
-	//const [isMutating, setIsMutating] = React.useState<boolean>(false)
 	const [currentStep, setCurrentStep] = React.useState<number>(1)
 	const [cartId, setCartId] = React.useState<string>()
 	const searchParams = useSearchParams()
   const productId = searchParams.get("product") || ''
-	//let cartId = await getCookie("cartId")
-
-	/**if (!cartId) {
-		cartId = await createCart(productId)
-	}*/
 
 	useEffectOnce(() => {
     async function fetchCart() {
@@ -128,7 +122,7 @@ export default function Subscrever() {
 				)}
 				
 				{/**<PromosTable card={card} />*/}
-				<a
+				<button
 					onClick={() => setCurrentStep(2)}
 					aria-label="checkout-products"
 					className="bg-palette-primary font-primary focus:ring-palette-light hover:bg-palette-dark flex w-full items-center justify-center rounded-sm 
@@ -136,22 +130,21 @@ export default function Subscrever() {
 				>
 					Pagamento
 					<MoveRight className="ml-2 inline-flex w-4"/>
-				</a>
+				</button>
 				
 			</div>
 
 			<div className={`${currentStep == 2 ? "" : "hidden"} {steps.currentStep == 1 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
 				<p>Step 2</p>
-				<Link href="/" passHref legacyBehavior>
-					<a
+					<button
+						onClick={() => setCurrentStep(1)}
 						aria-label="back-to-products"
 						className="border-palette-primary text-palette-primary font-primary focus:ring-palette-light hover:bg-palette-lighter flex w-full items-center justify-center rounded-sm 
 					border pb-1 pt-2 text-lg font-semibold leading-relaxed focus:outline-none focus:ring-1"
 					>
 						<MoveLeft className="ml-2 inline-flex w-4"/>
-						Back To All Products
-					</a>
-				</Link>
+						Voltar ao Carrinho
+					</button>
 				<a
 					onClick={() => setCurrentStep(3)}	className="hover:text-primary underline underline-offset-4"
 					>

@@ -1,24 +1,28 @@
+import Link from "next/link"
+
 const plans = [
 	{
-		name: "Enterprise",
-		desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-		price: 32,
+		name: "Acesso Integral",
+		desc: "Acesso a todos os cursos sem limitação",
+		price: 55,
 		isMostPop: true,
+		href: "/subscrever?product=",
 		features: [
-			"Curabitur faucibus",
-			"massa ut pretium maximus",
-			"Sed posuere nisi",
-			"Pellentesque eu nibh et neque",
-			"Suspendisse a leo",
+			"Introdução à Permacultura",
+			"Introdução à Agricultura Biodinâmica",
+			"Introdução à Sustentabilidade Integral",
+			"Não inclui facilitação",
+			"Não inclui certificação",
 			"Praesent quis venenatis ipsum",
 			"Duis non diam vel tortor",
 		],
 	},
 	{
-		name: "Startup",
-		desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-		price: 12,
+		name: "Cursos",
+		desc: "Escolhe o teu curso",
+		price: 35,
 		isMostPop: false,
+		href: "/cursos",
 		features: [
 			"Curabitur faucibus",
 			"massa ut pretium maximus",
@@ -49,7 +53,7 @@ export const PricingSection = () => {
 									{item.desc}
 								</p>
 								<button className='w-full rounded-lg bg-cyan-500 p-3 text-sm font-semibold text-white duration-150 hover:bg-cyan-600 active:bg-cyan-700'>
-									Get Started
+									<Link href={item.href} >Começar Agora</Link>
 								</button>
 							</div>
 							<ul className='space-y-3 p-4 py-8 md:p-8'>

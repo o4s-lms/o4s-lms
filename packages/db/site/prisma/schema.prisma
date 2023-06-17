@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider     			= "mongodb"
-  url          			= env("DATABASE_SITE_PROD")
+  url          			= env("DATABASE_SITE_DEV")
 }
 
 model Post {
@@ -203,7 +203,7 @@ model Order {
 	currency    				String    	@default("eur")
 	type								String?
 	status							OrderStatus @default(PENDING)
-	customer_uuid				String?
+	customer_uuid				String
 	customer_email			String
 	customer_stripe_id	String?
 	tax_total						Int					@default(0)
@@ -211,7 +211,7 @@ model Order {
 	sub_total						Int 				@default(0)
 	sub_total_with_tax	Int 				@default(0)
 	items								OrderItems[]
-	Payment							Payment?
+	payment							Payment?
 
 	@@map("orders")
 }
@@ -233,19 +233,37 @@ model OrderItems {
 }
 
 model Payment {
-	id					String 				@id @default(auto()) @map("_id") @db.ObjectId
-	createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @default(now()) @updatedAt
-	status      PaymentStatus	@default(PENDING)
-	value       Int
-	type				PaymentType   @default(SEPA)
-	gateway			String?
-	customer_id String?
-	payment_id  String?
-	order_id 		String				@unique @db.ObjectId
-	order       Order				  @relation(fields: [order_id], references: [id])
+	id							String 				@id @default(auto()) @map("_id") @db.ObjectId
+	created_at   		DateTime      @default(now())
+  updated_at   		DateTime      @default(now()) @updatedAt
+	status      		PaymentStatus	@default(PENDING)
+	value       		Int
+	type						PaymentType   @default(SEPA)
+	method_id			 	String				@db.ObjectId
+	customer_id 		String?
+	payment_id  		String?
+	order_id 				String				@unique @db.ObjectId
+	order       		Order				  @relation(fields: [order_id], references: [id])
+	payment_method 	PaymentMethod	@relation(fields: [method_id], references: [id])
 
 	@@map("payments")
+}
+
+model PaymentMethod {
+	id						String 				@id @default(auto()) @map("_id") @db.ObjectId
+	name					String
+	description		String
+	icon					String
+	instructions	String?
+	created_at   	DateTime      @default(now())
+  updated_at   	DateTime      @updatedAt
+	is_manual    	Boolean
+	gateway				String
+	active				Boolean				@default(true)
+	locale				String				@default("pt")
+	payments    	Payment[]
+
+	@@map("payments_methods")
 }
 
 model Testimonial {

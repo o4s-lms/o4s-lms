@@ -1,0 +1,22 @@
+mutation (
+	$name: String!,
+	$description: String!,
+	$icon: String!,
+	$instructions: String,
+	$is_manual: Boolean!,
+	$gateway: String!
+	)
+@rbac(requireMatchAny: [admin]) {
+	method: site_createOnePaymentMethod(
+		data: {
+			name: $name
+			description: $description
+			instructions: $instructions
+			icon: $icon
+			is_manual: $is_manual
+			gateway: $gateway
+		}
+	) {
+		id
+	}
+}

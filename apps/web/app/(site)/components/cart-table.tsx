@@ -7,7 +7,7 @@ import Price from './price'
 import { Loading } from "@/components/loading"
 import { SnackbarProvider, enqueueSnackbar } from "notistack"
 import { CartIdResponseData, ProductsAllResponseData } from "@o4s/generated-wundergraph/models"
-import { useQuery } from '@/lib/wundergraph'
+import { useQuery } from "@o4s/generated-wundergraph/nextjs"
 import useRemoveItemMutation from "@/hooks/orders/use-remove-item-mutation"
 import useAddItemMutation from "@/hooks/orders/use-add-item-mutation"
 import { getProduct, getProductsToAdd } from "@/actions/orders"

@@ -1,0 +1,19 @@
+query ($locale: String!, $active: Boolean = true) {
+	methods: site_findManyPaymentMethod(
+		where: {
+      locale: { equals: $locale }
+      active: { equals: $active }
+    }
+	) {
+		id
+		name
+		description
+		icon
+		instructions
+		created_at
+		updated_at
+		is_manual
+		gateway
+		active
+	}
+}

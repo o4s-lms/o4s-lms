@@ -25,5 +25,19 @@ query ($id: String!) {
 				include
 			}
 		}
+		payment {
+			id
+			created_at
+			updated_at
+			status
+			value
+			type
+			payment_method {
+				id
+				name
+				is_manual
+				gateway
+			}
+		}
 	}
 }

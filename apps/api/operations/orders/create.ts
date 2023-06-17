@@ -1,5 +1,12 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { OperationError } from '@wundergraph/sdk/operations'
 import { createOperation, z } from '../../generated/wundergraph.factory'
+
+export class CartNotFoundError extends OperationError {
+  statusCode = 400;
+  code = 'CartNotFoundError' as const;
+  message = 'Cart not found error';
+}
 
 export class OrderCreationError extends OperationError {
   statusCode = 400;
@@ -10,23 +17,36 @@ export class OrderCreationError extends OperationError {
 export class ItemCreationError extends OperationError {
   statusCode = 400;
   code = 'ItemCreationError' as const;
-  message = 'Add to cart creation error';
+  message = 'Order item creation error';
 }
 
 export class UpdateSubTotalError extends OperationError {
   statusCode = 400;
   code = 'UpdateSubTotalError' as const;
-  message = 'Update subtotal error';
+  message = 'Order update subtotal error';
+}
+
+export class PaymentCreationError extends OperationError {
+  statusCode = 400;
+  code = 'PaymentCreationError' as const;
+  message = 'Payment creation error';
 }
 
 export default createOperation.mutation({
   input: z.object({
-		product_id: z.string(),
-		price: z.number().int(),
-		discount: z.number().int(),
-		tax: z.number().int(),
+		cart_id: z.string(),
+		payment_method: z.string(),
   }),
   handler: async ({ input, user, graph, operations }) => {
+		const { data: currentCard } = await operations.query({
+			operationName: 'cart/id',
+			input: {
+				id: input.cart_id,
+			}
+		})
+		if (!currentCard) {
+			throw new CartNotFoundError()
+		}
 		const order = await graph
 			.from('site')
 			.mutate('createOneOrder')
@@ -38,30 +58,65 @@ export default createOperation.mutation({
 		if (!order) {
 			throw new OrderCreationError()
 		}
-		const item = await graph
-			.from('site')
-			.mutate('upsertOneOrderItems')
-			.where({
-				where: {
-					order_id_product_id: {
-						order_id: order.id,
-						product_id: input.product_id,
-					}
-				},
-				update: {},
-				create: {
-					order: { connect: { id: order.id } },
-					product: { connect: { id: input.product_id } },
-					price: input.price,
-					discount: input.discount,
-					tax: input.tax
-				},
-			})
-			.exec()
-		if (!item) {
-			throw new ItemCreationError()
+		/**currentCard?.cart?.items?.forEach(async (item) => {
+			const order_item = await graph
+				.from('site')
+				.mutate('upsertOneOrderItems')
+				.where({
+					where: {
+						order_id_product_id: {
+							order_id: order.id,
+							product_id: item.product_id,
+						}
+					},
+					update: {},
+					create: {
+						order: { connect: { id: order.id } },
+						product: { connect: { id: item.product_id } },
+						price: item.price,
+						discount: item.discount,
+						tax: item.tax
+					},
+				})
+				.exec()
+			if (!order_item) {
+				throw new ItemCreationError()
+			}
+			num += 1
+		})*/
+		async function items () {
+			await currentCard?.cart?.items?.reduce(async (promise, item) => {
+				// This line will wait for the last async function to finish.
+				// The first iteration uses an already resolved Promise
+				// so, it will immediately continue.
+				await promise
+				const order_item = await graph
+					.from('site')
+					.mutate('upsertOneOrderItems')
+					.where({
+						where: {
+							order_id_product_id: {
+								order_id: order.id,
+								product_id: item.product_id,
+							}
+						},
+						update: {},
+						create: {
+							order: { connect: { id: order.id } },
+							product: { connect: { id: item.product_id } },
+							price: item.price,
+							discount: item.discount,
+							tax: item.tax
+						},
+					})
+					.exec()
+				if (!order_item) {
+					throw new ItemCreationError()
+				}
+			}, Promise.resolve());
 		}
-		const subtotal = await operations.mutate({
+		await items()
+		const { data: subtotal } = await operations.mutate({
 			operationName: 'orders/subtotal',
 			input: {
 				order_id: order.id,
@@ -70,12 +125,24 @@ export default createOperation.mutation({
 		if (!subtotal) {
 			throw new UpdateSubTotalError()
 		}
-		const { data, error } = await operations.query({
+		const { data: payment } = await operations.mutate({
+			operationName: 'payments/create',
+			input: {
+				status: 'PENDING',
+				value: subtotal.order.sub_total_with_tax,
+				method_id: input.payment_method,
+				order_id: order.id,
+			}
+		})
+		if (!payment) {
+			throw new PaymentCreationError()
+		}
+		const { data: newOrder } = await operations.query({
 			operationName: 'orders/id',
 			input: {
 				id: order.id,
 			}
 		})
-		return data?.order
+		return newOrder
   },
 })

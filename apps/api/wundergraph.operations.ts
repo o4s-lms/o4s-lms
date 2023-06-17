@@ -148,6 +148,12 @@ export default configureWunderGraphOperations<OperationsConfiguration>({
 					required: false,
 				},
 			}),
+			PaymentsMethods: (config) => ({
+				...config,
+				authentication: {
+					required: false,
+				},
+			}),
 			
 		},
   }

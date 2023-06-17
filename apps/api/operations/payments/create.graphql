@@ -1,0 +1,17 @@
+mutation (
+	$status: site_PaymentStatus!,
+	$value: Int!,
+	$method_id: String!,
+	$order_id: String!
+	) {
+	method: site_createOnePayment(
+		data: {
+			status: $status
+			value: $value
+			order: { connect: { id: $order_id } }
+			payment_method: { connect: { id: $method_id } }
+		}
+	) {
+		id
+	}
+}
