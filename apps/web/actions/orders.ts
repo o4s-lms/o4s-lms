@@ -33,7 +33,6 @@ export async function getProductsToAdd(cart: Cart) {
 	})
 
 	let products = data?.products
-	//productIds.forEach((productId) => products = products?.filter((t) => t.id !== productId))
 	cart?.items?.forEach((item) => products = products?.filter((t) => t.id !== item.product_id))
 	return products
 }

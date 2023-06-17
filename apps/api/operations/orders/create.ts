@@ -58,32 +58,6 @@ export default createOperation.mutation({
 		if (!order) {
 			throw new OrderCreationError()
 		}
-		/**currentCard?.cart?.items?.forEach(async (item) => {
-			const order_item = await graph
-				.from('site')
-				.mutate('upsertOneOrderItems')
-				.where({
-					where: {
-						order_id_product_id: {
-							order_id: order.id,
-							product_id: item.product_id,
-						}
-					},
-					update: {},
-					create: {
-						order: { connect: { id: order.id } },
-						product: { connect: { id: item.product_id } },
-						price: item.price,
-						discount: item.discount,
-						tax: item.tax
-					},
-				})
-				.exec()
-			if (!order_item) {
-				throw new ItemCreationError()
-			}
-			num += 1
-		})*/
 		async function items () {
 			await currentCard?.cart?.items?.reduce(async (promise, item) => {
 				// This line will wait for the last async function to finish.

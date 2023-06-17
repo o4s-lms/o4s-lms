@@ -25,16 +25,16 @@ export const PlayList = ({ items, className, slug, ...props }: PlayListProps) =>
                 onClick={() => setOpen(!isOpen)}
             />
             <h3 className="hidden text-xl font-semibold text-gray-800 dark:text-gray-50 lg:block">
-                Módulos de aprendizagem
+                Os nossos cursos
             </h3>
             <div className={isOpen ? "" : "hidden lg:block"}>
                 <p className="mt-4 text-gray-700 dark:text-gray-400 lg:mt-3">
-                    3 Módulos
+                    3 Cursos
                 </p>
                 <ul className="mt-6 max-h-[450px] space-y-1 overflow-auto pb-4 lg:max-w-sm lg:pb-0">
                     {
                         items?.map((item, idx) => (
-                            <li key={idx} className={`rounded-lg text-gray-600 duration-150 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800 ${slug == item.slug ? "bg-gray-50 dark:bg-gray-800" : ""}`}>
+                            <li key={idx} className={`rounded-lg text-gray-600 duration-150 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800 ${slug == item.slug ? "bg-gray-500 dark:bg-gray-800" : ""}`}>
                                 <Link
                                     href={`/cursos/${item.slug}`}
                                     className="flex items-center gap-x-3 p-3"

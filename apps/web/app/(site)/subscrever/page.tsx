@@ -11,6 +11,7 @@ import { MoveRight, MoveLeft } from 'lucide-react'
 import { ProductsAllResponseData, OrdersIdResponseData } from "@o4s/generated-wundergraph/models"
 import CartTable from "../components/cart-table"
 import PromosTable from "../components/promos-table"
+import PaymentMethod from "../components/payment-method"
 import { Icons } from "@/components/icons"
 import { createCart } from "@/actions/orders"
 import { useEffectOnce } from "usehooks-ts"
@@ -54,9 +55,7 @@ export default function Subscrever() {
     async function fetchCart() {
 			const id = await createCart(productId)
 			if (!ignore) {
-				console.log(`Fetching cart: ${id}`)
         setCartId(id)
-				console.log(`CartId: ${cartId}`)
       }
 		}
 		let ignore = false
@@ -80,7 +79,8 @@ export default function Subscrever() {
     }
   }, [productId])*/
 
-	function BackToCartButton() {
+	const save = async (method_id: string | undefined) => {
+		console.log(`Method ID: ${method_id}`)
 
 	}
 
@@ -135,7 +135,8 @@ export default function Subscrever() {
 			</div>
 
 			<div className={`${currentStep == 2 ? "" : "hidden"} {steps.currentStep == 1 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
-				<p>Step 2</p>
+				<PaymentMethod saveOrder={save} />
+					
 					<button
 						onClick={() => setCurrentStep(1)}
 						aria-label="back-to-products"
@@ -145,11 +146,6 @@ export default function Subscrever() {
 						<MoveLeft className="ml-2 inline-flex w-4"/>
 						Voltar ao Carrinho
 					</button>
-				<a
-					onClick={() => setCurrentStep(3)}	className="hover:text-primary underline underline-offset-4"
-					>
-					Step 3
-				</a>
 			</div>
 			<div className={`${currentStep == 3 ? "" : "hidden"} {steps.currentStep == 1 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
 				<p>Step 3</p>

@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Includes } from "./includes"
 import { Title } from "./title"
 import { SubTitle } from "./sub-title"
