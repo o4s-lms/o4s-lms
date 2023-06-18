@@ -9,9 +9,11 @@
     "clean": "rm -rf .turbo generated node_modules",
 		"site:generate": "pnpm with-env prisma generate --schema=./site/prisma/schema.prisma",
     "lms:generate": "pnpm with-env prisma generate --schema=./lms/prisma/schema.prisma",
+		"auth:generate": "pnpm with-env prisma generate --schema=./auth/prisma/schema.prisma",
 		"site:push": "pnpm with-env prisma db push --schema=./site/prisma/schema.prisma --accept-data-loss --skip-generate",
     "lms:push": "pnpm with-env prisma db push --schema=./lms/prisma/schema.prisma --accept-data-loss --skip-generate",
 		"site:studio": "pnpm with-env prisma studio --schema=./site/prisma/schema.prisma",
+		"auth:pull": "pnpm with-env prisma db pull --schema=./auth/prisma/schema.prisma",
     "db:proxy": "pscale connect o4s-courses-apps main --port 3309",
     "dev": "pnpm with-env prisma studio --port 5556",
     "with-env": "dotenv -e ../../.env --"

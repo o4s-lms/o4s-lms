@@ -8,7 +8,7 @@ import { type GetVerificationKey, expressjwt as jwt, type Request as JWTRequest 
 import jwksRsa from "jwks-rsa";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { lms } from "@o4s/db";
+import { lms, auth } from "@o4s/db";
 
 const app = express();
 const jwksHost = process.env.PUBLIC_HANKO_API;
@@ -91,6 +91,21 @@ app.get("/userInfo", async (req: JWTRequest, res: express.Response) => {
 				roles: true,
 			},
 		});
+
+		if (!user) {
+			const hankoUser = await auth.primary_emails.findUnique({
+				where: { user_id: userUUID },
+				select : {
+					emails: {
+						created_at: true,
+						updated_at: true,
+						address: true,
+						verified: true,
+	
+					}
+				}
+			})
+		}
   
 		res.status(200).send(
 			JSON.stringify({

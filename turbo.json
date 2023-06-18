@@ -17,6 +17,14 @@
       "inputs": ["lms/prisma/schema.prisma"],
       "cache": false
     },
+		"auth:generate": {
+      "inputs": ["auth/prisma/schema.prisma"],
+      "cache": false
+    },
+    "auth:pull": {
+      "inputs": ["auth/prisma/schema.prisma"],
+      "cache": false
+    },
 		"site:studio": {
       "cache": false
     },
@@ -74,6 +82,8 @@
 		"DATABASE_LMS_PROD",
 		"DATABASE_SITE_DEV",
 		"DATABASE_SITE_PROD",
+		"DATABASE_AUTH_DEV",
+		"DATABASE_AUTH_PROD",
 		"DATABASE_MONGODB_URL",
     "DATABASE_DIRECT_URL",
 		"PUBLIC_URL",
