@@ -8,6 +8,7 @@ import { OrdersIdResponseData } from "@o4s/generated-wundergraph/models"
 import { Icons } from "@/components/icons"
 import { useEffectOnce } from "usehooks-ts"
 import useCreateOrderMutation from "@/hooks/orders/use-create-order-mutation"
+import Brand from "@/components/brand"
 
 type Order = OrdersIdResponseData["order"]
 
@@ -69,8 +70,61 @@ export default function SubscricaoConcluida() {
 			
 				<div className={`${currentStep == 4 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
 					{order ? (
-						<div>
-							<p>{JSON.stringify(order, null, 2)}</p>
+						<div className="mx-auto max-w-xl rounded-lg px-8 py-10 shadow-lg">
+							<div className="mb-8 flex items-center justify-between">
+									<div className="flex items-center">
+											<Brand />
+									</div>
+									<div className="text-gray-700">
+											<div className="mb-2 text-xl font-bold">SUBSCRIÇÃO</div>
+											<div className="text-sm">#: {order.id}</div>
+											<div className="text-sm">Data: {new Date().toLocaleDateString('pt-PT')}</div>
+											
+									</div>
+							</div>
+							<div className="mb-8 border-b-2 border-gray-300 pb-8">
+									<h2 className="mb-4 text-2xl font-bold">Para:</h2>
+									<div className="text-gray-700">{order.customer_email}</div>
+							</div>
+							<table className="mb-8 w-full text-left">
+									<thead>
+											<tr>
+													<th className="py-2 font-bold uppercase text-gray-700">Curso</th>
+													<th className="py-2 font-bold uppercase text-gray-700">Desconto</th>
+													<th className="py-2 font-bold uppercase text-gray-700">Total</th>
+											</tr>
+									</thead>
+									<tbody>
+										{order.items?.map((item, idx) => (
+											<tr key={idx}>
+												<td className="py-4 text-gray-700">{item.product.title}</td>
+												<td className="py-4 text-gray-700">{item.discount}</td>
+												<td className="py-4 text-gray-700">{item.price}</td>
+											</tr>
+										))}
+									</tbody>
+							</table>
+							<div className="mb-8 flex justify-end">
+									<div className="mr-2 text-gray-700">Descontos:</div>
+									<div className="text-gray-700">{order.discount_total}</div>
+							</div>
+							<div className="mb-8 text-right">
+									<div className="mr-2 text-gray-700">Tax:</div>
+									<div className="text-gray-700">{order.tax_total}</div>
+							</div>
+							<div className="mb-8 flex justify-end">
+									<div className="mr-2 text-gray-700">Subtotal:</div>
+									<div className="text-gray-700">{order.sub_total}</div>
+							</div>
+							<div className="mb-8 flex justify-end">
+									<div className="mr-2 text-gray-700">Total:</div>
+									<div className="text-xl font-bold text-gray-700">{order.sub_total_with_tax}</div>
+							</div>
+							<div className="mb-8 border-t-2 border-gray-300 pt-8">
+									<div className="mb-2 text-gray-700">Payment is due within 30 days. Late payments are subject to fees.</div>
+									<div className="mb-2 text-gray-700">Please make checks payable to Your Company Name and mail to:</div>
+									<div className="text-gray-700">123 Main St., Anytown, USA 12345</div>
+							</div>
 						</div>
 					) : (
 						<div>
