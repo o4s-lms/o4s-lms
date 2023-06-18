@@ -9,6 +9,14 @@ import jwksRsa from "jwks-rsa";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { lms, auth } from "@o4s/db";
+import { Novu } from "@novu/node";
+
+const config = {
+	appId: process.env.NOVU_CLIENT_APP_ID as string,
+	backendUrl: process.env.NOVU_API_ENDPOINT as string,
+	socketUrl: process.env.NOVU_SOCKET_ENDPOINT as string,
+};
+const novu = new Novu(process.env.NOVU_API_KEY as string, config);
 
 const app = express();
 const jwksHost = process.env.PUBLIC_HANKO_API;
@@ -93,34 +101,64 @@ app.get("/userInfo", async (req: JWTRequest, res: express.Response) => {
 		});
 
 		if (!user) {
-			const hankoUser = await auth.primary_emails.findUnique({
+			const email = await auth.primary_emails.findUnique({
 				where: { user_id: userUUID },
 				select : {
 					emails: {
-						created_at: true,
-						updated_at: true,
-						address: true,
-						verified: true,
-	
+						select: {
+							created_at: true,
+							updated_at: true,
+							address: true,
+							verified: true,
+						}
 					}
 				}
-			})
+			});
+			const newUser = await lms.user.create({
+				data: {
+					uuid: userUUID,
+					email: email?.emails.address as string,
+					email_verified: email?.emails.verified,
+					created_at: email?.emails.created_at,
+					updated_at: email?.emails.updated_at,
+					locale: 'pt',
+					roles: ["user"],
+				}
+			});
+			logger.info(`User created: ${userUUID}`);
+			const trigger = await novu.trigger('welcome-new-user', {
+				to: {
+					subscriberId: newUser?.id,
+					email: newUser?.email,
+					locale: newUser?.locale as string
+				},
+				payload: {}
+			});
+			res.status(200).send(
+				JSON.stringify({
+					sub: userUUID,
+					email: newUser?.email,
+					email_verified: newUser?.email_verified,
+					locale: newUser?.locale,
+					roles: newUser?.roles,
+				}),
+			);
+		} else {
+			res.status(200).send(
+				JSON.stringify({
+					sub: userUUID,
+					name: user?.name,
+					given_name: user?.given_name,
+					family_name: user?.family_name,
+					gender: user?.gender,
+					email: user?.email,
+					email_verified: user?.email_verified,
+					picture: user?.picture,
+					locale: user?.locale,
+					roles: user?.roles,
+				}),
+			);
 		}
-  
-		res.status(200).send(
-			JSON.stringify({
-				sub: userUUID,
-				name: user?.name,
-				given_name: user?.given_name,
-				family_name: user?.family_name,
-				gender: user?.gender,
-				email: user?.email,
-				email_verified: user?.email_verified,
-				picture: user?.picture,
-				locale: user?.locale,
-				roles: user?.roles,
-			}),
-		);
 	} else res.sendStatus(401);
 });
 

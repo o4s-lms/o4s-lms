@@ -629,6 +629,9 @@ importers:
 
   packages/db:
     dependencies:
+      '@novu/node':
+        specifier: ^0.15.0
+        version: 0.15.0
       '@planetscale/database':
         specifier: ^1.7.0
         version: 1.7.0

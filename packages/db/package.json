@@ -19,6 +19,7 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
+		"@novu/node": "^0.15.0",
     "@prisma/client": "^4.15.0",
     "@planetscale/database": "^1.7.0",
 		"prisma-redis-middleware": "^4.8.0",
