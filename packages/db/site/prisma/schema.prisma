@@ -149,6 +149,7 @@ model Product {
 	description			String
 	slug						String		@unique
 	include					String
+	features				String[]
 	certification		Boolean		@default(false)
 	facilitation		Boolean		@default(false)
 	html						String?

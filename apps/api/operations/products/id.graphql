@@ -12,6 +12,7 @@ query (
 		description
     slug
 		include
+		features
 		html
   	order
 		active

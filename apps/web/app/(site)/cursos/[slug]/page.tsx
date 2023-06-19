@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
 	const metadata = data?.product
 
-  return { 
+  return {
 		title: metadata?.title,
 		description: metadata?.description,
 		og_image: metadata?.image,
@@ -78,7 +78,7 @@ const Curso = async ({ params }: { params: { slug: string } }) => {
             <PlayList items={products} slug={params.slug} className="sticky top-3 w-full" />
           </div>
         </div>
-				<PrincingCourse />
+				<PrincingCourse product={product} />
       </div>
 
       <style></style>

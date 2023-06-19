@@ -16,6 +16,7 @@ query ($locale: String!, $active: Boolean = true) {
 		description
 		slug
 		include
+		features
 		html
 		order
 		locale

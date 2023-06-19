@@ -6,6 +6,7 @@ mutation (
 	$description: String!,
 	$slug: String!,
 	$include: String!,
+	$features: site_ProductCreatefeaturesInput,
 	$html: String,
 	$order: Int!,
 	$locale: String!,
@@ -20,6 +21,7 @@ mutation (
 			description: $description
 			slug: $slug
 			include: $include
+			features: $features
 			html: $html
 			order: $order
 			locale: $locale

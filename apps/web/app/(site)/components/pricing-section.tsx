@@ -1,10 +1,11 @@
 import Link from "next/link"
+import Price from "./price"
 
 const plans = [
 	{
 		name: "Acesso Integral",
 		desc: "Acesso a todos os cursos sem limitação",
-		price: 55,
+		price: 5500,
 		isMostPop: true,
 		href: "/subscrever?product=",
 		features: [
@@ -20,7 +21,7 @@ const plans = [
 	{
 		name: "Cursos",
 		desc: "Escolhe o teu curso",
-		price: 35,
+		price: 2000,
 		isMostPop: false,
 		href: "/cursos",
 		features: [
@@ -47,7 +48,7 @@ export const PricingSection = () => {
 									{item.name}
 								</span>
 								<div className='text-3xl font-semibold text-cyan-400'>
-									${item.price} <span className="text-xl font-normal">/mo</span>
+                  {item.isMostPop ? "" : "Preços desde "}<Price currency="eur" num={item.price} numSize="text-3xl" />
 								</div>
 								<p className="text-gray-400">
 									{item.desc}

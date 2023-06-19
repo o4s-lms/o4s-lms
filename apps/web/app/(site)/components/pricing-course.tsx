@@ -1,21 +1,14 @@
-export const PrincingCourse = () => {
+import { ProductsAllResponseData } from "@o4s/generated-wundergraph/models"
+import Price from "./price"
+import Link from "next/link";
 
-	const plan = {
-			name: "Basic plan",
-			desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-			price: 35,
-			isMostPop: true,
-			features: [
-					"Curabitur faucibus",
-					"Curabitur faucibus",
-					"Curabitur faucibus",
-					"Curabitur faucibus",
-					"Curabitur faucibus",
-					"Curabitur faucibus",
-					"Curabitur faucibus",
-					"Curabitur faucibus",
-			],
-	}
+type Product = ProductsAllResponseData["products"][number]
+
+interface Props {
+  product: Product | undefined;
+}
+
+export const PrincingCourse = ({ product }: Props) => {
 
 	const features = [
 			{
@@ -59,8 +52,8 @@ export const PrincingCourse = () => {
 					<h3 className="font-semibold text-indigo-600">
 						Preço
 					</h3>
-					<p className='text-3xl font-semibold text-gray-800 sm:text-4xl'>
-						Pay as you grow
+					<p className='text-3xl font-semibold text-gray-500 sm:text-4xl'>
+						Pago uma única vez
 					</p>
 					<div className='max-w-xl'>
 						<p>
@@ -77,10 +70,10 @@ export const PrincingCourse = () => {
 										{item.icon}
 									</div>
 									<div>
-										<h4 className="text-lg font-medium text-gray-800">
+										<h4 className="text-lg font-medium text-gray-500">
 											{item.name}
 										</h4>
-										<p className="mt-2 text-gray-600 md:text-sm">
+										<p className="mt-2 text-gray-300 md:text-sm">
 											{item.desc}
 										</p>
 									</div>
@@ -92,27 +85,27 @@ export const PrincingCourse = () => {
 						<div className="border-b p-4 py-8 md:p-8">
 							<div className="flex justify-between">
 								<div className="max-w-xs">
-									<span className='text-2xl font-semibold text-gray-800 sm:text-3xl'>
-										{plan.name}
+									<span className='text-2xl font-semibold text-gray-500 sm:text-3xl'>
+										{product?.title}
 									</span>
 									<p className="mt-3 sm:text-sm">
-										{plan.desc}
+										{product?.description}
 									</p>
 								</div>
-								<div className='flex-none text-2xl font-semibold text-gray-800 sm:text-3xl'>
-									${plan.price} <span className="text-xl font-normal text-gray-600">/mo</span>
+								<div className='flex-none text-2xl font-semibold text-gray-500 sm:text-3xl'>
+                  <Price currency={product?.currency} num={product?.price} numSize="text-2xl" />
 								</div>
 							</div>
-							<button className='mt-4 w-full rounded-lg bg-indigo-600 p-3 text-sm font-semibold text-white duration-150 hover:bg-indigo-500 active:bg-indigo-700'>
-								Começa Agora
-							</button>
+                <button className='mt-4 w-full rounded-lg bg-indigo-600 p-3 text-sm font-semibold text-white duration-150 hover:bg-indigo-500 active:bg-indigo-700'>
+                  <Link href={`/subscrever?productId=${product?.id}`} >Subscrever Agora</Link>
+                </button>
 						</div>
 						<ul className='space-y-3 p-4 sm:grid sm:grid-cols-2 md:block md:p-8 lg:grid'>
-							<div className="col-span-2 pb-2 font-medium text-gray-800">
+							<div className="col-span-2 pb-2 font-medium text-gray-500">
 								<p>Módulos de Aprendizagem</p>
 							</div>
 							{
-								plan.features.map((featureItem, idx) => (
+								product?.features?.map((featureItem, idx) => (
 									<li key={idx} className='flex items-center gap-5'>
 										<svg
 											xmlns='http://www.w3.org/2000/svg'
