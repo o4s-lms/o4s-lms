@@ -55,7 +55,7 @@ export async function getProductsToAdd(cart: Cart) {
 async function newCart(productId: string) {
 
 	const product = await getProduct(productId)
-	
+
 	if (product) {
 
 		const { data: cart, error } = await client.mutate({
@@ -77,7 +77,7 @@ async function newCart(productId: string) {
 async function addItem(cartId: string, productId: string) {
 
 	const product = await getProduct(productId)
-	
+
 	if (product) {
 
 		const { data: cart, error } = await client.mutate({
@@ -107,8 +107,17 @@ export async function createCart(productId: string) {
 		}
 		return
 	}
-	cartId = await addItem(cartId, productId)
+  if (productId.length === 24) {
+    cartId = await addItem(cartId, productId)
+  }
+
 	if (cartId) {
 		return cartId
 	}
+}
+
+export async function removeCart(cartId: string) {
+
+	cookies().delete('cartId')
+
 }

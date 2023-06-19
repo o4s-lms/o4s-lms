@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { OperationError } from '@wundergraph/sdk/operations'
 import { createOperation, z } from '../../generated/wundergraph.factory'

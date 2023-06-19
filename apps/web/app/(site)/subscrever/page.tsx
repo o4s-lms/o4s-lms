@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 
 import { enqueueSnackbar } from "notistack"
 import { createClient } from "@o4s/generated-wundergraph/client"
-import useCreateOrderMutation from "@/hooks/orders/use-create-order-mutation"
+import { useUser } from "@/lib/wundergraph"
 import { MoveRight, MoveLeft } from 'lucide-react'
 import { ProductsAllResponseData, OrdersIdResponseData } from "@o4s/generated-wundergraph/models"
 import CartTable from "../components/cart-table"
@@ -15,6 +15,12 @@ import PaymentMethod from "../components/payment-method"
 import { Icons } from "@/components/icons"
 import { createCart } from "@/actions/orders"
 import { useEffectOnce } from "usehooks-ts"
+import { Loading } from "@/components/loading"
+import useCreateOrderMutation from "@/hooks/orders/use-create-order-mutation"
+import Brand from "@/components/brand"
+import { removeCart } from "@/actions/orders"
+
+type Order = OrdersIdResponseData["order"]
 
 type Product = ProductsAllResponseData["products"][number] | undefined
 type Cart = OrdersIdResponseData["order"]
@@ -46,11 +52,15 @@ async function getCookie(key: string) {
 
 export default function Subscrever() {
 	const router = useRouter()
-	const stepsItems = ["Carrinho", "Pagamento", "Identificação", "Conclusão"]
+  const createOrder = useCreateOrderMutation()
+	const stepsItems = ["Identificação", "Carrinho", "Pagamento", "Conclusão"]
 	const [currentStep, setCurrentStep] = React.useState<number>(1)
 	const [cartId, setCartId] = React.useState<string>()
+  const [order, setOrder] = React.useState<Order>()
 	const searchParams = useSearchParams()
   const productId = searchParams.get("product") || ''
+
+  const { data: user, error, isLoading } = useUser()
 
 	useEffectOnce(() => {
     async function fetchCart() {
@@ -81,10 +91,18 @@ export default function Subscrever() {
   }, [productId])*/
 
 	const save = async (method_id: string | undefined) => {
-		const callback = `/signin?callback=/subscrever/concluido?cartId=${cartId}&paymentMethod=${method_id}`
-		router.replace(callback)
+    if (cartId && method_id) {
+      setCurrentStep(4)
+      const data = await createOrder.trigger({ cart_id: cartId, payment_method: method_id })
+
+      setOrder(data?.order)
+      removeCart(cartId)
+    }
 	}
 
+  if (isLoading) {
+    return <Loading />
+  }
 
     return (
 			<><section className="bg-gray-50 py-4 dark:bg-gray-900">
@@ -115,49 +133,128 @@ export default function Subscrever() {
 						))}
 					</ul>
 				</div>
-			<div className={`${currentStep == 1 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
+      <div className={`${currentStep == 1 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
+				{user ? (
+          <>
+          <button
+						onClick={() => setCurrentStep(2)}
+						aria-label="back-to-products"
+						className="border-palette-primary text-palette-primary font-primary focus:ring-palette-light hover:bg-palette-lighter flex w-full items-center justify-center rounded-sm
+					              border pb-1 pt-2 text-lg font-semibold leading-relaxed focus:outline-none focus:ring-1"
+					>
+						Ir para o Carrinho
+            <MoveRight className="ml-2 inline-flex w-4"/>
+					</button>
+          </>
+        ) : (
+          <>
+          <button
+						onClick={() => router.replace(`/signin?callback=/subscrever?productId=${productId}`)}
+						aria-label="back-to-products"
+						className="border-palette-primary text-palette-primary font-primary focus:ring-palette-light hover:bg-palette-lighter flex w-full items-center justify-center rounded-sm
+					border pb-1 pt-2 text-lg font-semibold leading-relaxed focus:outline-none focus:ring-1"
+					>
+						Identifique-se entrando com o seu email
+					</button>
+          </>
+        )}
+			</div>
+			<div className={`${currentStep == 2 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
 				{cartId ? (
 					<CartTable cartId={cartId} />
 				) : (
 					<Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
 				)}
-				
+
 				{/**<PromosTable card={card} />*/}
 				<button
-					onClick={() => setCurrentStep(2)}
+					onClick={() => setCurrentStep(3)}
 					aria-label="checkout-products"
-					className="bg-palette-primary font-primary focus:ring-palette-light hover:bg-palette-dark flex w-full items-center justify-center rounded-sm 
+					className="bg-palette-primary font-primary focus:ring-palette-light hover:bg-palette-dark flex w-full items-center justify-center rounded-sm
 					pb-1 pt-2 text-lg font-semibold leading-relaxed text-white focus:outline-none focus:ring-1"
 				>
 					Pagamento
 					<MoveRight className="ml-2 inline-flex w-4"/>
 				</button>
-				
+
 			</div>
 
-			<div className={`${currentStep == 2 ? "" : "hidden"} {steps.currentStep == 1 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
+			<div className={`${currentStep == 3 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
 				<PaymentMethod saveOrder={(method_id) => save(method_id)} />
-					
+
 					<button
-						onClick={() => setCurrentStep(1)}
+						onClick={() => setCurrentStep(2)}
 						aria-label="back-to-products"
-						className="border-palette-primary text-palette-primary font-primary focus:ring-palette-light hover:bg-palette-lighter flex w-full items-center justify-center rounded-sm 
+						className="border-palette-primary text-palette-primary font-primary focus:ring-palette-light hover:bg-palette-lighter flex w-full items-center justify-center rounded-sm
 					border pb-1 pt-2 text-lg font-semibold leading-relaxed focus:outline-none focus:ring-1"
 					>
 						<MoveLeft className="ml-2 inline-flex w-4"/>
 						Voltar ao Carrinho
 					</button>
 			</div>
-			<div className={`${currentStep == 3 ? "" : "hidden"} {steps.currentStep == 1 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
-				<p>Step 3</p>
-				<a
-					onClick={() => setCurrentStep(4)}	className="hover:text-primary underline underline-offset-4"
-					>
-					Step 4
-				</a>
-			</div>
-			<div className={`${currentStep == 4 ? "" : "hidden"} {steps.currentStep == 1 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
-				<p>Step 4</p>
+			<div className={`${currentStep == 4 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
+        {order ? (
+						<div className="mx-auto max-w-xl rounded-lg px-8 py-10 shadow-lg">
+							<div className="mb-8 flex items-center justify-between">
+									<div className="flex items-center">
+											<Brand />
+									</div>
+									<div className="text-gray-700">
+											<div className="mb-2 text-xl font-bold">SUBSCRIÇÃO</div>
+											<div className="text-sm">#: {order.id}</div>
+											<div className="text-sm">Data: {new Date().toLocaleDateString('pt-PT')}</div>
+
+									</div>
+							</div>
+							<div className="mb-8 border-b-2 border-gray-300 pb-8">
+									<h2 className="mb-4 text-2xl font-bold">Para:</h2>
+									<div className="text-gray-700">{order.customer_email}</div>
+							</div>
+							<table className="mb-8 w-full text-left">
+									<thead>
+											<tr>
+													<th className="py-2 font-bold uppercase text-gray-700">Curso</th>
+													<th className="py-2 font-bold uppercase text-gray-700">Desconto</th>
+													<th className="py-2 font-bold uppercase text-gray-700">Total</th>
+											</tr>
+									</thead>
+									<tbody>
+										{order.items?.map((item, idx) => (
+											<tr key={idx}>
+												<td className="py-4 text-gray-700">{item.product.title}</td>
+												<td className="py-4 text-gray-700">{item.discount}</td>
+												<td className="py-4 text-gray-700">{item.price}</td>
+											</tr>
+										))}
+									</tbody>
+							</table>
+							<div className="mb-8 flex justify-end">
+									<div className="mr-2 text-gray-700">Descontos:</div>
+									<div className="text-gray-700">{order.discount_total}</div>
+							</div>
+							<div className="mb-8 text-right">
+									<div className="mr-2 text-gray-700">Tax:</div>
+									<div className="text-gray-700">{order.tax_total}</div>
+							</div>
+							<div className="mb-8 flex justify-end">
+									<div className="mr-2 text-gray-700">Subtotal:</div>
+									<div className="text-gray-700">{order.sub_total}</div>
+							</div>
+							<div className="mb-8 flex justify-end">
+									<div className="mr-2 text-gray-700">Total:</div>
+									<div className="text-xl font-bold text-gray-700">{order.sub_total_with_tax}</div>
+							</div>
+							<div className="mb-8 border-t-2 border-gray-300 pt-8">
+									<div className="mb-2 text-gray-700">Payment is due within 30 days. Late payments are subject to fees.</div>
+									<div className="mb-2 text-gray-700">Please make checks payable to Your Company Name and mail to:</div>
+									<div className="text-gray-700">123 Main St., Anytown, USA 12345</div>
+							</div>
+						</div>
+				) : (
+					<div>
+						<p>Estamos processando o seu pedido... Aguarde um momento <Icons.spinner className="mr-2 h-4 w-4 animate-spin" /></p>
+					</div>
+				)}
 			</div>
 			</section></>
     )
