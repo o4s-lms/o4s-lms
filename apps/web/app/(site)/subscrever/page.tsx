@@ -5,7 +5,6 @@ import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 
 import { enqueueSnackbar } from "notistack"
-import { createClient } from "@o4s/generated-wundergraph/client"
 import { useUser } from "@/lib/wundergraph"
 import { MoveRight, MoveLeft } from 'lucide-react'
 import { ProductsAllResponseData, OrdersIdResponseData } from "@o4s/generated-wundergraph/models"
@@ -15,19 +14,12 @@ import PaymentMethod from "../components/payment-method"
 import { Icons } from "@/components/icons"
 import { createCart } from "@/actions/orders"
 import { useEffectOnce } from "usehooks-ts"
-import { Loading } from "@/components/loading"
+import Loading from "../components/loading"
 import useCreateOrderMutation from "@/hooks/orders/use-create-order-mutation"
 import Brand from "@/components/brand"
 import { removeCart } from "@/actions/orders"
 
 type Order = OrdersIdResponseData["order"]
-
-type Product = ProductsAllResponseData["products"][number] | undefined
-type Cart = OrdersIdResponseData["order"]
-
-const client = createClient({
-  customFetch: fetch,
-})
 
 /**function getCookie(name: string) {
   if (document.cookie && document.cookie !== '') {
@@ -138,9 +130,8 @@ export default function Subscrever() {
           <>
           <button
 						onClick={() => setCurrentStep(2)}
-						aria-label="back-to-products"
-						className="border-palette-primary text-palette-primary font-primary focus:ring-palette-light hover:bg-palette-lighter flex w-full items-center justify-center rounded-sm
-					              border pb-1 pt-2 text-lg font-semibold leading-relaxed focus:outline-none focus:ring-1"
+						aria-label="go-to-cart"
+						className="mt-4 w-full rounded-lg bg-indigo-600 p-3 text-lg font-semibold text-white duration-150 hover:bg-indigo-500 active:bg-indigo-700"
 					>
 						Ir para o Carrinho
             <MoveRight className="ml-2 inline-flex w-4"/>
@@ -151,8 +142,7 @@ export default function Subscrever() {
           <button
 						onClick={() => router.replace(`/signin?callback=/subscrever?productId=${productId}`)}
 						aria-label="back-to-products"
-						className="border-palette-primary text-palette-primary font-primary focus:ring-palette-light hover:bg-palette-lighter flex w-full items-center justify-center rounded-sm
-					border pb-1 pt-2 text-lg font-semibold leading-relaxed focus:outline-none focus:ring-1"
+						className="mt-4 w-full rounded-lg bg-indigo-600 p-3 text-sm font-semibold text-white duration-150 hover:bg-indigo-500 active:bg-indigo-700"
 					>
 						Identifique-se entrando com o seu email
 					</button>
@@ -170,8 +160,7 @@ export default function Subscrever() {
 				<button
 					onClick={() => setCurrentStep(3)}
 					aria-label="checkout-products"
-					className="bg-palette-primary font-primary focus:ring-palette-light hover:bg-palette-dark flex w-full items-center justify-center rounded-sm
-					pb-1 pt-2 text-lg font-semibold leading-relaxed text-white focus:outline-none focus:ring-1"
+					className="mt-4 w-full rounded-lg bg-indigo-600 p-3 text-lg font-semibold text-white duration-150 hover:bg-indigo-500 active:bg-indigo-700"
 				>
 					Pagamento
 					<MoveRight className="ml-2 inline-flex w-4"/>
@@ -199,60 +188,61 @@ export default function Subscrever() {
 									<div className="flex items-center">
 											<Brand />
 									</div>
-									<div className="text-gray-700">
+									<div className="text-gray-500">
 											<div className="mb-2 text-xl font-bold">SUBSCRIÇÃO</div>
 											<div className="text-sm">#: {order.id}</div>
 											<div className="text-sm">Data: {new Date().toLocaleDateString('pt-PT')}</div>
-
+											<div className="text-sm font-bold">Refª Pagamento: {order.payment?.id.slice(18).toUpperCase()}</div>
 									</div>
 							</div>
 							<div className="mb-8 border-b-2 border-gray-300 pb-8">
 									<h2 className="mb-4 text-2xl font-bold">Para:</h2>
-									<div className="text-gray-700">{order.customer_email}</div>
+									<div className="text-gray-500">{order.customer_email}</div>
 							</div>
 							<table className="mb-8 w-full text-left">
 									<thead>
 											<tr>
-													<th className="py-2 font-bold uppercase text-gray-700">Curso</th>
-													<th className="py-2 font-bold uppercase text-gray-700">Desconto</th>
-													<th className="py-2 font-bold uppercase text-gray-700">Total</th>
+													<th className="py-2 font-bold uppercase text-gray-500">Curso</th>
+													<th className="py-2 font-bold uppercase text-gray-500">Desconto</th>
+													<th className="py-2 font-bold uppercase text-gray-500">Total</th>
 											</tr>
 									</thead>
 									<tbody>
 										{order.items?.map((item, idx) => (
 											<tr key={idx}>
-												<td className="py-4 text-gray-700">{item.product.title}</td>
-												<td className="py-4 text-gray-700">{item.discount}</td>
-												<td className="py-4 text-gray-700">{item.price}</td>
+												<td className="py-4 text-gray-500">{item.product.title}</td>
+												<td className="py-4 text-gray-500">{item.discount}</td>
+												<td className="py-4 text-gray-500">{item.price}</td>
 											</tr>
 										))}
 									</tbody>
 							</table>
 							<div className="mb-8 flex justify-end">
-									<div className="mr-2 text-gray-700">Descontos:</div>
-									<div className="text-gray-700">{order.discount_total}</div>
+									<div className="mr-2 text-gray-500">Descontos:</div>
+									<div className="text-gray-500">{order.discount_total}</div>
 							</div>
 							<div className="mb-8 text-right">
-									<div className="mr-2 text-gray-700">Tax:</div>
-									<div className="text-gray-700">{order.tax_total}</div>
+									<div className="mr-2 text-gray-700">Taxas:</div>
+									<div className="text-gray-500">{order.tax_total}</div>
 							</div>
 							<div className="mb-8 flex justify-end">
-									<div className="mr-2 text-gray-700">Subtotal:</div>
+									<div className="mr-2 text-gray-500">Subtotal:</div>
 									<div className="text-gray-700">{order.sub_total}</div>
 							</div>
 							<div className="mb-8 flex justify-end">
-									<div className="mr-2 text-gray-700">Total:</div>
+									<div className="mr-2 text-gray-500">Total:</div>
 									<div className="text-xl font-bold text-gray-700">{order.sub_total_with_tax}</div>
 							</div>
 							<div className="mb-8 border-t-2 border-gray-300 pt-8">
-									<div className="mb-2 text-gray-700">Payment is due within 30 days. Late payments are subject to fees.</div>
-									<div className="mb-2 text-gray-700">Please make checks payable to Your Company Name and mail to:</div>
-									<div className="text-gray-700">123 Main St., Anytown, USA 12345</div>
+									<div className="mb-2 text-gray-500">Complete o pagamento no seu banco utilizando as informações fornecidas. O pagamento geralmente é concluído em 1 a 3 dias úteis, dependendo do sistema bancário e do país envolvido.</div>
+									<div className="mb-2 font-bold text-gray-500">Importante: Certifique-se de incluir a sua referência de pagamento: {order.payment?.id.slice(18).toUpperCase()} quando completar o pagamento no banco para fazer corresponder o seu pagamento à sua subscrição com facilidade.</div>
+									<div className="text-gray-500">Sobral de Monte Agraço, Portugal</div>
 							</div>
 						</div>
 				) : (
-					<div>
-						<p>Estamos processando o seu pedido... Aguarde um momento <Icons.spinner className="mr-2 h-4 w-4 animate-spin" /></p>
+					<div className="flex items-center">
+						<p>Estamos a processar o seu pedido... Por favor aguarde um momento.</p>
+            <Loading />
 					</div>
 				)}
 			</div>
