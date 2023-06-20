@@ -1,0 +1,22 @@
+query ($slug: String!) {
+	lesson: lms_findUniqueLesson(
+		where: { slug: $slug }
+	) {
+		id
+		name
+		slug
+		pos
+		course_id
+		module_id
+		html
+		status
+		created_by
+		created_at
+		updated_at
+		deleted
+		course {
+			id
+			name
+		}
+	}
+}
