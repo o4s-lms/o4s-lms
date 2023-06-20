@@ -39,10 +39,10 @@ export function SidebarNav({ className, course, ...props }: SidebarNavProps) {
             {item.lessons?.map((item) => (
               <Link
                 key={item.id}
-                href={`/courses/${course.slug}/${item.slug}`}
+                href={`/app/courses/${course.slug}/${item.slug}`}
                 className={cn(
                   buttonVariants({ variant: "ghost" }),
-                  pathname === `/courses/${course.slug}/${item.slug}`
+                  pathname === `/app/courses/${course.slug}/${item.slug}`
                     ? "bg-muted hover:bg-muted"
                     : "hover:bg-transparent hover:underline",
                   "justify-start"

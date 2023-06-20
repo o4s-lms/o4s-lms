@@ -56,7 +56,7 @@ function Lesson({ params }: { params: { courseSlug: string, lessonSlug: string }
 					<aside className="-mx-4 lg:w-1/5">
 						<SidebarNav course={data?.course} />
 					</aside>
-					<div className="flex-1 lg:max-w-2xl">
+					<div className="w-full flex-1">
             <LessonHtml slug={params.lessonSlug} />
           </div>
 				</div>

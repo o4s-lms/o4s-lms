@@ -20,7 +20,7 @@ function LessonHtml({ slug }: Props) {
     {!isLoading ? (
 
         <article
-          className="prose dark:prose-invert mt-6 max-w-3xl px-4 md:px-8 lg:px-0"
+          className="prose dark:prose-invert"
           dangerouslySetInnerHTML={{ __html: data?.lesson?.html }}
         ></article>
 

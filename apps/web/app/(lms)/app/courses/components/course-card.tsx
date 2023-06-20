@@ -42,7 +42,7 @@ export function CourseCard({ item }: CourseCardProps) {
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button variant="ghost">Cancel</Button>
-				<Link href={`/courses/${item.id}`} >
+				<Link href={`/app/courses/${item.slug}`} >
         	<Button>Deploy</Button>
 				</Link>
       </CardFooter>

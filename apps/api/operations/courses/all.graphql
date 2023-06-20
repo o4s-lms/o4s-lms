@@ -3,6 +3,7 @@ query ($deleted: Boolean = false) {
 		id
 		name
 		description
+		slug
 		image
 		published
 		created_by
