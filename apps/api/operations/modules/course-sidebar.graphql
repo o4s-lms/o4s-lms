@@ -1,0 +1,29 @@
+query ($course_id: String!, $deleted: Boolean = false, $status: String = "published") {
+	modules: lms_findManyModule(
+		where: {
+			course_id: { equals: $course_id }
+			deleted: { equals: $deleted }
+		}
+		orderBy: { pos: asc }
+	) {
+		id
+		name
+		slug
+		pos
+		course_id
+		lessons(
+			where: {
+				deleted: { equals: $deleted }
+				status: { equals: $status }
+			}
+			orderBy: { pos: asc }
+		) {
+			id
+			name
+			slug
+			pos
+			status
+			course_id
+		}
+	}
+}

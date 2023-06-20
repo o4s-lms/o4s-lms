@@ -55,7 +55,7 @@ model Course {
   id					String					@id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
-  slug        String
+  slug        String					@unique
 	image				String?
 	published   Boolean					@default(false)
 	deleted			Boolean					@default(false)
@@ -71,7 +71,7 @@ model Course {
 model Module {
 	id					 	 String		@id @default(auto()) @map("_id") @db.ObjectId
   name           String
-	slug           String
+	slug           String		@unique
 	pos						 Int			@default(0)
 	deleted				 Boolean	@default(false)
 	course_id      String		@db.ObjectId
@@ -89,7 +89,7 @@ model Module {
 model Lesson {
   id					 	 String								@id @default(auto()) @map("_id") @db.ObjectId
   name           String
-  slug           String
+  slug           String								@unique
 	pos						 Int									@default(0)
   course_id      String								@db.ObjectId
 	module_id      String								@db.ObjectId

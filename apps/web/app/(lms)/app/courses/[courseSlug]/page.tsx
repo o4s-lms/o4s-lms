@@ -1,7 +1,6 @@
 "use client"
 
 import Link from "next/link"
-import { useSession } from "next-auth/react"
 import { useQuery } from "@/lib/wundergraph"
 
 import { Loading } from "@/components/loading"
@@ -9,21 +8,22 @@ import { useToast } from "@/hooks/use-toast"
 import { Separator } from "@/components/ui/separator"
 import useLastActivityMutation from "@/hooks/use-last-activity-mutation"
 import { useEffectOnce } from "usehooks-ts"
+import { SidebarNav } from "../components/sidebar-nav"
 
-export default function Course({ params }: { params: { courseId: string } }) {
+export default function Course({ params }: { params: { courseSlug: string } }) {
 	const { toast } = useToast()
 	const updateLastActivity = useLastActivityMutation()
-	
-	useEffectOnce(() => {
+
+	/**useEffectOnce(() => {
     updateLastActivity.trigger({
-			courseId: parseInt(params.courseId),
+			course_id: params.courseId
 		}, { throwOnError: false }) // this will fire only on first render
-  })
+  })*/
 
 	const { data, error, isLoading } = useQuery({
-		operationName: 'courses/id',
+		operationName: 'courses/slug',
 		input: {
-			id: parseInt(params.courseId),
+			slug: params.courseSlug,
 		},
 		enabled: true,
 	})
@@ -39,7 +39,7 @@ export default function Course({ params }: { params: { courseId: string } }) {
 			),
 		})
 	}
-	
+
   return (
 		<div className="container grid items-center space-y-6 p-10 pb-16 md:block">
 			{!isLoading ? (
@@ -51,8 +51,13 @@ export default function Course({ params }: { params: { courseId: string } }) {
 					</p>
 				</div>
 				<Separator className="my-6" />
-				<div className="pb-8 pt-6 md:py-10">
-							
+        <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
+					<aside className="-mx-4 lg:w-1/5">
+						<SidebarNav course={data?.course} />
+					</aside>
+					<div className="flex-1 lg:max-w-2xl">
+
+          </div>
 				</div>
 			</>
 			) : (

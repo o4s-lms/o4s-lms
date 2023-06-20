@@ -47,7 +47,7 @@ function SiteHeader() {
 											${scrolled ? "border-gray-400 bg-white/50 backdrop-blur-xl dark:border-gray-800 dark:bg-gray-900" : "bg-white/0"}
 											transition-all`} >
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
-        <MainNav items={siteConfig.mainNav} />
+        <MainNav />
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-1">
             <Link
