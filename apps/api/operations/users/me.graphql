@@ -13,5 +13,11 @@ query ($uuid: String! @fromClaim(name: USERID)) {
 		picture
 		locale
 		roles
+		progress {
+			id
+			course_id
+			lesson_id
+			completed_at
+		}
 	}
 }

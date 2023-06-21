@@ -1,0 +1,15 @@
+mutation (
+	$course_id: String!,
+	$lesson_id: String!,
+	$user_uuid: String! @fromClaim(name: USERID)
+) {
+	completed: lms_createOneLessonProgress(
+		data: {
+			user: { connect: { uuid: $user_uuid } }
+			course: { connect: { id: $course_id } }
+			lesson: { connect: { id: $lesson_id } }
+		}
+	) {
+		id
+	}
+}

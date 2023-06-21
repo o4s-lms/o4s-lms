@@ -1,5 +1,6 @@
 "use client"
 
+import * as React from "react"
 import Link from "next/link"
 import { useQuery, withWunderGraph } from "@/lib/wundergraph"
 
@@ -56,8 +57,9 @@ function Lesson({ params }: { params: { courseSlug: string, lessonSlug: string }
 					<aside className="-mx-4 lg:w-1/5">
 						<SidebarNav course={data?.course} />
 					</aside>
+          <Separator orientation="vertical" />
 					<div className="w-full flex-1">
-            <LessonHtml slug={params.lessonSlug} />
+            <LessonHtml courseId={data?.course?.id} slug={params.lessonSlug} />
           </div>
 				</div>
 			</>

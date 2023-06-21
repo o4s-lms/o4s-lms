@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useQuery } from "@/lib/wundergraph"
+import { useQuery, withWunderGraph } from "@/lib/wundergraph"
 
 import { Loading } from "@/components/loading"
 import { useToast } from "@/hooks/use-toast"
@@ -10,7 +10,7 @@ import useLastActivityMutation from "@/hooks/use-last-activity-mutation"
 import { useEffectOnce } from "usehooks-ts"
 import { SidebarNav } from "../components/sidebar-nav"
 
-export default function Course({ params }: { params: { courseSlug: string } }) {
+function Course({ params }: { params: { courseSlug: string } }) {
 	const { toast } = useToast()
 	const updateLastActivity = useLastActivityMutation()
 
@@ -66,3 +66,5 @@ export default function Course({ params }: { params: { courseSlug: string } }) {
 		</div>
   )
 }
+
+export default withWunderGraph(Course)
