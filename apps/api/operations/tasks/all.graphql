@@ -1,0 +1,9 @@
+query () {
+	tasks: lms_findManyTask() {
+		id
+		title
+		status
+		label
+		priority
+	}
+}

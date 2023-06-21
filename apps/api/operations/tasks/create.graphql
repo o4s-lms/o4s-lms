@@ -1,0 +1,20 @@
+mutation (
+	$title: String!
+	$status: String!,
+	$label: String!,
+	$priority: String!,
+  $user_uuid: String! @fromClaim(name: USERID)
+) {
+	task: lms_createOneTask(
+		data: {
+			title: $title
+			status: $status
+			label: $label
+			priority: $priority
+      created_by: $user_uuid
+      updated_by: $user_uuid
+		}
+	) {
+		id
+	}
+}

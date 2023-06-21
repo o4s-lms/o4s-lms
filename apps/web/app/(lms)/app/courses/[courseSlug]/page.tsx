@@ -1,5 +1,6 @@
 "use client"
 
+import * as React from "react"
 import Link from "next/link"
 import { useQuery, withWunderGraph } from "@/lib/wundergraph"
 
@@ -9,16 +10,37 @@ import { Separator } from "@/components/ui/separator"
 import useLastActivityMutation from "@/hooks/use-last-activity-mutation"
 import { useEffectOnce } from "usehooks-ts"
 import { SidebarNav } from "../components/sidebar-nav"
+import { columns } from "../components/tasks/columns"
+import { DataTable } from "../components/tasks/data-table"
+import { taskSchema } from "../components/tasks/data/schema"
+import { getTasks } from "@/actions/tasks"
+import { TasksAllResponseData } from "@o4s/generated-wundergraph/models"
+
+type Tasks = TasksAllResponseData["tasks"]
 
 function Course({ params }: { params: { courseSlug: string } }) {
 	const { toast } = useToast()
 	const updateLastActivity = useLastActivityMutation()
+  const [tasks, setTasks] = React.useState<Tasks>([])
 
 	/**useEffectOnce(() => {
     updateLastActivity.trigger({
 			course_id: params.courseId
 		}, { throwOnError: false }) // this will fire only on first render
   })*/
+  React.useEffect(() => {
+    async function tasks() {
+			const t: Tasks = await getTasks()
+			if (!ignore) {
+        setTasks(t)
+      }
+		}
+		let ignore = false
+		tasks()
+		return () => {
+      ignore = true
+    }
+  }, [])
 
 	const { data, error, isLoading } = useQuery({
 		operationName: 'courses/slug',
@@ -55,8 +77,8 @@ function Course({ params }: { params: { courseSlug: string } }) {
 					<aside className="-mx-4 lg:w-1/5">
 						<SidebarNav course={data?.course} />
 					</aside>
-					<div className="flex-1 lg:max-w-2xl">
-
+					<div className="w-full flex-1">
+            <DataTable data={tasks} columns={columns} />
           </div>
 				</div>
 			</>

@@ -3,6 +3,7 @@ import { useQuery, withWunderGraph } from "@/lib/wundergraph"
 import { Progress } from "@/components/ui/progress"
 import { currentProgress } from "@/actions/courses"
 import { Loading } from "@/components/loading"
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 
 interface Props {
   courseId: string;
@@ -38,12 +39,41 @@ function LessonHtml({ courseId, slug }: Props) {
     <>
     {!isLoading ? (
       <>
-      <Progress value={progress} className="w-[60%]" />
+      <div className="space-y-0.5">
+				<h2 className="text-2xl font-bold tracking-tight">{data?.lesson?.name}</h2>
+			</div>
       <article
           className="prose dark:prose-invert"
           dangerouslySetInnerHTML={{ __html: data?.lesson?.html }}
         >
       </article>
+      <div className="mt-10 flex items-center justify-center">
+        <Progress value={progress} className="w-[60%]" />
+      </div>
+      <div className="mt-10 flex items-center justify-center">
+        <nav
+          className="isolate inline-flex -space-x-px rounded-md shadow-sm"
+          aria-label="Pagination">
+          <button
+
+            className="relative inline-flex items-center gap-1 rounded-l-md border border-gray-300 bg-white px-3 py-2 pr-4 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20 disabled:pointer-events-none disabled:opacity-40 dark:border-gray-500 dark:bg-gray-800 dark:text-gray-300">
+            <ChevronLeftIcon
+              className="h-3 w-3"
+              aria-hidden="true"
+            />
+            <span>Anterior</span>
+          </button>
+          <button
+
+            className="relative inline-flex items-center gap-1 rounded-r-md border border-gray-300 bg-white px-3 py-2 pl-4 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20 disabled:pointer-events-none disabled:opacity-40 dark:border-gray-500 dark:bg-gray-800 dark:text-gray-300">
+            <span>Próximo</span>
+            <ChevronRightIcon
+              className="h-3 w-3"
+              aria-hidden="true"
+            />
+          </button>
+        </nav>
+      </div>
       </>
     ) : (
 			<Loading />
