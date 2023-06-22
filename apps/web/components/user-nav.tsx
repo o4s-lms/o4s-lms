@@ -1,3 +1,4 @@
+import * as React from "react"
 import { CreditCard, LogOut, PlusCircle, Settings, User } from "lucide-react"
 import { minioImage } from "@/lib/minio"
 
@@ -15,7 +16,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
 import { Hanko } from "@teamhanko/hanko-elements"
-import { useCallback, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
 const hankoApi = 'http://joseantcordeiro.hopto.org:8000'
@@ -28,10 +28,10 @@ interface Props {
 
 export function UserNav({ name, email, image}: Props) {
 	const router = useRouter()
-	const [hanko, setHankoClient] = useState<Hanko>()
-	const [error, setError] = useState<Error | null>(null)
+	const [hanko, setHankoClient] = React.useState<Hanko>()
+	const [error, setError] = React.useState<Error | null>(null)
 
-	useEffect(() => {
+	React.useEffect(() => {
     import("@teamhanko/hanko-elements").then(({ Hanko }) => setHankoClient(new Hanko(hankoApi)));
   }, [])
 
@@ -43,15 +43,15 @@ export function UserNav({ name, email, image}: Props) {
       })
   }
 
-  const redirectToLogin = useCallback(() => {
+  const redirectToLogin = React.useCallback(() => {
     router.replace("/signin")
   }, [router])
 
-  useEffect(() => hanko?.onUserLoggedOut(() => {
+  React.useEffect(() => hanko?.onUserLoggedOut(() => {
     redirectToLogin()
   }), [hanko, redirectToLogin])
 
-  useEffect(() => hanko?.onSessionNotPresent(() => {
+  React.useEffect(() => hanko?.onSessionNotPresent(() => {
     redirectToLogin()
   }), [hanko, redirectToLogin])
 
@@ -79,13 +79,13 @@ export function UserNav({ name, email, image}: Props) {
 					<DropdownMenuItem>
 						<User className="mr-2 h-4 w-4" />
 						<Link href={"/app/profile"} >
-							<span>Profile</span>
+							<span>Perfil</span>
 						</Link>
 						<DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
 					</DropdownMenuItem>
           <DropdownMenuItem>
             <CreditCard className="mr-2 h-4 w-4" />
-            <span>Billing</span>
+            <span>Pagamentos</span>
             <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem>
@@ -97,7 +97,7 @@ export function UserNav({ name, email, image}: Props) {
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={logout}>
           <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
+          <span>Sair</span>
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>

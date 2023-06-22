@@ -4,6 +4,7 @@ import { Progress } from "@/components/ui/progress"
 import { currentProgress } from "@/actions/courses"
 import { Loading } from "@/components/loading"
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
+import { Separator } from "@/components/ui/separator"
 
 interface Props {
   courseId: string;
@@ -42,11 +43,13 @@ function LessonHtml({ courseId, slug }: Props) {
       <div className="space-y-0.5">
 				<h2 className="text-2xl font-bold tracking-tight">{data?.lesson?.name}</h2>
 			</div>
+      <Separator className="my-6" />
       <article
           className="prose dark:prose-invert"
           dangerouslySetInnerHTML={{ __html: data?.lesson?.html }}
         >
       </article>
+      <Separator className="my-6" />
       <div className="mt-10 flex items-center justify-center">
         <Progress value={progress} className="w-[60%]" />
       </div>

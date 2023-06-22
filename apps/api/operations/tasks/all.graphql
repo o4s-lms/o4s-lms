@@ -1,5 +1,5 @@
-query () {
-	tasks: lms_findManyTask() {
+query ($user_uuid: String! @fromClaim(name: USERID)) {
+	tasks: lms_findManyTask(where: { created_by: { equals: $user_uuid } }) {
 		id
 		title
 		status

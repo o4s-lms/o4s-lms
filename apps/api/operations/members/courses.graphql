@@ -1,8 +1,4 @@
-query (
-	$role: lms_CourseRole!,
-	$user_uuid: String! @fromClaim(name: USERID)
-)
-@rbac(requireMatchAll: [user]) {
+query ($role: lms_CourseRole!, $user_uuid: String! @fromClaim(name: USERID)) {
 	courses: lms_findManyCourseMember(
 		where: {
 			user_uuid: { equals: $user_uuid }
@@ -14,6 +10,7 @@ query (
 			id
 			name
 			description
+			slug
 			image
 			published
 			created_by
