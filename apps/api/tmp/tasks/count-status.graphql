@@ -1,0 +1,12 @@
+query ($course_id: String!, $user_uuid: String! @fromClaim(name: USERID)) {
+	tasks: lms_groupByTask(
+		by: { ["status"] }
+		where: {
+			course_id: { equals: $course_id }
+			created_by: { equals: $user_uuid }
+		}) {
+		_count {
+			status
+		}
+	}
+}
