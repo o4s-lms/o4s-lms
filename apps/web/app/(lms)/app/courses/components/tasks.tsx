@@ -7,7 +7,7 @@ import { Loading } from "@/components/loading"
 import { useToast } from "@/hooks/use-toast"
 import { columns } from "./tasks/columns"
 import { DataTable } from "./tasks/data-table"
-import { taskSchema } from "./components/tasks/data/schema"
+import { taskSchema } from "./tasks/data/schema"
 
 interface Props {
   courseId: string | undefined
@@ -15,7 +15,6 @@ interface Props {
 
 function Tasks({ courseId }: Props ) {
 	const { toast } = useToast()
-  const [tasks, setTasks] = React.useState<Tasks>([])
 
   const { data, error, isLoading } = useQuery({
 		operationName: 'tasks/course',
