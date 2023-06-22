@@ -3,6 +3,7 @@ mutation (
 	$status: String!,
 	$label: String!,
 	$priority: String!,
+	$course_id: String!,
   $user_uuid: String! @fromClaim(name: USERID)
 ) {
 	task: lms_createOneTask(
@@ -11,8 +12,9 @@ mutation (
 			status: $status
 			label: $label
 			priority: $priority
-      created_by: $user_uuid
       updated_by: $user_uuid
+			user: { connect: { uuid: $user_uuid } }
+			course: { connect: { id: $course_id } }
 		}
 	) {
 		id

@@ -216,14 +216,14 @@ model Task {
 	status				String
 	label					String
 	priority			String
-	course_id			String?			@db.ObjectId
+	course_id			String			@db.ObjectId
 	object_id			String?			@db.ObjectId
 	created_by   	String
 	created_at		DateTime 		@default(now())
 	updated_by   	String
 	updated_at		DateTime		@updatedAt
 	user         	User        @relation(fields: [created_by], references: [uuid], onDelete: Cascade)
-	course       	Course?     @relation(fields: [course_id], references: [id], onDelete: Cascade)
+	course       	Course      @relation(fields: [course_id], references: [id], onDelete: Cascade)
 
 	@@index([created_by])
 
