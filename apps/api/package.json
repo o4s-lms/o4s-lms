@@ -14,19 +14,19 @@
 				"with-env": "dotenv -e ../../.env --"
 		},
 		"dependencies": {
-				"@novu/node": "^0.15.0",
+				"@novu/node": "^0.16.1",
 				"@o4s/tsconfig": "^0.1.0",
 				"@tryghost/html-to-mobiledoc": "^2.0.20",
-				"@wundergraph/nextjs": "^0.11.10",
-				"@wundergraph/sdk": "^0.165.0",
+				"@wundergraph/nextjs": "^0.11.12",
+				"@wundergraph/sdk": "^0.166.1",
 				"reading-time": "^1.5.0",
-				"stripe": "^12.9.0"
+				"stripe": "^12.10.0"
 		},
 		"devDependencies": {
 				"@o4s/eslint-config": "^0.1.0",
 				"@types/node": "^20.3.1",
 				"dotenv-cli": "^7.2.1",
-				"eslint": "^8.42.0",
+				"eslint": "^8.43.0",
 				"typescript": "^5.1.3"
 		}
 }
