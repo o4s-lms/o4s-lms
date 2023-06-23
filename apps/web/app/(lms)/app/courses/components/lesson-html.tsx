@@ -5,6 +5,7 @@ import { currentProgress } from "@/actions/courses"
 import { Loading } from "@/components/loading"
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
+import Task from "./task"
 
 interface Props {
   courseId: string;
@@ -52,6 +53,10 @@ function LessonHtml({ courseId, slug }: Props) {
       <Separator className="my-6" />
       <div className="mt-10 flex items-center justify-center">
         <Progress value={progress} className="w-[60%]" />
+      </div>
+      <Separator className="my-6" />
+      <div className="mt-10 flex items-center justify-center">
+        <Task lessonId={data?.lesson?.id} />
       </div>
       <div className="mt-10 flex items-center justify-center">
         <nav

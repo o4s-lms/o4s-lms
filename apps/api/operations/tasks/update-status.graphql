@@ -1,0 +1,10 @@
+mutation($id: String!, $status: String!) {
+	task: lms_updateOneTask(
+		where: { id: $id }
+		data: {
+			status: { set: $status }
+		}
+	) {
+		id
+	}
+}

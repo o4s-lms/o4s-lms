@@ -1,0 +1,16 @@
+query ($object_id: String!, $user_uuid: String! @fromClaim(name: USERID)) {
+	task: lms_findUniqueTask(
+		where: {
+			object_id_created_by: {
+        object_id: $object_id
+				created_by: $user_uuid
+			}
+		}) {
+		id
+		title
+		status
+		label
+		priority
+		object_id
+	}
+}

@@ -217,7 +217,7 @@ model Task {
 	label					String
 	priority			String
 	course_id			String			@db.ObjectId
-	object_id			String?			@db.ObjectId
+	object_id			String			@db.ObjectId
 	created_by   	String
 	created_at		DateTime 		@default(now())
 	updated_by   	String
@@ -225,6 +225,7 @@ model Task {
 	user         	User        @relation(fields: [created_by], references: [uuid], onDelete: Cascade)
 	course       	Course      @relation(fields: [course_id], references: [id], onDelete: Cascade)
 
+  @@unique([object_id, created_by])
 	@@index([created_by])
 
 	@@map("tasks")
