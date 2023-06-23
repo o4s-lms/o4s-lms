@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { useQuery, withWunderGraph } from "@/lib/wundergraph"
+import { useSWRConfig } from "swr"
 
 import { Loading } from "@/components/loading"
 import { useToast } from "@/hooks/use-toast"
@@ -17,6 +18,7 @@ interface Props {
 function Task({ lessonId }: Props ) {
 	const { toast } = useToast()
   const updateStatus = useUpdateStatusMutation()
+  const { mutate } = useSWRConfig()
 
   const { data, error, isLoading } = useQuery({
 		operationName: 'tasks/object',
@@ -45,6 +47,12 @@ function Task({ lessonId }: Props ) {
       status: status,
     })
     if (task) {
+      await mutate({
+				operationName: 'tasks/object',
+        input: {
+          object_id: lessonId,
+        },
+			})
       toast({
         title: "Tarefa atualizada",
         description: "A tarefa foi atualizada com sucesso",
@@ -61,7 +69,7 @@ function Task({ lessonId }: Props ) {
     <>
 		{!isLoading ? (
       <div className="relative inline-flex self-center">
-        <svg className="pointer-events-none absolute right-0 top-0 m-2 rounded bg-purple-700 p-2 text-white" xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" viewBox="0 0 38 22" version="1.1">
+        <svg className="pointer-events-none absolute right-0 top-0 m-2 rounded bg-blue-700 p-2 text-white" xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" viewBox="0 0 38 22" version="1.1">
           <title>F09B337F-81F6-41AC-8924-EC55BA135736</title>
           <g id="ZahnhelferDE—Design" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
             <g id="ZahnhelferDE–Icon&amp;Asset-Download" transform="translate(-539.000000, -199.000000)" fill="#ffffff" fill-rule="nonzero">
@@ -74,7 +82,7 @@ function Task({ lessonId }: Props ) {
         <select
           onChange={selectChange}
           value={data?.task?.status}
-          className="h-14 w-60 appearance-none rounded border-2 border-purple-700 bg-white pl-5 pr-10 text-2xl font-bold text-gray-600 hover:border-gray-400 focus:outline-none">
+          className="h-14 w-60 appearance-none rounded border-2 border-blue-700 bg-white pl-5 pr-10 text-2xl font-bold text-gray-600 hover:border-gray-400 focus:outline-none">
             {statuses.map((status) => (
               <option value={status.value}>{status.label}</option>
             ))}

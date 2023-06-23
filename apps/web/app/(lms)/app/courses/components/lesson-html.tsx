@@ -51,13 +51,15 @@ function LessonHtml({ courseId, slug }: Props) {
         >
       </article>
       <Separator className="my-6" />
-      <div className="mt-10 flex items-center justify-center">
-        <Progress value={progress} className="w-[60%]" />
+      <div className="flex items-center justify-center">
+        <div className="w-[60%] flex-initial">
+          <Progress value={progress} />
+        </div>
+        <div className="px-6">
+          <Task lessonId={data?.lesson?.id} />
+        </div>
       </div>
       <Separator className="my-6" />
-      <div className="mt-10 flex items-center justify-center">
-        <Task lessonId={data?.lesson?.id} />
-      </div>
       <div className="mt-10 flex items-center justify-center">
         <nav
           className="isolate inline-flex -space-x-px rounded-md shadow-sm"

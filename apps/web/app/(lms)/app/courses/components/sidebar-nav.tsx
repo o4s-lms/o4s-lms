@@ -23,6 +23,7 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
 export function SidebarNav({ className, course, ...props }: SidebarNavProps) {
   const pathname = usePathname()
 
+  // TODO: Accordion defaultValue="item-2"
   return (
     <Accordion type="single" collapsible className="w-full">
     {course?.modules?.map((item) => (
