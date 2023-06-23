@@ -207,6 +207,9 @@ importers:
       '@o4s/lib':
         specifier: ^0.1.0
         version: link:../../packages/lib
+      '@paypal/react-paypal-js':
+        specifier: ^8.0.0
+        version: 8.0.0(react-dom@18.2.0)(react@18.2.0)
       '@radix-ui/react-accordion':
         specifier: ^1.1.2
         version: 1.1.2(@types/react-dom@18.2.5)(@types/react@18.2.12)(react-dom@18.2.0)(react@18.2.0)
@@ -3985,6 +3988,30 @@ packages:
 
   /@panva/hkdf@1.1.1:
     resolution: {integrity: sha512-dhPeilub1NuIG0X5Kvhh9lH4iW3ZsHlnzwgwbOlgwQ2wG1IqFzsgHqmKPk3WzsdWAeaxKJxgM0+W433RmN45GA==}
+    dev: false
+
+  /@paypal/paypal-js@6.0.0:
+    resolution: {integrity: sha512-FYzjYby9F7tgg4tUxYNseZ6vkeDJcdcjoULsyNhfrWZZjicDpdj5932fZlyUlQXDSR9KlhjXH6H4nPIJ0Lq0Kw==}
+    dependencies:
+      promise-polyfill: 8.3.0
+    dev: false
+
+  /@paypal/react-paypal-js@8.0.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-p0TTfWxpVOfqNCLoC/tVh490YOSaJUQc3pDOvdSz8giTLsJIZ3bRnNLPJFlZc6xu6DPD4ldZSfy++9dTlVmo7g==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      '@paypal/paypal-js': 6.0.0
+      '@paypal/sdk-constants': 1.0.130
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /@paypal/sdk-constants@1.0.130:
+    resolution: {integrity: sha512-hrh1SyZy+qiBA+h/EYWjTZ7QiBcRgDiEfhHCxP47fiBO8wE9w+DiEfHm747vFQomvHg6AyDxhyGXjnuaGAW31A==}
+    dependencies:
+      hi-base32: 0.5.1
     dev: false
 
   /@pkgr/utils@2.4.1:
@@ -10388,6 +10415,10 @@ packages:
       source-map: 0.7.4
     dev: false
 
+  /hi-base32@0.5.1:
+    resolution: {integrity: sha512-EmBBpvdYh/4XxsnUybsPag6VikPYnN30td+vQk+GI3qpahVEG9+gTkG0aXVxTjBqQ5T6ijbWIu77O+C5WFWsnA==}
+    dev: false
+
   /hoist-non-react-statics@3.3.2:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
     dependencies:
@@ -13857,6 +13888,10 @@ packages:
   /process@0.11.10:
     resolution: {integrity: sha512-cdGef/drWFoydD1JsMzuFf8100nZl+GT+yacc2bEced5f9Rjk4z+WtFUTBu9PhOi9j/jfmBPu0mMEY4wIdAF8A==}
     engines: {node: '>= 0.6.0'}
+    dev: false
+
+  /promise-polyfill@8.3.0:
+    resolution: {integrity: sha512-H5oELycFml5yto/atYqmjyigJoAo3+OXwolYiH7OfQuYlAqhxNvTfiNMbV9hsC6Yp83yE5r2KTVmtrG6R9i6Pg==}
     dev: false
 
   /promise@8.3.0:
