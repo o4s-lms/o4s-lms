@@ -241,8 +241,8 @@ model Payment {
 	value       		Int
 	type						PaymentType   @default(SEPA)
 	method_id			 	String				@db.ObjectId
-	customer_id 		String?
-	payment_id  		String?
+	payer_id     		String?
+	transaction_id	String?
 	order_id 				String				@unique @db.ObjectId
 	order       		Order				  @relation(fields: [order_id], references: [id])
 	payment_method 	PaymentMethod	@relation(fields: [method_id], references: [id])

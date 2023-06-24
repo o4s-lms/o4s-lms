@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -57,6 +56,12 @@ async function handleResponse(response: Response) {
 	throw new OrderCreationError()
 }
 
+function insertCharacter(str: string, index: number, char: string) {
+	const arr = str.split('');
+	arr.splice(index, 0, char);
+	return arr.join('');
+}
+
 export default createOperation.mutation({
   input: z.object({
 		order_id: z.string(),
@@ -72,20 +77,23 @@ export default createOperation.mutation({
 		if (!order) {
 			throw new OrderNotFoundError()
 		}
+
+		let value: string = (order.sub_total_with_tax).toString()
+		value.slice(0, value.length - 2) + '.' + value.slice(value.length - 2)
+		value = insertCharacter(value, value.length - 2, ".")
     
 		const accessToken = await generateAccessToken()
     const url = `${baseURL.sandbox}/v2/checkout/orders`
     const payload = {
-        intent: "CAPTURE",
-        purchase_units: [
-        {
-            amount: {
-            currency_code: "EUR",
-            value: Math.round( order.sub_total_with_tax + Number.EPSILON ) / 100
-            ,
-            },
-        },
-        ],
+      intent: "CAPTURE",
+      purchase_units: [
+				{
+					amount: {
+						currency_code: order.currency.toUpperCase(),
+						value: value,
+					},
+				},
+      ],
     }
 
     const response = await fetch(url, {
