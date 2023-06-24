@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -6,7 +7,10 @@ import { createOperation, z } from '../../generated/wundergraph.factory'
 
 const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID as string
 const PAYPAL_APP_SECRET = process.env.PAYPAL_APP_SECRET as string
-const base = "https://api-m.sandbox.paypal.com"
+const baseURL = {
+	sandbox: "https://api-m.sandbox.paypal.com",
+	production: "https://api-m.paypal.com"
+}
 
 export class OrderNotFoundError extends OperationError {
   statusCode = 400;
@@ -17,6 +21,7 @@ export class OrderNotFoundError extends OperationError {
 export class OrderCreationError extends OperationError {
   statusCode = 400;
   code = 'OrderCreationError' as const;
+	message = 'Paypal Order creation error';
 }
 
 export class AccessTokenError extends OperationError {
@@ -28,7 +33,7 @@ export class AccessTokenError extends OperationError {
 const generateAccessToken = async () => {
 	try {
 			const auth = Buffer.from(PAYPAL_CLIENT_ID + ":" + PAYPAL_APP_SECRET).toString("base64")
-			const response = await fetch(`${base}/v1/oauth2/token`, {
+			const response = await fetch(`${baseURL.sandbox}/v1/oauth2/token`, {
 				method: "POST",
 				body: "grant_type=client_credentials",
 				headers: {
@@ -46,37 +51,38 @@ const generateAccessToken = async () => {
 
 async function handleResponse(response: Response) {
 	if (response.status === 200 || response.status === 201) {
-		return response.json();
+		return response.json()
 	}
 
-	const errorMessage = await response.text();
-	throw new OrderCreationError({ message: errorMessage });
+	throw new OrderCreationError()
 }
-
 
 export default createOperation.mutation({
   input: z.object({
 		order_id: z.string(),
   }),
-  handler: async ({ input, user, graph, operations }) => {
-		const { data: order } = await operations.query({
+  handler: async ({ input, operations }) => {
+		const { data, error } = await operations.query({
 			operationName: 'orders/id',
 			input: {
 				id: input.order_id,
 			}
 		})
+    const order = data?.order
 		if (!order) {
 			throw new OrderNotFoundError()
 		}
+    
 		const accessToken = await generateAccessToken()
-    const url = `${base}/v2/checkout/orders`
+    const url = `${baseURL.sandbox}/v2/checkout/orders`
     const payload = {
         intent: "CAPTURE",
         purchase_units: [
         {
             amount: {
-            currency_code: "USD",
-            value: "0.02",
+            currency_code: "EUR",
+            value: Math.round( order.sub_total_with_tax + Number.EPSILON ) / 100
+            ,
             },
         },
         ],
