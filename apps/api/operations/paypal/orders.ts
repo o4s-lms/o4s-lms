@@ -79,7 +79,7 @@ export default createOperation.mutation({
 		}
 
 		let value: string = (order.sub_total_with_tax).toString()
-		value.slice(0, value.length - 2) + '.' + value.slice(value.length - 2)
+		// value.slice(0, value.length - 2) + '.' + value.slice(value.length - 2)
 		value = insertCharacter(value, value.length - 2, ".")
     
 		const accessToken = await generateAccessToken()
@@ -88,6 +88,7 @@ export default createOperation.mutation({
       intent: "CAPTURE",
       purchase_units: [
 				{
+					reference_id: order.id,
 					amount: {
 						currency_code: order.currency.toUpperCase(),
 						value: value,

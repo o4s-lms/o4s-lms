@@ -53,6 +53,6 @@ export default createOperation.mutation({
 			},
 		})
 
-		return response
+		return response.json()
   },
 })

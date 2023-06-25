@@ -20,7 +20,7 @@ export default createOperation.mutation({
 		transaction_id: z.string(),
 		payer_id: z.string(),
 	}),
-	handler: async ({ input, graph }) => {
+	handler: async ({ input, graph, operations }) => {
 		const order = await graph
 			.from('site')
 			.mutate('updateOneOrder')
@@ -51,9 +51,12 @@ export default createOperation.mutation({
 			throw new PaymentUpdateError()
 		}
 
-		return {
-      order_id: order.id,
-      payment_id: payment.id,
-    }
+		const { data: newOrder } = await operations.query({
+			operationName: 'orders/id',
+			input: {
+				id: order.id,
+			}
+		})
+		return newOrder
 	},
 })

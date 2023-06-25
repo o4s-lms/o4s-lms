@@ -1,0 +1,16 @@
+query ($id: String!) {
+	methods: site_findUniquePaymentMethod(
+		where: { id: $id }
+	) {
+		id
+		name
+		description
+		icon
+		instructions
+		created_at
+		updated_at
+		is_manual
+		gateway
+		active
+	}
+}

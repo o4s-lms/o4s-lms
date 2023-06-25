@@ -206,7 +206,6 @@ model Order {
 	status							OrderStatus @default(PENDING)
 	customer_uuid				String
 	customer_email			String
-	customer_stripe_id	String?
 	tax_total						Int					@default(0)
 	discount_total			Int					@default(0)
 	sub_total						Int 				@default(0)

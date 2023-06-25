@@ -29,8 +29,10 @@ const FUNDING_SOURCES = [
 ]
 
 const initialOptions = {
-  "clientId": process.env.PAYPAL_CLIENT_ID as string,
+  "client-id": "AamHpFXrUnZC9_TD8dK22YPFgVzUgXR5cnAQNnHuEeHqiSKT70uOEgfyIldpCI98S3yiT0vbvpaNYJXg",
   "enable-funding": "paylater,venmo",
+  "locale": "pt_PT",
+  "currency": "EUR",
 }
 
 /**function getCookie(name: string) {
@@ -201,6 +203,15 @@ export default function Subscrever() {
       <div className={`${currentStep == 4 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
         {order ? (
           <div className="mx-auto max-w-xl rounded-lg px-8 py-10 shadow-lg">
+            <div className="mb-8 flex items-center justify-between">
+							<div className="text-gray-500">
+								<div className="mb-2 text-xl font-bold">SUBSCRIÇÃO</div>
+								<div className="text-sm">#: {order.id}</div>
+								<div className="text-sm">Data: {new Date().toLocaleDateString('pt-PT')}</div>
+								<div className="text-sm font-bold">Refª Pagamento: {order.payment?.id.slice(18).toUpperCase()}</div>
+                <div className="text-sm font-bold">STATUS: {order.payment?.status}</div>
+							</div>
+						</div>
             <PayPalScriptProvider options={initialOptions}>
               {
                 FUNDING_SOURCES.map(fundingSource=>{
@@ -260,8 +271,8 @@ export default function Subscrever() {
                         console.log('Capture result', details, JSON.stringify(details, null, 2))
                         const transaction = details.purchase_units[0].payments.captures[0]
                         const payer = details.payer
-                        alert('Transaction '+ transaction.status + ': ' + transaction.id + 'See console for all available details')
-                        await client.mutate({
+                        // alert('Transaction '+ transaction.status + ': ' + transaction.id + 'See console for all available details')
+                        const { data: _order } = await client.mutate({
                           operationName: 'payments/paid',
                           input: {
                             order_id: order.id,
@@ -270,14 +281,8 @@ export default function Subscrever() {
                             payer_id: payer.payer_id,
                           },
                         })
-                        const { data: _order} = await client.query({
-                          operationName: 'orders/id',
-                          input: {
-                            id: order.id,
-                          }
-                        })
                         setOrder(_order)
-
+                        setCurrentStep(5)
                       }}
                   />)
                 })
@@ -303,6 +308,7 @@ export default function Subscrever() {
 											<div className="text-sm">#: {order.id}</div>
 											<div className="text-sm">Data: {new Date().toLocaleDateString('pt-PT')}</div>
 											<div className="text-sm font-bold">Refª Pagamento: {order.payment?.id.slice(18).toUpperCase()}</div>
+                      <div className="text-sm font-bold">STATUS: {order.payment?.status}</div>
 									</div>
 							</div>
 							<div className="mb-8 border-b-2 border-gray-300 pb-8">
