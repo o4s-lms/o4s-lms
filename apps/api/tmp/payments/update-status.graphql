@@ -1,0 +1,17 @@
+mutation (
+	$id: String!,
+	$status: String!,
+	$payer_id: String,
+	$transaction_id: String
+) {
+	payment: site_updateOnePayment(
+		where: { id: $id }
+		data: {
+			status: { set: $status }
+			payer_id: { set: $payer_id }
+			transaction_id: { set: $transaction_id }
+		}
+	) {
+		id
+	}
+}

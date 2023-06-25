@@ -4,8 +4,8 @@ import * as React from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 
-import { enqueueSnackbar } from "notistack"
-import { useUser } from "@/lib/wundergraph"
+import { PayPalScriptProvider, PayPalButtons, FUNDING } from "@paypal/react-paypal-js"
+import { client, useUser } from "@/lib/wundergraph"
 import { MoveRight, MoveLeft } from 'lucide-react'
 import { ProductsAllResponseData, OrdersIdResponseData } from "@o4s/generated-wundergraph/models"
 import CartTable from "../components/cart-table"
@@ -18,8 +18,20 @@ import Loading from "../components/loading"
 import useCreateOrderMutation from "@/hooks/orders/use-create-order-mutation"
 import Brand from "@/components/brand"
 import { removeCart } from "@/actions/orders"
+import { PaymentsMethodsResponseData } from "@o4s/generated-wundergraph/models"
 
+type Method = PaymentsMethodsResponseData["methods"][number]
 type Order = OrdersIdResponseData["order"]
+
+const FUNDING_SOURCES = [
+  FUNDING.PAYPAL,
+  FUNDING.CARD
+]
+
+const initialOptions = {
+  "clientId": process.env.PAYPAL_CLIENT_ID as string,
+  "enable-funding": "paylater,venmo",
+}
 
 /**function getCookie(name: string) {
   if (document.cookie && document.cookie !== '') {
@@ -45,7 +57,7 @@ async function getCookie(key: string) {
 export default function Subscrever() {
 	const router = useRouter()
   const createOrder = useCreateOrderMutation()
-	const stepsItems = ["Identificação", "Carrinho", "Pagamento", "Conclusão"]
+	const stepsItems = ["Identificação", "Carrinho", "Método", "Pagar", "Conclusão"]
 	const [currentStep, setCurrentStep] = React.useState<number>(1)
 	const [cartId, setCartId] = React.useState<string>()
   const [order, setOrder] = React.useState<Order>()
@@ -82,10 +94,15 @@ export default function Subscrever() {
     }
   }, [productId])*/
 
-	const save = async (method_id: string | undefined) => {
-    if (cartId && method_id) {
-      setCurrentStep(4)
-      const data = await createOrder.trigger({ cart_id: cartId, payment_method: method_id })
+	const save = async (method: Method | undefined) => {
+    if (cartId && method) {
+      if (method.is_manual) {
+        setCurrentStep(5)
+      } else {
+        setCurrentStep(4)
+      }
+
+      const data = await createOrder.trigger({ cart_id: cartId, payment_method: method.id })
 
       setOrder(data?.order)
       removeCart(cartId)
@@ -169,7 +186,7 @@ export default function Subscrever() {
 			</div>
 
 			<div className={`${currentStep == 3 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
-				<PaymentMethod saveOrder={(method_id) => save(method_id)} />
+				<PaymentMethod saveOrder={(method) => save(method)} />
 
 					<button
 						onClick={() => setCurrentStep(2)}
@@ -181,7 +198,100 @@ export default function Subscrever() {
 						Voltar ao Carrinho
 					</button>
 			</div>
-			<div className={`${currentStep == 4 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
+      <div className={`${currentStep == 4 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
+        {order ? (
+          <div className="mx-auto max-w-xl rounded-lg px-8 py-10 shadow-lg">
+            <PayPalScriptProvider options={initialOptions}>
+              {
+                FUNDING_SOURCES.map(fundingSource=>{
+                  return(
+                    <PayPalButtons
+                      fundingSource={fundingSource}
+                      key={fundingSource}
+
+                      style={{
+                        layout: 'vertical',
+                        shape: 'rect',
+                        color: (fundingSource == FUNDING.PAYLATER) ? 'gold' : undefined,
+                      }}
+
+                      createOrder={async (data, actions) => {
+                        const { data: paypal_order, error } = await client.mutate({
+                          operationName: 'paypal/orders',
+                          input: {
+                            order_id: order.id
+                          }
+                        })
+                        if (error) {
+                          console.error(error)
+                        }
+
+                        return paypal_order.id
+
+                      }}
+
+                      onApprove={async (data, actions) => {
+                        const { data: details, error } = await client.mutate({
+                          operationName: 'paypal/capture',
+                          input: {
+                            order_id: data.orderID
+                          }
+                        })
+
+                        if (error) {
+                          console.error(error)
+                        }
+
+                        const errorDetail = Array.isArray(details.details) && details.details[0]
+
+                        if (errorDetail && errorDetail.issue === 'INSTRUMENT_DECLINED') {
+                          return actions.restart();
+                          // https://developer.paypal.com/docs/checkout/integration-features/funding-failure/
+                        }
+
+                        if (errorDetail) {
+                          let msg = 'Sorry, your transaction could not be processed.'
+                          msg += errorDetail.description ? ' ' + errorDetail.description : ''
+                          msg += details.debug_id ? ' (' + details.debug_id + ')' : ''
+                          alert(msg);
+                        }
+
+                        // Successful capture! For demo purposes:
+                        console.log('Capture result', details, JSON.stringify(details, null, 2))
+                        const transaction = details.purchase_units[0].payments.captures[0]
+                        const payer = details.payer
+                        alert('Transaction '+ transaction.status + ': ' + transaction.id + 'See console for all available details')
+                        await client.mutate({
+                          operationName: 'payments/paid',
+                          input: {
+                            order_id: order.id,
+                            payment_id: order.payment?.id,
+                            transaction_id: transaction.id,
+                            payer_id: payer.payer_id,
+                          },
+                        })
+                        const { data: _order} = await client.query({
+                          operationName: 'orders/id',
+                          input: {
+                            id: order.id,
+                          }
+                        })
+                        setOrder(_order)
+
+                      }}
+                  />)
+                })
+              }
+            </PayPalScriptProvider>
+          </div>
+        ) : (
+					<div className="flex items-center">
+						<p>Estamos a processar o seu pedido... Por favor aguarde um momento.</p>
+            <Loading />
+					</div>
+				)}
+      </div>
+			<div className={`${currentStep == 5 ? "" : "hidden"} mx-auto max-w-2xl p-4 md:px-0`}>
         {order ? (
 						<div className="mx-auto max-w-xl rounded-lg px-8 py-10 shadow-lg">
 							<div className="mb-8 flex items-center justify-between">

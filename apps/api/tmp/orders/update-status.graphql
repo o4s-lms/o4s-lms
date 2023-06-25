@@ -1,0 +1,10 @@
+mutation ($id: String!, $status: String!) {
+	order: site_updateOneOrder(
+		where: { id: $id }
+		data: {
+			status: { set: $status }
+		}
+	) {
+		id
+	}
+}

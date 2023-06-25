@@ -236,7 +236,7 @@ model OrderItems {
 model Payment {
 	id							String 				@id @default(auto()) @map("_id") @db.ObjectId
 	created_at   		DateTime      @default(now())
-  updated_at   		DateTime      @default(now()) @updatedAt
+  updated_at   		DateTime      @updatedAt
 	status      		PaymentStatus	@default(PENDING)
 	value       		Int
 	type						PaymentType   @default(SEPA)

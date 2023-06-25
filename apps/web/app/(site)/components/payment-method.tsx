@@ -3,13 +3,16 @@ import Image from "next/image"
 import { Icons } from "@/components/icons"
 import { useQuery } from "@o4s/generated-wundergraph/nextjs"
 import { MoveRight } from "lucide-react";
+import { PaymentsMethodsResponseData } from "@o4s/generated-wundergraph/models";
+
+type Method = PaymentsMethodsResponseData["methods"][number]
 
 interface Props {
-	saveOrder: (method_id: string | undefined) => void;
+	saveOrder: (method: Method | undefined) => void;
 }
 
 function PaymentMethod({ saveOrder }: Props) {
-	const [selectedMethod, setSelectedMethod] = React.useState<string>()
+	const [selectedMethod, setSelectedMethod] = React.useState<Method>()
 	const { data, isLoading } = useQuery({
 		operationName: 'payments/methods',
 		input: {
@@ -17,11 +20,12 @@ function PaymentMethod({ saveOrder }: Props) {
 		}
 	})
 
-	const radioHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedMethod(event.target.value);
-  }
+  const radios = data?.methods
 
-	const radios = data?.methods
+	const radioHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const method = radios?.find((t) => t.id === event.target.value)
+    setSelectedMethod(method)
+  }
 
 	return (
 		<div className="min-h-80 mx-auto my-4 w-full max-w-2xl sm:my-8">

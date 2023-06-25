@@ -2,7 +2,8 @@ import { PayPalScriptProvider, PayPalButtons, FUNDING } from "@paypal/react-payp
 import { client } from "@/lib/wundergraph"
 
 interface Props {
-  orderId: string
+  orderId: string;
+  saveOrder: (method_id: string | undefined) => void;
 }
 
 function PayPal({ orderId }: Props) {
@@ -12,7 +13,7 @@ function PayPal({ orderId }: Props) {
   ]
 
   const initialOptions = {
-    "clientId": "<test>",
+    "clientId": process.env.PAYPAL_CLIENT_ID as string,
     "enable-funding": "paylater,venmo",
   }
 
@@ -77,6 +78,7 @@ function PayPal({ orderId }: Props) {
                   console.log('Capture result', details, JSON.stringify(details, null, 2));
                   const transaction = details.purchase_units[0].payments.captures[0];
                   alert('Transaction '+ transaction.status + ': ' + transaction.id + 'See console for all available details')
+
 
                 }}
             />)
