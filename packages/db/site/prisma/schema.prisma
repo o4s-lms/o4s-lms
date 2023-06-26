@@ -238,7 +238,6 @@ model Payment {
   updated_at   		DateTime      @updatedAt
 	status      		PaymentStatus	@default(PENDING)
 	value       		Int
-	type						PaymentType   @default(SEPA)
 	method_id			 	String				@db.ObjectId
 	payer_id     		String?
 	transaction_id	String?
@@ -258,6 +257,7 @@ model PaymentMethod {
 	created_at   	DateTime      @default(now())
   updated_at   	DateTime      @updatedAt
 	is_manual    	Boolean
+	type					String[]
 	gateway				String
 	active				Boolean				@default(true)
 	locale				String				@default("pt")
@@ -306,6 +306,7 @@ enum PaymentStatus {
 
 enum PaymentType {
 	CC
+	DC
 	SEPA
 	PAYPAL
 	BOLETO

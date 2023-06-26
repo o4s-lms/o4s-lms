@@ -12,6 +12,7 @@ import CartTable from "../components/cart-table"
 import PromosTable from "../components/promos-table"
 import PaymentMethod from "../components/payment-method"
 import { Icons } from "@/components/icons"
+import { useToast } from "@/hooks/use-toast"
 import { createCart } from "@/actions/orders"
 import { useEffectOnce } from "usehooks-ts"
 import Loading from "../components/loading"
@@ -58,6 +59,7 @@ async function getCookie(key: string) {
 
 export default function Subscrever() {
 	const router = useRouter()
+  const { toast } = useToast()
   const createOrder = useCreateOrderMutation()
 	const stepsItems = ["Identificação", "Carrinho", "Método", "Pagar", "Conclusão"]
 	const [currentStep, setCurrentStep] = React.useState<number>(1)
@@ -234,6 +236,15 @@ export default function Subscrever() {
                           }
                         })
                         if (error) {
+                          toast({
+                            variant: "destructive",
+                            title: "Sorry, your transaction could not be processed.",
+                            description: (
+                              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                                <code className="text-white">{error.message}</code>
+                              </pre>
+                            ),
+                          })
                           console.error(error)
                         }
 
@@ -261,16 +272,33 @@ export default function Subscrever() {
                         }
 
                         if (errorDetail) {
-                          let msg = 'Sorry, your transaction could not be processed.'
-                          msg += errorDetail.description ? ' ' + errorDetail.description : ''
+
+                          let msg = errorDetail.description ? ' ' + errorDetail.description : ''
                           msg += details.debug_id ? ' (' + details.debug_id + ')' : ''
-                          alert(msg);
+                          toast({
+                            variant: "destructive",
+                            title: "Sorry, your transaction could not be processed.",
+                            description: (
+                              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                                <code className="text-white">{error.message}</code>
+                              </pre>
+                            ),
+                          })
+
                         }
 
                         // Successful capture! For demo purposes:
                         console.log('Capture result', details, JSON.stringify(details, null, 2))
                         const transaction = details.purchase_units[0].payments.captures[0]
                         const payer = details.payer
+                        toast({
+                          title: "Transaction processed sucessfully.",
+                          description: (
+                            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                              <code className="text-white">{'Transaction '+ transaction.status + ': ' + transaction.id}</code>
+                            </pre>
+                          ),
+                        })
                         // alert('Transaction '+ transaction.status + ': ' + transaction.id + 'See console for all available details')
                         const { data: _order } = await client.mutate({
                           operationName: 'payments/paid',
@@ -291,8 +319,8 @@ export default function Subscrever() {
           </div>
         ) : (
 					<div className="flex items-center">
-						<p>Estamos a processar o seu pedido... Por favor aguarde um momento.</p>
-            <Loading />
+						<div><p>Estamos a processar o seu pedido... Por favor aguarde um momento.</p></div>
+            <div><Loading /></div>
 					</div>
 				)}
       </div>
@@ -333,14 +361,18 @@ export default function Subscrever() {
 										))}
 									</tbody>
 							</table>
+              {order.discount_total > 0 && (
 							<div className="mb-8 flex justify-end">
-									<div className="mr-2 text-gray-500">Descontos:</div>
-									<div className="text-gray-500">{order.discount_total}</div>
+								<div className="mr-2 text-gray-500">Descontos:</div>
+                <div className="text-gray-500">{order.discount_total}</div>
 							</div>
-							<div className="mb-8 text-right">
-									<div className="mr-2 text-gray-700">Taxas:</div>
-									<div className="text-gray-500">{order.tax_total}</div>
+              )}
+              {order.tax_total > 0 && (
+							<div className="mb-8 flex justify-end">
+								<div className="mr-2 text-gray-700">Taxas:</div>
+								<div className="text-gray-500">{order.tax_total}</div>
 							</div>
+              )}
 							<div className="mb-8 flex justify-end">
 									<div className="mr-2 text-gray-500">Subtotal:</div>
 									<div className="text-gray-700">{order.sub_total}</div>
@@ -350,15 +382,19 @@ export default function Subscrever() {
 									<div className="text-xl font-bold text-gray-700">{order.sub_total_with_tax}</div>
 							</div>
 							<div className="mb-8 border-t-2 border-gray-300 pt-8">
+                {order.payment?.payment_method.is_manual && (
+                  <>
 									<div className="mb-2 text-gray-500">Complete o pagamento no seu banco utilizando as informações fornecidas. O pagamento geralmente é concluído em 1 a 3 dias úteis, dependendo do sistema bancário e do país envolvido.</div>
 									<div className="mb-2 font-bold text-gray-500">Importante: Certifique-se de incluir a sua referência de pagamento: {order.payment?.id.slice(18).toUpperCase()} quando completar o pagamento no banco para fazer corresponder o seu pagamento à sua subscrição com facilidade.</div>
-									<div className="text-gray-500">Sobral de Monte Agraço, Portugal</div>
+                  </>
+                )}
+								<div className="text-gray-500">Sobral de Monte Agraço, Portugal</div>
 							</div>
 						</div>
 				) : (
 					<div className="flex items-center">
-						<p>Estamos a processar o seu pedido... Por favor aguarde um momento.</p>
-            <Loading />
+						<div><p>Estamos a processar o seu pedido... Por favor aguarde um momento.</p></div>
+            <div><Loading /></div>
 					</div>
 				)}
 			</div>

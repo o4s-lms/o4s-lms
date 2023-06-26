@@ -31,11 +31,11 @@ query ($id: String!) {
 			updated_at
 			status
 			value
-			type
 			payment_method {
 				id
 				name
 				is_manual
+				type
 				gateway
 			}
 		}
