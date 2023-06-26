@@ -309,7 +309,8 @@ export default function Subscrever() {
                             payer_id: payer.payer_id,
                           },
                         })
-                        setOrder(_order)
+                        console.log('Order', _order, JSON.stringify(_order, null, 2))
+                        setOrder(_order.order)
                         setCurrentStep(5)
                       }}
                   />)

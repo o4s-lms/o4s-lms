@@ -95,6 +95,13 @@ export default createOperation.mutation({
 					},
 				},
       ],
+			payment_source: {
+				paypal: {
+					experience_context: {
+						shipping_preference: 'NO_SHIPPING',
+					},
+				},
+			},
     }
 
     const response = await fetch(url, {
