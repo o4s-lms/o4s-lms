@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { OperationError } from '@wundergraph/sdk/operations'
 import { createOperation, z } from '../../generated/wundergraph.factory'
 import { Novu } from '@novu/node'
@@ -31,22 +29,46 @@ export class TopicSubscritionError extends OperationError {
 
 export default createOperation.mutation({
   input: z.object({
-		email: z.string().email(),
-		newsletter_id: z.string(),
+		order_id: z.string(),
   }),
-  handler: async ({ input, graph }) => {
-		const member = await graph
-			.from('site')
-			.mutate('upsertOneMember')
-			.where({
-				where: { email: input.email },
-				update: {},
-				create: {	email: input.email },
-			})
-			.exec()
-		if (!member) {
-			throw new MemberCreationError()
+  handler: async ({ input, graph, operations }) => {
+		const { data: order } = await operations.query({
+			operationName: 'orders/id',
+			input: {
+				id: input.order_id,
+			}
+		})
+
+		async function items () {
+			await order?.order?.items?.reduce(async (promise, item) => {
+				// This line will wait for the last async function to finish.
+				// The first iteration uses an already resolved Promise
+				// so, it will immediately continue.
+				await promise
+				const order_item = await graph
+					.from('lms')
+					.mutate('upsertOneCourseMember')
+					.where({
+						where: {
+							user_uuid_course_id: {
+								user_uuid: order?.order?.customer_uuid,
+								course_id: item.product.courses[0],
+							}
+						},
+						update: {},
+						create: {
+							user: { connect: { uuid: order?.order?.customer_uuid } },
+							course: { connect: { id: item.product.courses[0] } },
+							role: 'STUDENT',
+						},
+					})
+					.exec()
+				if (!order_item) {
+					throw new ItemCreationError()
+				}
+			}, Promise.resolve())
 		}
+		await items()
 		const newsletter = await graph
 			.from('site')
 			.mutate('upsertOneNewsletterMembers')

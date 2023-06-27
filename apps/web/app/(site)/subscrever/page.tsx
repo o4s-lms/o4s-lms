@@ -338,6 +338,11 @@ export default function Subscrever() {
 											<div className="text-sm">Data: {new Date().toLocaleDateString('pt-PT')}</div>
 											<div className="text-sm font-bold">Refª Pagamento: {order.payment?.id.slice(18).toUpperCase()}</div>
                       <div className="text-sm font-bold">STATUS: {order.payment?.status}</div>
+                      {order.payment?.status === 'PAID' && (
+                        <div className="text-sm font-bold">
+                          <Link href="/app/cursos" >Aceder Cursos</Link>
+                        </div>
+                      )}
 									</div>
 							</div>
 							<div className="mb-8 border-b-2 border-gray-300 pb-8">
