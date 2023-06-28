@@ -6,6 +6,13 @@ import { Check, ChevronsUpDown } from "lucide-react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
+import Uppy from "@uppy/core"
+import AwsS3 from "@uppy/aws-s3"
+import { DragDrop, StatusBar } from "@uppy/react"
+import "@uppy/core/dist/style.min.css"
+import "@uppy/drag-drop/dist/style.min.css"
+import "@uppy/status-bar/dist/style.min.css"
+
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -37,6 +44,9 @@ import { Textarea } from "@/components/ui/textarea"
 import useUpdateProfileMutation from "@/hooks/profile/use-update-profile-mutation"
 import { ToastAction } from "@/components/ui/toast"
 import { UsersMeResponseData } from "@o4s/generated-wundergraph/models"
+
+const uppy = new Uppy()
+    .use(AwsS3, { companionUrl: 'http://joseantcordeiro.hopto.org:3020' })
 
 const languages = [
   { label: "English", value: "en" },
@@ -87,7 +97,11 @@ type AccountFormValues = z.infer<typeof accountFormSchema>
 
 type Profile = UsersMeResponseData["me"] | undefined
 
-export function ProfileForm({ profile }: Profile) {
+interface Props {
+  profile: Profile;
+}
+
+export function ProfileForm({ profile }: Props) {
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const updateProfile = useUpdateProfileMutation()
 
@@ -138,148 +152,145 @@ export function ProfileForm({ profile }: Profile) {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="given_name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>First name</FormLabel>
-              <FormControl>
-                <Input placeholder="Your first name" {...field} />
-              </FormControl>
-              <FormDescription>
-                This is the first name that will be displayed on your profile and in
-                emails.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-				<FormField
-          control={form.control}
-          name="family_name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Last name</FormLabel>
-              <FormControl>
-                <Input placeholder="Your last name" {...field} />
-              </FormControl>
-              <FormDescription>
-                This is the last name that will be displayed on your profile and in
-                emails.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-				<FormField
-          control={form.control}
-          name="nickname"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="jose" {...field} />
-              </FormControl>
-              <FormDescription>
-                This is your public display name. It can be your real name or a
-                pseudonym. You can only change this once every 30 days.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-				<FormField
-          control={form.control}
-          name="bio"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Bio</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Tell us a little bit about yourself"
-                  className="resize-none"
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription>
-                You can <span>@mention</span> other users and organizations to
-                link to them.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="locale"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Language</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      className={cn(
-                        "w-[200px] justify-between",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value
-                        ? languages.find(
+    <>
+      <DragDrop uppy={uppy} />
+      <StatusBar uppy={uppy} />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="given_name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>First name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Your first name" {...field} />
+                </FormControl>
+                <FormDescription>
+                  This is the first name that will be displayed on your profile and in
+                  emails.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )} />
+          <FormField
+            control={form.control}
+            name="family_name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Last name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Your last name" {...field} />
+                </FormControl>
+                <FormDescription>
+                  This is the last name that will be displayed on your profile and in
+                  emails.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )} />
+          <FormField
+            control={form.control}
+            name="nickname"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input placeholder="jose" {...field} />
+                </FormControl>
+                <FormDescription>
+                  This is your public display name. It can be your real name or a
+                  pseudonym. You can only change this once every 30 days.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )} />
+          <FormField
+            control={form.control}
+            name="bio"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Bio</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Tell us a little bit about yourself"
+                    className="resize-none"
+                    {...field} />
+                </FormControl>
+                <FormDescription>
+                  You can <span>@mention</span> other users and organizations to
+                  link to them.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )} />
+          <FormField
+            control={form.control}
+            name="locale"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Language</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-[200px] justify-between",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value
+                          ? languages.find(
                             (language) => language.value === field.value
                           )?.label
-                        : "Select language"}
-                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
-                  <Command>
-                    <CommandInput placeholder="Search language..." />
-                    <CommandEmpty>No language found.</CommandEmpty>
-                    <CommandGroup>
-                      {languages.map((language) => (
-                        <CommandItem
-                          value={language.value}
-                          key={language.value}
-                          onSelect={(value) => {
-                            form.setValue("locale", value)
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              language.value === field.value
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                          {language.label}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              <FormDescription>
-                This is the language that will be used in the dashboard.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" disabled={isLoading}>
-					{isLoading && (
-						<Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-					)}
-					Update profile
-				</Button>
-      </form>
-    </Form>
+                          : "Select language"}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0">
+                    <Command>
+                      <CommandInput placeholder="Search language..." />
+                      <CommandEmpty>No language found.</CommandEmpty>
+                      <CommandGroup>
+                        {languages.map((language) => (
+                          <CommandItem
+                            value={language.value}
+                            key={language.value}
+                            onSelect={(value) => {
+                              form.setValue("locale", value)
+                            } }
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                language.value === field.value
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )} />
+                            {language.label}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <FormDescription>
+                  This is the language that will be used in the dashboard.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )} />
+          <Button type="submit" disabled={isLoading}>
+            {isLoading && (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Update profile
+          </Button>
+        </form>
+      </Form>
+    </>
   )
 }

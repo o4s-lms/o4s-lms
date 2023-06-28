@@ -2,13 +2,13 @@ import { createOperation, z } from '../../generated/wundergraph.factory'
 import { OperationError } from '@wundergraph/sdk/operations'
 
 export class LessonProgressError extends OperationError {
-  statusCode = 400;
+  statusCode = 500;
   code = 'LessonProgressError' as const;
   message = 'Lesson progress query error';
 }
 
 export class LessonsError extends OperationError {
-  statusCode = 400;
+  statusCode = 500;
   code = 'LessonsError' as const;
   message = 'Lessons query error';
 }

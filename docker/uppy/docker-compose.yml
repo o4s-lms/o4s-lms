@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+  uppy:
+    image: transloadit/companion
+    container_name: companion
+    restart: always
+    volumes:
+      - /app/node_modules
+      - uppy-server-data:/mnt/uppy-server-data
+    ports:
+      - "3020:3020"
+    env_file:
+     - .env
+
+volumes:
+  uppy-server-data:

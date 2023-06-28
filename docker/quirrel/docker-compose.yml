@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  quirrel:
+    image: ghcr.io/quirrel-dev/quirrel:main
+    container_name: quirrel
+    platform: linux/amd64
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - 9181:9181

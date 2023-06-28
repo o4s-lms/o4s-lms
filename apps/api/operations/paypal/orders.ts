@@ -18,13 +18,13 @@ export class OrderNotFoundError extends OperationError {
 }
 
 export class OrderCreationError extends OperationError {
-  statusCode = 400;
+  statusCode = 500;
   code = 'OrderCreationError' as const;
 	message = 'Paypal Order creation error';
 }
 
 export class AccessTokenError extends OperationError {
-  statusCode = 400;
+  statusCode = 401;
   code = 'AccessTokenError' as const;
   message = 'Failed to generate Access Token';
 }

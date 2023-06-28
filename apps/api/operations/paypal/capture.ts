@@ -12,7 +12,7 @@ const baseURL = {
 }
 
 export class AccessTokenError extends OperationError {
-  statusCode = 400;
+  statusCode = 401;
   code = 'AccessTokenError' as const;
   message = 'Failed to generate Access Token';
 }

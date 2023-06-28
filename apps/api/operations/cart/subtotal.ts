@@ -2,13 +2,13 @@ import { OperationError } from '@wundergraph/sdk/operations'
 import { createOperation, z } from '../../generated/wundergraph.factory'
 
 export class CartNotFoundError extends OperationError {
-  statusCode = 400;
+  statusCode = 500;
   code = 'CartNotFoundError' as const;
   message = 'Cart not found error';
 }
 
 export class CartUpdateError extends OperationError {
-  statusCode = 400;
+  statusCode = 500;
   code = 'CartUpdateError' as const;
   message = 'Update subtotal value error';
 }

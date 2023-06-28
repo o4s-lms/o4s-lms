@@ -11,13 +11,13 @@ const config = {
 const novu = new Novu(process.env.NOVU_API_KEY as string, config)
 
 export class MemberCreationError extends OperationError {
-  statusCode = 400;
+  statusCode = 500;
   code = 'MemberCreationError' as const;
   message = 'Member creation error';
 }
 
 export class SubscriberError extends OperationError {
-  statusCode = 400;
+  statusCode = 500;
   code = 'SubscriberError' as const;
   message = 'Novu subscriber error';
 }

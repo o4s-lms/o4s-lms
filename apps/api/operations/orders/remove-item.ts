@@ -2,13 +2,13 @@ import { OperationError } from '@wundergraph/sdk/operations'
 import { createOperation, z } from '../../generated/wundergraph.factory'
 
 export class ItemDeletionError extends OperationError {
-  statusCode = 400;
+  statusCode = 500;
   code = 'ItemDeletionError' as const;
   message = 'Remove from cart deletion error';
 }
 
 export class UpdateSubTotalError extends OperationError {
-  statusCode = 400;
+  statusCode = 500;
   code = 'UpdateSubTotalError' as const;
   message = 'Update subtotal error';
 }

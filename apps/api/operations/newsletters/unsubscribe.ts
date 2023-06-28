@@ -11,19 +11,19 @@ const config = {
 const novu = new Novu(process.env.NOVU_API_KEY as string, config)
 
 export class MemberNotFoundError extends OperationError {
-  statusCode = 400;
+  statusCode = 500;
   code = 'MemberNotFoundError' as const;
   message = 'Member not found error';
 }
 
 export class NewsletterSubscritionError extends OperationError {
-  statusCode = 400;
+  statusCode = 500;
   code = 'NewsletterSubscritionError' as const;
   message = 'Newsletter subscrition error';
 }
 
 export class TopicSubscritionError extends OperationError {
-  statusCode = 400;
+  statusCode = 500;
   code = 'TopicSubscritionError' as const;
   message = 'Novu topic subscrition error';
 }

@@ -2,19 +2,19 @@ import { OperationError } from '@wundergraph/sdk/operations'
 import { createOperation, z } from '../../generated/wundergraph.factory'
 
 export class CartCreationError extends OperationError {
-  statusCode = 400;
+  statusCode = 500;
   code = 'CartCreationError' as const;
   message = 'Cart creation error';
 }
 
 export class ItemCreationError extends OperationError {
-  statusCode = 400;
+  statusCode = 500;
   code = 'ItemCreationError' as const;
   message = 'Add to cart creation error';
 }
 
 export class UpdateSubTotalError extends OperationError {
-  statusCode = 400;
+  statusCode = 500;
   code = 'UpdateSubTotalError' as const;
   message = 'Update subtotal error';
 }
