@@ -9,6 +9,7 @@ import * as z from "zod"
 import Uppy from "@uppy/core"
 import AwsS3 from "@uppy/aws-s3"
 import { DragDrop, StatusBar } from "@uppy/react"
+import Portuguese from "@uppy/locales/lib/pt_PT"
 import "@uppy/core/dist/style.min.css"
 import "@uppy/drag-drop/dist/style.min.css"
 import "@uppy/status-bar/dist/style.min.css"
@@ -45,7 +46,11 @@ import useUpdateProfileMutation from "@/hooks/profile/use-update-profile-mutatio
 import { ToastAction } from "@/components/ui/toast"
 import { UsersMeResponseData } from "@o4s/generated-wundergraph/models"
 
-const uppy = new Uppy()
+const uppy = new Uppy({
+			debug: true,
+			autoProceed: true,
+			locale: Portuguese,
+		})
     .use(AwsS3, { companionUrl: 'http://joseantcordeiro.hopto.org:3020' })
 
 const languages = [

@@ -291,6 +291,9 @@ importers:
       '@uppy/file-input':
         specifier: ^3.0.2
         version: 3.0.2(@uppy/core@3.2.1)
+      '@uppy/locales':
+        specifier: ^3.2.2
+        version: 3.2.2
       '@uppy/progress-bar':
         specifier: ^3.0.2
         version: 3.0.2(@uppy/core@3.2.1)
@@ -6942,6 +6945,10 @@ packages:
       '@uppy/core': 3.2.1
       '@uppy/utils': 5.4.0
       preact: 10.15.1
+    dev: false
+
+  /@uppy/locales@3.2.2:
+    resolution: {integrity: sha512-U4Xg5FAGWMuCzcfhSsEyxUEdYLAG8HSYLcJuNzt7+nrRwMm/5AKrTXWJ9b34Uq9VN1+48X5MkVEV6isaS8P79g==}
     dev: false
 
   /@uppy/progress-bar@3.0.2(@uppy/core@3.2.1):
