@@ -5,7 +5,7 @@ import { Test } from './templates/test'
 const PUBLIC_URL = process.env.PUBLIC_URL
 
 export const sendTest = async (to: string) => {
-	const emailHtml = render(Test({ url: `${PUBLIC_URL}/app/courses` }))
+	const emailHtml = render(<Test url={`${PUBLIC_URL}/app/courses`} />)
 
 	const options = {
 		to: to,

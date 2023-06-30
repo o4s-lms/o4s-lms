@@ -2,11 +2,11 @@ import * as React from 'react'
 import { Html } from '@react-email/html'
 import { Button } from '@react-email/button'
 
-interface Props {
+interface EmailProps {
 	url: string;
 }
 
-export function Test({ url }: Props) {
+export const Test: React.FC<Readonly<EmailProps>> = ({ url }) => {
 
   return (
     <Html lang="en">

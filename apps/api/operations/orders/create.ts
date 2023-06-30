@@ -1,6 +1,5 @@
 import { OperationError } from '@wundergraph/sdk/operations'
 import { createOperation, z } from '../../generated/wundergraph.factory'
-import { sendTest } from '../../emails/send-test'
 
 export class CartNotFoundError extends OperationError {
   statusCode = 500;
@@ -110,10 +109,6 @@ export default createOperation.mutation({
 		})
 		if (!payment) {
 			throw new PaymentCreationError()
-		}
-
-		if (payment.payment_method.is_manual) {
-			void sendTest(order.customer_email)
 		}
 
 		const { data: newOrder } = await operations.query({

@@ -13,20 +13,5 @@ mutation (
 		}
 	) {
 		id
-		status
-		value
-		order {
-			id
-			currency
-			status
-			customer_uuid
-			customer_email
-		}
-		payment_method {
-			instructions
-			is_manual
-			type
-			gateway
-		}
 	}
 }

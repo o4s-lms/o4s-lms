@@ -1,7 +1,6 @@
 {
 	"extends": "@o4s/tsconfig/wundergraph",
 	"compilerOptions": {
-		"jsx": "preserve",
     "baseUrl": ".",
     "paths": {
       "~/*": [
@@ -9,5 +8,5 @@
       ]
     }
   },
-  "include": ["**/*.ts", "./emails/templates/*.tsx"]
+  "include": ["**/*.ts"]
 }
