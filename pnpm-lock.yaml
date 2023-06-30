@@ -150,11 +150,20 @@ importers:
   apps/api:
     dependencies:
       '@novu/node':
-        specifier: ^0.16.1
-        version: 0.16.1
+        specifier: ^0.16.2
+        version: 0.16.2
       '@o4s/tsconfig':
         specifier: ^0.1.0
         version: link:../../packages/config/tsconfig
+      '@react-email/button':
+        specifier: 0.0.8
+        version: 0.0.8
+      '@react-email/html':
+        specifier: 0.0.4
+        version: 0.0.4
+      '@react-email/render':
+        specifier: 0.0.7
+        version: 0.0.7
       '@tryghost/html-to-mobiledoc':
         specifier: ^2.0.20
         version: 2.0.20
@@ -164,9 +173,12 @@ importers:
       '@wundergraph/sdk':
         specifier: ^0.166.1
         version: 0.166.1(@graphql-mesh/store@0.94.0)(react-native@0.71.10)
-      reading-time:
-        specifier: ^1.5.0
-        version: 1.5.0
+      nodemailer:
+        specifier: ^6.9.3
+        version: 6.9.3
+      react-email:
+        specifier: 1.9.3
+        version: 1.9.3
       stripe:
         specifier: ^12.10.0
         version: 12.10.0
@@ -177,6 +189,9 @@ importers:
       '@types/node':
         specifier: ^20.3.1
         version: 20.3.1
+      '@types/nodemailer':
+        specifier: ^6.4.8
+        version: 6.4.8
       dotenv-cli:
         specifier: ^7.2.1
         version: 7.2.1
@@ -184,8 +199,8 @@ importers:
         specifier: ^8.43.0
         version: 8.43.0
       typescript:
-        specifier: ^5.1.3
-        version: 5.1.3
+        specifier: ^5.1.6
+        version: 5.1.6
 
   apps/web:
     dependencies:
@@ -644,6 +659,43 @@ importers:
       typescript:
         specifier: ^5.1.3
         version: 5.1.3
+
+  packages/email:
+    dependencies:
+      '@o4s/db':
+        specifier: ^0.1.0
+        version: link:../db
+      '@o4s/tsconfig':
+        specifier: ^0.1.0
+        version: link:../config/tsconfig
+      '@react-email/button':
+        specifier: 0.0.8
+        version: 0.0.8
+      '@react-email/html':
+        specifier: 0.0.4
+        version: 0.0.4
+      '@react-email/render':
+        specifier: 0.0.7
+        version: 0.0.7
+      nodemailer:
+        specifier: ^6.9.3
+        version: 6.9.3
+      react-email:
+        specifier: 1.9.3
+        version: 1.9.3
+    devDependencies:
+      '@o4s/eslint-config':
+        specifier: ^0.1.0
+        version: link:../config/eslint
+      '@types/nodemailer':
+        specifier: ^6.4.8
+        version: 6.4.8
+      eslint:
+        specifier: ^8.43.0
+        version: 8.43.0
+      typescript:
+        specifier: ^5.1.6
+        version: 5.1.6
 
   packages/generated-wundergraph:
     dependencies:
@@ -3265,7 +3317,7 @@ packages:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
     dependencies:
-      '@emotion/react': 11.11.1(@types/react@18.2.14)(react@18.2.0)
+      '@emotion/react': 11.11.1(@types/react@18.2.12)(react@18.2.0)
       clsx: 1.1.1
       csstype: 3.0.9
       react: 18.2.0
@@ -3646,7 +3698,7 @@ packages:
     resolution: {integrity: sha512-yktSpJVwxwIRR5Iek6N/VpMANEQD9fxsq5DMYk50xfiMLmlxbzpCxZEe6tZGwwUiARUNwC7ILLv9jW3dk3mF+w==}
     engines: {node: '>=10'}
     dependencies:
-      '@novu/shared': 0.16.1
+      '@novu/shared': 0.16.2
     transitivePeerDependencies:
       - debug
     dev: false
@@ -3655,7 +3707,7 @@ packages:
     resolution: {integrity: sha512-IMD+daiq4iBbU4AOZeFpUNvOILruUfCwd4Bz3xqtQXicKLWAoenjjZOqpUGlKyZOu43QjZ1VPbN9moZYTd3ytw==}
     engines: {node: '>=10'}
     dependencies:
-      '@novu/shared': 0.16.1
+      '@novu/shared': 0.16.2
     transitivePeerDependencies:
       - debug
     dev: false
@@ -3684,11 +3736,11 @@ packages:
       - debug
     dev: false
 
-  /@novu/node@0.16.1:
-    resolution: {integrity: sha512-O37ZA7Kc3T81vF1C1dGDw57sAWFKbAkEC3Ge8zw0rZxuOiT0KwxwUFCNOAupebOuVzO2+b/v/OaiSWQ4958Hlg==}
+  /@novu/node@0.16.2:
+    resolution: {integrity: sha512-iUQOya5q+OzDLUn9GBVqqtXza8tSmksG38xaC5QGZ1jAvAddcFIGBK5IKFOCF6OnPComBrUIeM0z4CjTkweRqg==}
     engines: {node: '>=10'}
     dependencies:
-      '@novu/shared': 0.16.1
+      '@novu/shared': 0.16.2
       handlebars: 4.7.7
       lodash.get: 4.4.2
       lodash.merge: 4.6.2
@@ -3703,9 +3755,9 @@ packages:
       react-dom: '>=16.8.0'
     dependencies:
       '@emotion/css': 11.11.0
-      '@emotion/react': 11.11.1(@types/react@18.2.12)(react@18.2.0)
-      '@emotion/styled': 11.11.0(@emotion/react@11.11.1)(@types/react@18.2.12)(react@18.2.0)
-      '@mantine/core': 5.10.5(@emotion/react@11.11.1)(@mantine/hooks@5.10.5)(@types/react@18.2.12)(react-dom@18.2.0)(react@18.2.0)
+      '@emotion/react': 11.11.1(@types/react@18.2.14)(react@18.2.0)
+      '@emotion/styled': 11.11.0(@emotion/react@11.11.1)(@types/react@18.2.14)(react@18.2.0)
+      '@mantine/core': 5.10.5(@emotion/react@11.11.1)(@mantine/hooks@5.10.5)(@types/react@18.2.14)(react-dom@18.2.0)(react@18.2.0)
       '@mantine/hooks': 5.10.5(react@18.2.0)
       '@novu/client': 0.15.0
       '@novu/shared': 0.15.0
@@ -3841,6 +3893,16 @@ packages:
 
   /@novu/shared@0.16.1:
     resolution: {integrity: sha512-uM/Nuf+zXTDeX0om+53WXRDeVzwpRItBwLSdoAY46FIrUtsxZW4kVKB0XMRAUh5LbbWEb3mowrsG609ae07b1g==}
+    dependencies:
+      axios: 1.2.0
+      class-transformer: 0.5.1
+      class-validator: 0.14.0
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
+  /@novu/shared@0.16.2:
+    resolution: {integrity: sha512-VTv6XlAERD2LXRv3OmJLnT365XdNCx9M2ZT57pplp9Dbu04hjcHJb8BRHECLHC0qhRpXnDyAO9TLbIunh7osxA==}
     dependencies:
       axios: 1.2.0
       class-transformer: 0.5.1
@@ -6546,6 +6608,12 @@ packages:
 
   /@types/nodemailer@6.4.7:
     resolution: {integrity: sha512-f5qCBGAn/f0qtRcd4SEn88c8Fp3Swct1731X4ryPKqS61/A3LmmzN8zaEz7hneJvpjFbUUgY7lru/B/7ODTazg==}
+    dependencies:
+      '@types/node': 20.3.1
+    dev: true
+
+  /@types/nodemailer@6.4.8:
+    resolution: {integrity: sha512-oVsJSCkqViCn8/pEu2hfjwVO+Gb3e+eTWjg3PcjeFKRItfKpKwHphQqbYmPQrlMk+op7pNNWPbsJIEthpFN/OQ==}
     dependencies:
       '@types/node': 20.3.1
     dev: true
@@ -16729,6 +16797,12 @@ packages:
     resolution: {integrity: sha512-XH627E9vkeqhlZFQuL+UsyAXEnibT0kWR2FWONlr4sTjvxyJYnyefgrkyECLzM5NenmKzRAy2rR/OlYLA1HkZw==}
     engines: {node: '>=14.17'}
     hasBin: true
+
+  /typescript@5.1.6:
+    resolution: {integrity: sha512-zaWCozRZ6DLEWAWFrVDz1H6FVXzUSfTy5FUMWsQlU8Ym5JP9eO4xkTIROFCQvhQf61z6O/G6ugw3SgAnvvm+HA==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+    dev: true
 
   /uglify-es@3.3.9:
     resolution: {integrity: sha512-r+MU0rfv4L/0eeW3xZrd16t4NZfK8Ld4SWVglYBb7ez5uXFWHuVRs6xCTrf1yirs9a4j4Y27nn7SRfO6v67XsQ==}

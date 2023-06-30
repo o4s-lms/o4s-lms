@@ -4,7 +4,7 @@ mutation (
 	$method_id: String!,
 	$order_id: String!
 	) {
-	method: site_createOnePayment(
+	payment: site_createOnePayment(
 		data: {
 			status: $status
 			value: $value
@@ -13,5 +13,20 @@ mutation (
 		}
 	) {
 		id
+		status
+		value
+		order {
+			id
+			currency
+			status
+			customer_uuid
+			customer_email
+		}
+		payment_method {
+			instructions
+			is_manual
+			type
+			gateway
+		}
 	}
 }
