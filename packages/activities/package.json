@@ -1,0 +1,22 @@
+{
+  "name": "activities",
+  "version": "0.0.1",
+  "license": "MIT",
+  "main": "./lib/index.js",
+  "types": "./index.ts",
+  "scripts": {
+    "build": "tsc --build",
+    "build.watch": "tsc --build --watch",
+    "lint": "TIMING=1 eslint \"**/*.ts*\""
+  },
+  "dependencies": {
+    "@temporalio/activity": "1.8.0",
+    "@o4s/common": "^0.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.44.0",
+    "eslint-config-custom": "^0.1.0",
+    "@o4s/tsconfig": "^0.1.0",
+    "typescript": "^5.1.6"
+  }
+}
