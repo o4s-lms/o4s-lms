@@ -7,93 +7,98 @@ import {
   sleep,
   proxyActivities,
 } from '@temporalio/workflow'
-import { errorMessage, getProductById, Product } from 'common'
-import type * as activities from 'activities'
+import { errorMessage } from '@o4s/common'
+import type * as activities from '@o4s/activities'
+import { render } from '@react-email/render'
+import { OrderStatusMessage } from '@o4s/ui/emails/templates/order-status'
 
-type OrderState = 'Charging card' | 'Paid' | 'Picked up' | 'Delivered' | 'Refunding'
+type OrderState = 'PENDING' | 'COMPLETED' | 'ARCHIVED' | 'CANCELLED' | 'REQUIRES_ACTION'
 
 export interface OrderStatus {
-  productId: number
+  orderId: number
   state: OrderState
-  deliveredAt?: Date
+  paidAt?: Date
 }
 
-export const pickedUpSignal = defineSignal('pickedUp')
-export const deliveredSignal = defineSignal('delivered')
+interface EmailOptions {
+	to: string;
+	html: string;
+	subject: string;
+}
+
+export const paidSignal = defineSignal('paid')
+export const cancelSignal = defineSignal('cancel')
 export const getStatusQuery = defineQuery<OrderStatus>('getStatus')
 
-const { chargeCustomer, refundOrder, sendPushNotification } = proxyActivities<typeof activities>({
+const { getOrder, archiveOrder, cancelOrder, sendEmailNotification } = proxyActivities<typeof activities>({
   startToCloseTimeout: '1m',
   retry: {
     maximumInterval: '5s', // Just for demo purposes. Usually this should be larger.
   },
 })
 
-export async function order(productId: number): Promise<void> {
-  const product = getProductById(productId)
-  if (!product) {
-    throw ApplicationFailure.create({ message: `Product ${productId} not found` })
+export async function order(orderId: string): Promise<void> {
+	const order = await getOrder(orderId)
+  if (!order) {
+    throw ApplicationFailure.create({ message: `Order ${orderId} not found` })
   }
 
-  let state: OrderState = 'Charging card'
-  let deliveredAt: Date
+	let emailOptions: EmailOptions = {
+		to: order.customer_email,
+		html: '',
+		subject: '',
+	}
+  let state: OrderState = order.status as OrderState
+  let paidAt: Date
 
   // setup Signal and Query handlers
-  setHandler(pickedUpSignal, () => {
-    if (state === 'Paid') {
-      state = 'Picked up'
+  setHandler(paidSignal, () => {
+    if (state === 'PENDING') {
+      state = 'COMPLETED'
+			paidAt = new Date()
     }
   })
 
-  setHandler(deliveredSignal, () => {
-    if (state === 'Picked up') {
-      state = 'Delivered'
-      deliveredAt = new Date()
+	setHandler(cancelSignal, async () => {
+    if (state === 'PENDING') {
+      state = 'CANCELLED'
+			emailOptions.html = render(OrderStatusMessage({ message: 'Order cancelled' }))
+			emailOptions.subject = 'Order cancelled'
+			await cancelAndNotify(orderId, emailOptions)
+			throw ApplicationFailure.create({ message: 'Order cancelled' })
     }
   })
 
   setHandler(getStatusQuery, () => {
-    return { state, deliveredAt, productId }
+    return { state, paidAt, orderId }
   })
 
   // business logic
-  try {
-    await chargeCustomer(product)
-  } catch (err) {
-    const message = `Failed to charge customer for ${product.name}. Error: ${errorMessage(err)}`
-    await sendPushNotification(message)
-    throw ApplicationFailure.create({ message })
+
+  state = 'PENDING'
+
+  const notPaidInTime = !(await condition(() => state === 'PENDING', '7 days'))
+  if (notPaidInTime) {
+    state = 'ARCHIVED'
+		emailOptions.html = render(OrderStatusMessage({ message: 'Not paied in time' }))
+		emailOptions.subject = 'Order archived'
+    await archiveAndNotify(orderId, emailOptions)
+    throw ApplicationFailure.create({ message: 'Not paied in time' })
   }
 
-  state = 'Paid'
+  //await sendPushNotification('✅ Order delivered!')
 
-  const notPickedUpInTime = !(await condition(() => state === 'Picked up', '1 min'))
-  if (notPickedUpInTime) {
-    state = 'Refunding'
-    await refundAndNotify(
-      product,
-      '⚠️ No drivers were available to pick up your order. Your payment has been refunded.'
-    )
-    throw ApplicationFailure.create({ message: 'Not picked up in time' })
-  }
+  //await sleep('1 min') // this could also be hours or even months
 
-  await sendPushNotification('🚗 Order picked up')
-
-  const notDeliveredInTime = !(await condition(() => state === 'Delivered', '1 min'))
-  if (notDeliveredInTime) {
-    state = 'Refunding'
-    await refundAndNotify(product, '⚠️ Your driver was unable to deliver your order. Your payment has been refunded.')
-    throw ApplicationFailure.create({ message: 'Not delivered in time' })
-  }
-
-  await sendPushNotification('✅ Order delivered!')
-
-  await sleep('1 min') // this could also be hours or even months
-
-  await sendPushNotification(`✍️ Rate your meal. How was the ${product.name.toLowerCase()}?`)
+  //await sendPushNotification(`✍️ Rate your meal. How was the ${product.name.toLowerCase()}?`)
 }
 
-async function refundAndNotify(product: Product, message: string) {
-  await refundOrder(product)
-  await sendPushNotification(message)
+async function archiveAndNotify(orderId: string, emailOptions: EmailOptions) {
+  await archiveOrder(orderId)
+  await sendEmailNotification(emailOptions)
+}
+
+async function cancelAndNotify(orderId: string, emailOptions: EmailOptions) {
+  await cancelOrder(orderId)
+  await sendEmailNotification(emailOptions)
 }

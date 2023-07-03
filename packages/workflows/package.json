@@ -1,14 +1,17 @@
 {
-  "name": "workflows",
-  "version": "0.0.1",
+  "name": "@o4s/workflows",
+  "version": "0.1.0",
   "license": "MIT",
   "main": "./index.ts",
   "types": "./index.ts",
   "scripts": {
+		"clean": "rm -rf .turbo node_modules",
     "lint": "TIMING=1 eslint \"**/*.ts*\""
   },
   "dependencies": {
     "@temporalio/workflow": "1.8.0",
+		"@o4s/db": "^0.1.0",
+		"@o4s/ui": "^0.1.0",
     "@o4s/common": "^0.1.0"
   },
   "devDependencies": {

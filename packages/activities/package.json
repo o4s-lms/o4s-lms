@@ -1,10 +1,11 @@
 {
-  "name": "activities",
-  "version": "0.0.1",
+  "name": "@o4s/activities",
+  "version": "0.1.0",
   "license": "MIT",
   "main": "./lib/index.js",
   "types": "./index.ts",
   "scripts": {
+		"clean": "rm -rf .turbo node_modules",
     "build": "tsc --build",
     "build.watch": "tsc --build --watch",
     "lint": "TIMING=1 eslint \"**/*.ts*\""
@@ -12,12 +13,14 @@
   "dependencies": {
     "@temporalio/activity": "1.8.0",
     "@o4s/common": "^0.1.0",
+		"@o4s/db": "^0.1.0",
+		"@react-email/render": "0.0.7",
 		"nodemailer": "^6.9.3"
   },
   "devDependencies": {
 		"@types/nodemailer": "^6.4.8",
     "eslint": "^8.44.0",
-    "eslint-config-custom": "^0.1.0",
+    "@o4s/eslint-config-custom": "^0.1.0",
     "@o4s/tsconfig": "^0.1.0",
     "typescript": "^5.1.6"
   }

@@ -1,5 +1,6 @@
 import { ApplicationFailure, Context } from '@temporalio/activity'
 import { createTransport, type SendMailOptions } from 'nodemailer'
+import { site } from '@o4s/db'
 
 export const notificationService = {
   sendNotification({ type, message }: { type: string; message: string }) {
@@ -48,4 +49,36 @@ export const paymentService = {
 
     console.log(`Refunded $${cents / 100}`)
   },
+}
+
+export const orderService = {
+	async get(orderId: string) {
+		return await site.order.findUnique({
+			where: { id: orderId },
+			select: {
+				id: true,
+				status: true,
+				customer_email: true,
+			},
+		})
+	},
+
+	async archive(orderId: string) {
+		return await site.order.update({
+			where: { id: orderId },
+			data: {
+				status: 'ARCHIVED'
+			},
+		})
+	},
+
+	async cancel(orderId: string) {
+		return await site.order.update({
+			where: { id: orderId },
+			data: {
+				status: 'CANCELLED'
+			},
+		})
+	},
+
 }

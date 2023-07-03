@@ -1,0 +1,10 @@
+{
+  "extends": "@o4s/tsconfig/base.json",
+  "version": "5.1.6",
+  "compilerOptions": {
+    "sourceMap": true,
+    "rootDir": "./src",
+    "outDir": "./lib"
+  },
+  "include": ["src/**/*.ts"]
+}
