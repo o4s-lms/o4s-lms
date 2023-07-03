@@ -11,8 +11,8 @@
   "dependencies": {
     "@temporalio/workflow": "1.8.0",
 		"@o4s/db": "^0.1.0",
-		"@o4s/ui": "^0.1.0",
-    "@o4s/common": "^0.1.0"
+    "@o4s/common": "^0.1.0",
+		"@o4s/generated-wundergraph": "^0.1.0"
   },
   "devDependencies": {
     "@o4s/activities": "^0.1.0",

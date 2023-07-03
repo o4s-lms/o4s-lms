@@ -2,7 +2,7 @@
   "name": "@o4s/activities",
   "version": "0.1.0",
   "license": "MIT",
-  "main": "./lib/index.js",
+	"main": "./index.ts",
   "types": "./index.ts",
   "scripts": {
 		"clean": "rm -rf .turbo node_modules",
@@ -14,11 +14,9 @@
     "@temporalio/activity": "1.8.0",
     "@o4s/common": "^0.1.0",
 		"@o4s/db": "^0.1.0",
-		"@react-email/render": "0.0.7",
-		"nodemailer": "^6.9.3"
+		"@novu/node": "^0.16.2"
   },
   "devDependencies": {
-		"@types/nodemailer": "^6.4.8",
     "eslint": "^8.44.0",
     "@o4s/eslint-config-custom": "^0.1.0",
     "@o4s/tsconfig": "^0.1.0",

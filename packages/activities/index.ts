@@ -6,12 +6,18 @@ interface Order {
 	customer_email: string;
 }
 
-export async function sendPushNotification(message: string): Promise<void> {
-  notificationService.sendNotification({ type: 'push', message })
+interface MessageOptions {
+	to: string;
+	message: string;
+	subject: string;
 }
 
-export async function sendEmailNotification({ to: string, html: string, subject: string }): Promise<void> {
-  notificationService.sendEmail({ to: to, html: html, subject: subject })
+export async function sendPushNotification(messageOptions: MessageOptions): Promise<void> {
+  notificationService.sendNotification({ type: 'push', messageOptions })
+}
+
+export async function sendEmailNotification(messageOptions: MessageOptions): Promise<void> {
+  notificationService.sendNotification({ type: 'email', messageOptions })
 }
 
 export async function archiveOrder(orderId: string): Promise<void> {

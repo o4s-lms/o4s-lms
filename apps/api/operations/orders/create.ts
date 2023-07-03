@@ -1,5 +1,7 @@
 import { OperationError } from '@wundergraph/sdk/operations'
 import { createOperation, z } from '../../generated/wundergraph.factory'
+import { connectToTemporal } from '../../temporal/temporal-client'
+import { OrderWorkflow } from '@o4s/workflows'
 
 export class CartNotFoundError extends OperationError {
   statusCode = 500;
@@ -117,6 +119,14 @@ export default createOperation.mutation({
 				id: order.id,
 			}
 		})
+
+		const temporal = await connectToTemporal()
+		await temporal.workflow.start(OrderWorkflow, {
+			taskQueue: 'site-order',
+			workflowId: `order-workflow-${newOrder.order.id}`,
+			args: [newOrder.order],
+		})
+
 		return newOrder
   },
 })

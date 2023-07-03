@@ -20,8 +20,6 @@ import useCreateOrderMutation from "@/hooks/orders/use-create-order-mutation"
 import Brand from "@/components/brand"
 import { removeCart } from "@/actions/orders"
 import { PaymentsMethodsResponseData } from "@o4s/generated-wundergraph/models"
-import { sendEmail } from "@/actions/emails"
-import { connectToTemporal } from "@o4s/common"
 
 type Method = PaymentsMethodsResponseData["methods"][number]
 type Order = OrdersIdResponseData["order"]
@@ -69,7 +67,6 @@ export default function Subscrever() {
   const [order, setOrder] = React.useState<Order>()
 	const searchParams = useSearchParams()
   const productId = searchParams.get("product") || ''
-  const temporal = await connectToTemporal()
 
   const { data: user, error, isLoading } = useUser()
 
@@ -110,10 +107,6 @@ export default function Subscrever() {
       }
 
       const data = await createOrder.trigger({ cart_id: cartId, payment_method: method.id })
-
-      if (data?.order?.payment?.payment_method.is_manual) {
-        void sendEmail(data?.order.customer_email)
-      }
 
       setOrder(data?.order)
       removeCart(cartId)

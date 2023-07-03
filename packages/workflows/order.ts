@@ -9,20 +9,21 @@ import {
 } from '@temporalio/workflow'
 import { errorMessage } from '@o4s/common'
 import type * as activities from '@o4s/activities'
-import { render } from '@react-email/render'
-import { OrderStatusMessage } from '@o4s/ui/emails/templates/order-status'
+import { OrdersIdResponseData } from "@o4s/generated-wundergraph/models"
+
+type Order = OrdersIdResponseData["order"]
 
 type OrderState = 'PENDING' | 'COMPLETED' | 'ARCHIVED' | 'CANCELLED' | 'REQUIRES_ACTION'
 
 export interface OrderStatus {
-  orderId: number
-  state: OrderState
-  paidAt?: Date
+  orderId: string;
+  state: OrderState;
+  paidAt?: Date;
 }
 
 interface EmailOptions {
 	to: string;
-	html: string;
+	message: string;
 	subject: string;
 }
 
@@ -37,17 +38,18 @@ const { getOrder, archiveOrder, cancelOrder, sendEmailNotification } = proxyActi
   },
 })
 
-export async function order(orderId: string): Promise<void> {
-	const order = await getOrder(orderId)
+export async function OrderWorkflow(order: Order): Promise<void> {
+	//const order = await getOrder(orderId)
   if (!order) {
-    throw ApplicationFailure.create({ message: `Order ${orderId} not found` })
+    throw ApplicationFailure.create({ message: 'Order not found' })
   }
 
 	let emailOptions: EmailOptions = {
 		to: order.customer_email,
-		html: '',
-		subject: '',
+		message: 'Order created',
+		subject: 'Order created',
 	}
+	const orderId: string = order.id
   let state: OrderState = order.status as OrderState
   let paidAt: Date
 
@@ -62,7 +64,7 @@ export async function order(orderId: string): Promise<void> {
 	setHandler(cancelSignal, async () => {
     if (state === 'PENDING') {
       state = 'CANCELLED'
-			emailOptions.html = render(OrderStatusMessage({ message: 'Order cancelled' }))
+			emailOptions.message = 'Order cancelled'
 			emailOptions.subject = 'Order cancelled'
 			await cancelAndNotify(orderId, emailOptions)
 			throw ApplicationFailure.create({ message: 'Order cancelled' })
@@ -75,12 +77,14 @@ export async function order(orderId: string): Promise<void> {
 
   // business logic
 
-  state = 'PENDING'
+  if (state === 'PENDING') {
+		await sendEmailNotification(emailOptions)
+	}
 
   const notPaidInTime = !(await condition(() => state === 'PENDING', '7 days'))
   if (notPaidInTime) {
     state = 'ARCHIVED'
-		emailOptions.html = render(OrderStatusMessage({ message: 'Not paied in time' }))
+		emailOptions.message = 'Order archived'
 		emailOptions.subject = 'Order archived'
     await archiveAndNotify(orderId, emailOptions)
     throw ApplicationFailure.create({ message: 'Not paied in time' })

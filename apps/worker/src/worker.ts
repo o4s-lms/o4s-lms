@@ -1,7 +1,7 @@
 import { NativeConnection, Worker } from '@temporalio/worker'
 import * as activities from '@o4s/activities'
 import { taskQueue } from '@o4s/common'
-import { namespace, getConnectionOptions } from 'common/lib/temporal-connection'
+import { namespace, getConnectionOptions } from '@o4s/common/temporal-connection'
 
 async function run() {
   const connection = await NativeConnection.connect(getConnectionOptions())

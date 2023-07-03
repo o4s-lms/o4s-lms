@@ -3,7 +3,7 @@
   "version": "0.1.0",
 	"author": "José Cordeiro <joseantcordeiro@gmail.com>",
   "license": "MIT",
-  "main": "./lib/index.js",
+  "main": "./index.ts",
   "types": "./index.ts",
   "scripts": {
 		"clean": "rm -rf .turbo node_modules",
