@@ -94,7 +94,7 @@ export async function OrderWorkflow(order: Order): Promise<void> {
 		await sendEmailNotification(emailOptions)
 	}
 
-  const notPaidInTime = !(await condition(() => state === 'PENDING', '86400s'))
+  const notPaidInTime = !(await condition(() => state === 'COMPLETED', '86400s'))
   if (notPaidInTime) {
     state = 'ARCHIVED'
 		emailOptions.message = 'Order archived'
