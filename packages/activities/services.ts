@@ -1,5 +1,5 @@
 import { ApplicationFailure, Context } from '@temporalio/activity'
-import { site } from '@o4s/db'
+import { site, lms } from '@o4s/db'
 import { Novu } from '@novu/node'
 
 const config = {
@@ -17,12 +17,21 @@ interface MessageOptions {
 
 export const notificationService = {
   async sendNotification({ type, messageOptions }: { type: string; messageOptions: MessageOptions }) {
+		const user = await lms.user.findUnique({
+			where: { email: messageOptions.to },
+			select: {
+				id: true,
+			},
+		})
+		if (!user) {
+      throw new Error(`Failed to send ${type} notification. Unable to find the user.`)
+    }
 		switch (type)
 		{
 			case "email":
 				await novu.trigger('order-status-pt', {
 					to: {
-						subscriberId: messageOptions.to,
+						subscriberId: user.id,
 					},
 					payload: {
 						subject: messageOptions.subject,

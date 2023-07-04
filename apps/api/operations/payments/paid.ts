@@ -1,5 +1,6 @@
 import { OperationError } from '@wundergraph/sdk/operations'
 import { createOperation, z } from '../../generated/wundergraph.factory'
+import { connectToTemporal } from '../../temporal/temporal-client'
 
 export class OrderUpdateError extends OperationError {
   statusCode = 400;
@@ -50,6 +51,10 @@ export default createOperation.mutation({
 		if (!payment) {
 			throw new PaymentUpdateError()
 		}
+
+		const temporal = await connectToTemporal()
+		const workflow = temporal.workflow.getHandle(`order-workflow-${input.order_id}`)
+		await workflow.signal('paid')
 
 		const { data: newOrder } = await operations.query({
 			operationName: 'orders/id',

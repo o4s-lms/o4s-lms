@@ -1,7 +1,7 @@
 import { OperationError } from '@wundergraph/sdk/operations'
 import { createOperation, z } from '../../generated/wundergraph.factory'
 import { connectToTemporal } from '../../temporal/temporal-client'
-import { OrderWorkflow } from '@o4s/workflows'
+import { OrderWorkflow } from '../../../../packages/workflows/order'
 
 export class CartNotFoundError extends OperationError {
   statusCode = 500;
