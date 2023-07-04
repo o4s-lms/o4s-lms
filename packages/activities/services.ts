@@ -13,25 +13,17 @@ interface MessageOptions {
 	to: string;
 	message: string;
 	subject: string;
+	template: string;
 }
 
 export const notificationService = {
   async sendNotification({ type, messageOptions }: { type: string; messageOptions: MessageOptions }) {
-		const user = await lms.user.findUnique({
-			where: { email: messageOptions.to },
-			select: {
-				id: true,
-			},
-		})
-		if (!user) {
-      throw new Error(`Failed to send ${type} notification. Unable to find the user.`)
-    }
 		switch (type)
 		{
 			case "email":
-				await novu.trigger('order-status-pt', {
+				await novu.trigger(messageOptions.template, {
 					to: {
-						subscriberId: user.id,
+						subscriberId: messageOptions.to,
 					},
 					payload: {
 						subject: messageOptions.subject,
@@ -93,6 +85,28 @@ export const paymentService = {
   },
 }
 
+export const userService = {
+	async get(userUuid: string) {
+		return await lms.user.findUniqueOrThrow({
+			where: { uuid: userUuid },
+			select: {
+				id: true,
+			},
+		})
+	},
+
+	async member(courseId: string, userUuid: string) {
+		return await lms.courseMember.create({
+			data: {
+				course: { connect: { id: courseId } },
+				user: { connect: { uuid: userUuid } },
+				role: 'STUDENT',
+			},
+		})
+	},
+
+}
+
 export const orderService = {
 	async get(orderId: string) {
 		return await site.order.findUnique({
@@ -115,6 +129,15 @@ export const orderService = {
 	},
 
 	async cancel(orderId: string) {
+		return await site.order.update({
+			where: { id: orderId },
+			data: {
+				status: 'CANCELLED'
+			},
+		})
+	},
+
+	async completed(orderId: string) {
 		return await site.order.update({
 			where: { id: orderId },
 			data: {

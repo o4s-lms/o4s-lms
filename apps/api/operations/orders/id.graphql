@@ -23,6 +23,7 @@ query ($id: String!) {
 				title
 				slug
 				include
+				courses
 			}
 		}
 		payment {

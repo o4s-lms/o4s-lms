@@ -25,13 +25,20 @@ interface EmailOptions {
 	to: string;
 	message: string;
 	subject: string;
+	template: string;
 }
 
 export const paidSignal = defineSignal('paid')
 export const cancelSignal = defineSignal('cancel')
 export const getStatusQuery = defineQuery<OrderStatus>('getStatus')
 
-const { getOrder, archiveOrder, cancelOrder, sendEmailNotification } = proxyActivities<typeof activities>({
+const {
+	getUser,
+	addUserToCourse,
+	archiveOrder,
+	cancelOrder,
+	sendEmailNotification
+} = proxyActivities<typeof activities>({
   startToCloseTimeout: '1m',
   retry: {
     maximumInterval: '5s', // Just for demo purposes. Usually this should be larger.
@@ -44,10 +51,16 @@ export async function OrderWorkflow(order: Order): Promise<void> {
     throw ApplicationFailure.create({ message: 'Order not found' })
   }
 
+	const user = await getUser(order.customer_uuid)
+	if (!user) {
+    throw ApplicationFailure.create({ message: 'Customer not found' })
+  }
+
 	let emailOptions: EmailOptions = {
-		to: order.customer_email,
+		to: user.id,
 		message: 'Order created',
 		subject: 'Order created',
+		template: 'order-status-pt',
 	}
 	const orderId: string = order.id
   let state: OrderState = order.status as OrderState
@@ -81,7 +94,7 @@ export async function OrderWorkflow(order: Order): Promise<void> {
 		await sendEmailNotification(emailOptions)
 	}
 
-  const notPaidInTime = !(await condition(() => state === 'PENDING', '1 day'))
+  const notPaidInTime = !(await condition(() => state === 'PENDING', '86400s'))
   if (notPaidInTime) {
     state = 'ARCHIVED'
 		emailOptions.message = 'Order archived'
@@ -90,6 +103,17 @@ export async function OrderWorkflow(order: Order): Promise<void> {
     throw ApplicationFailure.create({ message: 'Not paied in time' })
   }
 
+	if (state === 'COMPLETED') {
+		emailOptions.message = 'Para aceder aos seus cursos clique no seguinte botão:'
+		emailOptions.subject = 'Acesso aos cursos'
+		emailOptions.template = 'courses-welcome-pt'
+		for (let item of order.items) {
+			for (let courseId of item.product.courses) {
+				await addUserToCourse(courseId, order.customer_uuid)
+			}
+		}
+		await sendEmailNotification(emailOptions)
+	}
   //await sendPushNotification('✅ Order delivered!')
 
   //await sleep('1 min') // this could also be hours or even months
@@ -106,3 +130,4 @@ async function cancelAndNotify(orderId: string, emailOptions: EmailOptions) {
   await cancelOrder(orderId)
   await sendEmailNotification(emailOptions)
 }
+
