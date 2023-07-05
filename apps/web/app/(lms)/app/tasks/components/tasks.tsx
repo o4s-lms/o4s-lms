@@ -8,12 +8,15 @@ import { useToast } from "@/hooks/use-toast"
 import { columns } from "./tasks/columns"
 import { DataTable } from "./tasks/data-table"
 import { taskSchema } from "./tasks/data/schema"
+import { TasksAllResponseData } from "@o4s/generated-wundergraph/models"
+
+type Tasks = TasksAllResponseData["tasks"]
 
 interface Props {
-  courseId: string | undefined
+  tasks: Tasks | undefined
 }
 
-function Tasks({ courseId }: Props ) {
+function Tasks({ tasks }: Props ) {
 	const { toast } = useToast()
 
   const { data, error, isLoading } = useQuery({
@@ -39,7 +42,7 @@ function Tasks({ courseId }: Props ) {
   return (
     <>
 		{!isLoading ? (
-      <DataTable data={data?.tasks} columns={columns} />
+      <DataTable data={tasks} columns={columns} />
 		) : (
 			<Loading />
 		)}

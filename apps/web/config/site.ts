@@ -6,8 +6,12 @@ export const siteConfig = {
     "Open Source Learning Management System",
   mainNav: [
     {
-      title: "Home",
-      href: "/",
+      title: "Cursos",
+      href: "/app/courses",
+    },
+    {
+      title: "Tarefas",
+      href: "/app/tasks",
     },
   ],
   links: {
