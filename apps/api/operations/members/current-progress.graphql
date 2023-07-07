@@ -1,0 +1,18 @@
+query (
+	$course_id: String!,
+	$user_uuid: String! @fromClaim(name: USERID)
+) {
+	progress: lms_findUniqueCourseMember(
+		where: {
+			user_uuid_course_id: {
+				user_uuid: $user_uuid
+				course_id: $course_id
+			}
+		}
+	) {
+		user_uuid
+		course_id
+		last_activity
+		progress
+	}
+}

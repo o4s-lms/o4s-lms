@@ -6,6 +6,7 @@ query ($role: lms_CourseRole!, $user_uuid: String! @fromClaim(name: USERID)) {
 		}
 	) {
 		last_activity
+		progress
 		course {
 			id
 			name

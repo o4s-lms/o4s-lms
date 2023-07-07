@@ -1,8 +1,10 @@
 "use client"
 
 import Link from "next/link"
+import { Progress } from "@/components/ui/progress"
 import { MembersCoursesResponseData } from "@o4s/generated-wundergraph/models"
 import { ColumnDef } from "@tanstack/react-table"
+import { Button } from "@/components/ui/button"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -19,11 +21,20 @@ export const columns: ColumnDef<Course>[] = [
     header: "Nome",
   },
   {
+    id: "progress",
+    cell: ({ row }) => {
+      const course = row.original
+      return (
+        <Progress value={course.progress} />
+      )
+    }
+  },
+  {
     id: "actions",
     cell: ({ row }) => {
       const course = row.original
       return (
-        <Link href={`/app/courses/${course.course.slug}`} >View</Link>
+        <Button variant="outline"><Link href={`/app/courses/${course.course.slug}`} >Resume</Link></Button>
       )
     }
   },

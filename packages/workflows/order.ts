@@ -48,12 +48,12 @@ const {
 export async function OrderWorkflow(order: Order): Promise<void> {
 	//const order = await getOrder(orderId)
   if (!order) {
-    throw ApplicationFailure.create({ message: 'Order not found' })
+    throw ApplicationFailure.create({ nonRetryable: true, message: 'Order not found' })
   }
 
 	const user = await getUser(order.customer_uuid)
 	if (!user) {
-    throw ApplicationFailure.create({ message: 'Customer not found' })
+    throw ApplicationFailure.create({ nonRetryable: true, message: 'Customer not found' })
   }
 
 	let emailOptions: EmailOptions = {
@@ -80,7 +80,7 @@ export async function OrderWorkflow(order: Order): Promise<void> {
 			emailOptions.message = 'Order cancelled'
 			emailOptions.subject = 'Order cancelled'
 			await cancelAndNotify(orderId, emailOptions)
-			throw ApplicationFailure.create({ message: 'Order cancelled' })
+			throw ApplicationFailure.create({ nonRetryable: true, message: 'Order cancelled' })
     }
   })
 
@@ -100,7 +100,7 @@ export async function OrderWorkflow(order: Order): Promise<void> {
 		emailOptions.message = 'Order archived'
 		emailOptions.subject = 'Order archived'
     await archiveAndNotify(orderId, emailOptions)
-    throw ApplicationFailure.create({ message: 'Not paied in time' })
+    throw ApplicationFailure.create({ nonRetryable: true, message: 'Not paied in time' })
   }
 
 	if (state === 'COMPLETED') {

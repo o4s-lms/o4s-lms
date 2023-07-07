@@ -8,7 +8,7 @@ import { Button, buttonVariants } from "@/components/ui/button"
 import { Loading } from "@/components/loading"
 
 import { useToast } from "@/hooks/use-toast"
-import { DataTable } from "./components/data-table"
+import { DataTable } from "@/components/data-table"
 import { columns } from "./components/columns"
 import { Separator } from "@/components/ui/separator"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
@@ -58,7 +58,7 @@ function Courses() {
 								<AlertTitle>You do not have any course. 🪄</AlertTitle>
 								<AlertDescription>
 									<Button variant="link">
-										<Link href="/products">Check your available courses.</Link>
+										<Link href="/cursos">Check your available courses.</Link>
 									</Button>
 								</AlertDescription>
 							</Alert>

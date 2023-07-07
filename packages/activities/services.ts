@@ -141,7 +141,7 @@ export const orderService = {
 		return await site.order.update({
 			where: { id: orderId },
 			data: {
-				status: 'CANCELLED'
+				status: 'COMPLETED'
 			},
 		})
 	},

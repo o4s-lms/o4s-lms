@@ -36,11 +36,12 @@ model User {
 model CourseMember {
 	id					 	String				@id @default(auto()) @map("_id") @db.ObjectId
   created_at   	DateTime      @default(now())
-	last_activity DateTime?
   user_uuid     String
   course_id     String				@db.ObjectId
 	certification	Boolean				@default(false)
 	facilitation	Boolean				@default(false)
+	last_activity DateTime?
+	progress			Int						@default(0)
   role         	CourseRole
   user         	User          @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
   course       	Course        @relation(fields: [course_id], references: [id], onDelete: Cascade)

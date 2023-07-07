@@ -49,6 +49,19 @@ export default createOperation.query({
 			}
 			const num_lessons: number = lessons.length
 			const progress: number = Math.round(num_completed / num_lessons * 100)
+			/**await graph
+				.from('lms')
+				.query('updateOneCourseMember')
+				.where({
+					where: {
+						user_uuid: user?.userId as string,
+						course_id: input.course_id,
+					},
+					data: {
+						progress: { set: progress },
+					},
+				})
+				.exec()*/
 			return {
 				progress: progress,
 			}
