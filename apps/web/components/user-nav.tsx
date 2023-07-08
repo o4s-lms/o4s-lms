@@ -51,9 +51,9 @@ export function UserNav({ name, email, image}: Props) {
     redirectToLogin()
   }), [hanko, redirectToLogin])
 
-  React.useEffect(() => hanko?.onSessionNotPresent(() => {
-    redirectToLogin()
-  }), [hanko, redirectToLogin])
+  //React.useEffect(() => hanko?.session.isValid()(() => {
+  //  redirectToLogin()
+  //}), [hanko, redirectToLogin])
 
   return (
     <DropdownMenu>
