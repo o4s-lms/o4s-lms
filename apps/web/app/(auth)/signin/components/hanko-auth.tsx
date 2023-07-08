@@ -1,4 +1,5 @@
-import { Hanko, register } from "@teamhanko/hanko-elements"
+import { Hanko, register, Translation } from "@teamhanko/hanko-elements"
+import { all } from "@teamhanko/hanko-elements/i18n/all"
 import * as React from "react"
 import { useRouter } from "next/navigation"
 /**import { createClient } from "@o4s/generated-wundergraph/client"
@@ -7,6 +8,124 @@ import useNewUserMutation from "@/hooks/profile/use-new-user-mutation"
 const client = createClient({
   customFetch: fetch,
 })*/
+
+export const pt: Translation = {
+  headlines: {
+    error: "Ocorreu um erro",
+    loginEmail: "Entrar ou cadastrar",
+    loginFinished: "Login successful",
+    loginPasscode: "Enter passcode",
+    loginPassword: "Enter password",
+    registerAuthenticator: "Save a passkey",
+    registerConfirm: "Criar uma conta?",
+    registerPassword: "Set new password",
+    profileEmails: "Emails",
+    profilePassword: "Password",
+    profilePasskeys: "Passkeys",
+    isPrimaryEmail: "Primary email address",
+    setPrimaryEmail: "Set primary email address",
+    emailVerified: "Verified",
+    emailUnverified: "Unverified",
+    emailDelete: "Delete",
+    renamePasskey: "Rename passkey",
+    deletePasskey: "Delete passkey",
+    lastUsedAt: "Last used at",
+    createdAt: "Created at",
+    connectedAccounts: "Connected accounts",
+    deleteAccount: "Delete account",
+  },
+  texts: {
+    enterPasscode: 'Digite o código que foi enviada para "{emailAddress}".',
+    setupPasskey:
+      "Sign in to your account easily and securely with a passkey. Note: Your biometric data is only stored on your devices and will never be shared with anyone.",
+    createAccount:
+      'Nenhuma conta existe para "{emailAddress}". Deseja criar uma nova conta?',
+    passwordFormatHint:
+      "Must be between {minLength} and {maxLength} characters long.",
+    manageEmails:
+      "Your email addresses are used for communication and authentication.",
+    changePassword: "Set a new password.",
+    managePasskeys: "Your passkeys allow you to sign in to this account.",
+    isPrimaryEmail:
+      "Used for communication, passcodes, and as username for passkeys. To change the primary email address, add another email address first and set it as primary.",
+    setPrimaryEmail:
+      "Set this email address primary so it will be used for communications, for passcodes, and as a username for passkeys.",
+    emailVerified: "This email address has been verified.",
+    emailUnverified: "This email address has not been verified.",
+    emailDelete:
+      "If you delete this email address, it can no longer be used for signing in to your account. Passkeys that may have been created with this email address will remain intact.",
+    emailDeleteThirdPartyConnection:
+      "If you delete this email address, it can no longer be used for signing in. You can also no longer sign in with or reconnect your {provider} account. Passkeys that may have been created with this email address will remain intact.",
+    emailDeletePrimary:
+      "The primary email address cannot be deleted. Add another email address first and make it your primary email address.",
+    renamePasskey:
+      "Set a name for the passkey that helps you identify where it is stored.",
+    deletePasskey:
+      "Delete this passkey from your account. Note that the passkey will still exist on your devices and needs to be deleted there as well.",
+    deleteAccount:
+      "Are you sure you want to delete this account? All data will be deleted immediately and cannot be recovered.",
+  },
+  labels: {
+    or: "ou",
+    no: "não",
+    yes: "sim",
+    email: "Email",
+    continue: "Continuar",
+    skip: "Saltar",
+    save: "Guardar",
+    password: "Password",
+    signInPassword: "Sign in with a password",
+    signInPasscode: "Sign in with a passcode",
+    forgotYourPassword: "Forgot your password?",
+    back: "Voltar",
+    signInPasskey: "Sign in with a passkey",
+    registerAuthenticator: "Save a passkey",
+    signIn: "Entrar",
+    signUp: "Inscrever-se",
+    sendNewPasscode: "Enviar novo código",
+    passwordRetryAfter: "Retry in {passwordRetryAfter}",
+    passcodeResendAfter: "Request a new code in {passcodeResendAfter}",
+    unverifiedEmail: "unverified",
+    primaryEmail: "primary",
+    setAsPrimaryEmail: "Set as primary",
+    verify: "Verificar",
+    delete: "Apagar",
+    newEmailAddress: "New email address",
+    newPassword: "New password",
+    rename: "Rename",
+    newPasskeyName: "New passkey name",
+    addEmail: "Add email",
+    changePassword: "Change password",
+    addPasskey: "Add passkey",
+    webauthnUnsupported: "Passkeys are not supported by your browser",
+    signInWith: "Sign in with {provider}",
+    deleteAccount: "Yes, delete this account.",
+  },
+  errors: {
+    somethingWentWrong:
+      "A technical error has occurred. Please try again later.",
+    requestTimeout: "The request timed out.",
+    invalidPassword: "Wrong email or password.",
+    invalidPasscode: "The passcode provided was not correct.",
+    passcodeAttemptsReached:
+      "The passcode was entered incorrectly too many times. Please request a new code.",
+    tooManyRequests:
+      "Too many requests have been made. Please wait to repeat the requested operation.",
+    unauthorized: "Your session has expired. Please log in again.",
+    invalidWebauthnCredential: "This passkey cannot be used anymore.",
+    passcodeExpired: "The passcode has expired. Please request a new one.",
+    userVerification:
+      "User verification required. Please ensure your authenticator device is protected with a PIN or biometric.",
+    emailAddressAlreadyExistsError: "The email address already exists.",
+    maxNumOfEmailAddressesReached: "No further email addresses can be added.",
+    thirdPartyAccessDenied:
+      "Access denied. The request was cancelled by the user or the provider has denied access for other reasons.",
+    thirdPartyMultipleAccounts:
+      "Cannot identify account. The email address is used by multiple accounts.",
+    thirdPartyUnverifiedEmail:
+      "Email verification required. Please verify the used email address with your provider.",
+  },
+}
 
 const hankoApi = 'http://joseantcordeiro.hopto.org:8000'
 
@@ -25,7 +144,7 @@ function HankoAuth({ callback, setError }: Props) {
   }, [router, callback])
 
   React.useEffect(() => {
-    register(hankoApi).catch(setError)
+    register(hankoApi, {translations: {...all, pt}}).catch(setError)
   }, [setError])
 
   React.useEffect(() => hanko.onAuthFlowCompleted(async () => {
@@ -47,7 +166,7 @@ function HankoAuth({ callback, setError }: Props) {
 		redirectToCallback()
   }), [hanko, redirectToCallback])
 
-  return <hanko-auth />
+  return <hanko-auth lang="pt" />
 }
 
 export default HankoAuth

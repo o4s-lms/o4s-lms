@@ -9,7 +9,7 @@
     "lint": "TIMING=1 eslint \"**/*.ts*\""
   },
   "dependencies": {
-    "@temporalio/workflow": "1.8.0",
+    "@temporalio/workflow": "1.8.1",
 		"@o4s/db": "^0.1.0",
     "@o4s/common": "^0.1.0",
 		"@o4s/generated-wundergraph": "^0.1.0"
