@@ -1,5 +1,6 @@
 import * as React from "react"
 import { useQuery, withWunderGraph } from "@/lib/wundergraph"
+import { parseISO, format } from "date-fns"
 import { Progress } from "@/components/ui/progress"
 import { currentProgress } from "@/actions/courses"
 import { Loading } from "@/components/loading"
@@ -55,6 +56,14 @@ function LessonHtml({ courseId, slug }: Props) {
           <Progress value={progress} />
         </div>
         <div className="px-6">
+          {data?.lesson?.completed?.length > 0 ? (
+            <span>Concluído em {" "}
+              {format(
+                parseISO(data?.lesson?.completed[0].completed_at),
+                "dd-MMMM-yyyy"
+              )}
+            </span>
+          ) : (
           <button
 
             className="relative inline-flex items-center gap-1 rounded-r-md border border-gray-300 bg-white px-3 py-2 pl-4 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20 disabled:pointer-events-none disabled:opacity-40 dark:border-gray-500 dark:bg-gray-800 dark:text-gray-300">
@@ -64,6 +73,7 @@ function LessonHtml({ courseId, slug }: Props) {
               aria-hidden="true"
             />
           </button>
+          )}
         </div>
       </div>
       <Separator className="my-6" />

@@ -1,4 +1,4 @@
-query ($slug: String!) {
+query ($slug: String!, $user_uuid: String! @fromClaim(name: USERID)) {
 	lesson: lms_findUniqueLesson(
 		where: { slug: $slug }
 	) {
@@ -17,6 +17,11 @@ query ($slug: String!) {
 		course {
 			id
 			name
+		}
+		completed(
+			where: { user_uuid: { equals: $user_uuid } }
+		) {
+			completed_at
 		}
 	}
 }

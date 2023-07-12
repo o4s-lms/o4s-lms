@@ -1,6 +1,5 @@
 mutation (
 	$course_id: String!,
-	$progress: Int!,
 	$date: DateTime! @injectCurrentDateTime,
 	$user_uuid: String! @fromClaim(name: USERID)
 )
@@ -14,7 +13,6 @@ mutation (
 		}
 		data: {
 			last_activity: { set: $date }
-			progress: { set: $progress }
 		}
 	) {
 		user_uuid
