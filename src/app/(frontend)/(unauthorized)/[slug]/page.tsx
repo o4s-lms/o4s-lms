@@ -14,7 +14,7 @@ import { RenderHero } from '@/heros/RenderHero';
 import { generateMeta } from '@/utilities/generateMeta';
 import PageClient from './page.client';
 import { LivePreviewListener } from '@/components/LivePreviewListener';
-import { getLanguage } from '@/tolgee/language';
+//import { getLanguage } from '@/tolgee/language';
 
 export async function generateStaticParams() {
   //const locale = await getLanguage();
