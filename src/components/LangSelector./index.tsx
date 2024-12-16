@@ -1,6 +1,5 @@
 import { useTolgee } from '@tolgee/react';
 import { setLanguage } from '@/tolgee/language';
-import type { HTMLAttributes } from 'react';
 import { useCallback, useMemo } from 'react';
 import {
   DropdownMenu,
@@ -12,10 +11,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/utilities/cn';
 import { ALL_LANGUAGES as LANGUAGES } from '@/tolgee/shared';
 import { Languages, ChevronDown } from 'lucide-react';
-
-export type LanguageSelectorProps = {
-  mobile?: boolean;
-} & HTMLAttributes<HTMLDivElement>;
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const getLocaleDisplayName = (locale: string, displayLocale?: string) => {
   const displayName = new Intl.DisplayNames([displayLocale || locale], {
@@ -24,10 +20,8 @@ const getLocaleDisplayName = (locale: string, displayLocale?: string) => {
   return displayName.charAt(0).toLocaleUpperCase() + displayName.slice(1);
 };
 
-export function LanguageSelector({
-  mobile = false,
-  ...props
-}: LanguageSelectorProps) {
+export function LanguageSelector() {
+  const isMobile = useIsMobile();
   const tolgee = useTolgee(['language']);
   const currentLanguage = tolgee.getLanguage();
 
@@ -38,7 +32,7 @@ export function LanguageSelector({
     }));
   }, []);
 
-  const languageChanged = useCallback(async (locale: any) => {
+  const languageChanged = useCallback(async (locale: string) => {
     setLanguage(locale);
   }, []);
 
@@ -48,7 +42,7 @@ export function LanguageSelector({
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="ghost">
             <Languages size={18} />
-            <span className={`${mobile ? 'hidden' : ''}`}>
+            <span className={`${isMobile ? 'hidden' : ''}`}>
               {' '}
               {currentLanguage && getLocaleDisplayName(currentLanguage)}
             </span>
