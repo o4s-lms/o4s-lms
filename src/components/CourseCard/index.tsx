@@ -7,94 +7,125 @@ import React, { Fragment } from 'react';
 import type { Course } from '@/payload-types';
 
 import { Media } from '@/components/Media';
+import { CMSLink } from '@/components/Link';
+import { Check } from 'lucide-react';
 
-export type CourseCardPostData = Pick<
-  Course,
-  'slug' | 'sections' | 'meta' | 'title'
->;
+export type CourseCardPostData = Pick<Course, 'slug' | 'meta' | 'title'>;
+
+/**const links = {
+  type?: ("reference" | "custom") | null;
+  newTab?: boolean | null;
+  reference?: {
+      relationTo: "pages";
+      value: number | Page;
+  } | null;
+  url?: string | null;
+  label: string;
+  appearance?: ("default" | "outline") | null;
+};*/
 
 export const CourseCard: React.FC<{
   alignItems?: 'center';
   className?: string;
   doc?: CourseCardPostData;
   relationTo?: 'courses';
-  showSections?: boolean;
   title?: string;
 }> = (props) => {
   const { card, link } = useClickableCard({});
-  const {
-    className,
-    doc,
-    relationTo,
-    showSections,
-    title: titleFromProps,
-  } = props;
+  const { className, doc, relationTo, title: titleFromProps } = props;
 
-  const { slug, sections, meta, title } = doc || {};
+  const { slug, meta, title } = doc || {};
   const { description, image: metaImage } = meta || {};
 
-  const hasSections =
-    sections && Array.isArray(sections) && sections.length > 0;
   const titleToUse = titleFromProps || title;
   const sanitizedDescription = description?.replace(/\s/g, ' '); // replace non-breaking space with white space
   const href = `/${relationTo}/${slug}`;
 
+  const links = [
+    {
+      url: href,
+      label: 'Saber mais',
+      appearance: 'outline'
+    },
+    {
+      url: `/checkout/${slug}`,
+      label: 'Comprar agora',
+      appearance: 'default'
+    }
+  ]
+
   return (
-    <article
-      className={cn(
-        'overflow-hidden rounded-lg border border-border bg-card hover:cursor-pointer',
-        className,
-      )}
-      ref={card.ref}
-    >
-      <div className="relative w-full">
-        {!metaImage && <div className="">No image</div>}
-        {metaImage && typeof metaImage !== 'string' && (
-          <Media resource={metaImage} size="33vw" />
-        )}
-      </div>
-      <div className="p-4">
-        {showSections && hasSections && (
-          <div className="mb-4 text-sm uppercase">
-            {showSections && hasSections && (
-              <div>
-                {sections?.map((section, index) => {
-                  if (typeof section === 'object') {
-                    const { title: titleFromSection } = section;
-
-                    const sectionTitle = titleFromSection || 'Untitled section';
-
-                    const isLast = index === sections.length - 1;
-
-                    return (
-                      <Fragment key={index}>
-                        {sectionTitle}
-                        {!isLast && <Fragment>, &nbsp;</Fragment>}
-                      </Fragment>
-                    );
-                  }
-
-                  return null;
-                })}
+    <div className="w-full py-10 lg:py-20" ref={card.ref}>
+      <div className="container mx-auto">
+        <div className="container grid grid-cols-1 items-center gap-8 rounded-lg border py-8 lg:grid-cols-2">
+          <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
+                <h2 className="font-regular max-w-xl text-left text-3xl tracking-tighter lg:text-5xl">
+                  {titleToUse && (
+                    <Link className="not-prose" href={href} ref={link.ref}>
+                      {titleToUse}
+                    </Link>
+                  )}
+                </h2>
+                {description && (
+                  <p className="max-w-xl text-left text-lg leading-relaxed tracking-tight text-muted-foreground">
+                    {sanitizedDescription}
+                  </p>
+                )}
               </div>
+            </div>
+            <div className="grid grid-cols-1 items-start gap-6 sm:grid-cols-3 lg:grid-cols-1 lg:pl-6">
+              <div className="flex flex-row items-start gap-6">
+                <Check className="mt-2 h-4 w-4 text-primary" />
+                <div className="flex flex-col gap-1">
+                  <p>Easy to use</p>
+                  <p className="text-sm text-muted-foreground">
+                    We&apos;ve made it easy to use and understand.
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-row items-start gap-6">
+                <Check className="mt-2 h-4 w-4 text-primary" />
+                <div className="flex flex-col gap-1">
+                  <p>Fast and reliable</p>
+                  <p className="text-sm text-muted-foreground">
+                    We&apos;ve made it fast and reliable.
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-row items-start gap-6">
+                <Check className="mt-2 h-4 w-4 text-primary" />
+                <div className="flex flex-col gap-1">
+                  <p>Beautiful and modern</p>
+                  <p className="text-sm text-muted-foreground">
+                    We&apos;ve made it beautiful and modern.
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-row items-start gap-6">
+                {Array.isArray(links) && links.length > 0 && (
+                  <ul className="flex gap-4 md:justify-center">
+                    {links.map((l, i) => {
+                      return (
+                        <li key={i}>
+                          <CMSLink label={l.label} url={l.url} appearance={l.appearance}/>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="rounded-md bg-muted">
+            {!metaImage && <div className="">No image</div>}
+            {metaImage && typeof metaImage !== 'string' && (
+              <Media resource={metaImage} size="33vw" />
             )}
           </div>
-        )}
-        {titleToUse && (
-          <div className="prose">
-            <h3>
-              <Link className="not-prose" href={href} ref={link.ref}>
-                {titleToUse}
-              </Link>
-            </h3>
-          </div>
-        )}
-        {description && (
-          <div className="mt-2">
-            {description && <p>{sanitizedDescription}</p>}
-          </div>
-        )}
+        </div>
       </div>
-    </article>
+    </div>
   );
 };
