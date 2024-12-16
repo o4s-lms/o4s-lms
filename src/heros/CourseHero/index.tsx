@@ -4,6 +4,7 @@ import React from 'react';
 import type { Course } from '@/payload-types';
 
 import { Media } from '@/components/Media';
+import { formatPrice } from '@/lib/utils';
 
 export const CourseHero: React.FC<{
   course: Course;
@@ -13,6 +14,7 @@ export const CourseHero: React.FC<{
     populatedAuthors,
     publishedAt,
     title,
+    price
   } = course;
 
   return (
@@ -60,6 +62,14 @@ export const CourseHero: React.FC<{
                 <time dateTime={publishedAt}>
                   {formatDateTime(publishedAt)}
                 </time>
+              </div>
+            )}
+            {price && (
+              <div className="flex flex-col gap-1">
+                <p className="text-sm">Price</p>
+
+                {formatPrice(price)}
+
               </div>
             )}
           </div>

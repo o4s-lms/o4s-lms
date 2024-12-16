@@ -14,6 +14,15 @@ import { generateMeta } from '@/utilities/generateMeta';
 import PageClient from './page.client';
 import { LivePreviewListener } from '@/components/LivePreviewListener';
 
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+import { Button } from '@/components/ui/button';
+import { PhoneCall } from 'lucide-react';
+
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise });
   const courses = await payload.find({
@@ -60,13 +69,47 @@ export default async function Course({ params: paramsPromise }: Args) {
 
       <CourseHero course={course} />
 
-      <div className="flex flex-col items-center gap-4 pt-8">
-        <div className="container">
-          <RichText
-            className="mx-auto max-w-[48rem]"
-            data={course.content}
-            enableGutter={false}
-          />
+      <div className="w-full py-20 lg:py-40">
+        <div className="container mx-auto">
+          <div className="md:grid-col-2 flex gap-10">
+            <div className="flex basis-3/5 flex-col gap-10">
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-2">
+                  <RichText
+                    className="mx-auto max-w-[48rem]"
+                    data={course.content}
+                    enableGutter={false}
+                  />
+                </div>
+                <div className="">
+                  <Button className="gap-4" variant="outline">
+                    Any questions? Reach out <PhoneCall className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+            <div className="basis-2/5">
+              <div className="prose max-w-none dark:prose-invert">
+                <h4>Conteúdo do curso</h4>
+              </div>
+              <Accordion type="single" collapsible className="w-full">
+                {course.sections.map((section, index) => (
+                  <AccordionItem key={index} value={'index-' + index}>
+                    <AccordionTrigger>{section.title}</AccordionTrigger>
+                    <AccordionContent>
+                      {section.richText && (
+                        <RichText
+                          className="mx-auto max-w-[48rem]"
+                          data={section.richText}
+                          enableGutter={false}
+                        />
+                      )}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+          </div>
         </div>
       </div>
     </article>
@@ -82,32 +125,34 @@ export async function generateMetadata({
   return generateMeta({ doc: post });
 }
 
-const queryCourseBySlug = cache(async ({ slug, language = 'pt' }: { slug: string, language?: string }) => {
-  const { isEnabled: draft } = await draftMode();
+const queryCourseBySlug = cache(
+  async ({ slug, language = 'pt' }: { slug: string; language?: string }) => {
+    const { isEnabled: draft } = await draftMode();
 
-  const payload = await getPayload({ config: configPromise });
+    const payload = await getPayload({ config: configPromise });
 
-  const result = await payload.find({
-    collection: 'courses',
-    draft,
-    limit: 1,
-    overrideAccess: draft,
-    pagination: false,
-    where: {
-      and: [
-        {
-          slug: {
-            equals: slug,
+    const result = await payload.find({
+      collection: 'courses',
+      draft,
+      limit: 1,
+      overrideAccess: draft,
+      pagination: false,
+      where: {
+        and: [
+          {
+            slug: {
+              equals: slug,
+            },
           },
-        },
-        {
-          language: {
-            equals: language,
+          {
+            language: {
+              equals: language,
+            },
           },
-        },
-      ],
-    },
-  });
+        ],
+      },
+    });
 
-  return result.docs?.[0] || null;
-});
+    return result.docs?.[0] || null;
+  },
+);
