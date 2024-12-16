@@ -9,7 +9,7 @@ import RichText from '@/components/RichText';
 
 import type { Course } from '@/payload-types';
 
-import { PostHero } from '@/heros/PostHero';
+import { CourseHero } from '@/heros/CourseHero';
 import { generateMeta } from '@/utilities/generateMeta';
 import PageClient from './page.client';
 import { LivePreviewListener } from '@/components/LivePreviewListener';
@@ -41,6 +41,7 @@ type Args = {
 };
 
 export default async function Course({ params: paramsPromise }: Args) {
+  // TO DO: get the current language
   const { isEnabled: draft } = await draftMode();
   const { slug = '' } = await paramsPromise;
   const url = '/courses/' + slug;
@@ -57,7 +58,7 @@ export default async function Course({ params: paramsPromise }: Args) {
 
       {draft && <LivePreviewListener />}
 
-      <PostHero post={course} />
+      <CourseHero course={course} />
 
       <div className="flex flex-col items-center gap-4 pt-8">
         <div className="container">

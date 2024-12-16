@@ -22,7 +22,7 @@ export default async function Page() {
     select: {
       title: true,
       slug: true,
-      categories: true,
+      sections: true,
       meta: true,
     },
   });
@@ -58,6 +58,6 @@ export default async function Page() {
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Payload Website Template Courses`,
+    title: `O4S LMS Website Courses`,
   };
 }

@@ -7,8 +7,6 @@ import configPromise from '@payload-config';
 import { getPayload } from 'payload';
 import React from 'react';
 import PageClient from './page.client';
-import { HeroHighlight, Highlight } from '@/components/ui/hero-highlight';
-import { motion } from 'framer-motion';
 import { HighLight } from '@/heros/HighLight';
 
 export const dynamic = 'force-static';
@@ -61,6 +59,6 @@ export default async function Page() {
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Payload Website Template Posts`,
+    title: `O4S LMS Website Blog`,
   };
 }
