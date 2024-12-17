@@ -15,7 +15,7 @@ export const CoursesArchive: React.FC<Props> = (props) => {
   return (
     <div className={cn('container')}>
       <div>
-        
+        <div className="grid grid-cols-1 gap-x-4 gap-y-4 lg:gap-x-8 lg:gap-y-8 xl:gap-x-8">
           {courses?.map((result, index) => {
             if (typeof result === 'object' && result !== null) {
               return (
@@ -31,7 +31,7 @@ export const CoursesArchive: React.FC<Props> = (props) => {
 
             return null;
           })}
-        
+        </div>
       </div>
     </div>
   );

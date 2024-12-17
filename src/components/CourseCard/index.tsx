@@ -55,7 +55,7 @@ export const CourseCard: React.FC<{
   ]
 
   return (
-    <div className="w-full py-10 lg:py-20" ref={card.ref}>
+    
       <div className="container mx-auto">
         <div className="container grid grid-cols-1 items-center gap-8 rounded-lg border py-8 lg:grid-cols-2">
           <div className="flex flex-col gap-10">
@@ -126,6 +126,6 @@ export const CourseCard: React.FC<{
           </div>
         </div>
       </div>
-    </div>
+   
   );
 };
