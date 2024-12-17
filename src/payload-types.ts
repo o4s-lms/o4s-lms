@@ -17,6 +17,7 @@ export interface Config {
     categories: Category;
     courses: Course;
     lessons: Lesson;
+    transactions: Transaction;
     'newsletter-signups': NewsletterSignup;
     users: User;
     redirects: Redirect;
@@ -35,6 +36,7 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     courses: CoursesSelect<false> | CoursesSelect<true>;
     lessons: LessonsSelect<false> | LessonsSelect<true>;
+    transactions: TransactionsSelect<false> | TransactionsSelect<true>;
     'newsletter-signups': NewsletterSignupsSelect<false> | NewsletterSignupsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
@@ -864,6 +866,24 @@ export interface Lesson {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "transactions".
+ */
+export interface Transaction {
+  id: number;
+  email: string;
+  customerId?: string | null;
+  transactionId?: string | null;
+  provider: 'stripe' | 'paypal' | 'transfer' | 'mbway';
+  discount: number;
+  amount: number;
+  status: 'pending' | 'awaiting' | 'cancelled' | 'declined' | 'refunded' | 'disputed' | 'completed';
+  user?: (number | null) | User;
+  courses: (number | Course)[];
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "newsletter-signups".
  */
 export interface NewsletterSignup {
@@ -979,6 +999,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'lessons';
         value: number | Lesson;
+      } | null)
+    | ({
+        relationTo: 'transactions';
+        value: number | Transaction;
       } | null)
     | ({
         relationTo: 'newsletter-signups';
@@ -1420,6 +1444,23 @@ export interface LessonsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "transactions_select".
+ */
+export interface TransactionsSelect<T extends boolean = true> {
+  email?: T;
+  customerId?: T;
+  transactionId?: T;
+  provider?: T;
+  discount?: T;
+  amount?: T;
+  status?: T;
+  user?: T;
+  courses?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

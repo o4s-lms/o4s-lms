@@ -29,6 +29,8 @@ export const AuthProvider: React.FC<{
   api?: 'gql' | 'rest';
   children: React.ReactNode;
 }> = ({ api = 'rest', children }) => {
+  const [isSignedIn, setisSignedIn] = useState<boolean>(false);
+  const [isLoaded, setisLoaded] = useState<boolean>(false);
   const [user, setUser] = useState<null | User>();
   const [permissions, setPermissions] = useState<null | Permissions>(null);
 
@@ -65,6 +67,7 @@ export const AuthProvider: React.FC<{
           args,
         );
         setUser(user);
+        if (user) setisSignedIn(true);
         return user;
       }
 
@@ -79,6 +82,7 @@ export const AuthProvider: React.FC<{
       }`);
 
         setUser(loginUser?.user);
+        if (loginUser?.user) setisSignedIn(true);
         return loginUser?.user;
       }
     },
@@ -89,6 +93,7 @@ export const AuthProvider: React.FC<{
     if (api === 'rest') {
       await rest(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/logout`);
       setUser(null);
+      setisSignedIn(false);
       return;
     }
 
@@ -98,12 +103,14 @@ export const AuthProvider: React.FC<{
       }`);
 
       setUser(null);
+      setisSignedIn(false);
     }
   }, [api]);
 
   // On mount, get user and set
   useEffect(() => {
     const fetchMe = async () => {
+      setisLoaded(false);
       if (api === 'rest') {
         const user = await rest(
           `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/me`,
@@ -130,6 +137,8 @@ export const AuthProvider: React.FC<{
     };
 
     void fetchMe();
+    if (user) setisSignedIn(true);
+    setisLoaded(true);
   }, [api]);
 
   const forgotPassword = useCallback<ForgotPassword>(
@@ -193,6 +202,8 @@ export const AuthProvider: React.FC<{
         setPermissions,
         setUser,
         user,
+        isSignedIn,
+        isLoaded,
       }}
     >
       {children}

@@ -15,6 +15,9 @@ declare global {
       SMTP_PASS: string;
       NEXT_PUBLIC_TOLGEE_API_URL: string;
       NEXT_PUBLIC_TOLGEE_API_KEY: string;
+      NEXT_PUBLIC_PAYPAL_CLIENT_ID: string;
+      PAYPAL_CLIENT_ID: string;
+      PAYPAL_CLIENT_SECRET: string;
     }
   }
 }

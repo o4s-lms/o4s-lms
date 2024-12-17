@@ -51,6 +51,13 @@ export default {
           DEFAULT: 'hsl(var(--popover))',
           foreground: 'hsl(var(--popover-foreground))',
         },
+        customgreys: {
+          primarybg: "#1B1C22",
+          secondarybg: "#25262F",
+          darkGrey: "#17181D",
+          darkerGrey: "#3d3d3d",
+          dirtyGrey: "#6e6e6e",
+        },
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',

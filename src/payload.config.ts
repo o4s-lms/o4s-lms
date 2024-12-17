@@ -14,6 +14,7 @@ import { Pages } from './collections/Pages';
 import { Posts } from './collections/Posts';
 import { Courses } from './collections/Courses';
 import { Lessons } from './collections/Lessons';
+import { Transactions } from './collections/Transactions';
 import { Newsletter } from './collections/Newsletter';
 import { Users } from './collections/Users';
 import { Footer } from './Footer/config';
@@ -90,6 +91,7 @@ export default buildConfig({
     Categories,
     Courses,
     Lessons,
+    Transactions,
     Newsletter,
     Users,
   ],
