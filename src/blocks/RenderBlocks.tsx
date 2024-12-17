@@ -4,6 +4,7 @@ import React, { Fragment } from 'react';
 import type { Page } from '@/payload-types';
 
 import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component';
+import { CoursesArchiveBlock } from '@/blocks/CoursesArchiveBlock/Component';
 import { CallToActionBlock } from '@/blocks/CallToAction/Component';
 import { ContentBlock } from '@/blocks/Content/Component';
 import { FormBlock } from '@/blocks/Form/Component';
@@ -13,6 +14,7 @@ import { TestimonialBlock } from './TestimonialBlock/Component';
 
 const blockComponents = {
   archive: ArchiveBlock,
+  coursesArchive: CoursesArchiveBlock,
   content: ContentBlock,
   cta: CallToActionBlock,
   formBlock: FormBlock,
