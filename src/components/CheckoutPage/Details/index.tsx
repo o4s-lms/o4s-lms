@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
+import { useCheckoutNavigation } from '@/hooks/useCheckoutNavigation';
 
 const formSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -26,6 +27,7 @@ const CheckoutDetailsPage = () => {
   const searchParams = useSearchParams();
   const showSignUp = searchParams.get('showSignUp') === 'true';
   const { courses, discount, isLoading } = useCurrentOrder();
+  const { navigateToStep } = useCheckoutNavigation();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,6 +40,10 @@ const CheckoutDetailsPage = () => {
   //if (isError) return <div>Failed to fetch course data</div>;
   if (!(Array.isArray(courses) && courses.length > 0))
     return <div>Courses not found</div>;
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    navigateToStep(2);
+  }
 
   return (
     <div className="h-fit w-full gap-10">
@@ -58,9 +64,7 @@ const CheckoutDetailsPage = () => {
             </p>
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit((data) => {
-                  console.log(data);
-                })}
+                onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-8"
               >
                 <FormField
@@ -99,7 +103,7 @@ const CheckoutDetailsPage = () => {
             <hr className="border-customgreys-dirtyGrey w-full" />
           </div>
 
-          <div className="bg-customgreys-secondarybg flex w-full items-center justify-center rounded-lg">
+          {/**<div className="bg-customgreys-secondarybg flex w-full items-center justify-center rounded-lg">
             {showSignUp ? (
               <Button
                 href={`/sign-up?redirect=/checkout?step=1&slug=${searchParams.get('slug')}&showSignUp=false`}
@@ -115,7 +119,7 @@ const CheckoutDetailsPage = () => {
                 Sign In
               </Button>
             )}
-          </div>
+          </div>*/}
         </div>
       </div>
     </div>
