@@ -19,6 +19,7 @@ import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { useCheckoutNavigation } from '@/hooks/useCheckoutNavigation';
 import { useAuth } from '@/providers/Auth';
+import Link from 'next/link';
 
 const formSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -107,23 +108,26 @@ const CheckoutDetailsPage = () => {
             <hr className="w-full border-customgreys-dirtyGrey" />
           </div>
 
-          {/**<div className="bg-customgreys-secondarybg flex w-full items-center justify-center rounded-lg">
+          <div className="flex w-full items-center justify-center rounded-lg bg-customgreys-secondarybg">
             {showSignUp ? (
-              <Button
-                href={`/sign-up?redirect=/checkout?step=1&slug=${searchParams.get('slug')}&showSignUp=false`}
-                className="bg-primary-700 hover:bg-primary-600 text-white-100 my-6 w-full rounded py-3 text-sm font-semibold shadow"
-              >
-                Sign Up
+              <Button className="bg-primary-700 hover:bg-primary-600 text-white-100 my-6 w-full rounded py-3 text-sm font-semibold shadow">
+                <Link
+                  href={`/sign-up?redirect=/checkout?step=1&slug=${searchParams.get('slug')}&showSignUp=false`}
+                  scroll={false}
+                >
+                  Sign Up
+                </Link>
               </Button>
             ) : (
-              <Button
-                href={`/sign-in?redirect=/checkout?step=1&slug=${searchParams.get('slug')}&showSignUp=false`}
-                className="bg-primary-700 hover:bg-primary-600 text-white-100 my-6 w-full rounded py-3 text-sm font-semibold shadow"
-              >
-                Sign In
+              <Button className="bg-primary-700 hover:bg-primary-600 text-white-100 my-6 w-full rounded py-3 text-sm font-semibold shadow">
+                <Link
+                  href={`/sign-in?redirect=/checkout?step=1&slug=${searchParams.get('slug')}&showSignUp=false`}
+                >
+                  Sign In
+                </Link>
               </Button>
             )}
-          </div>*/}
+          </div>
         </div>
       </div>
     </div>

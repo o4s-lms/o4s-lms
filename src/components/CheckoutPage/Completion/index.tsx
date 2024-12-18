@@ -7,17 +7,17 @@ import React from 'react';
 
 const CompletionPage = () => {
   return (
-    <div className="completion">
-      <div className="completion__content">
-        <div className="completion__icon">
+    <div className="flex flex-col h-full items-center justify-center bg-background text-foreground">
+      <div className="text-center">
+        <div className="mb-4 rounded-full bg-green-500 p-3 inline-flex items-center justify-center">
           <Check className="h-16 w-16" />
         </div>
-        <h1 className="completion__title">COMPLETED</h1>
-        <p className="completion__message">
+        <h1 className="text-4xl font-bold mb-3">COMPLETED</h1>
+        <p className="mb-1">
           🎉 You have made a course purchase successfully! 🎉
         </p>
       </div>
-      <div className="completion__support">
+      <div className="text-centert">
         <p>
           Need help? Contact our{' '}
           <Button variant="link" asChild className="text-primary-700 m-0 p-0">
@@ -26,8 +26,8 @@ const CompletionPage = () => {
           .
         </p>
       </div>
-      <div className="completion__action">
-        <Link href="user/courses" scroll={false}>
+      <div className="mt-2 flex justify-center bg-secondary-700 rounded-lg px-4 py-2 hover:bg-secondary-600 cursor-pointer">
+        <Link href="/dashboard/courses" scroll={false}>
           Go to Courses
         </Link>
       </div>
