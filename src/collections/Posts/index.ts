@@ -42,6 +42,7 @@ export const Posts: CollectionConfig<'posts'> = {
   defaultPopulate: {
     title: true,
     slug: true,
+    heroImage: true,
     categories: true,
     language: true,
     meta: {

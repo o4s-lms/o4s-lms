@@ -44,6 +44,7 @@ export const Courses: CollectionConfig<'courses'> = {
   defaultPopulate: {
     title: true,
     description: true,
+    heroImage: true,
     price: true,
     slug: true,
     language: true,
