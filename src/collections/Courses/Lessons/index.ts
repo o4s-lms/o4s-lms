@@ -4,12 +4,14 @@ import {
   BlocksFeature,
   FixedToolbarFeature,
   HeadingFeature,
+  AlignFeature,
   HorizontalRuleFeature,
   InlineToolbarFeature,
   lexicalEditor,
+  UploadFeature,
 } from '@payloadcms/richtext-lexical';
 
-import { authenticated } from '@/access/authenticated';
+import { admin } from '@/access/admin';
 import { authenticatedOrPublished } from '@/access/authenticatedOrPublished';
 import { Banner } from '@/blocks/Banner/config';
 import { Code } from '@/blocks/Code/config';
@@ -26,15 +28,14 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields';
 import { slugField } from '@/fields/slug';
-//import { courseSection } from '@/fields/selectCourseSection';
 
 export const Lessons: CollectionConfig<'lessons'> = {
   slug: 'lessons',
   access: {
-    create: authenticated,
-    delete: authenticated,
+    create: admin,
+    delete: admin,
     read: authenticatedOrPublished,
-    update: authenticated,
+    update: admin,
   },
   // This config controls what's populated by default when a post is referenced
   // https://payloadcms.com/docs/queries/select#defaultpopulate-collection-config-property
@@ -43,7 +44,7 @@ export const Lessons: CollectionConfig<'lessons'> = {
     title: true,
     slug: true,
     course: true,
-    //section: true,
+    section: true,
     meta: {
       image: true,
       description: true,
@@ -77,6 +78,15 @@ export const Lessons: CollectionConfig<'lessons'> = {
       required: true,
     },
     {
+      name: 'activity',
+      type: 'checkbox',
+      admin: {
+        position: 'sidebar',
+      },
+      defaultValue: false,
+      required: true,
+    },
+    {
       type: 'tabs',
       tabs: [
         {
@@ -95,6 +105,21 @@ export const Lessons: CollectionConfig<'lessons'> = {
                     FixedToolbarFeature(),
                     InlineToolbarFeature(),
                     HorizontalRuleFeature(),
+                    UploadFeature({
+                      collections: {
+                        uploads: {
+                          // Example showing how to customize the built-in fields
+                          // of the Upload feature
+                          fields: [
+                            {
+                              name: 'caption',
+                              type: 'richText',
+                              editor: lexicalEditor(),
+                            },
+                          ],
+                        },
+                      },
+                    }),
                   ];
                 },
               }),

@@ -573,6 +573,7 @@ export interface Section {
 export interface Lesson {
   id: number;
   title: string;
+  activity: boolean;
   content: {
     root: {
       type: string;
@@ -1466,6 +1467,7 @@ export interface SectionsSelect<T extends boolean = true> {
  */
 export interface LessonsSelect<T extends boolean = true> {
   title?: T;
+  activity?: T;
   content?: T;
   meta?:
     | T

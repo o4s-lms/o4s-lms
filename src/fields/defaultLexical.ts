@@ -12,13 +12,13 @@ import {
 export const defaultLexical: Config['editor'] = lexicalEditor({
   features: () => {
     return [
-      AlignFeature(),
       ParagraphFeature(),
       UnderlineFeature(),
       BoldFeature(),
       ItalicFeature(),
+      AlignFeature(),
       LinkFeature({
-        enabledCollections: ['pages', 'posts'],
+        enabledCollections: ['pages', 'posts', 'lessons'],
         fields: ({ defaultFields }) => {
           const defaultFieldsWithoutUrl = defaultFields.filter((field) => {
             if ('name' in field && field.name === 'url') return false;

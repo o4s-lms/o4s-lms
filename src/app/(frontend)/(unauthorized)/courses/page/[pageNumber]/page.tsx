@@ -67,7 +67,7 @@ export async function generateMetadata({
 }: Args): Promise<Metadata> {
   const { pageNumber } = await paramsPromise;
   return {
-    title: `Payload Website Template Course Page ${pageNumber || ''}`,
+    title: `O4S LMS Course Page ${pageNumber || ''}`,
   };
 }
 

@@ -5,7 +5,7 @@ import type {
 
 import { revalidatePath, revalidateTag } from 'next/cache';
 
-import type { Lesson } from '../../../payload-types';
+import type { Lesson } from '@/payload-types';
 
 export const revalidateLesson: CollectionAfterChangeHook<Lesson> = ({
   doc,
@@ -43,7 +43,7 @@ export const revalidateDelete: CollectionAfterDeleteHook<Course> = ({
     const path = `/courses/${doc?.slug}`;
 
     revalidatePath(path);
-    //revalidateTag('courses-sitemap')
+    revalidateTag('courses-sitemap')
   }
 
   return doc;

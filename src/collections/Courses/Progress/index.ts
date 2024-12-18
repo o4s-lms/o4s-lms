@@ -1,11 +1,12 @@
 import type { CollectionConfig } from 'payload';
 
 import { authenticated } from '@/access/authenticated';
+import { admin } from '@/access/admin';
 
 export const CourseProgress: CollectionConfig = {
   slug: 'courseProgress',
   access: {
-    admin: authenticated,
+    admin: admin,
     create: authenticated,
     delete: authenticated,
     read: authenticated,
@@ -17,7 +18,7 @@ export const CourseProgress: CollectionConfig = {
   },
   fields: [
     {
-      name: 'user',
+      name: 'student',
       type: 'relationship',
       label: 'Student',
       relationTo: ['users'],
@@ -31,29 +32,35 @@ export const CourseProgress: CollectionConfig = {
       required: true,
     },
     {
-        name: 'sections',
-        type: 'relationship',
-        label: 'Sections Progress',
-        hasMany: true,
-        relationTo: ['sectionProgress'],
-        required: true,
-      },
-    {
-        name: 'enrollmentDate',
-        type: 'date',
-        label: 'Enrollment Date',
+      name: 'sections',
+      type: 'relationship',
+      label: 'Sections Progress',
+      hasMany: true,
+      relationTo: ['sectionProgress'],
+      required: true,
     },
     {
-        name: 'overallProgress',
-        type: 'number',
-        label: 'Overall Progress',
-        required: true,
-        defaultValue: 0,
+      name: 'enrollmentDate',
+      type: 'date',
+      label: 'Enrollment Date',
     },
     {
-        name: 'lastAccessed',
-        type: 'date',
-        label: 'Last Accessed Date',
+      name: 'overallProgress',
+      type: 'number',
+      label: 'Overall Progress',
+      required: true,
+      defaultValue: 0,
+    },
+    {
+      name: 'lastAccessed',
+      type: 'date',
+      label: 'Last Accessed Date',
+    },
+    {
+      name: 'lastAccessedLesson',
+      type: 'relationship',
+      relationTo: ['lessons'],
+      label: 'Last Accessed Lesson',
     },
   ],
   timestamps: true,

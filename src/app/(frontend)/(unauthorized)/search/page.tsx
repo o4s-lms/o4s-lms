@@ -86,6 +86,6 @@ export default async function Page({
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Payload Website Template Search`,
+    title: `O4S LMS Search`,
   };
 }
