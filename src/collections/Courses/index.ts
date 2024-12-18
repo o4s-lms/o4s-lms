@@ -107,6 +107,11 @@ export const Courses: CollectionConfig<'courses'> = {
         {
           fields: [
             {
+              name: 'heroImage',
+              type: 'upload',
+              relationTo: 'media',
+            },
+            {
               name: 'content',
               type: 'richText',
               editor: lexicalEditor({

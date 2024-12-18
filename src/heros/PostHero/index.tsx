@@ -10,7 +10,7 @@ export const PostHero: React.FC<{
 }> = ({ post }) => {
   const {
     categories,
-    meta: { image: metaImage } = {},
+    heroImage,
     populatedAuthors,
     publishedAt,
     title,
@@ -86,14 +86,8 @@ export const PostHero: React.FC<{
         </div>
       </div>
       <div className="min-h-[80vh] select-none">
-        {metaImage && typeof metaImage !== 'string' && (
-          <Media
-            fill
-            priority={false}
-            loading="lazy"
-            imgClassName="-z-10 object-cover"
-            resource={metaImage}
-          />
+        {heroImage && typeof heroImage !== 'string' && (
+          <Media fill priority imgClassName="-z-10 object-cover" resource={heroImage} />
         )}
         <div className="pointer-events-none absolute bottom-0 left-0 h-1/2 w-full bg-gradient-to-t from-black to-transparent" />
       </div>

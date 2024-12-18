@@ -11,6 +11,7 @@ import { contact as contactPageData } from './contact-page';
 import { home } from './home';
 import { image1 } from './image-1';
 import { image2 } from './image-2';
+import { imageHero1 } from './image-hero-1'
 import { post1 } from './post-1';
 import { post2 } from './post-2';
 import { post3 } from './post-3';
@@ -84,7 +85,7 @@ export const seed = async ({
     depth: 0,
     where: {
       email: {
-        equals: 'demo-author@payloadcms.com',
+        equals: 'demo-author@example.com',
       },
     },
   });
@@ -124,7 +125,7 @@ export const seed = async ({
       collection: 'users',
       data: {
         name: 'Demo Author',
-        email: 'demo-author@payloadcms.com',
+        email: 'demo-author@example.com',
         password: 'password',
         roles: ['admin'],
       },
@@ -146,7 +147,7 @@ export const seed = async ({
     }),
     payload.create({
       collection: 'media',
-      data: image2,
+      data: imageHero1,
       file: hero1Buffer,
     }),
 
