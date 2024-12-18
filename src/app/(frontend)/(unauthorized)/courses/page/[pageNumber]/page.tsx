@@ -37,7 +37,7 @@ export default async function Page({ params: paramsPromise }: Args) {
     <div className="pb-24 pt-24">
       <PageClient />
       <div className="container mb-16">
-        <div className="prose dark:prose-invert max-w-none">
+        <div className="prose max-w-none dark:prose-invert">
           <h1>Courses</h1>
         </div>
       </div>
@@ -79,9 +79,9 @@ export async function generateStaticParams() {
     overrideAccess: false,
     where: {
       language: {
-        equals: language
+        equals: language,
       },
-    }
+    },
   });
 
   const totalPages = Math.ceil(totalDocs / 10);

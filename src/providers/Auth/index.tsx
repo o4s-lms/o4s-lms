@@ -120,6 +120,7 @@ export const AuthProvider: React.FC<{
           },
         );
         setUser(user);
+        if (user) setisSignedIn(true);
       }
 
       if (api === 'gql') {
@@ -133,11 +134,11 @@ export const AuthProvider: React.FC<{
         }`);
 
         setUser(meUser.user);
+        if (meUser.user) setisSignedIn(true);
       }
     };
 
     void fetchMe();
-    if (user) setisSignedIn(true);
     setisLoaded(true);
   }, [api]);
 

@@ -2,9 +2,7 @@ import type { Config } from 'tailwindcss';
 
 export default {
   darkMode: ['selector', '[data-theme="dark"]'],
-  content: [
-    './src/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
+  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   prefix: '',
   safelist: [
     'lg:col-span-4',
@@ -52,11 +50,11 @@ export default {
           foreground: 'hsl(var(--popover-foreground))',
         },
         customgreys: {
-          primarybg: "#1B1C22",
-          secondarybg: "#25262F",
-          darkGrey: "#17181D",
-          darkerGrey: "#3d3d3d",
-          dirtyGrey: "#6e6e6e",
+          primarybg: '#1B1C22',
+          secondarybg: '#25262F',
+          darkGrey: '#17181D',
+          darkerGrey: '#3d3d3d',
+          dirtyGrey: '#6e6e6e',
         },
         primary: {
           DEFAULT: 'hsl(var(--primary))',
@@ -104,7 +102,7 @@ export default {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
-	  keyframes: {
+      keyframes: {
         'accordion-down': {
           from: { height: '0' },
           to: { height: 'var(--radix-accordion-content-height)' },
@@ -114,7 +112,7 @@ export default {
           to: { height: '0' },
         },
       },
-	  animation: {
+      animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },

@@ -66,7 +66,7 @@ export default async function Page({
     <div className="pb-24 pt-24">
       <PageClient />
       <div className="container mb-16">
-        <div className="prose dark:prose-invert max-w-none text-center">
+        <div className="prose max-w-none text-center dark:prose-invert">
           <h1 className="mb-8 lg:mb-16">Search</h1>
 
           <div className="mx-auto max-w-[50rem]">

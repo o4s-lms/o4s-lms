@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
-import Link from "next/link";
-import React from "react";
+import { Button } from '@/components/ui/button';
+import { Check } from 'lucide-react';
+import Link from 'next/link';
+import React from 'react';
 
 const CompletionPage = () => {
   return (
     <div className="completion">
       <div className="completion__content">
         <div className="completion__icon">
-          <Check className="w-16 h-16" />
+          <Check className="h-16 w-16" />
         </div>
         <h1 className="completion__title">COMPLETED</h1>
         <p className="completion__message">
@@ -19,8 +19,8 @@ const CompletionPage = () => {
       </div>
       <div className="completion__support">
         <p>
-          Need help? Contact our{" "}
-          <Button variant="link" asChild className="p-0 m-0 text-primary-700">
+          Need help? Contact our{' '}
+          <Button variant="link" asChild className="text-primary-700 m-0 p-0">
             <a href="mailto:support@example.com">customer support</a>
           </Button>
           .

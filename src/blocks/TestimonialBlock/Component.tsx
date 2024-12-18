@@ -18,7 +18,6 @@ export const TestimonialBlock: React.FC<TestimonialBlockProps> = ({
 }) => {
   return (
     <div className="container py-24 sm:py-32">
-
       <div className="my-16">
         {richTextBefore && (
           <RichText data={richTextBefore} enableGutter={false} />

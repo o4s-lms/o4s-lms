@@ -36,11 +36,15 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 
   return (
     <header
-      className="fixed left-0 right-0 z-[100] flex items-center justify-between border-b-[1px] border-neutral-900 bg-black/40 dark:bg-black/80 px-4 py-4 backdrop-blur-lg"
+      className="fixed left-0 right-0 z-[100] flex items-center justify-between border-b-[1px] border-neutral-900 bg-black/40 px-4 py-4 backdrop-blur-lg dark:bg-black/80"
       {...(theme ? { 'data-theme': theme } : {})}
     >
-      <aside className='dark:text-white '>
-        <Link href={"/"} alt={"Open For Sustainability"} className="flex items-center gap-[4px]">
+      <aside className="dark:text-white">
+        <Link
+          href={'/'}
+          alt={'Open For Sustainability'}
+          className="flex items-center gap-[4px]"
+        >
           <p className="text-3xl font-bold">O4S</p>
           <Image
             src="/iconO4S-100x100.png"
@@ -53,7 +57,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
         </Link>
       </aside>
       <HeaderNav data={data} />
-      <aside className="flex items-center gap-4 dark:text-white ">
+      <aside className="flex items-center gap-4 dark:text-white">
         <Link href="/search">
           <span className="sr-only">Search</span>
           <SearchIcon className="w-5 text-primary" />

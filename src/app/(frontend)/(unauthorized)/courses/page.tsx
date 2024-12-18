@@ -31,7 +31,7 @@ export default async function Page() {
     <div className="pb-24 pt-24">
       <PageClient />
       <div className="container mb-16">
-        <div className="prose dark:prose-invert max-w-none">
+        <div className="prose max-w-none dark:prose-invert">
           <h1>Courses</h1>
         </div>
       </div>

@@ -33,6 +33,6 @@ export interface AuthContext {
   setPermissions: (permissions: null | Permissions) => void;
   setUser: (user: null | User) => void;
   user?: null | User;
-  isSignedIn?: boolean;
-  isLoaded?: boolean;
+  isSignedIn: boolean;
+  isLoaded: boolean;
 }

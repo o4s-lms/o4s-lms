@@ -9,19 +9,12 @@ import { formatPrice } from '@/lib/utils';
 export const CourseHero: React.FC<{
   course: Course;
 }> = ({ course }) => {
-  const {
-    heroImage,
-    populatedAuthors,
-    publishedAt,
-    title,
-    price
-  } = course;
+  const { heroImage, populatedAuthors, publishedAt, title, price } = course;
 
   return (
     <div className="relative -mt-[10.4rem] flex items-end">
       <div className="container relative z-10 pb-8 text-white lg:grid lg:grid-cols-[1fr_48rem_1fr]">
         <div className="col-span-1 col-start-1 md:col-span-2 md:col-start-2">
-
           <div className="">
             <h1 className="mb-6 text-3xl md:text-5xl lg:text-6xl">{title}</h1>
           </div>
@@ -69,7 +62,6 @@ export const CourseHero: React.FC<{
                 <p className="text-sm">Price</p>
 
                 {formatPrice(price)}
-
               </div>
             )}
           </div>
@@ -77,7 +69,12 @@ export const CourseHero: React.FC<{
       </div>
       <div className="min-h-[80vh] select-none">
         {heroImage && typeof heroImage !== 'string' && (
-          <Media fill priority imgClassName="-z-10 object-cover" resource={heroImage} />
+          <Media
+            fill
+            priority
+            imgClassName="-z-10 object-cover"
+            resource={heroImage}
+          />
         )}
         <div className="pointer-events-none absolute bottom-0 left-0 h-1/2 w-full bg-gradient-to-t from-black to-transparent" />
       </div>

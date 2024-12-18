@@ -34,8 +34,10 @@ export default async function Page() {
     <div className="pb-24 pt-24">
       <PageClient />
 
-      <HighLight msg="Consulte o nosso blogue e leia os melhores" highlightMsg="artigos sobre sustentabilidade" />
-
+      <HighLight
+        msg="Consulte o nosso blogue e leia os melhores"
+        highlightMsg="artigos sobre sustentabilidade"
+      />
 
       <div className="container mb-8">
         <PageRange

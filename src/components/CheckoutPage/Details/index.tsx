@@ -18,6 +18,7 @@ import {
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { useCheckoutNavigation } from '@/hooks/useCheckoutNavigation';
+import { useAuth } from '@/providers/Auth';
 
 const formSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -28,6 +29,7 @@ const CheckoutDetailsPage = () => {
   const showSignUp = searchParams.get('showSignUp') === 'true';
   const { courses, discount, isLoading } = useCurrentOrder();
   const { navigateToStep } = useCheckoutNavigation();
+  const { isSignedIn, isLoaded } = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -36,10 +38,12 @@ const CheckoutDetailsPage = () => {
     },
   });
 
-  if (isLoading) return <Loading />;
+  if (isLoading && !isLoaded) return <Loading />;
   //if (isError) return <div>Failed to fetch course data</div>;
   if (!(Array.isArray(courses) && courses.length > 0))
     return <div>Courses not found</div>;
+
+  if (isSignedIn) navigateToStep(2);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     navigateToStep(2);
@@ -54,7 +58,7 @@ const CheckoutDetailsPage = () => {
 
         {/* STRETCH FEATURE */}
         <div className="flex h-auto flex-1 basis-1/2 flex-col gap-10">
-          <div className="bg-customgreys-secondarybg w-full rounded-lg px-24 py-12">
+          <div className="w-full rounded-lg bg-customgreys-secondarybg px-24 py-12">
             <h2 className="mb-2 text-center text-3xl font-bold">
               Guest Checkout
             </h2>
@@ -96,11 +100,11 @@ const CheckoutDetailsPage = () => {
           </div>
 
           <div className="flex items-center justify-between">
-            <hr className="border-customgreys-dirtyGrey w-full" />
+            <hr className="w-full border-customgreys-dirtyGrey" />
             <span className="whitespace-nowrap px-4 text-sm text-gray-400">
               Or
             </span>
-            <hr className="border-customgreys-dirtyGrey w-full" />
+            <hr className="w-full border-customgreys-dirtyGrey" />
           </div>
 
           {/**<div className="bg-customgreys-secondarybg flex w-full items-center justify-center rounded-lg">
