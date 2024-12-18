@@ -13,7 +13,8 @@ import { Media } from './collections/Media';
 import { Pages } from './collections/Pages';
 import { Posts } from './collections/Posts';
 import { Courses } from './collections/Courses';
-import { Lessons } from './collections/Lessons';
+import { Sections } from './collections/Courses/Sections';
+import { Lessons } from './collections/Courses/Lessons';
 import { Transactions } from './collections/Transactions';
 import { Newsletter } from './collections/Newsletter';
 import { Users } from './collections/Users';
@@ -90,6 +91,7 @@ export default buildConfig({
     Media,
     Categories,
     Courses,
+    Sections,
     Lessons,
     Transactions,
     Newsletter,

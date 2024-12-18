@@ -27,7 +27,6 @@ import {
 } from '@payloadcms/plugin-seo/fields';
 import { slugField } from '@/fields/slug';
 import { languageSelectOptions } from '@/utilities/languages';
-import { CourseSection } from '@/blocks/CourseSections/config';
 import { FAQBlock } from '@/blocks/FAQBlock/config';
 
 export const Courses: CollectionConfig<'courses'> = {
@@ -141,12 +140,14 @@ export const Courses: CollectionConfig<'courses'> = {
           fields: [
             {
               name: 'sections',
-              type: 'blocks',
-              blocks: [CourseSection],
-              required: true,
+              type: 'relationship',
+              hasMany: true,
               admin: {
-                initCollapsed: true,
+                isSortable: true,
               },
+              label: 'Sections',
+              relationTo: ['sections'],
+              required: true,
             },
           ],
           label: 'Sections',

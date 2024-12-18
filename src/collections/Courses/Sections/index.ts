@@ -1,4 +1,7 @@
-import type { Block } from 'payload';
+import type { CollectionConfig } from 'payload';
+
+import { anyone } from '@/access/anyone';
+import { admin } from '@/access/admin';
 
 import {
   FixedToolbarFeature,
@@ -6,10 +9,19 @@ import {
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical';
+import { slugField } from '@/fields/slug';
 
-export const CourseSection: Block = {
-  slug: 'section',
-  interfaceName: 'CourseSectionBlock',
+export const Sections: CollectionConfig = {
+  slug: 'sections',
+  access: {
+    create: admin,
+    delete: admin,
+    read: anyone,
+    update: admin,
+  },
+  admin: {
+    useAsTitle: 'title',
+  },
   fields: [
     {
       name: 'title',
@@ -31,17 +43,17 @@ export const CourseSection: Block = {
       }),
       label: false,
     },
-    {
-      name: 'slug',
-      type: 'text',
-      required: true,
-    },
+    ...slugField(),
     {
       name: 'lessons',
       type: 'relationship',
       hasMany: true,
+      admin: {
+        isSortable: true,
+      },
       label: 'Lessons',
       relationTo: ['lessons'],
+      required: true,
     },
   ],
   labels: {

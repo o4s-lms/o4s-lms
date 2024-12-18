@@ -16,6 +16,7 @@ export interface Config {
     media: Media;
     categories: Category;
     courses: Course;
+    sections: Section;
     lessons: Lesson;
     transactions: Transaction;
     'newsletter-signups': NewsletterSignup;
@@ -35,6 +36,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     courses: CoursesSelect<false> | CoursesSelect<true>;
+    sections: SectionsSelect<false> | SectionsSelect<true>;
     lessons: LessonsSelect<false> | LessonsSelect<true>;
     transactions: TransactionsSelect<false> | TransactionsSelect<true>;
     'newsletter-signups': NewsletterSignupsSelect<false> | NewsletterSignupsSelect<true>;
@@ -509,7 +511,10 @@ export interface Course {
     };
     [k: string]: unknown;
   };
-  sections: CourseSectionBlock[];
+  sections: {
+    relationTo: 'sections';
+    value: number | Section;
+  }[];
   meta?: {
     title?: string | null;
     image?: (number | null) | Media;
@@ -532,9 +537,10 @@ export interface Course {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CourseSectionBlock".
+ * via the `definition` "sections".
  */
-export interface CourseSectionBlock {
+export interface Section {
+  id: number;
   title: string;
   richText?: {
     root: {
@@ -551,10 +557,57 @@ export interface CourseSectionBlock {
     };
     [k: string]: unknown;
   } | null;
-  slug: string;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'section';
+  slug?: string | null;
+  slugLock?: boolean | null;
+  lessons: {
+    relationTo: 'lessons';
+    value: number | Lesson;
+  }[];
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lessons".
+ */
+export interface Lesson {
+  id: number;
+  title: string;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  meta?: {
+    title?: string | null;
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
+  course?: (number | null) | Course;
+  section?: (number | null) | Section;
+  publishedAt?: string | null;
+  authors?: (number | User)[] | null;
+  populatedAuthors?:
+    | {
+        id?: string | null;
+        name?: string | null;
+      }[]
+    | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -826,48 +879,6 @@ export interface FAQBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "lessons".
- */
-export interface Lesson {
-  id: number;
-  title: string;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  meta?: {
-    title?: string | null;
-    image?: (number | null) | Media;
-    description?: string | null;
-  };
-  course?: (number | null) | Course;
-  publishedAt?: string | null;
-  authors?: (number | User)[] | null;
-  populatedAuthors?:
-    | {
-        id?: string | null;
-        name?: string | null;
-      }[]
-    | null;
-  slug?: string | null;
-  slugLock?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "transactions".
  */
 export interface Transaction {
@@ -997,6 +1008,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'courses';
         value: number | Course;
+      } | null)
+    | ({
+        relationTo: 'sections';
+        value: number | Section;
       } | null)
     | ({
         relationTo: 'lessons';
@@ -1409,11 +1424,7 @@ export interface CoursesSelect<T extends boolean = true> {
   language?: T;
   heroImage?: T;
   content?: T;
-  sections?:
-    | T
-    | {
-        section?: T | CourseSectionBlockSelect<T>;
-      };
+  sections?: T;
   meta?:
     | T
     | {
@@ -1438,14 +1449,16 @@ export interface CoursesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CourseSectionBlock_select".
+ * via the `definition` "sections_select".
  */
-export interface CourseSectionBlockSelect<T extends boolean = true> {
+export interface SectionsSelect<T extends boolean = true> {
   title?: T;
   richText?: T;
   slug?: T;
-  id?: T;
-  blockName?: T;
+  slugLock?: T;
+  lessons?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1462,6 +1475,7 @@ export interface LessonsSelect<T extends boolean = true> {
         description?: T;
       };
   course?: T;
+  section?: T;
   publishedAt?: T;
   authors?: T;
   populatedAuthors?:

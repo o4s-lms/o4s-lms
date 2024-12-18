@@ -14,14 +14,9 @@ import { generateMeta } from '@/utilities/generateMeta';
 import PageClient from './page.client';
 import { LivePreviewListener } from '@/components/LivePreviewListener';
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { PhoneCall } from 'lucide-react';
+import { CourseSections } from '@/components/CoursePage/Sections';
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise });
@@ -88,27 +83,15 @@ export default async function Course({ params: paramsPromise }: Args) {
                 </div>
               </div>
             </div>
-            <div className="basis-2/5">
-              <div className="prose max-w-none dark:prose-invert">
-                <h4>Conteúdo do curso</h4>
-              </div>
-              <Accordion type="single" collapsible className="w-full">
-                {course.sections.map((section, index) => (
-                  <AccordionItem key={index} value={'index-' + index}>
-                    <AccordionTrigger>{section.title}</AccordionTrigger>
-                    <AccordionContent>
-                      {section.richText && (
-                        <RichText
-                          className="mx-auto max-w-[48rem]"
-                          data={section.richText}
-                          enableGutter={false}
-                        />
-                      )}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
+            {course.sections && course.sections.length > 0 && (
+              <CourseSections
+               className="basis-2/5"
+                docs={course.sections.map(({ value }) => value).filter(
+                  (section) => typeof section === 'object',
+                )}
+                introContent="Conteúdo do curso"
+              />
+            )}
           </div>
         </div>
       </div>
