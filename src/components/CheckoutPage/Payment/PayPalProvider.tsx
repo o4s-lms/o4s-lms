@@ -1,7 +1,7 @@
-import { PayPalScriptProvider } from '@paypal/react-paypal-js';
+import { PayPalScriptProvider, ReactPayPalScriptOptions } from '@paypal/react-paypal-js';
 
 const PayPalProvider = ({ children }: { children: React.ReactNode }) => {
-  const initialOptions = {
+  const initialOptions: ReactPayPalScriptOptions = {
     clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
     currency: 'EUR',
     intent: 'capture',

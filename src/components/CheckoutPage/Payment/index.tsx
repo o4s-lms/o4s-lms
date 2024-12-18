@@ -21,9 +21,9 @@ const PaymentPageContent = () => {
   const [{ options, isPending }, dispatch] = usePayPalScriptReducer();
   const { navigateToStep } = useCheckoutNavigation();
   const { courses, amount, discount, isLoading } = useCurrentOrder();
-  const { user, logout } = useAuth();
+  const { user, logout, isLoaded } = useAuth();
 
-  if (isLoading) return <Loading />;
+  if (isLoading && !isLoaded) return <Loading />;
 
   const paypalbuttonTransactionProps: PayPalButtonsComponentProps = {
     style: { layout: 'vertical' },
@@ -139,13 +139,13 @@ const PaymentPageContent = () => {
           Switch Account
         </Button>
 
-        <Button
+        {/**<Button
           form="payment-form"
           type="submit"
           className="hover:bg-primary-600 bg-primary-700"
         >
           Pay with Credit Card
-        </Button>
+        </Button>*/}
       </div>
     </div>
   );
