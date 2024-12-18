@@ -14,6 +14,7 @@ import { slugField } from '@/fields/slug';
 export const Sections: CollectionConfig = {
   slug: 'sections',
   access: {
+    admin: admin,
     create: admin,
     delete: admin,
     read: anyone,
@@ -43,7 +44,16 @@ export const Sections: CollectionConfig = {
       }),
       label: false,
     },
-    ...slugField(),
+    {
+      name: 'course',
+      type: 'relationship',
+      admin: {
+        position: 'sidebar',
+      },
+      label: 'Course',
+      relationTo: ['courses'],
+      required: true,
+    },
     {
       name: 'lessons',
       type: 'relationship',
@@ -55,6 +65,7 @@ export const Sections: CollectionConfig = {
       relationTo: ['lessons'],
       required: true,
     },
+    ...slugField(),
   ],
   labels: {
     plural: 'Course Sections',

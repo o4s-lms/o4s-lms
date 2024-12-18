@@ -8,21 +8,24 @@ import path from 'path';
 import { buildConfig } from 'payload';
 import { fileURLToPath } from 'url';
 
-import { Categories } from './collections/Categories';
-import { Media } from './collections/Media';
-import { Pages } from './collections/Pages';
-import { Posts } from './collections/Posts';
-import { Courses } from './collections/Courses';
-import { Sections } from './collections/Courses/Sections';
-import { Lessons } from './collections/Courses/Lessons';
-import { Transactions } from './collections/Transactions';
-import { Newsletter } from './collections/Newsletter';
-import { Users } from './collections/Users';
-import { Footer } from './Footer/config';
-import { Header } from './Header/config';
-import { plugins } from './plugins';
+import { Categories } from '@/collections/Categories';
+import { Media } from '@/collections/Media';
+import { Pages } from '@/collections/Pages';
+import { Posts } from '@/collections/Posts';
+import { Courses } from '@/collections/Courses';
+import { Sections } from '@/collections/Courses/Sections';
+import { Lessons } from '@/collections/Courses/Lessons';
+import { CourseProgress } from '@/collections/Courses/Progress';
+import { SectionProgress } from '@/collections/Courses/Progress/SectionProgress';
+import { LessonProgress } from '@/collections/Courses/Progress/LessonProgress';
+import { Transactions } from '@/collections/Transactions';
+import { Newsletter } from '@/collections/Newsletter';
+import { Users } from '@/collections/Users';
+import { Footer } from '@/Footer/config';
+import { Header } from '@/Header/config';
+import { plugins } from '@/plugins';
 import { defaultLexical } from '@/fields/defaultLexical';
-import { getServerSideURL } from './utilities/getURL';
+import { getServerSideURL } from '@/utilities/getURL';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -93,6 +96,9 @@ export default buildConfig({
     Courses,
     Sections,
     Lessons,
+    CourseProgress,
+    SectionProgress,
+    LessonProgress,
     Transactions,
     Newsletter,
     Users,

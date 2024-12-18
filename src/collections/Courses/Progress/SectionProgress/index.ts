@@ -1,11 +1,12 @@
 import type { CollectionConfig } from 'payload';
 
 import { authenticated } from '@/access/authenticated';
+import { admin } from '@/access/admin';
 
 export const SectionProgress: CollectionConfig = {
-  slug: 'sectionProgress',
+  slug: 'section-progress',
   access: {
-    admin: authenticated,
+    admin: admin,
     create: authenticated,
     delete: authenticated,
     read: authenticated,
@@ -16,13 +17,14 @@ export const SectionProgress: CollectionConfig = {
       name: 'section',
       type: 'relationship',
       relationTo: ['sections'],
+      required: true,
     },
     {
       name: 'lessonProgress',
       type: 'relationship',
       label: 'Lessons Progress',
       hasMany: true,
-      relationTo: ['lessonProgress'],
+      relationTo: ['lesson-progress'],
     },
   ],
   timestamps: true,

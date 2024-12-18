@@ -32,6 +32,7 @@ import { slugField } from '@/fields/slug';
 export const Lessons: CollectionConfig<'lessons'> = {
   slug: 'lessons',
   access: {
+    admin: admin,
     create: admin,
     delete: admin,
     read: authenticatedOrPublished,
@@ -85,50 +86,45 @@ export const Lessons: CollectionConfig<'lessons'> = {
       },
       defaultValue: false,
       required: true,
+      label: 'Is Acyivity',
+    },
+    {
+      name: 'content',
+      type: 'richText',
+      editor: lexicalEditor({
+        features: ({ rootFeatures }) => {
+          return [
+            ...rootFeatures,
+            HeadingFeature({
+              enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'],
+            }),
+            BlocksFeature({ blocks: [Banner, Code, MediaBlock] }),
+            FixedToolbarFeature(),
+            InlineToolbarFeature(),
+            HorizontalRuleFeature(),
+            UploadFeature({
+              collections: {
+                uploads: {
+                  // Example showing how to customize the built-in fields
+                  // of the Upload feature
+                  fields: [
+                    {
+                      name: 'caption',
+                      type: 'richText',
+                      editor: lexicalEditor(),
+                    },
+                  ],
+                },
+              },
+            }),
+          ];
+        },
+      }),
+      label: 'Content',
     },
     {
       type: 'tabs',
       tabs: [
-        {
-          fields: [
-            {
-              name: 'content',
-              type: 'richText',
-              editor: lexicalEditor({
-                features: ({ rootFeatures }) => {
-                  return [
-                    ...rootFeatures,
-                    HeadingFeature({
-                      enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'],
-                    }),
-                    BlocksFeature({ blocks: [Banner, Code, MediaBlock] }),
-                    FixedToolbarFeature(),
-                    InlineToolbarFeature(),
-                    HorizontalRuleFeature(),
-                    UploadFeature({
-                      collections: {
-                        uploads: {
-                          // Example showing how to customize the built-in fields
-                          // of the Upload feature
-                          fields: [
-                            {
-                              name: 'caption',
-                              type: 'richText',
-                              editor: lexicalEditor(),
-                            },
-                          ],
-                        },
-                      },
-                    }),
-                  ];
-                },
-              }),
-              label: false,
-              required: true,
-            },
-          ],
-          label: 'Content',
-        },
         {
           name: 'meta',
           label: 'SEO',

@@ -18,6 +18,9 @@ export interface Config {
     courses: Course;
     sections: Section;
     lessons: Lesson;
+    'course-progress': CourseProgress;
+    'section-progress': SectionProgress;
+    'lesson-progress': LessonProgress;
     transactions: Transaction;
     'newsletter-signups': NewsletterSignup;
     users: User;
@@ -38,6 +41,9 @@ export interface Config {
     courses: CoursesSelect<false> | CoursesSelect<true>;
     sections: SectionsSelect<false> | SectionsSelect<true>;
     lessons: LessonsSelect<false> | LessonsSelect<true>;
+    'course-progress': CourseProgressSelect<false> | CourseProgressSelect<true>;
+    'section-progress': SectionProgressSelect<false> | SectionProgressSelect<true>;
+    'lesson-progress': LessonProgressSelect<false> | LessonProgressSelect<true>;
     transactions: TransactionsSelect<false> | TransactionsSelect<true>;
     'newsletter-signups': NewsletterSignupsSelect<false> | NewsletterSignupsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -557,12 +563,16 @@ export interface Section {
     };
     [k: string]: unknown;
   } | null;
-  slug?: string | null;
-  slugLock?: boolean | null;
+  course: {
+    relationTo: 'courses';
+    value: number | Course;
+  };
   lessons: {
     relationTo: 'lessons';
     value: number | Lesson;
   }[];
+  slug?: string | null;
+  slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -574,7 +584,7 @@ export interface Lesson {
   id: number;
   title: string;
   activity: boolean;
-  content: {
+  content?: {
     root: {
       type: string;
       children: {
@@ -588,7 +598,7 @@ export interface Lesson {
       version: number;
     };
     [k: string]: unknown;
-  };
+  } | null;
   meta?: {
     title?: string | null;
     image?: (number | null) | Media;
@@ -880,6 +890,67 @@ export interface FAQBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "course-progress".
+ */
+export interface CourseProgress {
+  id: number;
+  student: {
+    relationTo: 'users';
+    value: number | User;
+  };
+  course: {
+    relationTo: 'courses';
+    value: number | Course;
+  };
+  sections: {
+    relationTo: 'section-progress';
+    value: number | SectionProgress;
+  }[];
+  enrollmentDate?: string | null;
+  overallProgress: number;
+  lastAccessed?: string | null;
+  lastAccessedLesson?: {
+    relationTo: 'lessons';
+    value: number | Lesson;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "section-progress".
+ */
+export interface SectionProgress {
+  id: number;
+  section: {
+    relationTo: 'sections';
+    value: number | Section;
+  };
+  lessonProgress?:
+    | {
+        relationTo: 'lesson-progress';
+        value: number | LessonProgress;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lesson-progress".
+ */
+export interface LessonProgress {
+  id: number;
+  lesson?: {
+    relationTo: 'lessons';
+    value: number | Lesson;
+  } | null;
+  completed?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "transactions".
  */
 export interface Transaction {
@@ -1017,6 +1088,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'lessons';
         value: number | Lesson;
+      } | null)
+    | ({
+        relationTo: 'course-progress';
+        value: number | CourseProgress;
+      } | null)
+    | ({
+        relationTo: 'section-progress';
+        value: number | SectionProgress;
+      } | null)
+    | ({
+        relationTo: 'lesson-progress';
+        value: number | LessonProgress;
       } | null)
     | ({
         relationTo: 'transactions';
@@ -1455,9 +1538,10 @@ export interface CoursesSelect<T extends boolean = true> {
 export interface SectionsSelect<T extends boolean = true> {
   title?: T;
   richText?: T;
+  course?: T;
+  lessons?: T;
   slug?: T;
   slugLock?: T;
-  lessons?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1491,6 +1575,41 @@ export interface LessonsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "course-progress_select".
+ */
+export interface CourseProgressSelect<T extends boolean = true> {
+  student?: T;
+  course?: T;
+  sections?: T;
+  enrollmentDate?: T;
+  overallProgress?: T;
+  lastAccessed?: T;
+  lastAccessedLesson?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "section-progress_select".
+ */
+export interface SectionProgressSelect<T extends boolean = true> {
+  section?: T;
+  lessonProgress?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lesson-progress_select".
+ */
+export interface LessonProgressSelect<T extends boolean = true> {
+  lesson?: T;
+  completed?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

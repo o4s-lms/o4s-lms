@@ -1,11 +1,12 @@
 import type { CollectionConfig } from 'payload';
 
 import { authenticated } from '@/access/authenticated';
+import { admin } from '@/access/admin';
 
 export const LessonProgress: CollectionConfig = {
-  slug: 'lessonProgress',
+  slug: 'lesson-progress',
   access: {
-    admin: authenticated,
+    admin: admin,
     create: authenticated,
     delete: authenticated,
     read: authenticated,

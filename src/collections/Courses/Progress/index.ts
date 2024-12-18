@@ -4,7 +4,7 @@ import { authenticated } from '@/access/authenticated';
 import { admin } from '@/access/admin';
 
 export const CourseProgress: CollectionConfig = {
-  slug: 'courseProgress',
+  slug: 'course-progress',
   access: {
     admin: admin,
     create: authenticated,
@@ -13,8 +13,8 @@ export const CourseProgress: CollectionConfig = {
     update: authenticated,
   },
   admin: {
-    defaultColumns: ['name', 'email'],
-    useAsTitle: 'email',
+    defaultColumns: ['student', 'course', 'overallProgress'],
+    useAsTitle: 'student',
   },
   fields: [
     {
@@ -36,7 +36,7 @@ export const CourseProgress: CollectionConfig = {
       type: 'relationship',
       label: 'Sections Progress',
       hasMany: true,
-      relationTo: ['sectionProgress'],
+      relationTo: ['section-progress'],
       required: true,
     },
     {

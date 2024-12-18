@@ -9,12 +9,12 @@ import {
   lexicalEditor,
 } from '@payloadcms/richtext-lexical';
 
-import { authenticated } from '../../access/authenticated';
-import { authenticatedOrPublished } from '../../access/authenticatedOrPublished';
-import { Banner } from '../../blocks/Banner/config';
-import { Code } from '../../blocks/Code/config';
-import { MediaBlock } from '../../blocks/MediaBlock/config';
-import { generatePreviewPath } from '../../utilities/generatePreviewPath';
+import { admin } from '@/access/admin';
+import { published } from '@/access/published';
+import { Banner } from '@/blocks/Banner/config';
+import { Code } from '@/blocks/Code/config';
+import { MediaBlock } from '@/blocks/MediaBlock/config';
+import { generatePreviewPath } from '@/utilities/generatePreviewPath';
 import { populateAuthors } from '@/hooks/populateAuthors';
 import { revalidateDelete, revalidateCourse } from './hooks/revalidateCourse';
 
@@ -32,10 +32,11 @@ import { FAQBlock } from '@/blocks/FAQBlock/config';
 export const Courses: CollectionConfig<'courses'> = {
   slug: 'courses',
   access: {
-    create: authenticated,
-    delete: authenticated,
-    read: authenticatedOrPublished,
-    update: authenticated,
+    admin: admin,
+    create: admin,
+    delete: admin,
+    read: published,
+    update: admin,
   },
   // This config controls what's populated by default when a post is referenced
   // https://payloadcms.com/docs/queries/select#defaultpopulate-collection-config-property
