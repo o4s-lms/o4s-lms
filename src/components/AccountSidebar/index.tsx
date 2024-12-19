@@ -3,13 +3,7 @@
 import * as React from 'react';
 import Image from 'next/image';
 import {
-  AudioWaveform,
-  Blocks,
-  Calendar,
-  Command,
-  GalleryVerticalEnd,
   Home,
-  Inbox,
   MessageCircleQuestion,
   Search,
   Settings2,
@@ -39,25 +33,13 @@ import {
   BreadcrumbPage,
 } from '@/components/ui/breadcrumb';
 
+import ProfileForm from '@/components/ProfileForm';
+import { User } from '@/payload-types';
+import { useSearchParams } from 'next/navigation';
+import { toast } from 'sonner';
+
 // This is sample data.
 const data = {
-  teams: [
-    {
-      name: 'Acme Inc',
-      logo: Command,
-      plan: 'Enterprise',
-    },
-    {
-      name: 'Acme Corp.',
-      logo: AudioWaveform,
-      plan: 'Startup',
-    },
-    {
-      name: 'Evil Corp.',
-      logo: Command,
-      plan: 'Free',
-    },
-  ],
   navMain: [
     {
       title: 'Search',
@@ -71,14 +53,14 @@ const data = {
     },
     {
       title: 'Dashboard',
-      url: '#',
+      url: '/dashboard',
       icon: Home,
-      isActive: true,
     },
     {
       title: 'Account',
-      url: '/dashboard/account',
+      url: '#',
       icon: User2,
+      isActive: true,
     },
     {
       title: 'Settings',
@@ -145,9 +127,16 @@ const data = {
   ],
 };
 
-export function DashboardSidebar({
-  ...props
-}: React.ComponentProps<typeof Sidebar>) {
+type AccountSidebarProps = {
+  user: User;
+} & React.ComponentProps<typeof Sidebar>;
+
+export function AccountSidebar({ user, ...props }: AccountSidebarProps) {
+  const searchParams = useSearchParams();
+  const success = searchParams.get('success');
+
+  if (success) toast.info(success);
+
   return (
     <>
       <Sidebar className="border-r-0" {...props}>
@@ -188,7 +177,7 @@ export function DashboardSidebar({
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbPage className="line-clamp-1 font-semibold">
-                    Dashboard
+                    Add or update your information
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
@@ -205,7 +194,9 @@ export function DashboardSidebar({
             <div className="aspect-video rounded-xl bg-muted/50" />
           </div>
 
-          <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min"></div>
+          <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min">
+            <ProfileForm currentUser={user} />
+          </div>
         </div>
       </SidebarInset>
     </>

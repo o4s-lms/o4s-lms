@@ -57,7 +57,7 @@ export function CourseSidebar({ title, data, ...props }: CourseSidebarProps) {
 
   return (
     <>
-      <Sidebar {...props}>
+      <Sidebar className="border-r-0" {...props}>
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>

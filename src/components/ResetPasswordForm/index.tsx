@@ -15,104 +15,106 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { User } from '@/payload-types';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useAuth } from '@/providers/Auth';
 
-const formSchema = z.object({
-  name: z.string(),
-  email: z.string().email(),
-});
+const formSchema = z
+  .object({
+    token: z.string().nullable(),
+    password: z.string().min(8),
+    passwordConfirmation: z.string().min(8),
+  })
+  .refine((data) => data.password === data.passwordConfirmation, {
+    message: "Passwords don't match",
+    path: ['passwordConfirmation'],
+  });
 
-export const ProfileForm = ({ currentUser }: { currentUser: User }) => {
-  const [user, setUser] = React.useState<User>(currentUser);
+export const ResetPasswordForm = () => {
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token');
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [error, setError] = React.useState<null | string>(null);
-  const [success, setSuccess] = React.useState('');
+  const { login } = useAuth();
 
+  const router = useRouter();
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: user?.name as string,
-      email: user?.email,
+      token: token,
+      password: '',
+      passwordConfirmation: '',
     },
   });
+
+  // when Next.js populates token within router,
+  // reset form with new token value
+  React.useEffect(() => {
+    form.reset({ token: token || undefined });
+  }, [form, token]);
 
   const onSubmit = React.useCallback(
     async (values: z.infer<typeof formSchema>) => {
       setIsLoading(true);
-
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/${user.id}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/reset-password`,
         {
-          // Make sure to include cookies with fetch
           body: JSON.stringify(values),
-          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
           },
-          method: 'PATCH',
+          method: 'POST',
         },
       );
 
       if (response.ok) {
         const json = await response.json();
-        setUser(json.doc);
-        setSuccess('Successfully updated account.');
-        toast.info('Successfully updated account.');
-        setError('');
-        form.reset({
-          name: json.doc.name,
-          email: json.doc.email,
-        });
-      } else {
-        setError('There was a problem updating your account.');
-        toast.error('Something went wrong.', {
-          description: error,
-        });
-      }
 
-      setIsLoading(false);
-      return;
+        // Automatically log the user in after they successfully reset password
+        await login({ email: json.user.email, password: values.password });
+
+        setIsLoading(false);
+
+        // Redirect them to `/account` with success message in URL
+        router.push('/dashboard/account?success=Password reset successfully.');
+      } else {
+        setIsLoading(false);
+        toast.error('There was a problem while resetting your password. Please try again later.');
+      }
     },
-    [error, form, user.id],
+    [router, login],
   );
 
-  const recoverPassword = React.useCallback(async (data: { email: string }) => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/forgot-password`,
-      {
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-      },
-    )
+  /**React.useEffect(() => {
+    if (user === null) {
+      router.push(`/sign-in?unauthorized=account`);
+    }
 
-    if (response.ok) {
-      toast.info('We sent an email to reset your password.');
-      setError('')
-    } else {
-      toast.error('Something went wrong.', {
-        description: 'There was a problem while attempting to send you a password reset email. Please try again.',
+    // Once user is loaded, reset form to have default values
+    if (user) {
+      form.reset({
+        name: user.name,
+        email: user.email,
+        password: '',
+        passwordConfirmation: '',
       });
     }
-  }, [])
+  }, [user, router, form, changePassword]);*/
 
   return (
-    <>
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
-        
+        <h1>Reset Password</h1>
+        <p>Please enter a new password below.</p>
         <FormField
           control={form.control}
-          name="name"
+          name="password"
           render={({ field }) => (
             <FormItem>
               <FormControl>
                 <Input
                   required
-                  placeholder="Your name"
+                  type="password"
+                  placeholder="Password"
                   {...field}
                   className="w-full"
                   disabled={isLoading}
@@ -124,13 +126,14 @@ export const ProfileForm = ({ currentUser }: { currentUser: User }) => {
         />
         <FormField
           control={form.control}
-          name="email"
+          name="passwordConfirmation"
           render={({ field }) => (
             <FormItem>
               <FormControl>
                 <Input
                   required
-                  placeholder="Email Address"
+                  type="password"
+                  placeholder="Confirm Password"
                   {...field}
                   className="w-full"
                   disabled={isLoading}
@@ -140,27 +143,16 @@ export const ProfileForm = ({ currentUser }: { currentUser: User }) => {
             </FormItem>
           )}
         />
+
+        <input type="hidden" {...form.register('token')} />
 
         <Button type="submit" className="capitalize" disabled={isLoading}>
           {isLoading && <Spinner className="mr-2 h-4 w-4 animate-spin" />}
-          {isLoading ? 'Processing' : 'Update account'}
+          {isLoading ? 'Processing' : 'Change password'}
         </Button>
       </form>
     </Form>
-   
-    <p>
-    {'To change your password, '}
-    <Button
-      variant="link"
-      onClick={() => recoverPassword({ email: user.email })}
-      disabled={isLoading}
-    >
-      click here
-    </Button>
-    .
-  </p>
-  </>
   );
 };
 
-export default ProfileForm;
+export default ResetPasswordForm;
