@@ -1,3 +1,4 @@
+import { SidebarProvider } from '@/components/ui/sidebar';
 import React from 'react';
 //import Sidebar from '@/components/SideBar';
 //import InfoBar from '@/components/InfoBar';
@@ -5,7 +6,11 @@ import React from 'react';
 type Props = { children: React.ReactNode };
 
 const Layout = (props: Props) => {
-  return <div className="flex h-screen overflow-hidden">{props.children}</div>;
+  return (
+    <div className="flex h-screen overflow-hidden">
+      <SidebarProvider>{props.children}</SidebarProvider>
+    </div>
+  );
 };
 
 export default Layout;

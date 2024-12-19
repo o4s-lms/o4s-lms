@@ -59,11 +59,6 @@ export const AuthSignInForm = ({ variant, id }: AuthFormProps) => {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    /**let callbackURL = `http://localhost:3000/dashboard`;
-
-    if (variant === 'invitation') {
-      callbackURL = `http://localhost:3000/accept-invitation/${id}`;
-    } */
 
     try {
       setError(null);
@@ -76,7 +71,7 @@ export const AuthSignInForm = ({ variant, id }: AuthFormProps) => {
         if (isAdmin) {
           router.push('/admin');
         } else {
-          router.push('/dashboard/account');
+          router.push('/dashboard');
         }
       }
     } catch (_) {

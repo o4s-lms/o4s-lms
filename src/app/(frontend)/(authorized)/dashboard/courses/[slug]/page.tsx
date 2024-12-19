@@ -1,54 +1,61 @@
+import type { Metadata } from 'next';
+import configPromise from '@payload-config';
+import { getPayload } from 'payload';
+import React, { cache } from 'react';
 import { CourseSidebar } from '@/components/CourseSidebar';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
-import { Separator } from '@/components/ui/separator';
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from '@/components/ui/sidebar';
+import { PayloadRedirects } from '@/components/PayloadRedirects';
 
-export default function Page() {
-  return (
-    <SidebarProvider
-      style={
-        {
-          '--sidebar-width': '350px',
-        } as React.CSSProperties
-      }
-    >
-      <CourseSidebar />
-      <SidebarInset>
-        <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4">
-          <SidebarTrigger className="-ml-1" />
-          <Separator orientation="vertical" className="mr-2 h-4" />
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">All Inboxes</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator className="hidden md:block" />
-              <BreadcrumbItem>
-                <BreadcrumbPage>Inbox</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-        </header>
-        <div className="flex flex-1 flex-col gap-4 p-4">
-          {Array.from({ length: 24 }).map((_, index) => (
-            <div
-              key={index}
-              className="aspect-video h-12 w-full rounded-lg bg-muted/50"
-            />
-          ))}
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
-  );
+export const metadata: Metadata = {
+  //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
+  title: 'Your course | O4S LMS',
+  description: 'Get started with your course.',
+};
+
+type Args = {
+  params: Promise<{
+    slug?: string;
+  }>;
+};
+
+export default async function Page({ params: paramsPromise }: Args) {
+  const { slug = '' } = await paramsPromise;
+  const url = '/dashboard/courses/' + slug;
+  const course = await queryCourseBySlug({ slug });
+
+  if (!course) return <PayloadRedirects url={url} />;
+
+  const sections = course.sections
+    .map(({ value }) => value)
+    .filter((section) => typeof section === 'object');
+
+  return <CourseSidebar title={course.title} data={sections} />;
 }
+
+const queryCourseBySlug = cache(
+  async ({ slug, language = 'pt' }: { slug: string; language?: string }) => {
+    const payload = await getPayload({ config: configPromise });
+
+    const result = await payload.find({
+      collection: 'courses',
+      depth: 2,
+      limit: 1,
+      pagination: false,
+      where: {
+        and: [
+          {
+            slug: {
+              equals: slug,
+            },
+          },
+          {
+            language: {
+              equals: language,
+            },
+          },
+        ],
+      },
+    });
+
+    return result.docs?.[0] || null;
+  },
+);

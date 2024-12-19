@@ -1,4 +1,8 @@
 import Link from 'next/link';
+import { headers as getHeaders } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { getPayload } from 'payload';
+import config from '@/payload.config';
 import type { Metadata } from 'next';
 import { Undo2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -10,7 +14,17 @@ export const metadata: Metadata = {
   description: 'Sign in or create an account to get started with your courses.',
 };
 
-export default function SigninPage() {
+export default async function SignUpPage() {
+  const headers = await getHeaders();
+  const payload = await getPayload({ config });
+  const { user } = await payload.auth({ headers });
+
+  if (user) {
+    redirect(
+      `/dashboard/account?message=${encodeURIComponent('You are already signed un.')}`,
+    );
+  }
+  
   return (
     <div className="flex h-full items-center justify-center p-10">
       <Button asChild className="absolute right-3 top-3" variant="ghost">

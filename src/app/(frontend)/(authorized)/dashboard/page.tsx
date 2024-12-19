@@ -1,13 +1,15 @@
+import type { Metadata } from 'next';
+import { DashboardSidebar } from '@/components/DashboardSideBar';
 import React from 'react';
 
+export const metadata: Metadata = {
+  //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
+  title: 'Dashboard | O4S LMS',
+  description: 'Get started with your courses.',
+};
+
 const DashboardPage = () => {
-  return (
-    <div className="prose max-w-none dark:prose-invert">
-      <h1 className="sticky top-0 z-[10] flex items-center border-b bg-background/50 p-6 text-4xl backdrop-blur-lg">
-        Dashboard
-      </h1>
-    </div>
-  );
+  return <DashboardSidebar />
 };
 
 export default DashboardPage;

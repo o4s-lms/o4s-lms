@@ -7,7 +7,7 @@ import { LogoutPage } from '@/components/AuthLogoutPage';
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
   title: 'O4S LMS - Log Out',
-  description: 'Sign in or create an account to get started with your courses.',
+  description: 'Log out from your account.',
 };
 
 export default function LogOutPage() {
