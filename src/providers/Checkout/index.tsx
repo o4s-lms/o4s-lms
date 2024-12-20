@@ -14,13 +14,12 @@ import React, {
 import type { Transaction } from '@/payload-types';
 import type { CheckoutContext, Create } from './types';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { DEFAULT_LANGUAGE } from '@/tolgee/shared';
 import { CourseOrderData } from '@/components/CheckoutPage/OrderPreview';
 
 import { gql, TRANSACTION } from './gql';
 import { rest } from './rest';
-//import { useAuth } from '@payloadcms/ui/providers/Auth';
 
 const Context = createContext({} as CheckoutContext);
 
@@ -28,17 +27,16 @@ export const CheckoutProvider: React.FC<{
   api?: 'gql' | 'rest';
   children: React.ReactNode;
 }> = ({ api = 'rest', children }) => {
+  const router = useRouter();
   const [isLoading, setisLoading] = useState<boolean>(false);
   const [courses, setCourses] = useState<CourseOrderData[]>([]);
   const [discount, setDiscount] = useState<number>(0);
   const [amount, setAmount] = useState<number>(0);
   const [transaction, setTransaction] = useState<null | Transaction>();
-  const searchParams = useSearchParams();
-  const router = useRouter();
   //const { isLoaded, isSignedIn } = useAuth();
-  const slug = searchParams.get('slug') ?? '';
-  const language = searchParams.get('language') ?? DEFAULT_LANGUAGE;
-  //const checkoutStep = parseInt(searchParams.get('step') ?? '1', 10);
+  const [slug] = useState(window.localStorage.getItem('slug') ?? '');
+  const [language] = useState(window.localStorage.getItem('language') ?? DEFAULT_LANGUAGE);
+  const [checkoutStep] = useState<number>(parseInt(window.localStorage.getItem('step') ?? '1', 10));
   let query: Where | null = null;
 
   if (slug === 'all') {
@@ -155,6 +153,7 @@ export const CheckoutProvider: React.FC<{
       value={{
         create,
         navigateToStep,
+        checkoutStep,
         setTransaction,
         transaction,
         courses,

@@ -2,16 +2,16 @@
 
 import Loading from '@/components/Loading';
 import WizardStepper from '@/components/CheckoutPage/WizardStepper';
-import { useCheckoutNavigation } from '@/hooks/useCheckoutNavigation';
 import React from 'react';
 import CheckoutDetailsPage from '@/components/CheckoutPage/Details';
 import PaymentPage from '@/components/CheckoutPage/Payment';
 import CompletionPage from '@/components/CheckoutPage/Completion';
 import { useAuth } from '@/providers/Auth';
+import { useCheckout } from '@/providers/Checkout';
 
 const CheckoutWizard = () => {
   const { isLoaded } = useAuth();
-  const { checkoutStep } = useCheckoutNavigation();
+  const { checkoutStep } = useCheckout();
 
   if (!isLoaded) return <Loading />;
 

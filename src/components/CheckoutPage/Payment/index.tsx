@@ -5,8 +5,6 @@ import {
   PayPalButtonsComponentProps,
   usePayPalScriptReducer,
 } from '@paypal/react-paypal-js';
-import configPromise from '@payload-config';
-import { getPayload } from 'payload';
 import OrderPreview from '@/components/CheckoutPage/OrderPreview';
 import { CreditCard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -18,7 +16,7 @@ import { useCheckout } from '@/providers/Checkout';
 
 const PaymentPageContent = () => {
   const [{ options, isPending }, dispatch] = usePayPalScriptReducer();
-  const { navigateToStep, courses, amount, discount, isLoading } = useCheckout();
+  const { navigateToStep, create, courses, amount, discount, isLoading } = useCheckout();
   const { user, logout, isLoaded } = useAuth();
 
   if (isLoading && !isLoaded) return <Loading />;
@@ -63,11 +61,7 @@ const PaymentPageContent = () => {
           status: 'completed',
         };*/
 
-        const payload = await getPayload({ config: configPromise });
-
-        await payload.create({
-          collection: 'transactions',
-          data: {
+        const transaction = await create({
             email: user?.email as string,
             transactionId: data.paymentID,
             customerId: data.payerID,
@@ -78,7 +72,7 @@ const PaymentPageContent = () => {
             amount: amount || 0,
             status: 'completed',
           },
-        });
+        );
 
         navigateToStep(3);
       });
