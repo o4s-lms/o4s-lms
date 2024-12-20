@@ -7,8 +7,6 @@ import {
 } from '@paypal/react-paypal-js';
 import configPromise from '@payload-config';
 import { getPayload } from 'payload';
-import { useCheckoutNavigation } from '@/hooks/useCheckoutNavigation';
-import { useCurrentOrder } from '@/hooks/useCurrentOrder';
 import OrderPreview from '@/components/CheckoutPage/OrderPreview';
 import { CreditCard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -16,11 +14,11 @@ import { toast } from 'sonner';
 import { useAuth } from '@/providers/Auth';
 //import { Transaction } from '@/payload-types';
 import Loading from '@/components/Loading';
+import { useCheckout } from '@/providers/Checkout';
 
 const PaymentPageContent = () => {
   const [{ options, isPending }, dispatch] = usePayPalScriptReducer();
-  const { navigateToStep } = useCheckoutNavigation();
-  const { courses, amount, discount, isLoading } = useCurrentOrder();
+  const { navigateToStep, courses, amount, discount, isLoading } = useCheckout();
   const { user, logout, isLoaded } = useAuth();
 
   if (isLoading && !isLoaded) return <Loading />;

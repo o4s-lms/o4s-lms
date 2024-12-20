@@ -21,6 +21,7 @@ export interface Config {
     'course-progress': CourseProgress;
     'section-progress': SectionProgress;
     'lesson-progress': LessonProgress;
+    favorites: Favorite;
     transactions: Transaction;
     'newsletter-signups': NewsletterSignup;
     users: User;
@@ -44,6 +45,7 @@ export interface Config {
     'course-progress': CourseProgressSelect<false> | CourseProgressSelect<true>;
     'section-progress': SectionProgressSelect<false> | SectionProgressSelect<true>;
     'lesson-progress': LessonProgressSelect<false> | LessonProgressSelect<true>;
+    favorites: FavoritesSelect<false> | FavoritesSelect<true>;
     transactions: TransactionsSelect<false> | TransactionsSelect<true>;
     'newsletter-signups': NewsletterSignupsSelect<false> | NewsletterSignupsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -951,6 +953,20 @@ export interface LessonProgress {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "favorites".
+ */
+export interface Favorite {
+  id: number;
+  userId: number;
+  objectType: 'lessons' | 'courses' | 'posts' | 'pages';
+  objectId: number;
+  title: string;
+  url?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "transactions".
  */
 export interface Transaction {
@@ -1100,6 +1116,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'lesson-progress';
         value: number | LessonProgress;
+      } | null)
+    | ({
+        relationTo: 'favorites';
+        value: number | Favorite;
       } | null)
     | ({
         relationTo: 'transactions';
@@ -1608,6 +1628,19 @@ export interface SectionProgressSelect<T extends boolean = true> {
 export interface LessonProgressSelect<T extends boolean = true> {
   lesson?: T;
   completed?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "favorites_select".
+ */
+export interface FavoritesSelect<T extends boolean = true> {
+  userId?: T;
+  objectType?: T;
+  objectId?: T;
+  title?: T;
+  url?: T;
   updatedAt?: T;
   createdAt?: T;
 }

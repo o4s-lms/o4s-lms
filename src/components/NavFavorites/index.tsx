@@ -24,15 +24,12 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { Favorite } from "@/payload-types"
 
 export function NavFavorites({
   favorites,
 }: {
-  favorites: {
-    name: string
-    url: string
-    emoji: string
-  }[]
+  favorites: Favorite[]
 }) {
   const { isMobile } = useSidebar()
 
@@ -41,11 +38,11 @@ export function NavFavorites({
       <SidebarGroupLabel>Favorites</SidebarGroupLabel>
       <SidebarMenu>
         {favorites.map((item) => (
-          <SidebarMenuItem key={item.name}>
+          <SidebarMenuItem key={item.title}>
             <SidebarMenuButton asChild>
-              <a href={item.url} title={item.name}>
-                <span>{item.emoji}</span>
-                <span>{item.name}</span>
+              <a href={item.url} title={item.title}>
+                {/**<span>{item.emoji}</span>*/}
+                <span>{item.title}</span>
               </a>
             </SidebarMenuButton>
             <DropdownMenu>

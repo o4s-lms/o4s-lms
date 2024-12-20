@@ -38,6 +38,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from '@/components/ui/breadcrumb';
+import { Favorite } from '@/payload-types';
 
 // This is sample data.
 const data = {
@@ -91,63 +92,17 @@ const data = {
       icon: MessageCircleQuestion,
     },
   ],
-  favorites: [
-    {
-      name: 'Project Management & Task Tracking',
-      url: '#',
-      emoji: '📊',
-    },
-    {
-      name: 'Family Recipe Collection & Meal Planning',
-      url: '#',
-      emoji: '🍳',
-    },
-    {
-      name: 'Fitness Tracker & Workout Routines',
-      url: '#',
-      emoji: '💪',
-    },
-    {
-      name: 'Book Notes & Reading List',
-      url: '#',
-      emoji: '📚',
-    },
-    {
-      name: 'Sustainable Gardening Tips & Plant Care',
-      url: '#',
-      emoji: '🌱',
-    },
-    {
-      name: 'Language Learning Progress & Resources',
-      url: '#',
-      emoji: '🗣️',
-    },
-    {
-      name: 'Home Renovation Ideas & Budget Tracker',
-      url: '#',
-      emoji: '🏠',
-    },
-    {
-      name: 'Personal Finance & Investment Portfolio',
-      url: '#',
-      emoji: '💰',
-    },
-    {
-      name: 'Movie & TV Show Watchlist with Reviews',
-      url: '#',
-      emoji: '🎬',
-    },
-    {
-      name: 'Daily Habit Tracker & Goal Setting',
-      url: '#',
-      emoji: '✅',
-    },
-  ],
 };
 
+type DashboardSidebarProps = {
+  favorites: Favorite[]
+} & React.ComponentProps<typeof Sidebar>
+
 export function DashboardSidebar({
+  favorites,
   ...props
-}: React.ComponentProps<typeof Sidebar>) {
+}: DashboardSidebarProps) {
+
   return (
     <>
       <Sidebar className="border-r-0" {...props}>
@@ -175,7 +130,7 @@ export function DashboardSidebar({
           <NavMain items={data.navMain} />
         </SidebarHeader>
         <SidebarContent>
-          <NavFavorites favorites={data.favorites} />
+          <NavFavorites favorites={favorites} />
         </SidebarContent>
         <SidebarRail />
       </Sidebar>

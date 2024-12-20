@@ -3,7 +3,6 @@
 import OrderPreview from '@/components/CheckoutPage/OrderPreview';
 import Loading from '@/components/Loading';
 import { Button } from '@/components/ui/button';
-import { useCurrentOrder } from '@/hooks/useCurrentOrder';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSearchParams } from 'next/navigation';
 import React from 'react';
@@ -17,9 +16,9 @@ import {
 } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
-import { useCheckoutNavigation } from '@/hooks/useCheckoutNavigation';
 import { useAuth } from '@/providers/Auth';
 import Link from 'next/link';
+import { useCheckout } from '@/providers/Checkout';
 
 const formSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -28,8 +27,7 @@ const formSchema = z.object({
 const CheckoutDetailsPage = () => {
   const searchParams = useSearchParams();
   const showSignUp = searchParams.get('showSignUp') === 'true';
-  const { courses, discount, isLoading } = useCurrentOrder();
-  const { navigateToStep } = useCheckoutNavigation();
+  const { navigateToStep, courses, discount, isLoading } = useCheckout();
   const { isSignedIn, isLoaded } = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
