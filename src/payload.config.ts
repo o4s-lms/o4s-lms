@@ -18,6 +18,7 @@ import { Lessons } from '@/collections/Courses/Lessons';
 import { CourseProgress } from '@/collections/Courses/Progress';
 import { SectionProgress } from '@/collections/Courses/Progress/SectionProgress';
 import { LessonProgress } from '@/collections/Courses/Progress/LessonProgress';
+import { Favorites } from '@/collections/Favorites';
 import { Transactions } from '@/collections/Transactions';
 import { Newsletter } from '@/collections/Newsletter';
 import { Users } from '@/collections/Users';
@@ -99,6 +100,7 @@ export default buildConfig({
     CourseProgress,
     SectionProgress,
     LessonProgress,
+    Favorites,
     Transactions,
     Newsletter,
     Users,
