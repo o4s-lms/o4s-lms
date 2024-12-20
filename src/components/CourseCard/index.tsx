@@ -9,6 +9,7 @@ import type { Course } from '@/payload-types';
 import { Media } from '@/components/Media';
 import { CMSLink } from '@/components/Link';
 import { Check } from 'lucide-react';
+import { url } from 'inspector';
 
 export type CourseCardPostData = Pick<
   Course,
@@ -44,6 +45,18 @@ export const CourseCard: React.FC<{
   const sanitizedDescription = description?.replace(/\s/g, ' '); // replace non-breaking space with white space
   const href = `/${relationTo}/${slug}`;
 
+  function addToCart(slug: string) {
+    const cart = {
+      item: {
+        slug: `${slug}`,
+        price: 3500,
+      },
+      discount: 0
+    }
+
+    window.localStorage.setItem("cart", JSON.stringify(cart));
+  }
+
   const links = [
     {
       url: href,
@@ -51,6 +64,7 @@ export const CourseCard: React.FC<{
       appearance: 'outline',
     },
     {
+      //onClick: () => addToCart(`${slug}`),
       url: `/checkout?step=1&slug=${slug}`,
       label: 'Comprar agora',
       appearance: 'default',
@@ -108,13 +122,10 @@ export const CourseCard: React.FC<{
             <div className="flex flex-row items-start gap-6">
               {Array.isArray(links) && links.length > 0 && (
                 <ul className="flex gap-4 md:justify-center">
-                  {links.map((l, i) => {
+                  {links.map((link, i) => {
                     return (
                       <li key={i}>
-                        <CMSLink
-                          label={l.label}
-                          url={l.url}
-                          appearance={l.appearance}
+                        <CMSLink {...link}
                         />
                       </li>
                     );

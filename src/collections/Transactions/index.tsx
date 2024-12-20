@@ -59,6 +59,13 @@ export const Transactions: CollectionConfig = {
       defaultValue: 0,
     },
     {
+      name: 'total',
+      type: 'number',
+      min: 0,
+      required: true,
+      defaultValue: 0,
+    },
+    {
       name: 'status',
       type: 'select',
       options: [

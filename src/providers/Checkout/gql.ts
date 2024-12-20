@@ -5,6 +5,7 @@ export const TRANSACTION = `
   provider
   discount
   amount
+  total
   status
 `;
 

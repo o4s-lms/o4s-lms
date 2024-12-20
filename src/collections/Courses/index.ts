@@ -49,6 +49,7 @@ export const Courses: CollectionConfig<'courses'> = {
     slug: true,
     language: true,
     sections: true,
+    badgeImage: true,
     meta: {
       image: true,
       description: true,
@@ -90,6 +91,14 @@ export const Courses: CollectionConfig<'courses'> = {
       type: 'number',
       min: 0,
       required: true,
+    },
+    {
+      name: 'badgeImage',
+      type: 'upload',
+      relationTo: 'media',
+      filterOptions: {
+        mimeType: { contains: 'image' },
+      },
     },
     {
       name: 'language',

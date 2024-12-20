@@ -502,6 +502,7 @@ export interface Course {
   title: string;
   description?: string | null;
   price: number;
+  badgeImage?: (number | null) | Media;
   language: 'pt' | 'en' | 'fr' | 'es';
   heroImage?: (number | null) | Media;
   content: {
@@ -977,6 +978,7 @@ export interface Transaction {
   provider: 'stripe' | 'paypal' | 'transfer' | 'mbway';
   discount: number;
   amount: number;
+  total: number;
   status: 'pending' | 'awaiting' | 'cancelled' | 'declined' | 'refunded' | 'disputed' | 'completed';
   user?: (number | null) | User;
   courses: (number | Course)[];
@@ -1525,6 +1527,7 @@ export interface CoursesSelect<T extends boolean = true> {
   title?: T;
   description?: T;
   price?: T;
+  badgeImage?: T;
   language?: T;
   heroImage?: T;
   content?: T;
@@ -1655,6 +1658,7 @@ export interface TransactionsSelect<T extends boolean = true> {
   provider?: T;
   discount?: T;
   amount?: T;
+  total?: T;
   status?: T;
   user?: T;
   courses?: T;

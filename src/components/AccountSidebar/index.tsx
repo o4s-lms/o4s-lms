@@ -34,7 +34,7 @@ import {
 } from '@/components/ui/breadcrumb';
 
 import ProfileForm from '@/components/ProfileForm';
-import { User } from '@/payload-types';
+import { Favorite, User } from '@/payload-types';
 import { useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 
@@ -73,65 +73,14 @@ const data = {
       icon: MessageCircleQuestion,
     },
   ],
-  favorites: [
-    {
-      name: 'Project Management & Task Tracking',
-      url: '#',
-      emoji: '📊',
-    },
-    {
-      name: 'Family Recipe Collection & Meal Planning',
-      url: '#',
-      emoji: '🍳',
-    },
-    {
-      name: 'Fitness Tracker & Workout Routines',
-      url: '#',
-      emoji: '💪',
-    },
-    {
-      name: 'Book Notes & Reading List',
-      url: '#',
-      emoji: '📚',
-    },
-    {
-      name: 'Sustainable Gardening Tips & Plant Care',
-      url: '#',
-      emoji: '🌱',
-    },
-    {
-      name: 'Language Learning Progress & Resources',
-      url: '#',
-      emoji: '🗣️',
-    },
-    {
-      name: 'Home Renovation Ideas & Budget Tracker',
-      url: '#',
-      emoji: '🏠',
-    },
-    {
-      name: 'Personal Finance & Investment Portfolio',
-      url: '#',
-      emoji: '💰',
-    },
-    {
-      name: 'Movie & TV Show Watchlist with Reviews',
-      url: '#',
-      emoji: '🎬',
-    },
-    {
-      name: 'Daily Habit Tracker & Goal Setting',
-      url: '#',
-      emoji: '✅',
-    },
-  ],
 };
 
 type AccountSidebarProps = {
   user: User;
+  favorites: Favorite[];
 } & React.ComponentProps<typeof Sidebar>;
 
-export function AccountSidebar({ user, ...props }: AccountSidebarProps) {
+export function AccountSidebar({ user, favorites, ...props }: AccountSidebarProps) {
   const searchParams = useSearchParams();
   const success = searchParams.get('success');
 
@@ -164,7 +113,7 @@ export function AccountSidebar({ user, ...props }: AccountSidebarProps) {
           <NavMain items={data.navMain} />
         </SidebarHeader>
         <SidebarContent>
-          <NavFavorites favorites={data.favorites} />
+          <NavFavorites favorites={favorites} />
         </SidebarContent>
         <SidebarRail />
       </Sidebar>

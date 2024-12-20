@@ -37,26 +37,10 @@ import {
   BreadcrumbPage,
 } from '@/components/ui/breadcrumb';
 import { NavActions } from '../NavActions';
+import { Favorite } from '@/payload-types';
 
 // This is sample data.
 const data = {
-  teams: [
-    {
-      name: 'Acme Inc',
-      logo: Command,
-      plan: 'Enterprise',
-    },
-    {
-      name: 'Acme Corp.',
-      logo: AudioWaveform,
-      plan: 'Startup',
-    },
-    {
-      name: 'Evil Corp.',
-      logo: Command,
-      plan: 'Free',
-    },
-  ],
   navMain: [
     {
       title: 'Search',
@@ -85,64 +69,17 @@ const data = {
       icon: MessageCircleQuestion,
     },
   ],
-  favorites: [
-    {
-      name: 'Project Management & Task Tracking',
-      url: '#',
-      emoji: '📊',
-    },
-    {
-      name: 'Family Recipe Collection & Meal Planning',
-      url: '#',
-      emoji: '🍳',
-    },
-    {
-      name: 'Fitness Tracker & Workout Routines',
-      url: '#',
-      emoji: '💪',
-    },
-    {
-      name: 'Book Notes & Reading List',
-      url: '#',
-      emoji: '📚',
-    },
-    {
-      name: 'Sustainable Gardening Tips & Plant Care',
-      url: '#',
-      emoji: '🌱',
-    },
-    {
-      name: 'Language Learning Progress & Resources',
-      url: '#',
-      emoji: '🗣️',
-    },
-    {
-      name: 'Home Renovation Ideas & Budget Tracker',
-      url: '#',
-      emoji: '🏠',
-    },
-    {
-      name: 'Personal Finance & Investment Portfolio',
-      url: '#',
-      emoji: '💰',
-    },
-    {
-      name: 'Movie & TV Show Watchlist with Reviews',
-      url: '#',
-      emoji: '🎬',
-    },
-    {
-      name: 'Daily Habit Tracker & Goal Setting',
-      url: '#',
-      emoji: '✅',
-    },
-  ],
   
 };
 
+type CoursesSidebarProps = {
+  favorites: Favorite[];
+} & React.ComponentProps<typeof Sidebar>;
+
 export function CoursesSidebar({
+  favorites,
   ...props
-}: React.ComponentProps<typeof Sidebar>) {
+}: CoursesSidebarProps) {
   return (
     <>
       <Sidebar className="border-r-0" {...props}>
@@ -165,7 +102,7 @@ export function CoursesSidebar({
           <NavMain items={data.navMain} />
         </SidebarHeader>
         <SidebarContent>
-          <NavFavorites favorites={data.favorites} />
+          <NavFavorites favorites={favorites} />
         </SidebarContent>
         <SidebarRail />
       </Sidebar>
