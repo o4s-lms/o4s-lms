@@ -23,6 +23,10 @@ import { Transactions } from '@/collections/Transactions';
 import { Newsletter } from '@/collections/Newsletter';
 import { Users } from '@/collections/Users';
 import { Footer } from '@/Footer/config';
+import { FooterPt } from '@/Footer/pt/config';
+import { FooterEn } from '@/Footer/en/config';
+import { FooterFr } from '@/Footer/fr/config';
+import { FooterEs } from '@/Footer/es/config';
 import { Header } from '@/Header/config';
 import { plugins } from '@/plugins';
 import { defaultLexical } from '@/fields/defaultLexical';
@@ -107,7 +111,7 @@ export default buildConfig({
   ],
   cors: [getServerSideURL()].filter(Boolean),
   csrf: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
+  globals: [Header, Footer, FooterPt, FooterEn, FooterFr, FooterEs],
   plugins: [
     ...plugins,
     // storage-adapter-placeholder

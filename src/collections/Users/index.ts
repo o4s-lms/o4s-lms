@@ -2,11 +2,12 @@ import type { CollectionConfig } from 'payload';
 
 import { authenticated } from '@/access/authenticated';
 import { anyone } from '@/access/anyone';
+import { admin } from '@/access/admin';
 
 export const Users: CollectionConfig = {
   slug: 'users',
   access: {
-    admin: authenticated,
+    admin: admin,
     create: anyone,
     delete: authenticated,
     read: authenticated,
@@ -32,7 +33,7 @@ export const Users: CollectionConfig = {
           <html>
             <body>
               <h1>Verify your email</h1>
-              <p>Hello, ${user.email}!</p>
+              <p>Hello, ${user.name}!</p>
               <p>Click below to verify your email.</p>
               <p>
                 <a href="${verifyURL}">${verifyURL}</a>
@@ -52,7 +53,7 @@ export const Users: CollectionConfig = {
           <html>
             <body>
               <h1>Reset your password!</h1>
-              <p>Hello, ${user.email}!</p>
+              <p>Hello, ${user.name}!</p>
               <p>Click below to reset your password.</p>
               <p>
                 <a href="${resetPasswordURL}">${resetPasswordURL}</a>

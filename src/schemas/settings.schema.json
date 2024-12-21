@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://o4s-lms.com/product.schema.json",
+  "title": "Settings",
+  "description": "User settings schema from O4S LMS",
+  "type": "object",
+  "properties": {
+    "language": {
+      "description": "The unique identifier for a product",
+      "type": "string",
+      "enum": ["pt", "en", "fr", "es"]
+    },
+    "theme": {
+      "description": "The default theme",
+      "type": "string",
+      "enum": ["system", "light", "dark"]
+    }
+  },
+  "required": [ "language", "theme" ]
+}
+
