@@ -59,6 +59,6 @@ export default async function Page() {
 
 export function generateMetadata(): Metadata {
   return {
-    title: `O4S LMS Website Courses`,
+    title: `Courses | O4S LMS`,
   };
 }

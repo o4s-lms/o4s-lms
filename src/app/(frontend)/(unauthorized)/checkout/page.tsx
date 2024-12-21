@@ -1,41 +1,101 @@
-'use client';
+import type { Metadata } from 'next/types';
+import configPromise from '@payload-config';
+import { getPayload, type Where } from 'payload';
+import { Cart, OrderSummary } from '@/components/CartSummary';
 
-import Loading from '@/components/Loading';
-import WizardStepper from '@/components/CheckoutPage/WizardStepper';
-import React from 'react';
-import CheckoutDetailsPage from '@/components/CheckoutPage/Details';
-import PaymentPage from '@/components/CheckoutPage/Payment';
-import CompletionPage from '@/components/CheckoutPage/Completion';
-import { useAuth } from '@/providers/Auth';
-import { useCheckout } from '@/providers/Checkout';
+export const metadata: Metadata = {
+  //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
+  title: 'Checkout | O4S LMS',
+  description: 'Get started with your courses.',
+};
 
-const CheckoutWizard = () => {
-  const { isLoaded } = useAuth();
-  const { checkoutStep } = useCheckout();
+type Args = {
+  searchParams: Promise<{
+    slug: string;
+    language: string;
+  }>;
+};
+export default async function AddToCart({
+  searchParams: searchParamsPromise,
+}: Args) {
+  const { slug, language } = await searchParamsPromise;
 
-  if (!isLoaded) return <Loading />;
+  const payload = await getPayload({ config: configPromise });
 
-  const renderStep = () => {
-    switch (checkoutStep) {
-      case 1:
-        return <CheckoutDetailsPage />;
-      case 2:
-        return <PaymentPage />;
-      case 3:
-        return <CompletionPage />;
-      default:
-        return <CheckoutDetailsPage />;
+  let amount = 0;
+  let discount = 0;
+  let tax = 0;
+  let query: Where | null = null;
+
+  if (slug === 'all') {
+    query = {
+      language: {
+        equals: language,
+      },
+    };
+  } else {
+    query = {
+      and: [
+        {
+          slug: {
+            equals: slug,
+          },
+        },
+        {
+          language: {
+            equals: language,
+          },
+        },
+      ],
+    };
+  }
+
+  const result = await payload.find({
+    collection: 'courses',
+    limit: 10,
+    pagination: false,
+    where: query,
+    select: {
+      title: true,
+      price: true,
+      slug: true,
+      badgeImage: true,
+    },
+  });
+
+  if (Array.isArray(result.docs) && result.docs.length > 0) {
+    for (const data of result.docs) {
+      amount += data.price;
     }
+
+    if (result.docs.length > 1) {
+      discount = 1000 * result.docs.length;
+    }
+  } else {
+    return <p>Course not found</p>;
+  }
+
+  tax = (amount - discount) * 0.06;
+
+  const cart: Cart = {
+    items: result.docs,
+    discount: discount,
+    amount: amount,
+    tax: tax,
+    total: amount - discount + tax,
   };
 
   return (
-    <div className="flex h-full w-full flex-col items-center px-4 py-12">
-      <WizardStepper currentStep={checkoutStep} />
-      <div className="mt-10 flex w-full max-w-screen-lg flex-col items-center">
-        {renderStep()}
+    <div className="py-16 antialiased md:py-24">
+      <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
+        <h2 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
+          Shopping Cart
+        </h2>
+
+        <div className="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
+          <OrderSummary cart={cart} />
+        </div>
       </div>
     </div>
   );
-};
-
-export default CheckoutWizard;
+}

@@ -15,8 +15,6 @@ import { ArrowRight, X } from 'lucide-react';
 import { Media } from '../Media';
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import { title } from 'process';
-//import { useCallback, useState } from 'react';
 
 export interface Cart {
   items: {
@@ -145,11 +143,7 @@ function OrderContent({ cart }: OrderSummaryProps) {
           status: 'completed',
         });
 
-        if (isSignedIn) {
-          router.push(`/checkout/completion?guest=false&transactionId=${data.paymentID}`)
-        } else {
-          router.push(`/checkout/completion?guest=true&transactionId=${data.paymentID}`)
-        }
+        router.push(`/checkout/completion?guest=${isSignedIn ? 'false' : 'true'}false&transactionId=${data.paymentID}`);
       });
     },
   };

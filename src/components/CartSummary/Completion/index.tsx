@@ -19,7 +19,10 @@ export function Completion({ transactionId }: CompletionProps) {
         </div>
         <h1 className="text-4xl font-bold mb-3">COMPLETED</h1>
         <p className="mb-1">
-          🎉 You have made a course purchase successfully! Transaction ID: {transactionId} 🎉
+          🎉 You have made a course purchase successfully! 🎉
+        </p>
+        <p className="font-bold mb-3">
+          Transaction ID: {transactionId}
         </p>
       </div>
       <div className="text-centert">
