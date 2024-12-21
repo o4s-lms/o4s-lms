@@ -1,10 +1,12 @@
 export const TRANSACTION = `
   email
+  orderId
   customerId
   transactionId
   provider
-  discount
   amount
+  discount
+  tax
   total
   status
 `;

@@ -13,7 +13,10 @@ import { useAuth } from '@/providers/Auth';
 import { Media as MediaType } from '@/payload-types';
 import { ArrowRight, X } from 'lucide-react';
 import { Media } from '../Media';
-import { useCallback, useState } from 'react';
+import * as React from 'react';
+import { useRouter } from 'next/navigation';
+import { title } from 'process';
+//import { useCallback, useState } from 'react';
 
 export interface Cart {
   items: {
@@ -34,12 +37,14 @@ type OrderSummaryProps = {
 };
 
 function OrderContent({ cart }: OrderSummaryProps) {
-  const [currentCart, setCurrentCart] = useState<Cart>(cart);
+  const [currentCart, setCurrentCart] = React.useState<Cart>(cart);
+  const [key, setKey] = React.useState(0);
   const [{ options, isPending }, dispatch] = usePayPalScriptReducer();
   const { create } = useCheckout();
-  const { user } = useAuth();
+  const { user, isSignedIn, isLoaded } = useAuth();
+  const router = useRouter();
 
-  const updateCart = useCallback(async (courseId: number) => {
+  const updateCart = React.useCallback(async (courseId: number) => {
     const tmpCart = currentCart;
     let a = 0;
     let d = 0;
@@ -56,7 +61,7 @@ function OrderContent({ cart }: OrderSummaryProps) {
       }
       t = (a - d) * 0.06;
     } else {
-      return <p>Course not found</p>;
+      router.push('/courses');
     }
 
     tmpCart.amount = a;
@@ -65,7 +70,8 @@ function OrderContent({ cart }: OrderSummaryProps) {
     tmpCart.total = a - d + t;
 
     setCurrentCart(tmpCart);
-  }, [currentCart]);
+    setKey(key + 1);
+  }, [currentCart, key, router]);
 
   const paypalbuttonTransactionProps: PayPalButtonsComponentProps = {
     style: { layout: 'vertical' },
@@ -74,8 +80,25 @@ function OrderContent({ cart }: OrderSummaryProps) {
         purchase_units: [
           {
             amount: {
+              //currency_code: 'EUR',
               value: (Math.round(cart.total) / 100).toFixed(2),
             },
+            /**items: currentCart.items.map((item) => {
+              return {
+                name: item.title,
+                quantity: '1',
+                category: 'DIGITAL_GOODS',
+                unit_amount: {
+                  currency_code: 'EUR',
+                  value: (Math.round(item.price) / 100).toFixed(2)
+                },
+                tax: {
+                  currency_code: 'EUR',
+                  value: (Math.round(cart.tax) / 100).toFixed(2),
+                },
+              }
+            }),*/
+            
           },
         ],
       });
@@ -108,27 +131,33 @@ function OrderContent({ cart }: OrderSummaryProps) {
         };*/
 
         const transaction = await create({
-          email: user?.email as string,
+          email: isSignedIn ? user?.email as string : details?.payer?.email_address as string,
+          orderId: data.orderID,
           transactionId: data.paymentID,
           customerId: data.payerID,
           user: user?.id,
-          courses: cart.items.map(({ id }) => id),
+          courses: currentCart.items.map(({ id }) => id),
           provider: 'paypal',
-          discount: cart.discount || 0,
-          amount: cart.amount || 0,
-          total: cart.total || 0,
+          discount: currentCart.discount || 0,
+          amount: currentCart.amount || 0,
+          tax: currentCart.amount || 0,
+          total: currentCart.total || 0,
           status: 'completed',
         });
 
-        //navigateToStep(3);
+        if (isSignedIn) {
+          router.push(`/checkout/completion?guest=false&transactionId=${data.paymentID}`)
+        } else {
+          router.push(`/checkout/completion?guest=true&transactionId=${data.paymentID}`)
+        }
       });
     },
   };
 
   return (
-    <>
+    <React.Fragment>
       <div className="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-3xl">
-        <div key="shopping-cart" className="space-y-6">
+        <div key={key} className="space-y-6">
           {currentCart.items.map((item) => (
             <>
               <div
@@ -148,13 +177,20 @@ function OrderContent({ cart }: OrderSummaryProps) {
                   <div className="flex items-center justify-between md:order-3 md:justify-end">
                     <div className="flex items-center">
                       <p className="text-base font-bold text-gray-900 dark:text-white">
-                        1
+                      {formatPrice(item.price)}
                       </p>
                     </div>
                     <div className="text-end md:order-4 md:w-32">
-                      <p className="text-base font-bold text-gray-900 dark:text-white">
-                        {formatPrice(item.price)}
-                      </p>
+                      
+                      <button
+                        onClick={() => updateCart(item.id)}
+                        type="button"
+                        className="inline-flex items-center text-sm font-medium text-red-600 hover:underline dark:text-red-500"
+                      >
+                        <X size={18} />
+                        
+                      </button>
+                      
                     </div>
                   </div>
 
@@ -169,14 +205,7 @@ function OrderContent({ cart }: OrderSummaryProps) {
                     </a>
 
                     <div className="flex items-center gap-4">
-                      <button
-                        onClick={() => updateCart(item.id)}
-                        type="button"
-                        className="inline-flex items-center text-sm font-medium text-red-600 hover:underline dark:text-red-500"
-                      >
-                        <X size={18} />
-                        Remove
-                      </button>
+                      
                     </div>
                   </div>
                 </div>
@@ -226,10 +255,13 @@ function OrderContent({ cart }: OrderSummaryProps) {
                 Total
               </dt>
               <dd className="text-base font-bold text-gray-900 dark:text-white">
-                {formatPrice(currentCart.total + cart.total * 0.06)}
+                {formatPrice(currentCart.total)}
               </dd>
             </dl>
           </div>
+          <p className="text-xl font-semibold text-gray-900 dark:text-white">
+            Payment
+          </p>
 
           {isPending ? <h2>Load Smart Payment Button...</h2> : null}
           <PayPalButtons {...paypalbuttonTransactionProps} />
@@ -250,7 +282,7 @@ function OrderContent({ cart }: OrderSummaryProps) {
           </div>
         </div>
       </div>
-    </>
+    </React.Fragment>
   );
 }
 

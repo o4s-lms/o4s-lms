@@ -25,6 +25,10 @@ export const Transactions: CollectionConfig = {
       index: true,
     },
     {
+      name: 'orderId',
+      type: 'text',
+    },
+    {
       name: 'customerId',
       type: 'text',
     },
@@ -36,13 +40,20 @@ export const Transactions: CollectionConfig = {
       name: 'provider',
       type: 'select',
       options: [
-        { label: 'Stripe', value: 'stripe' },
         { label: 'Paypal', value: 'paypal' },
+        { label: 'Stripe', value: 'stripe' },
         { label: 'Bank Transfer', value: 'transfer' },
         { label: 'MB Way', value: 'mbway' },
       ],
       required: true,
-      defaultValue: 'stripe',
+      defaultValue: 'paypal',
+    },
+    {
+      name: 'amount',
+      type: 'number',
+      min: 0,
+      required: true,
+      defaultValue: 0,
     },
     {
       name: 'discount',
@@ -52,7 +63,7 @@ export const Transactions: CollectionConfig = {
       defaultValue: 0,
     },
     {
-      name: 'amount',
+      name: 'tax',
       type: 'number',
       min: 0,
       required: true,

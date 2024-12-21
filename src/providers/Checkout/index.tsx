@@ -36,6 +36,7 @@ export const CheckoutProvider: React.FC<{
         const { createTransaction: transaction } = await gql(`mutation {
           createTransaction(data: {
             email: "${args.email}",
+            orderId: "${args.orderId}",
             customerId: "${args.customerId}",
             transactionId: "${args.transactionId}",
             user: "${args.user}",
@@ -43,7 +44,8 @@ export const CheckoutProvider: React.FC<{
             provider: "${args.provider}",
             discount: "${args.discount}",
             amount: "${args.amount}",
-            total: "${args.total}",
+            amount: "${args.amount}",
+            tax: "${args.tax}",
             status: "${args.status}" }) {
             ${TRANSACTION}
           }

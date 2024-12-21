@@ -1,16 +1,16 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Transaction } from '@/payload-types';
+//import { Transaction } from '@/payload-types';
 import { Check } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
 interface CompletionProps {
-  transaction: Transaction
+  transactionId: string
 }
 
-export function Completion({ transaction }: CompletionProps) {
+export function Completion({ transactionId }: CompletionProps) {
   return (
     <div className="flex flex-col h-full items-center justify-center bg-background text-foreground">
       <div className="text-center">

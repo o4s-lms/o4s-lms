@@ -973,11 +973,13 @@ export interface Favorite {
 export interface Transaction {
   id: number;
   email: string;
+  orderId?: string | null;
   customerId?: string | null;
   transactionId?: string | null;
-  provider: 'stripe' | 'paypal' | 'transfer' | 'mbway';
-  discount: number;
+  provider: 'paypal' | 'stripe' | 'transfer' | 'mbway';
   amount: number;
+  discount: number;
+  tax: number;
   total: number;
   status: 'pending' | 'awaiting' | 'cancelled' | 'declined' | 'refunded' | 'disputed' | 'completed';
   user?: (number | null) | User;
@@ -1653,11 +1655,13 @@ export interface FavoritesSelect<T extends boolean = true> {
  */
 export interface TransactionsSelect<T extends boolean = true> {
   email?: T;
+  orderId?: T;
   customerId?: T;
   transactionId?: T;
   provider?: T;
-  discount?: T;
   amount?: T;
+  discount?: T;
+  tax?: T;
   total?: T;
   status?: T;
   user?: T;
