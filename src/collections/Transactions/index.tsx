@@ -40,8 +40,8 @@ export const Transactions: CollectionConfig = {
       name: 'provider',
       type: 'select',
       options: [
-        { label: 'Paypal', value: 'paypal' },
         { label: 'Stripe', value: 'stripe' },
+        { label: 'Paypal', value: 'paypal' },
         { label: 'Bank Transfer', value: 'transfer' },
         { label: 'MB Way', value: 'mbway' },
       ],

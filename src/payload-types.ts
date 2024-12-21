@@ -976,7 +976,7 @@ export interface Transaction {
   orderId?: string | null;
   customerId?: string | null;
   transactionId?: string | null;
-  provider: 'paypal' | 'stripe' | 'transfer' | 'mbway';
+  provider: 'stripe' | 'paypal' | 'transfer' | 'mbway';
   amount: number;
   discount: number;
   tax: number;
