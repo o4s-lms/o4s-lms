@@ -7,11 +7,13 @@ import configPromise from '@payload-config';
 import { getPayload } from 'payload';
 import React from 'react';
 import PageClient from './page.client';
+import { getLanguage } from '@/tolgee/language';
 
 export const dynamic = 'force-static';
 export const revalidate = 600;
 
-export default async function Page() {
+export default async function CoursesPage() {
+  const language = await getLanguage();
   const payload = await getPayload({ config: configPromise });
 
   const courses = await payload.find({
@@ -19,6 +21,11 @@ export default async function Page() {
     depth: 1,
     limit: 12,
     overrideAccess: false,
+    where: {
+      language: {
+        equals: language,
+      }
+    },
     select: {
       title: true,
       slug: true,

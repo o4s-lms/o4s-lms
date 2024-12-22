@@ -393,6 +393,16 @@ export interface ArchiveBlock {
 export interface Category {
   id: number;
   title: string;
+  description?: string | null;
+  language: 'pt' | 'en' | 'fr' | 'es';
+  heroImage?: (number | null) | Media;
+  meta?: {
+    title?: string | null;
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
+  slug?: string | null;
+  slugLock?: boolean | null;
   parent?: (number | null) | Category;
   breadcrumbs?:
     | {
@@ -404,6 +414,7 @@ export interface Category {
     | null;
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1517,6 +1528,18 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
+  description?: T;
+  language?: T;
+  heroImage?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  slug?: T;
+  slugLock?: T;
   parent?: T;
   breadcrumbs?:
     | T
@@ -1528,6 +1551,7 @@ export interface CategoriesSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

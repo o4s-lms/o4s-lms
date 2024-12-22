@@ -45,18 +45,6 @@ export const CourseCard: React.FC<{
   const sanitizedDescription = description?.replace(/\s/g, ' '); // replace non-breaking space with white space
   const href = `/${relationTo}/${slug}`;
 
-  function addToCart(slug: string) {
-    const cart = {
-      item: {
-        slug: `${slug}`,
-        price: 3500,
-      },
-      discount: 0
-    }
-
-    window.localStorage.setItem("cart", JSON.stringify(cart));
-  }
-
   const links = [
     {
       url: href,
@@ -65,7 +53,7 @@ export const CourseCard: React.FC<{
     },
     {
       //onClick: () => addToCart(`${slug}`),
-      url: `/checkout?step=1&slug=${slug}`,
+      url: `/checkout?slug=${slug}`,
       label: 'Comprar agora',
       appearance: 'default',
     },

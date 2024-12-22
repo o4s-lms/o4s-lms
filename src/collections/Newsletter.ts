@@ -1,9 +1,18 @@
+import { admin } from '@/access/admin';
+import { anyone } from '@/access/anyone';
+import { authenticated } from '@/access/authenticated';
 import type { CollectionConfig } from 'payload';
 
 //import { generateEmailHTML } from '../email/generateEmailHTML'
 
 export const Newsletter: CollectionConfig = {
   slug: 'newsletter-signups',
+  access: {
+    create: anyone,
+    delete: authenticated,
+    read: authenticated,
+    update: authenticated,
+  },
   admin: {
     defaultColumns: ['name', 'email'],
     useAsTitle: 'email',

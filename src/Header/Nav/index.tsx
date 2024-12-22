@@ -27,8 +27,8 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
       <CMSLink
         key={i}
         {...link}
-        appearance="outline"
-        className="relative inline-flex h-10 overflow-hidden rounded-full p-[10px]"
+        appearance="link"
+        className="relative inline-flex h-10 overflow-hidden rounded-full p-[10px] dark:text-white"
       />
     </li>
   ));

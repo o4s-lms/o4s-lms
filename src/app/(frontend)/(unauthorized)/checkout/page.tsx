@@ -35,20 +35,12 @@ export default async function AddToCart({
     };
   } else {
     query = {
-      and: [
-        {
-          slug: {
-            equals: slug,
-          },
-        },
-        {
-          language: {
-            equals: language,
-          },
-        },
-      ],
+      slug: {
+        equals: slug,
+      },
     };
-  }
+  };
+  
 
   const result = await payload.find({
     collection: 'courses',

@@ -14,6 +14,7 @@ import { PostHero } from '@/heros/PostHero';
 import { generateMeta } from '@/utilities/generateMeta';
 import PageClient from './page.client';
 import { LivePreviewListener } from '@/components/LivePreviewListener';
+import { NewsletterBlock } from '@/blocks/NewsletterBlock/Component';
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise });
@@ -77,6 +78,7 @@ export default async function Post({ params: paramsPromise }: Args) {
           )}
         </div>
       </div>
+      <NewsletterBlock />
     </article>
   );
 }
