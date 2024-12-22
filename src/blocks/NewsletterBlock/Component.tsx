@@ -5,7 +5,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { CheckCircle2, CircleDashed } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import { useNewsletter } from '@/providers/Newsletter';
 import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -28,7 +27,6 @@ export const NewsletterBlock: React.FC = () => {
     'loading' | 'Subscribe' | 'Subscribed'
   >();
   const isEnabled = !status || status === 'Subscribe';
-  const { subscribe } = useNewsletter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -44,15 +42,27 @@ export const NewsletterBlock: React.FC = () => {
 
     setStatus('loading');
 
-    try {
-      await subscribe(values);
-      setStatus('Subscribed');
-    } catch (_) {
-      toast.error('Somethig goes wrong!', {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/newsletter-signups`,
+      {
+        body: JSON.stringify(values),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+      },
+    );
+
+    if (!response.ok) {
+      toast.error('There was an error creating the signup!', {
         description: 'Please try again.',
       });
       setStatus('Subscribe');
+      return;
     }
+
+    toast.info('You subscribed our newsletter successful!');
+    setStatus('Subscribed');
   }
 
   return (

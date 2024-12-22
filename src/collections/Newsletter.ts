@@ -28,25 +28,33 @@ export const Newsletter: CollectionConfig = {
       required: true,
     },
   ],
-  /**hooks: {
+  hooks: {
     afterChange: [
       async ({ doc, operation, req }) => {
         if (operation === 'create') {
           req.payload
             .sendEmail({
-              from: 'sender@example.com',
-              html: await generateEmailHTML({
-                content: `<p>${doc.name ? `Hi ${doc.name}!` : 'Hi!'} We'll be in touch soon...</p>`,
-                headline: 'Welcome to the newsletter!',
-              }),
+              from: process.env.SMTP_FROM,
+              html: `
+                <!doctype html>
+                <html>
+                  <body>
+                    <h1>Welcome to the newsletter!</h1>
+                    <p>${doc.name ? `Hi ${doc.name}` : 'Hi'}!</p>
+                    <p>
+                      We'll be in touch soon...
+                    </p>
+                  </body>
+                </html>
+              `,
               subject: 'Thanks for signing up!',
               to: doc.email,
             })
             .catch((error) => {
-              console.error('Error sending email:', error)
-            })
+              console.error('Error sending email:', error);
+            });
         }
       },
     ],
-  }, */
+  },
 };

@@ -31,8 +31,8 @@ export const NewsletterProvider: React.FC<{
       }
 
       if (api === 'gql') {
-        const { newsletterSignup: newslettersignup } = await gql(`mutation {
-          newsletterSignup(data: {
+        const { createNewsletterSignup: newslettersignup } = await gql(`mutation {
+          createNewsletterSignup(data: {
             name: "${args.name}",
             email: "${args.email}" }) {
             ${NEWSLETTERSIGNUP}

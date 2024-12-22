@@ -1,7 +1,7 @@
 import type { NewsletterSignup } from '@/payload-types';
 
 export type Subscribe = (args: {
-  name?: string;
+  name?: string | null;
   email: string;
 }) => Promise<NewsletterSignup>;
 

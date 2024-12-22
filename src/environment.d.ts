@@ -10,6 +10,7 @@ declare global {
       CLOUDFLARE_SECRET_KEY_ID: string;
       CLOUDFLARE_KEY_SECRET: string;
       S3_BUCKET: string;
+      SMTP_FROM: string;
       SMTP_HOST: string;
       SMTP_USER: string;
       SMTP_PASS: string;
