@@ -32,7 +32,7 @@ export default async function Page({ params: paramsPromise }: Args) {
 }
 
 const queryCourseBySlug = cache(
-  async ({ slug, language = 'pt' }: { slug: string; language?: string }) => {
+  async ({ slug }: { slug: string }) => {
     const payload = await getPayload({ config: configPromise });
 
     const result = await payload.find({
@@ -41,18 +41,9 @@ const queryCourseBySlug = cache(
       limit: 1,
       pagination: false,
       where: {
-        and: [
-          {
-            slug: {
-              equals: slug,
-            },
-          },
-          {
-            language: {
-              equals: language,
-            },
-          },
-        ],
+        slug: {
+          equals: slug,
+        },
       },
     });
 

@@ -45,7 +45,6 @@ type Args = {
 };
 
 export default async function Course({ params: paramsPromise }: Args) {
-  // TO DO: get the current language
   const { isEnabled: draft } = await draftMode();
   const { slug = '' } = await paramsPromise;
   const url = '/courses/' + slug;
@@ -85,10 +84,10 @@ export default async function Course({ params: paramsPromise }: Args) {
             </div>
             {course.sections && course.sections.length > 0 && (
               <CourseSections
-               className="basis-2/5"
-                docs={course.sections.map(({ value }) => value).filter(
-                  (section) => typeof section === 'object',
-                )}
+                className="basis-2/5"
+                docs={course.sections
+                  .map(({ value }) => value)
+                  .filter((section) => typeof section === 'object')}
                 introContent="Conteúdo do curso"
               />
             )}
@@ -109,7 +108,7 @@ export async function generateMetadata({
 }
 
 const queryCourseBySlug = cache(
-  async ({ slug, language = 'pt' }: { slug: string; language?: string }) => {
+  async ({ slug }: { slug: string }) => {
     const { isEnabled: draft } = await draftMode();
 
     const payload = await getPayload({ config: configPromise });
@@ -121,18 +120,9 @@ const queryCourseBySlug = cache(
       overrideAccess: draft,
       pagination: false,
       where: {
-        and: [
-          {
-            slug: {
-              equals: slug,
-            },
-          },
-          {
-            language: {
-              equals: language,
-            },
-          },
-        ],
+        slug: {
+          equals: slug,
+        },
       },
     });
 

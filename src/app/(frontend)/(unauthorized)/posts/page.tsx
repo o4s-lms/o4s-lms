@@ -8,11 +8,13 @@ import { getPayload } from 'payload';
 import React from 'react';
 import PageClient from './page.client';
 import { HighLight } from '@/heros/HighLight';
+import { getLanguage } from '@/tolgee/language';
 
 export const dynamic = 'force-static';
 export const revalidate = 600;
 
 export default async function Page() {
+  const language = getLanguage();
   const payload = await getPayload({ config: configPromise });
 
   const posts = await payload.find({
@@ -20,6 +22,11 @@ export default async function Page() {
     depth: 1,
     limit: 12,
     overrideAccess: false,
+    where: {
+      language: {
+        equals: language,
+      }
+    },
     select: {
       title: true,
       slug: true,

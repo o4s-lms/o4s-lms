@@ -8,6 +8,7 @@ import { getPayload } from 'payload';
 import React from 'react';
 import PageClient from './page.client';
 import { notFound } from 'next/navigation';
+import { getLanguage } from '@/tolgee/language';
 
 export const revalidate = 600;
 
@@ -18,6 +19,7 @@ type Args = {
 };
 
 export default async function Page({ params: paramsPromise }: Args) {
+  const language = await getLanguage();
   const { pageNumber } = await paramsPromise;
   const payload = await getPayload({ config: configPromise });
 
@@ -31,6 +33,11 @@ export default async function Page({ params: paramsPromise }: Args) {
     limit: 12,
     page: sanitizedPageNumber,
     overrideAccess: false,
+    where: {
+      language: {
+        equals: language,
+      }
+    }
   });
 
   return (
@@ -72,7 +79,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const language = 'pt';
+  const language = await getLanguage();
   const payload = await getPayload({ config: configPromise });
   const { totalDocs } = await payload.count({
     collection: 'courses',
