@@ -10,7 +10,7 @@ export const DEFAULT_LANGUAGE = 'pt';
 
 export async function getStaticData(
   languages: string[],
-  namespaces: string[] = ['footer'],
+  namespaces: string[] = [''],
 ) {
   const result: Record<string, any> = {};
   for (const lang of languages) {

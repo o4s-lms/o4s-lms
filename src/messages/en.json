@@ -1,3 +1,7 @@
 {
-  "home": "Home"
+  "build": "Build with",
+  "copyright": "All rights reserved.",
+  "home": "Home",
+  "privacy": "Privacy Policy",
+  "terms": "Terms and Conditions"
 }
