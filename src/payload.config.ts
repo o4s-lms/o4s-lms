@@ -13,16 +13,15 @@ import { Media } from '@/collections/Media';
 import { Pages } from '@/collections/Pages';
 import { Posts } from '@/collections/Posts';
 import { Courses } from '@/collections/Courses';
-import { Sections } from '@/collections/Courses/Sections';
+import { Modules } from '@/collections/Courses/Modules';
 import { Lessons } from '@/collections/Courses/Lessons';
 import { CourseProgress } from '@/collections/Courses/Progress';
-import { SectionProgress } from '@/collections/Courses/Progress/SectionProgress';
+import { ModuleProgress } from '@/collections/Courses/Progress/ModuleProgress';
 import { LessonProgress } from '@/collections/Courses/Progress/LessonProgress';
 import { Favorites } from '@/collections/Favorites';
 import { Transactions } from '@/collections/Transactions';
 import { Newsletter } from '@/collections/Newsletter';
 import { Users } from '@/collections/Users';
-import { Footer } from '@/Footer/config';
 import { FooterPt } from '@/Footer/pt/config';
 import { FooterEn } from '@/Footer/en/config';
 import { FooterFr } from '@/Footer/fr/config';
@@ -99,10 +98,10 @@ export default buildConfig({
     Media,
     Categories,
     Courses,
-    Sections,
+    Modules,
     Lessons,
     CourseProgress,
-    SectionProgress,
+    ModuleProgress,
     LessonProgress,
     Favorites,
     Transactions,
@@ -111,7 +110,7 @@ export default buildConfig({
   ],
   cors: [getServerSideURL()].filter(Boolean),
   csrf: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer, FooterPt, FooterEn, FooterFr, FooterEs],
+  globals: [Header, FooterPt, FooterEn, FooterFr, FooterEs],
   plugins: [
     ...plugins,
     // storage-adapter-placeholder

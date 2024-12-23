@@ -1,7 +1,9 @@
 {
+  "any-question": "¿Tienes alguna pregunta? Ponte en contacto con nosotros",
   "build": "Construye con",
   "copyright": "Reservados todos los derechos.",
   "home": "Inicio",
+  "modules": "Módulos de aprendizaje",
   "privacy": "Política de Privacidad",
   "terms": "Términos y Condiciones"
 }

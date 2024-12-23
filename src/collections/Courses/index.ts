@@ -48,7 +48,7 @@ export const Courses: CollectionConfig<'courses'> = {
     price: true,
     slug: true,
     language: true,
-    sections: true,
+    modules: true,
     badgeImage: true,
     meta: {
       image: true,
@@ -149,14 +149,14 @@ export const Courses: CollectionConfig<'courses'> = {
         {
           fields: [
             {
-              name: 'sections',
+              name: 'modules',
               type: 'relationship',
               hasMany: true,
               admin: {
                 isSortable: true,
               },
-              label: 'Sections',
-              relationTo: ['sections'],
+              label: 'Modules',
+              relationTo: ['modules'],
               required: true,
             },
           ],

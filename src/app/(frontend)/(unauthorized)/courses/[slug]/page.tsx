@@ -16,7 +16,8 @@ import { LivePreviewListener } from '@/components/LivePreviewListener';
 
 import { Button } from '@/components/ui/button';
 import { PhoneCall } from 'lucide-react';
-import { CourseSections } from '@/components/CoursePage/Sections';
+import { CourseModules } from '@/components/CoursePage/Modules';
+import { getTranslate } from '@/tolgee/server';
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise });
@@ -46,6 +47,7 @@ type Args = {
 
 export default async function Course({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode();
+  const t = await getTranslate();
   const { slug = '' } = await paramsPromise;
   const url = '/courses/' + slug;
   const course = await queryCourseBySlug({ slug });
@@ -77,18 +79,18 @@ export default async function Course({ params: paramsPromise }: Args) {
                 </div>
                 <div className="">
                   <Button className="gap-4" variant="outline">
-                    Any questions? Reach out <PhoneCall className="h-4 w-4" />
+                    {t('any-question')} <PhoneCall className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
             </div>
-            {course.sections && course.sections.length > 0 && (
-              <CourseSections
+            {course.modules && course.modules.length > 0 && (
+              <CourseModules
                 className="basis-2/5"
-                docs={course.sections
+                docs={course.modules
                   .map(({ value }) => value)
-                  .filter((section) => typeof section === 'object')}
-                introContent="Conteúdo do curso"
+                  .filter((module) => typeof module === 'object')}
+                introContent={t('modules')}
               />
             )}
           </div>

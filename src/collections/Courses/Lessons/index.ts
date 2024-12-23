@@ -4,7 +4,6 @@ import {
   BlocksFeature,
   FixedToolbarFeature,
   HeadingFeature,
-  AlignFeature,
   HorizontalRuleFeature,
   InlineToolbarFeature,
   lexicalEditor,
@@ -45,7 +44,7 @@ export const Lessons: CollectionConfig<'lessons'> = {
     title: true,
     slug: true,
     course: true,
-    section: true,
+    module: true,
     meta: {
       image: true,
       description: true,
@@ -163,12 +162,12 @@ export const Lessons: CollectionConfig<'lessons'> = {
       relationTo: 'courses',
     },
     {
-      name: 'section',
+      name: 'module',
       type: 'relationship',
       admin: {
         position: 'sidebar',
       },
-      relationTo: 'sections',
+      relationTo: 'modules',
     },
     {
       name: 'publishedAt',

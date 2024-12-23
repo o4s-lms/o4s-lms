@@ -16,10 +16,10 @@ export interface Config {
     media: Media;
     categories: Category;
     courses: Course;
-    sections: Section;
+    modules: Module;
     lessons: Lesson;
     'course-progress': CourseProgress;
-    'section-progress': SectionProgress;
+    'module-progress': ModuleProgress;
     'lesson-progress': LessonProgress;
     favorites: Favorite;
     transactions: Transaction;
@@ -40,10 +40,10 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     courses: CoursesSelect<false> | CoursesSelect<true>;
-    sections: SectionsSelect<false> | SectionsSelect<true>;
+    modules: ModulesSelect<false> | ModulesSelect<true>;
     lessons: LessonsSelect<false> | LessonsSelect<true>;
     'course-progress': CourseProgressSelect<false> | CourseProgressSelect<true>;
-    'section-progress': SectionProgressSelect<false> | SectionProgressSelect<true>;
+    'module-progress': ModuleProgressSelect<false> | ModuleProgressSelect<true>;
     'lesson-progress': LessonProgressSelect<false> | LessonProgressSelect<true>;
     favorites: FavoritesSelect<false> | FavoritesSelect<true>;
     transactions: TransactionsSelect<false> | TransactionsSelect<true>;
@@ -62,7 +62,6 @@ export interface Config {
   };
   globals: {
     header: Header;
-    footer: Footer;
     footer_pt: FooterPt;
     footer_en: FooterEn;
     footer_fr: FooterFr;
@@ -70,7 +69,6 @@ export interface Config {
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
-    footer: FooterSelect<false> | FooterSelect<true>;
     footer_pt: FooterPtSelect<false> | FooterPtSelect<true>;
     footer_en: FooterEnSelect<false> | FooterEnSelect<true>;
     footer_fr: FooterFrSelect<false> | FooterFrSelect<true>;
@@ -139,6 +137,9 @@ export interface Page {
             } | null;
             url?: string | null;
             label: string;
+            /**
+             * Choose how the link should be rendered.
+             */
             appearance?: ('default' | 'outline') | null;
           };
           id?: string | null;
@@ -158,6 +159,9 @@ export interface Page {
   )[];
   meta?: {
     title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
     image?: (number | null) | Media;
     description?: string | null;
   };
@@ -291,6 +295,9 @@ export interface CallToActionBlock {
           } | null;
           url?: string | null;
           label: string;
+          /**
+           * Choose how the link should be rendered.
+           */
           appearance?: ('default' | 'outline') | null;
         };
         id?: string | null;
@@ -333,6 +340,9 @@ export interface ContentBlock {
           } | null;
           url?: string | null;
           label: string;
+          /**
+           * Choose how the link should be rendered.
+           */
           appearance?: ('default' | 'outline') | null;
         };
         id?: string | null;
@@ -398,6 +408,9 @@ export interface Category {
   heroImage?: (number | null) | Media;
   meta?: {
     title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
     image?: (number | null) | Media;
     description?: string | null;
   };
@@ -444,6 +457,9 @@ export interface Post {
   categories?: (number | Category)[] | null;
   meta?: {
     title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
     image?: (number | null) | Media;
     description?: string | null;
   };
@@ -539,12 +555,15 @@ export interface Course {
     };
     [k: string]: unknown;
   };
-  sections: {
-    relationTo: 'sections';
-    value: number | Section;
+  modules: {
+    relationTo: 'modules';
+    value: number | Module;
   }[];
   meta?: {
     title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
     image?: (number | null) | Media;
     description?: string | null;
   };
@@ -565,9 +584,9 @@ export interface Course {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "sections".
+ * via the `definition` "modules".
  */
-export interface Section {
+export interface Module {
   id: number;
   title: string;
   richText?: {
@@ -623,11 +642,14 @@ export interface Lesson {
   } | null;
   meta?: {
     title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
     image?: (number | null) | Media;
     description?: string | null;
   };
   course?: (number | null) | Course;
-  section?: (number | null) | Section;
+  module?: (number | null) | Module;
   publishedAt?: string | null;
   authors?: (number | User)[] | null;
   populatedAuthors?:
@@ -784,6 +806,9 @@ export interface Form {
       )[]
     | null;
   submitButtonLabel?: string | null;
+  /**
+   * Choose whether to display an on-page message or redirect to a different page after they submit the form.
+   */
   confirmationType?: ('message' | 'redirect') | null;
   confirmationMessage?: {
     root: {
@@ -803,6 +828,9 @@ export interface Form {
   redirect?: {
     url: string;
   };
+  /**
+   * Send custom emails when the form submits. Use comma separated lists to send the same email to multiple recipients. To reference a value from this form, wrap that field's name with double curly brackets, i.e. {{firstName}}. You can use a wildcard {{*}} to output all data and {{*:table}} to format it as an HTML table in the email.
+   */
   emails?:
     | {
         emailTo?: string | null;
@@ -811,6 +839,9 @@ export interface Form {
         replyTo?: string | null;
         emailFrom?: string | null;
         subject: string;
+        /**
+         * Enter the message that should be sent in this email.
+         */
         message?: {
           root: {
             type: string;
@@ -924,9 +955,9 @@ export interface CourseProgress {
     relationTo: 'courses';
     value: number | Course;
   };
-  sections: {
-    relationTo: 'section-progress';
-    value: number | SectionProgress;
+  modules: {
+    relationTo: 'module-progress';
+    value: number | ModuleProgress;
   }[];
   enrollmentDate?: string | null;
   overallProgress: number;
@@ -940,13 +971,13 @@ export interface CourseProgress {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "section-progress".
+ * via the `definition` "module-progress".
  */
-export interface SectionProgress {
+export interface ModuleProgress {
   id: number;
-  section: {
-    relationTo: 'sections';
-    value: number | Section;
+  module: {
+    relationTo: 'modules';
+    value: number | Module;
   };
   lessonProgress?:
     | {
@@ -1023,6 +1054,9 @@ export interface NewsletterSignup {
  */
 export interface Redirect {
   id: number;
+  /**
+   * You will need to rebuild the website when changing this field.
+   */
   from: string;
   to?: {
     type?: ('reference' | 'custom') | null;
@@ -1066,6 +1100,8 @@ export interface FormSubmission {
   createdAt: string;
 }
 /**
+ * This is a collection of automatically created search results. These results are used by the global site search and will be updated automatically as documents in the CMS are created or updated.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "search".
  */
@@ -1121,8 +1157,8 @@ export interface PayloadLockedDocument {
         value: number | Course;
       } | null)
     | ({
-        relationTo: 'sections';
-        value: number | Section;
+        relationTo: 'modules';
+        value: number | Module;
       } | null)
     | ({
         relationTo: 'lessons';
@@ -1133,8 +1169,8 @@ export interface PayloadLockedDocument {
         value: number | CourseProgress;
       } | null)
     | ({
-        relationTo: 'section-progress';
-        value: number | SectionProgress;
+        relationTo: 'module-progress';
+        value: number | ModuleProgress;
       } | null)
     | ({
         relationTo: 'lesson-progress';
@@ -1565,7 +1601,7 @@ export interface CoursesSelect<T extends boolean = true> {
   language?: T;
   heroImage?: T;
   content?: T;
-  sections?: T;
+  modules?: T;
   meta?:
     | T
     | {
@@ -1590,9 +1626,9 @@ export interface CoursesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "sections_select".
+ * via the `definition` "modules_select".
  */
-export interface SectionsSelect<T extends boolean = true> {
+export interface ModulesSelect<T extends boolean = true> {
   title?: T;
   richText?: T;
   course?: T;
@@ -1618,7 +1654,7 @@ export interface LessonsSelect<T extends boolean = true> {
         description?: T;
       };
   course?: T;
-  section?: T;
+  module?: T;
   publishedAt?: T;
   authors?: T;
   populatedAuthors?:
@@ -1640,7 +1676,7 @@ export interface LessonsSelect<T extends boolean = true> {
 export interface CourseProgressSelect<T extends boolean = true> {
   student?: T;
   course?: T;
-  sections?: T;
+  modules?: T;
   enrollmentDate?: T;
   overallProgress?: T;
   lastAccessed?: T;
@@ -1650,10 +1686,10 @@ export interface CourseProgressSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "section-progress_select".
+ * via the `definition` "module-progress_select".
  */
-export interface SectionProgressSelect<T extends boolean = true> {
-  section?: T;
+export interface ModuleProgressSelect<T extends boolean = true> {
+  module?: T;
   lessonProgress?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -1978,30 +2014,6 @@ export interface Header {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "footer".
- */
-export interface Footer {
-  id: number;
-  navItems?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?: {
-            relationTo: 'pages';
-            value: number | Page;
-          } | null;
-          url?: string | null;
-          label: string;
-        };
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer_pt".
  */
 export interface FooterPt {
@@ -2101,29 +2113,6 @@ export interface FooterE {
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
-  navItems?:
-    | T
-    | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-            };
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "footer_select".
- */
-export interface FooterSelect<T extends boolean = true> {
   navItems?:
     | T
     | {

@@ -32,11 +32,11 @@ export const CourseProgress: CollectionConfig = {
       required: true,
     },
     {
-      name: 'sections',
+      name: 'modules',
       type: 'relationship',
-      label: 'Sections Progress',
+      label: 'Modules Progress',
       hasMany: true,
-      relationTo: ['section-progress'],
+      relationTo: ['module-progress'],
       required: true,
     },
     {

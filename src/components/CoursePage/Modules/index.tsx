@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import RichText from '@/components/RichText';
 
-import type { Section } from '@/payload-types';
+import type { Module } from '@/payload-types';
 
 import {
   Accordion,
@@ -13,11 +13,11 @@ import {
 
 export type CourseSectionsProps = {
   className?: string;
-  docs?: Section[];
+  docs?: Module[];
   introContent?: string;
 };
 
-export const CourseSections: React.FC<CourseSectionsProps> = (props) => {
+export const CourseModules: React.FC<CourseSectionsProps> = (props) => {
   const { className, docs, introContent } = props;
 
   return (
@@ -26,14 +26,14 @@ export const CourseSections: React.FC<CourseSectionsProps> = (props) => {
         <h4>{introContent}</h4>
       </div>
       <Accordion type="single" collapsible className="w-full">
-        {docs?.map((section, index) => (
+        {docs?.map((module, index) => (
           <AccordionItem key={index} value={'index-' + index}>
-            <AccordionTrigger>{section.title}</AccordionTrigger>
+            <AccordionTrigger>{module.title}</AccordionTrigger>
             <AccordionContent>
-              {section.richText && (
+              {module.richText && (
                 <RichText
                   className="mx-auto max-w-[48rem]"
-                  data={section.richText}
+                  data={module.richText}
                   enableGutter={false}
                 />
               )}

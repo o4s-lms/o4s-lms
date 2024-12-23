@@ -1,8 +1,6 @@
 import { getCachedGlobal } from '@/utilities/getGlobals';
 import React from 'react';
 
-import type { Footer } from '@/payload-types';
-
 import { CMSLink } from '@/components/Link';
 import { getLanguage } from '@/tolgee/language';
 import { getTranslate } from '@/tolgee/server';
@@ -10,7 +8,7 @@ import { getTranslate } from '@/tolgee/server';
 export async function Footer() {
   const t = await getTranslate();
   const language = await getLanguage()
-  const footerData: Footer = await getCachedGlobal(`footer_${language}`, 1)();
+  const footerData = await getCachedGlobal(`footer_${language}`, 1)();
 
   const navItems = footerData?.navItems || [];
 

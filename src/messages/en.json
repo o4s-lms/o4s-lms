@@ -1,7 +1,9 @@
 {
+  "any-question": "Any questions? Reach out",
   "build": "Build with",
   "copyright": "All rights reserved.",
   "home": "Home",
+  "modules": "Learning Modules",
   "privacy": "Privacy Policy",
   "terms": "Terms and Conditions"
 }

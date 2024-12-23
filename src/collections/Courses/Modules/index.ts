@@ -11,8 +11,8 @@ import {
 } from '@payloadcms/richtext-lexical';
 import { slugField } from '@/fields/slug';
 
-export const Sections: CollectionConfig = {
-  slug: 'sections',
+export const Modules: CollectionConfig = {
+  slug: 'modules',
   access: {
     admin: admin,
     create: admin,

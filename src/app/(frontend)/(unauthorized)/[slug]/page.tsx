@@ -14,10 +14,10 @@ import { RenderHero } from '@/heros/RenderHero';
 import { generateMeta } from '@/utilities/generateMeta';
 import PageClient from './page.client';
 import { LivePreviewListener } from '@/components/LivePreviewListener';
-//import { getLanguage } from '@/tolgee/language';
+import { getLanguage } from '@/tolgee/language';
 
 export async function generateStaticParams() {
-  //const locale = await getLanguage();
+  const language = await getLanguage();
   const payload = await getPayload({ config: configPromise });
   const pages = await payload.find({
     collection: 'pages',
@@ -33,7 +33,7 @@ export async function generateStaticParams() {
 
   const params = pages.docs
     ?.filter((doc) => {
-      return doc.slug !== 'home';
+      return doc.slug !== language;
     })
     .map(({ slug }) => {
       return { slug };
@@ -50,19 +50,26 @@ type Args = {
 
 export default async function Page({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode();
-  const { slug = 'home' } = await paramsPromise;
+  const language = await getLanguage();
+  // const { slug = 'home' } = await paramsPromise;
+  let { slug } = await paramsPromise;
+
+  if (!slug) {
+    slug = language;
+  }
+
   const url = '/' + slug;
 
-  let page: PageType | null;
+  //let page: PageType | null;
 
-  page = await queryPageBySlug({
+  const page: PageType | null = await queryPageBySlug({
     slug,
   });
 
-  // Remove this code once your website is seeded
+  /** Remove this code once your website is seeded
   if (!page && slug === 'home') {
     page = homeStatic;
-  }
+  } */
 
   if (!page) {
     return <PayloadRedirects url={url} />;

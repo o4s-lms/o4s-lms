@@ -3,8 +3,8 @@ import type { CollectionConfig } from 'payload';
 import { authenticated } from '@/access/authenticated';
 import { admin } from '@/access/admin';
 
-export const SectionProgress: CollectionConfig = {
-  slug: 'section-progress',
+export const ModuleProgress: CollectionConfig = {
+  slug: 'module-progress',
   access: {
     admin: admin,
     create: authenticated,
@@ -14,9 +14,9 @@ export const SectionProgress: CollectionConfig = {
   },
   fields: [
     {
-      name: 'section',
+      name: 'module',
       type: 'relationship',
-      relationTo: ['sections'],
+      relationTo: ['modules'],
       required: true,
     },
     {
