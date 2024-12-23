@@ -13,6 +13,7 @@ module.exports = {
     'courses-sitemap.xml',
     '/*',
     '/posts/*',
+    '/courses/*',
   ],
   robotsTxtOptions: {
     policies: [
