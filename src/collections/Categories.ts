@@ -22,6 +22,7 @@ export const Categories: CollectionConfig = {
     update: authenticated,
   },
   admin: {
+    defaultColumns: ['title', 'language', 'slug'],
     useAsTitle: 'title',
   },
   fields: [

@@ -6,8 +6,8 @@ export const author: Access = ({ req: { user } }) => {
   }
 
   return {
-    _authors: {
-      in: user?.id,
+    user: {
+      equals: user?.id,
     },
   };
 };

@@ -22,6 +22,7 @@ import { Favorites } from '@/collections/Favorites';
 import { Transactions } from '@/collections/Transactions';
 import { Newsletter } from '@/collections/Newsletter';
 import { Users } from '@/collections/Users';
+import { Settings } from '@/collections/Users/Settings';
 import { FooterPt } from '@/Footer/pt/config';
 import { FooterEn } from '@/Footer/en/config';
 import { FooterFr } from '@/Footer/fr/config';
@@ -107,6 +108,7 @@ export default buildConfig({
     Transactions,
     Newsletter,
     Users,
+    Settings,
   ],
   cors: [getServerSideURL()].filter(Boolean),
   csrf: [getServerSideURL()].filter(Boolean),

@@ -79,9 +79,27 @@ export const Users: CollectionConfig = {
       options: [
         { label: 'Admin', value: 'admin' },
         { label: 'User', value: 'user' },
+        { label: 'Student', value: 'student' },
+        { label: 'Teacher', value: 'teacher' },
       ],
       required: true,
       defaultValue: ['user'],
+    },
+    {
+      name: 'avatar',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Maximum size: 4MB. Accepted formats: .jpg, .jpeg, .png, .gif',
+      },
+    },
+    {
+      name: 'settings',
+      type: 'relationship',
+      relationTo: 'settings',
+      /**admin: {
+        condition: (data: { roles?: string[] }) => data.roles?.includes('user'),
+      },*/
     },
   ],
   timestamps: true,

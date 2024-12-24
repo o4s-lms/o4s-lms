@@ -57,12 +57,12 @@ const data = {
       title: 'Account',
       url: '#',
       icon: User2,
-      isActive: true,
     },
     {
       title: 'Settings',
       url: '#',
       icon: Settings2,
+      isActive: true,
     },
     {
       title: 'Help',
@@ -72,12 +72,12 @@ const data = {
   ],
 };
 
-type AccountSidebarProps = {
+type SettingsPageProps = {
   user: User;
   favorites: Favorite[];
 } & React.ComponentProps<typeof Sidebar>;
 
-export function AccountSidebar({ user, favorites, ...props }: AccountSidebarProps) {
+export function SettingsPage({ user, favorites, ...props }: SettingsPageProps) {
   const searchParams = useSearchParams();
   const success = searchParams.get('success');
 
@@ -104,7 +104,7 @@ export function AccountSidebar({ user, favorites, ...props }: AccountSidebarProp
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbPage className="line-clamp-1 font-semibold">
-                    Add or update your information
+                    Update your default settings
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
