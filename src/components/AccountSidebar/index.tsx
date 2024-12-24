@@ -30,13 +30,13 @@ import {
 } from '@/components/ui/breadcrumb';
 
 import ProfileForm from '@/components/ProfileForm';
-import { Favorite, User } from '@/payload-types';
+import type { User } from '@/payload-types';
 import { useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { SidebarHeaderMenu } from '@/components/SideBar/HeaderMenu';
 
 // This is sample data.
-const data = {
+const navs = {
   navMain: [
     {
       title: 'Search',
@@ -74,10 +74,9 @@ const data = {
 
 type AccountSidebarProps = {
   user: User;
-  favorites: Favorite[];
 } & React.ComponentProps<typeof Sidebar>;
 
-export function AccountSidebar({ user, favorites, ...props }: AccountSidebarProps) {
+export function AccountSidebar({ user, ...props }: AccountSidebarProps) {
   const searchParams = useSearchParams();
   const success = searchParams.get('success');
 
@@ -88,10 +87,10 @@ export function AccountSidebar({ user, favorites, ...props }: AccountSidebarProp
       <Sidebar className="border-r-0" {...props}>
         <SidebarHeader>
           <SidebarHeaderMenu />
-          <NavMain items={data.navMain} />
+          <NavMain items={navs.navMain} />
         </SidebarHeader>
         <SidebarContent>
-          <NavFavorites favorites={favorites} />
+          <NavFavorites/>
         </SidebarContent>
         <SidebarRail />
       </Sidebar>

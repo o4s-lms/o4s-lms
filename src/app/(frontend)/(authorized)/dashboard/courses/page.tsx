@@ -21,17 +21,6 @@ export default async function Page() {
         `/sign-in?error=${encodeURIComponent('You must be logged in to access your account.')}&redirect=/dashboard/courses`,
       );
     }
-  
-    const favorites = await payload.find({
-      collection: 'favorites',
-      limit: 50,
-      pagination: false,
-      where: {
-        userId: {
-          equals: user.id,
-        },
-      },
-    });
 
-  return <CoursesSidebar favorites={favorites.docs} />;
+  return <CoursesSidebar />;
 }

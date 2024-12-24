@@ -33,6 +33,17 @@ export const CourseProgress: CollectionConfig = {
       required: true,
     },
     {
+      name: 'status',
+      type: 'select',
+      required: true,
+      defaultValue: 'not_started',
+      options: [
+        { label: 'Not Started', value: 'not_started' },
+        { label: 'In Progress', value: 'in_progress' },
+        { label: 'Completed', value: 'completed' },
+      ],
+    },
+    {
       name: 'modules',
       type: 'relationship',
       label: 'Modules Progress',

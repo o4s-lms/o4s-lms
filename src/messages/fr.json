@@ -1,9 +1,15 @@
 {
   "any-question": "Des questions ? Contactez-nous",
   "build": "Construire avec",
+  "copy-link": "Copier le Lien",
   "copyright": "Tous droits réservés.",
+  "delete": "Supprimer",
+  "favorites": "Favoris",
   "home": "Accueil",
   "modules": "Modules d'apprentissage",
+  "more": "Plus",
+  "open-in-new-tab": "Ouvrir dans un Nouvel Onglet",
   "privacy": "Politique de Confidentialité",
+  "remove-from-favorites": "Supprimer des Favoris",
   "terms": "Termes et Conditions"
 }

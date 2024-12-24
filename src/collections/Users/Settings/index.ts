@@ -1,21 +1,7 @@
-import type { CollectionConfig, PayloadRequest } from 'payload';
-import type { User } from '@/payload-types';
+import type { CollectionConfig } from 'payload';
 import { checkRole } from '@/access/checkRole';
 import { languageSelectOptions } from '@/utilities/languages';
-
-type AccessArgs = {
-  req: {
-    user?: User | null;
-  };
-};
-
-interface BeforeChangeHookData {
-  data: {
-    user?: string | number;
-    [key: string]: any;
-  };
-  req: PayloadRequest;
-}
+import { AccessArgs, BeforeChangeHookData } from '@/collections/types';
 
 export const Settings: CollectionConfig = {
   slug: 'settings',

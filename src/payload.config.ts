@@ -18,7 +18,7 @@ import { Lessons } from '@/collections/Courses/Lessons';
 import { CourseProgress } from '@/collections/Courses/Progress';
 import { ModuleProgress } from '@/collections/Courses/Progress/ModuleProgress';
 import { LessonProgress } from '@/collections/Courses/Progress/LessonProgress';
-import { Favorites } from '@/collections/Favorites';
+import { Favorites } from '@/collections/Users/Favorites';
 import { Transactions } from '@/collections/Transactions';
 import { Newsletter } from '@/collections/Newsletter';
 import { Users } from '@/collections/Users';

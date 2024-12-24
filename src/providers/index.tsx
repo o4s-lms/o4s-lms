@@ -3,6 +3,9 @@ import React from 'react';
 import { AuthProvider } from './Auth';
 import { HeaderThemeProvider } from './HeaderTheme';
 import { ThemeProvider } from './Theme';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 type Props = {
   children: React.ReactNode;
@@ -18,7 +21,11 @@ export const Providers: React.FC<{
       api="rest" // change this to `gql` to use the GraphQL API
     >
       <ThemeProvider>
-        <HeaderThemeProvider>{children}</HeaderThemeProvider>
+        <HeaderThemeProvider>
+          <QueryClientProvider client={queryClient}>
+            {children}
+          </QueryClientProvider>
+        </HeaderThemeProvider>
       </ThemeProvider>
     </AuthProvider>
   );

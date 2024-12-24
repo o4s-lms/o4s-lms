@@ -1,9 +1,15 @@
 {
   "any-question": "Any questions? Reach out",
   "build": "Build with",
+  "copy-link": "Copy Link",
   "copyright": "All rights reserved.",
+  "delete": "Delete",
+  "favorites": "Favorites",
   "home": "Home",
   "modules": "Learning Modules",
+  "more": "More",
+  "open-in-new-tab": "Open in New Tab",
   "privacy": "Privacy Policy",
+  "remove-from-favorites": "Remove from Favorites",
   "terms": "Terms and Conditions"
 }

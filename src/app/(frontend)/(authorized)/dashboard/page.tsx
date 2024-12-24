@@ -23,18 +23,7 @@ const DashboardPage = async () => {
     );
   }
 
-  const favorites = await payload.find({
-    collection: 'favorites',
-    limit: 50,
-    pagination: false,
-    where: {
-      userId: {
-        equals: user.id,
-      },
-    },
-  });
-
-  return <DashboardSidebar favorites={favorites.docs} />;
+  return <DashboardSidebar />;
 };
 
 export default DashboardPage;

@@ -24,11 +24,11 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   if (!course) return <PayloadRedirects url={url} />;
 
-  const sections = course.sections
+  const modules = course.modules
     .map(({ value }) => value)
-    .filter((section) => typeof section === 'object');
+    .filter((module) => typeof module === 'object');
 
-  return <CourseSidebar title={course.title} data={sections} />;
+  return <CourseSidebar title={course.title} data={modules} />;
 }
 
 const queryCourseBySlug = cache(

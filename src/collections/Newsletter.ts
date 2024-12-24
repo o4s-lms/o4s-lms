@@ -14,6 +14,7 @@ export const Newsletter: CollectionConfig = {
     update: authenticated,
   },
   admin: {
+    group: 'Newsletters',
     defaultColumns: ['name', 'email'],
     useAsTitle: 'email',
   },

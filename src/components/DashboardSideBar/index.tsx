@@ -94,15 +94,9 @@ const data = {
   ],
 };
 
-type DashboardSidebarProps = {
-  favorites: Favorite[]
-} & React.ComponentProps<typeof Sidebar>
-
 export function DashboardSidebar({
-  favorites,
   ...props
-}: DashboardSidebarProps) {
-
+}: React.ComponentProps<typeof Sidebar>) {
   return (
     <>
       <Sidebar className="border-r-0" {...props}>
@@ -130,7 +124,7 @@ export function DashboardSidebar({
           <NavMain items={data.navMain} />
         </SidebarHeader>
         <SidebarContent>
-          <NavFavorites favorites={favorites} />
+          <NavFavorites />
         </SidebarContent>
         <SidebarRail />
       </Sidebar>

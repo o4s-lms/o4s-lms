@@ -1,7 +1,8 @@
 import type { CollectionConfig } from 'payload';
 
-import { authenticated } from '../access/authenticated';
+import { authenticated } from '@/access/authenticated';
 import { admin } from '@/access/admin';
+import { AccessArgs, BeforeChangeHookData } from '@/collections/types';
 
 export const Favorites: CollectionConfig = {
   slug: 'favorites',
@@ -49,4 +50,19 @@ export const Favorites: CollectionConfig = {
       type: 'text',
     },
   ],
+  hooks: {
+    beforeChange: [
+      ({ req, data }: BeforeChangeHookData) => {
+        if (!data.user && req.user?.id) {
+          if (
+            typeof req.user.id === 'string' ||
+            typeof req.user.id === 'number'
+          ) {
+            data.user = req.user.id;
+          }
+        }
+        return data;
+      },
+    ],
+  },
 };

@@ -8,7 +8,7 @@ import { Lessons } from './Courses/Lessons';
 import { CourseProgress } from './Courses/Progress';
 import { ModuleProgress } from './Courses/Progress/ModuleProgress';
 import { LessonProgress } from './Courses/Progress/LessonProgress';
-import { Favorites } from './Favorites';
+import { Favorites } from './Users/Favorites';
 import { Transactions } from './Transactions';
 import { Newsletter } from './Newsletter';
 import { Users } from './Users';
