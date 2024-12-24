@@ -995,6 +995,7 @@ export interface CourseProgress {
     relationTo: 'courses';
     value: number | Course;
   };
+  status: 'not_started' | 'in_progress' | 'completed';
   modules: {
     relationTo: 'module-progress';
     value: number | ModuleProgress;
@@ -1048,7 +1049,10 @@ export interface LessonProgress {
  */
 export interface Favorite {
   id: number;
-  userId: number;
+  /**
+   * The user this favorite belong to
+   */
+  user?: (number | null) | User;
   objectType: 'lessons' | 'courses' | 'posts' | 'pages';
   objectId: number;
   title: string;
@@ -1720,6 +1724,7 @@ export interface LessonsSelect<T extends boolean = true> {
 export interface CourseProgressSelect<T extends boolean = true> {
   student?: T;
   course?: T;
+  status?: T;
   modules?: T;
   enrollmentDate?: T;
   overallProgress?: T;
@@ -1753,7 +1758,7 @@ export interface LessonProgressSelect<T extends boolean = true> {
  * via the `definition` "favorites_select".
  */
 export interface FavoritesSelect<T extends boolean = true> {
-  userId?: T;
+  user?: T;
   objectType?: T;
   objectId?: T;
   title?: T;

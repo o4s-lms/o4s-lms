@@ -27,14 +27,13 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarRail,
-  useSidebar,
   SidebarInset,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { SearchForm } from './SearchForm';
 import RichText from '@/components/RichText';
 
-import { Section } from '@/payload-types';
+import type { Module } from '@/payload-types';
 import { NavActions } from '@/components/NavActions';
 import {
   SerializedEditorState,
@@ -43,17 +42,17 @@ import {
 
 type CourseSidebarProps = {
   title: string;
-  data: Section[];
+  data: Module[];
 } & React.ComponentProps<typeof Sidebar>;
 
 export function CourseSidebar({ title, data, ...props }: CourseSidebarProps) {
   // Note: I'm using state to show active item.
   // IRL you should use the url/router.
-  const [sections, setSections] = React.useState<Section[]>(data);
+  const [modules, setModules] = React.useState<Module[]>(data);
   const [content, setContent] = React.useState<
     SerializedEditorState | null | undefined
   >(null);
-  const [lesson, setLesson] = React.useState<string | null>(null);
+  const [lesson, setLesson] = React.useState<{ id: number; title: string; } | null>(null);
 
   return (
     <>
@@ -82,7 +81,7 @@ export function CourseSidebar({ title, data, ...props }: CourseSidebarProps) {
         <SidebarContent>
           <SidebarGroup>
             <SidebarMenu>
-              {sections.map((item, index) => (
+              {modules.map((item, index) => (
                 <Collapsible
                   key={item.title}
                   defaultOpen={index === 1}
@@ -106,13 +105,13 @@ export function CourseSidebar({ title, data, ...props }: CourseSidebarProps) {
                               <SidebarMenuSubItem key={item.title}>
                                 <SidebarMenuSubButton
                                   asChild
-                                  isActive={item.title === lesson}
+                                  isActive={item.title === lesson?.title}
                                 >
                                   <a
                                     href="#"
                                     onClick={() => {
                                       setContent(item.content);
-                                      setLesson(item.title);
+                                      setLesson({...item});
                                     }}
                                   >
                                     {item.title}
@@ -140,14 +139,14 @@ export function CourseSidebar({ title, data, ...props }: CourseSidebarProps) {
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbPage className="line-clamp-1">
-                    {lesson ? lesson : title}
+                    {lesson ? lesson.title : title}
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
           <div className="ml-auto px-3">
-            <NavActions />
+            <NavActions lesson={lesson} />
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4">

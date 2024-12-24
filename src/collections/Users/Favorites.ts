@@ -18,10 +18,13 @@ export const Favorites: CollectionConfig = {
   },
   fields: [
     {
-      name: 'userId',
-      type: 'number',
-      required: true,
-      index: true,
+      name: 'user',
+      type: 'relationship',
+      relationTo: 'users',
+      admin: {
+        description: 'The user this favorite belong to',
+      },
+      index: true
     },
     {
       name: 'objectType',
