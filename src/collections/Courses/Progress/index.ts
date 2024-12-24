@@ -13,6 +13,7 @@ export const CourseProgress: CollectionConfig = {
     update: authenticated,
   },
   admin: {
+    group: 'Courses',
     defaultColumns: ['student', 'course', 'overallProgress'],
     useAsTitle: 'student',
   },

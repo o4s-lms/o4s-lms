@@ -12,6 +12,9 @@ export const ModuleProgress: CollectionConfig = {
     read: authenticated,
     update: authenticated,
   },
+  admin: {
+    group: 'Courses',
+  },
   fields: [
     {
       name: 'module',

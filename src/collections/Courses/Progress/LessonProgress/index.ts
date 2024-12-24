@@ -12,6 +12,9 @@ export const LessonProgress: CollectionConfig = {
     read: authenticated,
     update: authenticated,
   },
+  admin: {
+    group: 'Courses',
+  },
   fields: [
     {
       name: 'lesson',

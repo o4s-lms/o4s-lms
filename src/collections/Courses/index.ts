@@ -31,6 +31,7 @@ import { FAQBlock } from '@/blocks/FAQBlock/config';
 
 export const Courses: CollectionConfig<'courses'> = {
   slug: 'courses',
+  
   access: {
     admin: admin,
     create: admin,
@@ -56,6 +57,7 @@ export const Courses: CollectionConfig<'courses'> = {
     },
   },
   admin: {
+    group: 'Courses',
     defaultColumns: ['title', 'slug', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) => {

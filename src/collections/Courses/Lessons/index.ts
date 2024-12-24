@@ -51,6 +51,7 @@ export const Lessons: CollectionConfig<'lessons'> = {
     },
   },
   admin: {
+    group: 'Courses',
     defaultColumns: ['title', 'slug', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) => {

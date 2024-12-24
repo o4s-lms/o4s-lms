@@ -21,6 +21,7 @@ export const Modules: CollectionConfig = {
     update: admin,
   },
   admin: {
+    group: 'Courses',
     useAsTitle: 'title',
   },
   fields: [
