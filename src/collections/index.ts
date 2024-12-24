@@ -1,4 +1,4 @@
-import { Categories } from './Categories';
+import { Categories } from './Posts/Categories';
 import { Media } from './Media';
 import { Pages } from './Pages';
 import { Posts } from './Posts';

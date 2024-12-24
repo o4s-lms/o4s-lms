@@ -14,6 +14,7 @@ export const Transactions: CollectionConfig = {
     update: admin,
   },
   admin: {
+    group: 'Orders',
     defaultColumns: ['email', 'provider', 'transactionId', 'total'],
     useAsTitle: 'email',
   },

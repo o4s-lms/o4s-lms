@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload';
 
-import { anyone } from '../access/anyone';
-import { authenticated } from '../access/authenticated';
+import { anyone } from '@/access/anyone';
+import { authenticated } from '@/access/authenticated';
 import { languageSelectOptions } from '@/utilities/languages';
 
 import {
@@ -22,6 +22,7 @@ export const Categories: CollectionConfig = {
     update: authenticated,
   },
   admin: {
+    group: 'Blog',
     defaultColumns: ['title', 'language', 'slug'],
     useAsTitle: 'title',
   },
