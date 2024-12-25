@@ -3,6 +3,9 @@ import type { CollectionConfig } from 'payload';
 import { authenticated } from '@/access/authenticated';
 import { anyone } from '@/access/anyone';
 import { admin } from '@/access/admin';
+import { render } from '@react-email/components';
+import { VerifyEmail } from '@/emails/verify';
+import { ResetPasswordEmail } from '@/emails/reset-password';
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -25,43 +28,15 @@ export const Users: CollectionConfig = {
     lockTime: 600 * 1000, // Time period to allow the max login attempts
     // More options are available
     verify: {
-      generateEmailHTML: ({ req, token, user }) => {
+      generateEmailHTML: async ({ req, token, user }) => {
         // Use the token provided to allow your user to verify their account
-        const verifyURL = `${process.env.NEXT_PUBLIC_SERVER_URL}/verify?token=${token}`;
-
-        return `
-          <!doctype html>
-          <html>
-            <body>
-              <h1>Verify your email</h1>
-              <p>Hello, ${user.name}!</p>
-              <p>Click below to verify your email.</p>
-              <p>
-                <a href="${verifyURL}">${verifyURL}</a>
-              </p>
-            </body>
-          </html>
-        `;
+        return await render(<VerifyEmail token={token} />);
       },
     },
     forgotPassword: {
-      generateEmailHTML: ({ req, token, user }) => {
+      generateEmailHTML: async ({ req, token, user }) => {
         // Use the token provided to allow your user to reset their password
-        const resetPasswordURL = `${process.env.NEXT_PUBLIC_SERVER_URL}/reset-password?token=${token}`;
-
-        return `
-          <!doctype html>
-          <html>
-            <body>
-              <h1>Reset your password!</h1>
-              <p>Hello, ${user.name}!</p>
-              <p>Click below to reset your password.</p>
-              <p>
-                <a href="${resetPasswordURL}">${resetPasswordURL}</a>
-              </p>
-            </body>
-          </html>
-        `;
+        return await render(<ResetPasswordEmail token={token} />);
       },
     },
   },
