@@ -19,6 +19,10 @@ declare global {
       NEXT_PUBLIC_PAYPAL_CLIENT_ID: string;
       PAYPAL_CLIENT_ID: string;
       PAYPAL_CLIENT_SECRET: string;
+      INNGEST_BASE_URL: string;
+      INNGEST_EVENT_KEY: string;
+      INNGEST_SIGNING_KEY: string;
+      REDIS_URI: string;
     }
   }
 }
