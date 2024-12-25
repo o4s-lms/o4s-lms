@@ -2,7 +2,6 @@ import { headers as getHeaders } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
-import { AccountSidebar } from '@/components/AccountSidebar';
 
 export default async function Settings() {
   const headers = await getHeaders();
@@ -20,7 +19,7 @@ export default async function Settings() {
     limit: 1,
     pagination: false,
     where: {
-      userId: {
+      user: {
         equals: user.id,
       },
     },

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import configPromise from '@payload-config';
 import { getPayload } from 'payload';
 import React, { cache } from 'react';
-import { CourseSidebar } from '@/components/CourseSidebar';
+import { CourseWithSidebar } from '@/components/Dashboard/Course';
 import { PayloadRedirects } from '@/components/PayloadRedirects';
 
 export const metadata: Metadata = {
@@ -28,7 +28,7 @@ export default async function Page({ params: paramsPromise }: Args) {
     .map(({ value }) => value)
     .filter((module) => typeof module === 'object');
 
-  return <CourseSidebar title={course.title} data={modules} />;
+  return <CourseWithSidebar title={course.title} data={modules} />;
 }
 
 const queryCourseBySlug = cache(

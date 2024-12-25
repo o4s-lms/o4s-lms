@@ -42,6 +42,7 @@ export const Lessons: CollectionConfig<'lessons'> = {
   // Type safe if the collection slug generic is passed to `CollectionConfig` - `CollectionConfig<'posts'>
   defaultPopulate: {
     title: true,
+    content: true,
     slug: true,
     course: true,
     module: true,

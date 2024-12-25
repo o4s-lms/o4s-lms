@@ -2,7 +2,7 @@ import { headers as getHeaders } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
-import { AccountSidebar } from '@/components/AccountSidebar';
+import { AccountWithSidebar } from '@/components/Dashboard/Account';
 
 export default async function Account() {
   const headers = await getHeaders();
@@ -15,18 +15,7 @@ export default async function Account() {
     );
   }
 
-  const favorites = await payload.find({
-    collection: 'favorites',
-    limit: 50,
-    pagination: false,
-    where: {
-      userId: {
-        equals: user.id,
-      },
-    },
-  });
-
   return (
-    <AccountSidebar user={user} favorites={favorites.docs} />
+    <AccountWithSidebar user={user} />
   );
 }

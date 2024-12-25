@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { headers as getHeaders } from 'next/headers';
-import { DashboardSidebar } from '@/components/DashboardSideBar';
+import { DashboardWithSidebar } from '@/components/Dashboard';
 import React from 'react';
 import configPromise from '@payload-config';
 import { getPayload } from 'payload';
@@ -23,7 +23,7 @@ const DashboardPage = async () => {
     );
   }
 
-  return <DashboardSidebar />;
+  return <DashboardWithSidebar />;
 };
 
 export default DashboardPage;

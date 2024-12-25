@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { headers as getHeaders } from 'next/headers';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
-import { CoursesSidebar } from '@/components/CoursesSidebar';
+import { CoursesWithSidebar } from '@/components/Dashboard/Courses';
 import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
@@ -22,5 +22,5 @@ export default async function Page() {
       );
     }
 
-  return <CoursesSidebar />;
+  return <CoursesWithSidebar />;
 }

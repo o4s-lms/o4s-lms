@@ -1,8 +1,16 @@
 'use client';
 
 import * as React from 'react';
+import Image from 'next/image';
 import {
+  AudioWaveform,
+  Blocks,
+  Calendar,
+  Command,
+  GalleryVerticalEnd,
   Home,
+  Inbox,
+  Library,
   MessageCircleQuestion,
   Search,
   Settings2,
@@ -18,6 +26,9 @@ import {
   SidebarContent,
   SidebarHeader,
   SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   SidebarRail,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
@@ -28,69 +39,80 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from '@/components/ui/breadcrumb';
+import { useTranslate } from '@tolgee/react';
 
-import ProfileForm from '@/components/ProfileForm';
-import type { User } from '@/payload-types';
-import { useSearchParams } from 'next/navigation';
-import { toast } from 'sonner';
-import { SidebarHeaderMenu } from '@/components/SideBar/HeaderMenu';
-
-// This is sample data.
-const navs = {
-  navMain: [
+export function DashboardWithSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
+  const { t } = useTranslate();
+  
+  const nav = [
     {
-      title: 'Search',
+      title: t('search'),
       url: '#',
       icon: Search,
     },
     {
-      title: 'Ask AI',
+      title: t('ask-ai'),
       url: '#',
       icon: Sparkles,
     },
     {
-      title: 'Dashboard',
-      url: '/dashboard',
-      icon: Home,
-    },
-    {
-      title: 'Account',
+      title: t('dashboard'),
       url: '#',
-      icon: User2,
+      icon: Home,
       isActive: true,
     },
     {
-      title: 'Settings',
-      url: '#',
+      title: t('courses'),
+      url: '/dashboard/courses',
+      icon: Library,
+    },
+    {
+      title: t('account'),
+      url: '/dashboard/account',
+      icon: User2,
+    },
+    {
+      title: t('settings'),
+      url: '/dashboard/settings',
       icon: Settings2,
     },
     {
-      title: 'Help',
+      title: t('help'),
       url: '#',
       icon: MessageCircleQuestion,
     },
-  ],
-};
-
-type AccountSidebarProps = {
-  user: User;
-} & React.ComponentProps<typeof Sidebar>;
-
-export function AccountSidebar({ user, ...props }: AccountSidebarProps) {
-  const searchParams = useSearchParams();
-  const success = searchParams.get('success');
-
-  if (success) toast.info(success);
+  ];
 
   return (
     <>
       <Sidebar className="border-r-0" {...props}>
         <SidebarHeader>
-          <SidebarHeaderMenu />
-          <NavMain items={navs.navMain} />
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton size="lg" asChild>
+                <a href="#">
+                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg text-sidebar-primary-foreground">
+                    <Image
+                      src="/iconO4S-100x100.png"
+                      width={24}
+                      height={24}
+                      alt="Open For Sustainability"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-0.5 leading-none">
+                    <span className="font-semibold">O4S LMS</span>
+                    <span className="">v1.0.0</span>
+                  </div>
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+          <NavMain items={nav} />
         </SidebarHeader>
         <SidebarContent>
-          <NavFavorites/>
+          <NavFavorites />
         </SidebarContent>
         <SidebarRail />
       </Sidebar>
@@ -103,14 +125,14 @@ export function AccountSidebar({ user, ...props }: AccountSidebarProps) {
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbPage className="line-clamp-1 font-semibold">
-                    Add or update your information
+                    {t('dashboard')}
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
           <div className="ml-auto px-3">
-            <NavActions />
+            <NavActions  lesson={null}/>
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4">
@@ -120,9 +142,7 @@ export function AccountSidebar({ user, ...props }: AccountSidebarProps) {
             <div className="aspect-video rounded-xl bg-muted/50" />
           </div>
 
-          <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min">
-            <ProfileForm currentUser={user} />
-          </div>
+          <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min"></div>
         </div>
       </SidebarInset>
     </>

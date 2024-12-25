@@ -1,15 +1,9 @@
 'use client';
 
 import * as React from 'react';
-import Image from 'next/image';
 import {
-  AudioWaveform,
-  Blocks,
-  Calendar,
-  Command,
-  GalleryVerticalEnd,
   Home,
-  Inbox,
+  Library,
   MessageCircleQuestion,
   Search,
   Settings2,
@@ -25,9 +19,6 @@ import {
   SidebarContent,
   SidebarHeader,
   SidebarInset,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarRail,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
@@ -38,90 +29,72 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from '@/components/ui/breadcrumb';
-import { Favorite } from '@/payload-types';
 
-// This is sample data.
-const data = {
-  teams: [
+import ProfileForm from '@/components/ProfileForm';
+import type { User } from '@/payload-types';
+import { toast } from 'sonner';
+import { SidebarHeaderMenu } from '@/components/SideBar/HeaderMenu';
+import { useTranslate } from '@tolgee/react';
+import { useQueryState } from 'nuqs';
+
+type AccountSidebarProps = {
+  user: User;
+} & React.ComponentProps<typeof Sidebar>;
+
+export function AccountWithSidebar({ user, ...props }: AccountSidebarProps) {
+  const [success, setSuccess] = useQueryState('success')
+  const { t } = useTranslate();
+
+  const nav = [
     {
-      name: 'Acme Inc',
-      logo: Command,
-      plan: 'Enterprise',
-    },
-    {
-      name: 'Acme Corp.',
-      logo: AudioWaveform,
-      plan: 'Startup',
-    },
-    {
-      name: 'Evil Corp.',
-      logo: Command,
-      plan: 'Free',
-    },
-  ],
-  navMain: [
-    {
-      title: 'Search',
+      title: t('search'),
       url: '#',
       icon: Search,
     },
     {
-      title: 'Ask AI',
+      title: t('ask-ai'),
       url: '#',
       icon: Sparkles,
     },
     {
-      title: 'Dashboard',
+      title: t('dashboard'),
       url: '#',
       icon: Home,
+    },
+    {
+      title: t('courses'),
+      url: '/dashboard/courses',
+      icon: Library,
+    },
+    {
+      title: t('account'),
+      url: '/dashboard/account',
+      icon: User2,
       isActive: true,
     },
     {
-      title: 'Account',
-      url: '/dashboard/account',
-      icon: User2,
-    },
-    {
-      title: 'Settings',
-      url: '#',
+      title: t('settings'),
+      url: '/dashboard/settings',
       icon: Settings2,
     },
     {
-      title: 'Help',
+      title: t('help'),
       url: '#',
       icon: MessageCircleQuestion,
     },
-  ],
-};
+  ];
 
-export function DashboardSidebar({
-  ...props
-}: React.ComponentProps<typeof Sidebar>) {
+  if (success) {
+    toast.success(success);
+    setSuccess(null);
+  }
+
   return (
     <>
       <Sidebar className="border-r-0" {...props}>
         <SidebarHeader>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton size="lg" asChild>
-                <a href="#">
-                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg text-sidebar-primary-foreground">
-                    <Image
-                      src="/iconO4S-100x100.png"
-                      width={24}
-                      height={24}
-                      alt="Open For Sustainability"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-0.5 leading-none">
-                    <span className="font-semibold">O4S LMS</span>
-                    <span className="">v1.0.0</span>
-                  </div>
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-          <NavMain items={data.navMain} />
+          <SidebarHeaderMenu />
+          <NavMain items={nav} />
         </SidebarHeader>
         <SidebarContent>
           <NavFavorites />
@@ -137,14 +110,14 @@ export function DashboardSidebar({
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbPage className="line-clamp-1 font-semibold">
-                    Dashboard
+                    Add or update your information
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
           <div className="ml-auto px-3">
-            <NavActions />
+            <NavActions lesson={null} />
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4">
@@ -154,7 +127,9 @@ export function DashboardSidebar({
             <div className="aspect-video rounded-xl bg-muted/50" />
           </div>
 
-          <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min"></div>
+          <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min">
+            <ProfileForm currentUser={user} />
+          </div>
         </div>
       </SidebarInset>
     </>

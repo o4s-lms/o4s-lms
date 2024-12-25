@@ -2,18 +2,14 @@
 
 import * as React from 'react';
 import {
-  AudioWaveform,
-  Blocks,
-  Calendar,
-  Command,
   GalleryVerticalEnd,
   Home,
-  Inbox,
+  Library,
   MessageCircleQuestion,
   Search,
   Settings2,
   Sparkles,
-  Trash2,
+  User2,
 } from 'lucide-react';
 
 import { NavFavorites } from '@/components/NavFavorites';
@@ -36,43 +32,53 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from '@/components/ui/breadcrumb';
-import { NavActions } from '../NavActions';
-// This is sample data.
-const data = {
-  navMain: [
+import { NavActions } from '../../NavActions';
+import { useTranslate } from '@tolgee/react';
+
+export function CoursesWithSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
+  const { t } = useTranslate();
+
+  const nav = [
     {
-      title: 'Search',
+      title: t('search'),
       url: '#',
       icon: Search,
     },
     {
-      title: 'Ask AI',
+      title: t('ask-ai'),
       url: '#',
       icon: Sparkles,
     },
     {
-      title: 'Home',
-      url: '#',
+      title: t('dashboard'),
+      url: '/dashboard',
       icon: Home,
+    },
+    {
+      title: t('courses'),
+      url: '/dashboard/courses',
+      icon: Library,
       isActive: true,
     },
     {
-      title: 'Settings',
-      url: '#',
+      title: t('account'),
+      url: '/dashboard/account',
+      icon: User2,
+    },
+    {
+      title: t('settings'),
+      url: '/dashboard/settings',
       icon: Settings2,
     },
     {
-      title: 'Help',
+      title: t('help'),
       url: '#',
       icon: MessageCircleQuestion,
     },
-  ],
-  
-};
+  ];
 
-export function CoursesSidebar({
-  ...props
-}: React.ComponentProps<typeof Sidebar>) {
   return (
     <>
       <Sidebar className="border-r-0" {...props}>
@@ -92,7 +98,7 @@ export function CoursesSidebar({
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
-          <NavMain items={data.navMain} />
+          <NavMain items={nav} />
         </SidebarHeader>
         <SidebarContent>
           <NavFavorites />
@@ -108,14 +114,14 @@ export function CoursesSidebar({
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbPage className="line-clamp-1 font-semibold">
-                    Courses
+                    {t('courses')}
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
           <div className="ml-auto px-3">
-            <NavActions lesson={null}/>
+            <NavActions lesson={null} />
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4">

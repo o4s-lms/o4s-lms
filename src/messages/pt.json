@@ -1,15 +1,22 @@
 {
+  "account": "Conta",
   "any-question": "Alguma dúvida? Entre em contacto",
+  "ask-ai": "Pergunte à IA",
   "build": "Feito com",
   "copy-link": "Copiar Link",
   "copyright": "Todos os direitos reservados.",
+  "courses": "Cursos",
+  "dashboard": "Painel",
   "delete": "Eliminar",
   "favorites": "Favoritos",
+  "help": "Ajuda",
   "home": "Início",
   "modules": "Módulos de Aprendizagem",
   "more": "Mais",
   "open-in-new-tab": "Abrir numa Nova Aba",
   "privacy": "Política de Privacidade",
   "remove-from-favorites": "Remove dos favoritos",
+  "search": "Pesquisa",
+  "settings": "Configurações",
   "terms": "Termos e Condições"
 }

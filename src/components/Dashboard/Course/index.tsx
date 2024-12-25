@@ -47,7 +47,7 @@ type CourseSidebarProps = {
   data: Module[];
 } & React.ComponentProps<typeof Sidebar>;
 
-export function CourseSidebar({ title, data, ...props }: CourseSidebarProps) {
+export function CourseWithSidebar({ title, data, ...props }: CourseSidebarProps) {
   // Note: I'm using state to show active item.
   // IRL you should use the url/router.
   const [lessonId, setLessonId] = useQueryState('lessonId', parseAsInteger)
