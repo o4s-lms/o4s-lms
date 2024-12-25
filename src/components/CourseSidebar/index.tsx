@@ -111,7 +111,7 @@ export function CourseSidebar({ title, data, ...props }: CourseSidebarProps) {
                               <SidebarMenuSubItem key={item.title}>
                                 <SidebarMenuSubButton
                                   asChild
-                                  isActive={item.title === lesson?.title}
+                                  isActive={item.id === lessonId}
                                 >
                                   <a
                                     href="#"

@@ -64,7 +64,7 @@ export async function removeUserFavorites(id: number, objectType: 'pages' | 'pos
       and: [ 
         {
           user: {
-            equals: user,
+            equals: user?.id,
           },
         },
         {

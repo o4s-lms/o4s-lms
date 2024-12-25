@@ -40,13 +40,13 @@ import { LanguageSelector } from '../LangSelector.';
 import { ThemeSelector } from '@/providers/Theme/ThemeSelector';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { Lesson } from '@/payload-types';
-import { FavoriteMutationData } from '@/hooks/useFavorites';
+import { FavoriteMutationData, useUserFavorites } from '@/hooks/useFavorites';
 import {
   createUserFavorites,
   removeUserFavorites,
 } from '@/utilities/userFavorites';
 import { toast } from 'sonner';
-import { parseAsInteger, useQueryState } from 'nuqs';
+import { usePathname } from 'next/navigation';
 
 const data = [
   [
@@ -116,15 +116,16 @@ export function NavActions({
 }: {
   lesson: { id: number; title: string } | null;
 }) {
-  const [lessonId, setLessonId] = useQueryState('lessonId', parseAsInteger)
   const [isOpen, setIsOpen] = React.useState(false);
   const [isFavorite, setIsFavorite] = React.useState(false);
+  const { isPending, isError, data: favorites, error } = useUserFavorites();
+  const pathname = usePathname();
   const queryClient = useQueryClient();
 
   //if (lesson?.id === lessonId) setIsFavorite(true);
 
-  console.log('isFavorite:', isFavorite);
-  console.log('LessonId: ', lessonId);
+  
+  console.log('pathname: ', pathname);
   console.log('id: ', lesson?.id);
 
   const createFavorite = useMutation({
@@ -133,6 +134,7 @@ export function NavActions({
         objectType: 'lessons',
         objectId: lesson?.id as number,
         title: lesson?.title as string,
+        url: `${pathname}?lessonId=${lesson?.id}`
       };
       return createUserFavorites(data);
     },
@@ -168,6 +170,10 @@ export function NavActions({
     }
   };
 
+  //if (favorites?.map(({ id }) => ( id )).includes(lesson.id)) setIsFavorite(true);
+
+  console.log('isFavorite:', isFavorite);
+
   return (
     <div className="flex items-center gap-2 text-sm">
       {lesson && (
@@ -177,7 +183,7 @@ export function NavActions({
           size="icon"
           className="h-7 w-7"
         >
-          {isFavorite ? <StarOff /> : <Star />}
+          {favorites?.map(({ id }) => ( id )).includes(lesson.id) ? <StarOff /> : <Star />}
         </Button>
       )}
       <Popover open={isOpen} onOpenChange={setIsOpen}>
