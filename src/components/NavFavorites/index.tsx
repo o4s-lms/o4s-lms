@@ -26,13 +26,36 @@ import {
 } from '@/components/ui/sidebar';
 import { useUserFavorites } from '@/hooks/useFavorites';
 import { useTranslate } from '@tolgee/react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { removeUserFavorites } from '@/utilities/userFavorites';
+import { toast } from 'sonner';
 
 export function NavFavorites() {
   const { isMobile } = useSidebar();
   const { t } = useTranslate();
   const { isPending, isError, data: favorites, error } = useUserFavorites();
+  const queryClient = useQueryClient();
+
+  const removeFavorite = useMutation({
+    mutationFn: ({ id }: { id: number }) =>
+      removeUserFavorites(id, 'lessons'),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user-favorites'] });
+      toast.success('Favorite removed');
+    },
+    onError: (error) => {
+      toast.error('Failed to remove favorite');
+      console.error('Failed to remove favorite:', error);
+    },
+  });
+
+  const remove = (id: number) => {
+    removeFavorite.mutate({ id });
+  };
 
   if (isPending) return null;
+
+  console.log('Favorites: ', JSON.stringify(favorites));
 
   return (
     <>
@@ -60,7 +83,7 @@ export function NavFavorites() {
                     side={isMobile ? 'bottom' : 'right'}
                     align={isMobile ? 'end' : 'start'}
                   >
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => remove(item.id)}>
                       <StarOff className="text-muted-foreground" />
                       <span>{t('remove-from-favorites')}</span>
                     </DropdownMenuItem>

@@ -28,6 +28,7 @@ import {
 import { slugField } from '@/fields/slug';
 import { languageSelectOptions } from '@/utilities/languages';
 import { FAQBlock } from '@/blocks/FAQBlock/config';
+import { anyone } from '@/access/anyone';
 
 export const Courses: CollectionConfig<'courses'> = {
   slug: 'courses',
@@ -36,7 +37,7 @@ export const Courses: CollectionConfig<'courses'> = {
     admin: admin,
     create: admin,
     delete: admin,
-    read: published,
+    read: anyone,
     update: admin,
   },
   // This config controls what's populated by default when a post is referenced

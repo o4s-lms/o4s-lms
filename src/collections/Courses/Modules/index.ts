@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload';
 
 import { anyone } from '@/access/anyone';
 import { admin } from '@/access/admin';
+import { authenticated } from '@/access/authenticated';
 
 import {
   FixedToolbarFeature,
@@ -69,7 +70,7 @@ export const Modules: CollectionConfig = {
     ...slugField(),
   ],
   labels: {
-    plural: 'Course Sections',
-    singular: 'Course Section',
+    plural: 'Learning Modules',
+    singular: 'Learning Module',
   },
 };

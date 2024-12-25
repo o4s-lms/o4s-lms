@@ -21,6 +21,7 @@ export const Favorites: CollectionConfig = {
       name: 'user',
       type: 'relationship',
       relationTo: 'users',
+      required: true,
       admin: {
         description: 'The user this favorite belong to',
       },

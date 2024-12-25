@@ -1,3 +1,5 @@
+'use server';
+
 import { headers as getHeaders } from 'next/headers';
 import configPromise from '@payload-config';
 import { getPayload } from 'payload';
@@ -9,10 +11,11 @@ export async function getUserFavorites() {
 
   const favorites = await payload.find({
     collection: 'favorites',
+    depth: 0,
     limit: 50,
     pagination: false,
     where: {
-      userId: {
+      user: {
         equals: user?.id,
       },
     },
@@ -32,11 +35,14 @@ export async function createUserFavorites({
   title: string;
   url?: string;
 }) {
+  const headers = await getHeaders();
   const payload = await getPayload({ config: configPromise });
+  const { user } = await payload.auth({ headers });
 
   const favorite = await payload.create({
     collection: 'favorites',
     data: {
+      user: user?.id,
       objectType: objectType,
       objectId: objectId,
       title: title,
@@ -58,7 +64,7 @@ export async function removeUserFavorites(id: number, objectType: 'pages' | 'pos
       and: [ 
         {
           user: {
-            equals: user?.id,
+            equals: user,
           },
         },
         {

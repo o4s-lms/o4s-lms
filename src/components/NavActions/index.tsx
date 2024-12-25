@@ -46,6 +46,7 @@ import {
   removeUserFavorites,
 } from '@/utilities/userFavorites';
 import { toast } from 'sonner';
+import { parseAsInteger, useQueryState } from 'nuqs';
 
 const data = [
   [
@@ -115,9 +116,16 @@ export function NavActions({
 }: {
   lesson: { id: number; title: string } | null;
 }) {
+  const [lessonId, setLessonId] = useQueryState('lessonId', parseAsInteger)
   const [isOpen, setIsOpen] = React.useState(false);
   const [isFavorite, setIsFavorite] = React.useState(false);
   const queryClient = useQueryClient();
+
+  //if (lesson?.id === lessonId) setIsFavorite(true);
+
+  console.log('isFavorite:', isFavorite);
+  console.log('LessonId: ', lessonId);
+  console.log('id: ', lesson?.id);
 
   const createFavorite = useMutation({
     mutationFn: () => {

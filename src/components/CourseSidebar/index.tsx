@@ -39,6 +39,8 @@ import {
   SerializedEditorState,
   SerializedLexicalNode,
 } from '@payloadcms/richtext-lexical/lexical';
+import { NavFavorites } from '@/components/NavFavorites';
+import { parseAsInteger, useQueryState } from 'nuqs';
 
 type CourseSidebarProps = {
   title: string;
@@ -48,6 +50,7 @@ type CourseSidebarProps = {
 export function CourseSidebar({ title, data, ...props }: CourseSidebarProps) {
   // Note: I'm using state to show active item.
   // IRL you should use the url/router.
+  const [lessonId, setLessonId] = useQueryState('lessonId', parseAsInteger)
   const [modules, setModules] = React.useState<Module[]>(data);
   const [content, setContent] = React.useState<
     SerializedEditorState | null | undefined
@@ -66,7 +69,10 @@ export function CourseSidebar({ title, data, ...props }: CourseSidebarProps) {
                     <GalleryVerticalEnd className="size-4" />
                   </div>
                   <div
-                    onClick={() => setLesson(null)}
+                    onClick={() => {
+                      setLesson(null);
+                      setLessonId(null);
+                    }}
                     className="flex flex-col gap-0.5 leading-none"
                   >
                     <span className="font-semibold">{title}</span>
@@ -112,6 +118,7 @@ export function CourseSidebar({ title, data, ...props }: CourseSidebarProps) {
                                     onClick={() => {
                                       setContent(item.content);
                                       setLesson({...item});
+                                      setLessonId(item.id);
                                     }}
                                   >
                                     {item.title}
@@ -127,6 +134,7 @@ export function CourseSidebar({ title, data, ...props }: CourseSidebarProps) {
               ))}
             </SidebarMenu>
           </SidebarGroup>
+          <NavFavorites />
         </SidebarContent>
         <SidebarRail />
       </Sidebar>

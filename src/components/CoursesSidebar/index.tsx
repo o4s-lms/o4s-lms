@@ -37,8 +37,6 @@ import {
   BreadcrumbPage,
 } from '@/components/ui/breadcrumb';
 import { NavActions } from '../NavActions';
-import { Favorite } from '@/payload-types';
-
 // This is sample data.
 const data = {
   navMain: [
@@ -117,7 +115,7 @@ export function CoursesSidebar({
             </Breadcrumb>
           </div>
           <div className="ml-auto px-3">
-            <NavActions />
+            <NavActions lesson={null}/>
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4">

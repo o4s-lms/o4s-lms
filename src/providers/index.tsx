@@ -1,9 +1,12 @@
+'use client';
+
 import React from 'react';
 
 import { AuthProvider } from './Auth';
 import { HeaderThemeProvider } from './HeaderTheme';
 import { ThemeProvider } from './Theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 const queryClient = new QueryClient();
 
@@ -13,7 +16,7 @@ type Props = {
 
 export const Providers: React.FC<{
   children: React.ReactNode;
-}> = async ({ children }: Props) => {
+}> = ({ children }: Props) => {
   return (
     <AuthProvider
       // To toggle between the REST and GraphQL APIs,
@@ -23,7 +26,7 @@ export const Providers: React.FC<{
       <ThemeProvider>
         <HeaderThemeProvider>
           <QueryClientProvider client={queryClient}>
-            {children}
+            <NuqsAdapter>{children}</NuqsAdapter>
           </QueryClientProvider>
         </HeaderThemeProvider>
       </ThemeProvider>

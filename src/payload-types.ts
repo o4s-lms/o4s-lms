@@ -1052,7 +1052,7 @@ export interface Favorite {
   /**
    * The user this favorite belong to
    */
-  user?: (number | null) | User;
+  user: number | User;
   objectType: 'lessons' | 'courses' | 'posts' | 'pages';
   objectId: number;
   title: string;
