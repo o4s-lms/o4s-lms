@@ -19,20 +19,17 @@ import { Input } from '@/components/ui/input';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/providers/Auth';
 import { checkRole } from '@/access/checkRole';
+import { useTranslate } from '@tolgee/react';
 
 const formSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
 });
 
-interface AuthFormProps {
-  variant: 'signin' | 'signup' | 'invitation';
-  id?: string;
-}
-
-export const AuthSignInForm = ({ variant, id }: AuthFormProps) => {
+export const AuthSignInForm = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<null | string>(null);
+  const { t } = useTranslate();
 
   const searchParams = useSearchParams();
   const allParams = searchParams.toString()
@@ -75,37 +72,27 @@ export const AuthSignInForm = ({ variant, id }: AuthFormProps) => {
         }
       }
     } catch (_) {
-      setError(
-        'There was an error with the credentials provided. Please try again.',
-      );
+      setError(t('error-credentials'));
     }
 
     setIsLoading(false);
 
     if (error) {
-      toast.error('Something went wrong.', {
+      toast.error(t('error-something'), {
         description: error,
       });
       return;
     }
   }
 
-  // Messaging
-  let primaryMessage = 'create an account to accept the invitation';
-  let secondaryMessage = 'sign up';
-  if (variant === 'signin') {
-    primaryMessage = 'sign in';
-    secondaryMessage = 'sign in';
-  }
-
   return (
     <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
       <div className="flex flex-col space-y-2 text-center">
         <h1 className="text-2xl font-semibold capitalize tracking-tight text-white">
-          {primaryMessage}
+          {t('sign-in')}
         </h1>
         <p className="text-muted-foregroun text-sm">
-          Enter your email and password below to {primaryMessage}
+          {t('email-password-to-sign-in')}
         </p>
       </div>
       <div className="grid gap-6">
@@ -119,7 +106,7 @@ export const AuthSignInForm = ({ variant, id }: AuthFormProps) => {
                   <FormControl>
                     <Input
                       required
-                      placeholder="Email Address"
+                      placeholder={t('email')}
                       {...field}
                       className="w-full"
                       disabled={isLoading}
@@ -138,7 +125,7 @@ export const AuthSignInForm = ({ variant, id }: AuthFormProps) => {
                     <Input
                       required
                       type="password"
-                      placeholder="Password"
+                      placeholder={t('password')}
                       {...field}
                       className="w-full"
                       disabled={isLoading}
@@ -150,33 +137,33 @@ export const AuthSignInForm = ({ variant, id }: AuthFormProps) => {
             />
             <Button type="submit" className="capitalize" disabled={isLoading}>
               {isLoading && <Spinner className="mr-2 h-4 w-4 animate-spin" />}
-              {secondaryMessage} with Email and Password
+              {t('sign-in-email-password')}
             </Button>
           </form>
         </Form>
         <p className="px-8 text-center text-xs text-muted-foreground">
-          If you do not have account click to create one.{' '}
+          {t('not-have-account')}{' '}
           <Link
             className="underline underline-offset-4 hover:text-primary"
             href="/sign-up"
           >
-            Sign Up
+            {t('sign-up')}
           </Link>
         </p>
         <p className="px-8 text-center text-xs text-muted-foreground">
-          By clicking continue, you agree to our{' '}
+          {t('clicking-continue')}{' '}
           <Link
             className="underline underline-offset-4 hover:text-primary"
             href="/terms"
           >
-            Terms
+            {t('terms')}
           </Link>{' '}
-          and{' '}
+          {t('and')}{' '}
           <Link
             className="underline underline-offset-4 hover:text-primary"
             href="/privacy"
           >
-            Privacy Policy
+            {t('privacy')}
           </Link>
           .
         </p>
