@@ -1,5 +1,6 @@
 // storage-adapter-import-placeholder
-import { postgresAdapter } from '@payloadcms/db-postgres';
+//import { postgresAdapter } from '@payloadcms/db-postgres';
+import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer';
 import { s3Storage } from '@payloadcms/storage-s3';
 
@@ -88,10 +89,15 @@ export default buildConfig({
       },
     },
   }),
-  db: postgresAdapter({
+  /**db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URI || '',
     },
+  }),*/
+  db: mongooseAdapter({
+    // Mongoose-specific arguments go here.
+    // URL is required.
+    url: process.env.DATABASE_URI,
   }),
   collections: [
     Pages,

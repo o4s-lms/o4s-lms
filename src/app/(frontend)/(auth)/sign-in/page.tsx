@@ -32,7 +32,7 @@ export default async function SigninPage() {
           <Undo2 className="mr-2 h-4 w-4" /> Go back
         </Link>
       </Button>
-      <AuthSignInForm variant="signin" />
+      <AuthSignInForm />
     </div>
   );
 }

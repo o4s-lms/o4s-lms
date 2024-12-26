@@ -30,15 +30,36 @@ import { createAvatar } from '@dicebear/core';
 import { lorelei } from '@dicebear/collection';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/providers/Auth';
+import { getClientSideURL } from '@/utilities/getURL';
+import type { StaticImageData } from 'next/image';
+import { useTranslate } from '@tolgee/react';
 
 export function NavUser() {
   const { user, isSignedIn, isLoaded } = useAuth();
   const { isMobile } = useSidebar();
   const router = useRouter();
+  const { t } = useTranslate();
+  let src: StaticImageData | string = '';
 
   if (!isLoaded) return null
 
   if (!isSignedIn && isLoaded) return null
+
+  if (user?.avatar && typeof user?.avatar === 'object') {
+    const {
+      url,
+    } = user?.avatar;
+
+    src = `${getClientSideURL()}${url}`;
+  }
+
+  if (src === '') {
+    src = createAvatar(lorelei, {
+      seed: user?.name || '',
+      size: 128,
+      // ... other options
+    }).toDataUri();
+  }
 
   return (
     <SidebarMenu>
@@ -51,11 +72,7 @@ export function NavUser() {
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage
-                  src={createAvatar(lorelei, {
-                    seed: user?.name || '',
-                    size: 128,
-                    // ... other options
-                  }).toDataUri()}
+                  src={src}
                   alt={user?.name || ''}
                 />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
@@ -81,11 +98,7 @@ export function NavUser() {
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage
-                    src={createAvatar(lorelei, {
-                      seed: user?.name || '',
-                      size: 128,
-                      // ... other options
-                    }).toDataUri()}
+                    src={src}
                     alt={user?.name || ''}
                   />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
@@ -108,7 +121,7 @@ export function NavUser() {
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck />
-                Account
+                {t('account')}
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <CreditCard />

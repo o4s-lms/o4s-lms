@@ -35,7 +35,7 @@ export default async function authMiddleware(request: NextRequest) {
     );
   }
 
-  const isAdmin = user.id === 1;
+  const isAdmin = user.id === '676d9f913e197080a3dd3a48';
 
   if (!isAdmin && isAdminRoute) {
     return NextResponse.redirect(

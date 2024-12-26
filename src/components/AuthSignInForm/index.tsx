@@ -61,6 +61,10 @@ export const AuthSignInForm = () => {
       setError(null);
       const user = await login(values);
       const isAdmin = checkRole(['admin'], user);
+      await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/lastLogin?userId=${user.id}`, {
+        method: 'POST',
+        credentials: 'include',
+      });
       setIsLoading(false);
       if (redirect?.current) {
         router.push(redirect.current);

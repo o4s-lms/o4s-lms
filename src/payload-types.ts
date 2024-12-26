@@ -60,7 +60,7 @@ export interface Config {
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: number;
+    defaultIDType: string;
   };
   globals: {
     header: Header;
@@ -108,7 +108,7 @@ export interface UserAuthOperations {
  * via the `definition` "pages".
  */
 export interface Page {
-  id: number;
+  id: string;
   title: string;
   language: 'pt' | 'en' | 'fr' | 'es';
   hero: {
@@ -135,7 +135,7 @@ export interface Page {
             newTab?: boolean | null;
             reference?: {
               relationTo: 'pages';
-              value: number | Page;
+              value: string | Page;
             } | null;
             url?: string | null;
             label: string;
@@ -147,7 +147,7 @@ export interface Page {
           id?: string | null;
         }[]
       | null;
-    media?: (number | null) | Media;
+    media?: (string | null) | Media;
   };
   layout: (
     | CallToActionBlock
@@ -164,7 +164,7 @@ export interface Page {
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
-    image?: (number | null) | Media;
+    image?: (string | null) | Media;
     description?: string | null;
   };
   publishedAt?: string | null;
@@ -179,7 +179,7 @@ export interface Page {
  * via the `definition` "media".
  */
 export interface Media {
-  id: number;
+  id: string;
   alt?: string | null;
   caption?: {
     root: {
@@ -293,7 +293,7 @@ export interface CallToActionBlock {
           newTab?: boolean | null;
           reference?: {
             relationTo: 'pages';
-            value: number | Page;
+            value: string | Page;
           } | null;
           url?: string | null;
           label: string;
@@ -338,7 +338,7 @@ export interface ContentBlock {
           newTab?: boolean | null;
           reference?: {
             relationTo: 'pages';
-            value: number | Page;
+            value: string | Page;
           } | null;
           url?: string | null;
           label: string;
@@ -359,7 +359,7 @@ export interface ContentBlock {
  * via the `definition` "MediaBlock".
  */
 export interface MediaBlock {
-  media: number | Media;
+  media: string | Media;
   id?: string | null;
   blockName?: string | null;
   blockType: 'mediaBlock';
@@ -386,12 +386,12 @@ export interface ArchiveBlock {
   } | null;
   populateBy?: ('collection' | 'selection') | null;
   relationTo?: 'posts' | null;
-  categories?: (number | Category)[] | null;
+  categories?: (string | Category)[] | null;
   limit?: number | null;
   selectedDocs?:
     | {
         relationTo: 'posts';
-        value: number | Post;
+        value: string | Post;
       }[]
     | null;
   id?: string | null;
@@ -403,25 +403,25 @@ export interface ArchiveBlock {
  * via the `definition` "categories".
  */
 export interface Category {
-  id: number;
+  id: string;
   title: string;
   description?: string | null;
   language: 'pt' | 'en' | 'fr' | 'es';
-  heroImage?: (number | null) | Media;
+  heroImage?: (string | null) | Media;
   meta?: {
     title?: string | null;
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
-    image?: (number | null) | Media;
+    image?: (string | null) | Media;
     description?: string | null;
   };
   slug?: string | null;
   slugLock?: boolean | null;
-  parent?: (number | null) | Category;
+  parent?: (string | null) | Category;
   breadcrumbs?:
     | {
-        doc?: (number | null) | Category;
+        doc?: (string | null) | Category;
         url?: string | null;
         label?: string | null;
         id?: string | null;
@@ -436,10 +436,10 @@ export interface Category {
  * via the `definition` "posts".
  */
 export interface Post {
-  id: number;
+  id: string;
   title: string;
   language: 'pt' | 'en' | 'fr' | 'es';
-  heroImage?: (number | null) | Media;
+  heroImage?: (string | null) | Media;
   content: {
     root: {
       type: string;
@@ -455,18 +455,18 @@ export interface Post {
     };
     [k: string]: unknown;
   };
-  relatedPosts?: (number | Post)[] | null;
-  categories?: (number | Category)[] | null;
+  relatedPosts?: (string | Post)[] | null;
+  categories?: (string | Category)[] | null;
   meta?: {
     title?: string | null;
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
-    image?: (number | null) | Media;
+    image?: (string | null) | Media;
     description?: string | null;
   };
   publishedAt?: string | null;
-  authors?: (number | User)[] | null;
+  authors?: (string | User)[] | null;
   populatedAuthors?:
     | {
         id?: string | null;
@@ -484,14 +484,15 @@ export interface Post {
  * via the `definition` "users".
  */
 export interface User {
-  id: number;
+  id: string;
   name?: string | null;
   roles: ('admin' | 'user' | 'student' | 'teacher')[];
   /**
    * Maximum size: 4MB. Accepted formats: .jpg, .jpeg, .png, .gif
    */
-  avatar?: (number | null) | Media;
-  settings?: (number | null) | Setting;
+  avatar?: (string | null) | Media;
+  settings?: (string | null) | Setting;
+  lastLogin?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -512,11 +513,11 @@ export interface User {
  * via the `definition` "settings".
  */
 export interface Setting {
-  id: number;
+  id: string;
   /**
    * The user this settings belong to
    */
-  user: number | User;
+  user: string | User;
   preferences: {
     /**
      * The default theme for the user
@@ -561,7 +562,7 @@ export interface CoursesArchiveBlock {
   selectedDocs?:
     | {
         relationTo: 'courses';
-        value: number | Course;
+        value: string | Course;
       }[]
     | null;
   id?: string | null;
@@ -573,13 +574,13 @@ export interface CoursesArchiveBlock {
  * via the `definition` "courses".
  */
 export interface Course {
-  id: number;
+  id: string;
   title: string;
   description?: string | null;
   price: number;
-  badgeImage?: (number | null) | Media;
+  badgeImage?: (string | null) | Media;
   language: 'pt' | 'en' | 'fr' | 'es';
-  heroImage?: (number | null) | Media;
+  heroImage?: (string | null) | Media;
   content: {
     root: {
       type: string;
@@ -597,25 +598,25 @@ export interface Course {
   };
   modules: {
     relationTo: 'modules';
-    value: number | Module;
+    value: string | Module;
   }[];
   meta?: {
     title?: string | null;
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
-    image?: (number | null) | Media;
+    image?: (string | null) | Media;
     description?: string | null;
   };
   publishedAt?: string | null;
-  authors?: (number | User)[] | null;
+  authors?: (string | User)[] | null;
   populatedAuthors?:
     | {
         id?: string | null;
         name?: string | null;
       }[]
     | null;
-  students?: (number | User)[] | null;
+  students?: (string | User)[] | null;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -627,7 +628,7 @@ export interface Course {
  * via the `definition` "modules".
  */
 export interface Module {
-  id: number;
+  id: string;
   title: string;
   richText?: {
     root: {
@@ -646,11 +647,11 @@ export interface Module {
   } | null;
   course: {
     relationTo: 'courses';
-    value: number | Course;
+    value: string | Course;
   };
   lessons: {
     relationTo: 'lessons';
-    value: number | Lesson;
+    value: string | Lesson;
   }[];
   slug?: string | null;
   slugLock?: boolean | null;
@@ -662,7 +663,7 @@ export interface Module {
  * via the `definition` "lessons".
  */
 export interface Lesson {
-  id: number;
+  id: string;
   title: string;
   activity: boolean;
   content?: {
@@ -685,13 +686,13 @@ export interface Lesson {
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
-    image?: (number | null) | Media;
+    image?: (string | null) | Media;
     description?: string | null;
   };
-  course?: (number | null) | Course;
-  module?: (number | null) | Module;
+  course?: (string | null) | Course;
+  module?: (string | null) | Module;
   publishedAt?: string | null;
-  authors?: (number | User)[] | null;
+  authors?: (string | User)[] | null;
   populatedAuthors?:
     | {
         id?: string | null;
@@ -709,7 +710,7 @@ export interface Lesson {
  * via the `definition` "FormBlock".
  */
 export interface FormBlock {
-  form: number | Form;
+  form: string | Form;
   enableIntro?: boolean | null;
   introContent?: {
     root: {
@@ -735,7 +736,7 @@ export interface FormBlock {
  * via the `definition` "forms".
  */
 export interface Form {
-  id: number;
+  id: string;
   title: string;
   fields?:
     | (
@@ -986,26 +987,26 @@ export interface FAQBlock {
  * via the `definition` "course-progress".
  */
 export interface CourseProgress {
-  id: number;
+  id: string;
   student: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   course: {
     relationTo: 'courses';
-    value: number | Course;
+    value: string | Course;
   };
   status: 'not_started' | 'in_progress' | 'completed';
   modules: {
     relationTo: 'module-progress';
-    value: number | ModuleProgress;
+    value: string | ModuleProgress;
   }[];
   enrollmentDate?: string | null;
   overallProgress: number;
   lastAccessed?: string | null;
   lastAccessedLesson?: {
     relationTo: 'lessons';
-    value: number | Lesson;
+    value: string | Lesson;
   } | null;
   updatedAt: string;
   createdAt: string;
@@ -1015,15 +1016,15 @@ export interface CourseProgress {
  * via the `definition` "module-progress".
  */
 export interface ModuleProgress {
-  id: number;
+  id: string;
   module: {
     relationTo: 'modules';
-    value: number | Module;
+    value: string | Module;
   };
   lessonProgress?:
     | {
         relationTo: 'lesson-progress';
-        value: number | LessonProgress;
+        value: string | LessonProgress;
       }[]
     | null;
   updatedAt: string;
@@ -1034,10 +1035,10 @@ export interface ModuleProgress {
  * via the `definition` "lesson-progress".
  */
 export interface LessonProgress {
-  id: number;
+  id: string;
   lesson?: {
     relationTo: 'lessons';
-    value: number | Lesson;
+    value: string | Lesson;
   } | null;
   completed?: boolean | null;
   updatedAt: string;
@@ -1048,11 +1049,11 @@ export interface LessonProgress {
  * via the `definition` "favorites".
  */
 export interface Favorite {
-  id: number;
+  id: string;
   /**
    * The user this favorite belong to
    */
-  user: number | User;
+  user: string | User;
   objectType: 'lessons' | 'courses' | 'posts' | 'pages';
   objectId: number;
   title: string;
@@ -1065,7 +1066,7 @@ export interface Favorite {
  * via the `definition` "transactions".
  */
 export interface Transaction {
-  id: number;
+  id: string;
   email: string;
   orderId?: string | null;
   customerId?: string | null;
@@ -1076,8 +1077,8 @@ export interface Transaction {
   tax: number;
   total: number;
   status: 'pending' | 'awaiting' | 'cancelled' | 'declined' | 'refunded' | 'disputed' | 'completed';
-  user?: (number | null) | User;
-  courses: (number | Course)[];
+  user?: (string | null) | User;
+  courses: (string | Course)[];
   updatedAt: string;
   createdAt: string;
 }
@@ -1086,7 +1087,7 @@ export interface Transaction {
  * via the `definition` "newsletter-signups".
  */
 export interface NewsletterSignup {
-  id: number;
+  id: string;
   name?: string | null;
   email: string;
   updatedAt: string;
@@ -1097,7 +1098,7 @@ export interface NewsletterSignup {
  * via the `definition` "redirects".
  */
 export interface Redirect {
-  id: number;
+  id: string;
   /**
    * You will need to rebuild the website when changing this field.
    */
@@ -1107,19 +1108,19 @@ export interface Redirect {
     reference?:
       | ({
           relationTo: 'pages';
-          value: number | Page;
+          value: string | Page;
         } | null)
       | ({
           relationTo: 'posts';
-          value: number | Post;
+          value: string | Post;
         } | null)
       | ({
           relationTo: 'courses';
-          value: number | Course;
+          value: string | Course;
         } | null)
       | ({
           relationTo: 'lessons';
-          value: number | Lesson;
+          value: string | Lesson;
         } | null);
     url?: string | null;
   };
@@ -1131,8 +1132,8 @@ export interface Redirect {
  * via the `definition` "form-submissions".
  */
 export interface FormSubmission {
-  id: number;
-  form: number | Form;
+  id: string;
+  form: string | Form;
   submissionData?:
     | {
         field: string;
@@ -1150,18 +1151,18 @@ export interface FormSubmission {
  * via the `definition` "search".
  */
 export interface Search {
-  id: number;
+  id: string;
   title?: string | null;
   priority?: number | null;
   doc: {
     relationTo: 'posts';
-    value: number | Post;
+    value: string | Post;
   };
   slug?: string | null;
   meta?: {
     title?: string | null;
     description?: string | null;
-    image?: (number | null) | Media;
+    image?: (string | null) | Media;
   };
   categories?:
     | {
@@ -1178,88 +1179,88 @@ export interface Search {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: number;
+  id: string;
   document?:
     | ({
         relationTo: 'pages';
-        value: number | Page;
+        value: string | Page;
       } | null)
     | ({
         relationTo: 'posts';
-        value: number | Post;
+        value: string | Post;
       } | null)
     | ({
         relationTo: 'media';
-        value: number | Media;
+        value: string | Media;
       } | null)
     | ({
         relationTo: 'categories';
-        value: number | Category;
+        value: string | Category;
       } | null)
     | ({
         relationTo: 'courses';
-        value: number | Course;
+        value: string | Course;
       } | null)
     | ({
         relationTo: 'modules';
-        value: number | Module;
+        value: string | Module;
       } | null)
     | ({
         relationTo: 'lessons';
-        value: number | Lesson;
+        value: string | Lesson;
       } | null)
     | ({
         relationTo: 'course-progress';
-        value: number | CourseProgress;
+        value: string | CourseProgress;
       } | null)
     | ({
         relationTo: 'module-progress';
-        value: number | ModuleProgress;
+        value: string | ModuleProgress;
       } | null)
     | ({
         relationTo: 'lesson-progress';
-        value: number | LessonProgress;
+        value: string | LessonProgress;
       } | null)
     | ({
         relationTo: 'favorites';
-        value: number | Favorite;
+        value: string | Favorite;
       } | null)
     | ({
         relationTo: 'transactions';
-        value: number | Transaction;
+        value: string | Transaction;
       } | null)
     | ({
         relationTo: 'newsletter-signups';
-        value: number | NewsletterSignup;
+        value: string | NewsletterSignup;
       } | null)
     | ({
         relationTo: 'users';
-        value: number | User;
+        value: string | User;
       } | null)
     | ({
         relationTo: 'settings';
-        value: number | Setting;
+        value: string | Setting;
       } | null)
     | ({
         relationTo: 'redirects';
-        value: number | Redirect;
+        value: string | Redirect;
       } | null)
     | ({
         relationTo: 'forms';
-        value: number | Form;
+        value: string | Form;
       } | null)
     | ({
         relationTo: 'form-submissions';
-        value: number | FormSubmission;
+        value: string | FormSubmission;
       } | null)
     | ({
         relationTo: 'search';
-        value: number | Search;
+        value: string | Search;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -1269,10 +1270,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number;
+  id: string;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   key?: string | null;
   value?:
@@ -1292,7 +1293,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number;
+  id: string;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -1805,6 +1806,7 @@ export interface UsersSelect<T extends boolean = true> {
   roles?: T;
   avatar?: T;
   settings?: T;
+  lastLogin?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -2066,7 +2068,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  * via the `definition` "header".
  */
 export interface Header {
-  id: number;
+  id: string;
   navItems?:
     | {
         link: {
@@ -2074,7 +2076,7 @@ export interface Header {
           newTab?: boolean | null;
           reference?: {
             relationTo: 'pages';
-            value: number | Page;
+            value: string | Page;
           } | null;
           url?: string | null;
           label: string;
@@ -2090,7 +2092,7 @@ export interface Header {
  * via the `definition` "footer_pt".
  */
 export interface FooterPt {
-  id: number;
+  id: string;
   navItems?:
     | {
         link: {
@@ -2098,7 +2100,7 @@ export interface FooterPt {
           newTab?: boolean | null;
           reference?: {
             relationTo: 'pages';
-            value: number | Page;
+            value: string | Page;
           } | null;
           url?: string | null;
           label: string;
@@ -2114,7 +2116,7 @@ export interface FooterPt {
  * via the `definition` "footer_en".
  */
 export interface FooterEn {
-  id: number;
+  id: string;
   navItems?:
     | {
         link: {
@@ -2122,7 +2124,7 @@ export interface FooterEn {
           newTab?: boolean | null;
           reference?: {
             relationTo: 'pages';
-            value: number | Page;
+            value: string | Page;
           } | null;
           url?: string | null;
           label: string;
@@ -2138,7 +2140,7 @@ export interface FooterEn {
  * via the `definition` "footer_fr".
  */
 export interface FooterFr {
-  id: number;
+  id: string;
   navItems?:
     | {
         link: {
@@ -2146,7 +2148,7 @@ export interface FooterFr {
           newTab?: boolean | null;
           reference?: {
             relationTo: 'pages';
-            value: number | Page;
+            value: string | Page;
           } | null;
           url?: string | null;
           label: string;
@@ -2162,7 +2164,7 @@ export interface FooterFr {
  * via the `definition` "footer_es".
  */
 export interface FooterE {
-  id: number;
+  id: string;
   navItems?:
     | {
         link: {
@@ -2170,7 +2172,7 @@ export interface FooterE {
           newTab?: boolean | null;
           reference?: {
             relationTo: 'pages';
-            value: number | Page;
+            value: string | Page;
           } | null;
           url?: string | null;
           label: string;

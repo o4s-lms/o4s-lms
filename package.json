@@ -27,6 +27,7 @@
     "@dicebear/collection": "^9.2.2",
     "@dicebear/core": "^9.2.2",
     "@hookform/resolvers": "^3.9.1",
+    "@payloadcms/db-mongodb": "^3.11.0",
     "@payloadcms/db-postgres": "^3.11.0",
     "@payloadcms/email-nodemailer": "^3.11.0",
     "@payloadcms/live-preview-react": "^3.11.0",

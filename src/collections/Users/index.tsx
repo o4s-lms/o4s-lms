@@ -77,6 +77,10 @@ export const Users: CollectionConfig = {
         condition: (data: { roles?: string[] }) => data.roles?.includes('user'),
       },*/
     },
+    {
+      name: 'lastLogin',
+      type: 'date',
+    }
   ],
   timestamps: true,
 };
