@@ -1,19 +1,20 @@
 'use client';
 
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+} from '@/components/ui/dropdown-menu';
+
 import React, { useState } from 'react';
 
 import type { Theme } from './types';
 
 import { useTheme } from '..';
 import { themeLocalStorageKey } from './types';
-import { ChevronDown, Moon, Sun } from 'lucide-react';
+import { Moon, Sun } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export const ThemeSelector: React.FC = () => {
   const { setTheme } = useTheme();
@@ -35,21 +36,25 @@ export const ThemeSelector: React.FC = () => {
   }, []);
 
   return (
-    <Select onValueChange={onThemeChange} value={value}>
-      <SelectTrigger
-        aria-label="Select a theme"
-        className="w-auto gap-2 border-none bg-transparent pl-0 md:pl-3"
-      >
-        <SelectValue placeholder="Theme">
-          <Moon className="size-[1.2rem] rotate-0 scale-100 transition-all dark:hidden dark:-rotate-90 dark:scale-0" />
-          <Sun className="size-[1.2rem] rotate-90 scale-0 transition-all dark:flex dark:rotate-0 dark:scale-100" />
-        </SelectValue>
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="auto">Auto</SelectItem>
-        <SelectItem value="light">Light</SelectItem>
-        <SelectItem value="dark">Dark</SelectItem>
-      </SelectContent>
-    </Select>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon">
+          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 text-black transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => onThemeChange('light')}>
+          Light
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => onThemeChange('dark')}>
+          Dark
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => onThemeChange('auto')}>
+          Auto
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
