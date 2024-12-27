@@ -7,6 +7,7 @@ import AuthSignInForm from '@/components/AuthSignInForm';
 import { getPayload } from 'payload';
 import config from '@/payload.config';
 import { redirect } from 'next/navigation';
+import { getTranslate } from '@/tolgee/server';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -18,10 +19,11 @@ export default async function SigninPage() {
   const headers = await getHeaders();
   const payload = await getPayload({ config });
   const { user } = await payload.auth({ headers });
+  const t = await getTranslate();
 
   if (user) {
     redirect(
-      `/dashboard/account?message=${encodeURIComponent('You are already logged in.')}`,
+      `/dashboard/account?message=${encodeURIComponent(t('already-logged-in'))}`,
     );
   }
 
@@ -29,7 +31,7 @@ export default async function SigninPage() {
     <div className="flex h-full items-center justify-center p-10">
       <Button asChild className="absolute right-3 top-3" variant="ghost">
         <Link href="/">
-          <Undo2 className="mr-2 h-4 w-4" /> Go back
+          <Undo2 className="mr-2 h-4 w-4" /> {t('go-back')}
         </Link>
       </Button>
       <AuthSignInForm />

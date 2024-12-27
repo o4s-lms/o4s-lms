@@ -3,19 +3,13 @@
 import * as React from 'react';
 import Image from 'next/image';
 import {
-  AudioWaveform,
-  Blocks,
-  Calendar,
-  Command,
-  GalleryVerticalEnd,
+  CreditCard,
   Home,
-  Inbox,
   Library,
   MessageCircleQuestion,
   Search,
   Settings2,
   Sparkles,
-  User2,
 } from 'lucide-react';
 
 import { NavMain } from '@/components/NavMain';
@@ -40,12 +34,18 @@ import {
   BreadcrumbPage,
 } from '@/components/ui/breadcrumb';
 import { useTranslate } from '@tolgee/react';
+import { useSearchParams } from 'next/navigation';
+import { toast } from 'sonner';
+import { VERSION } from '@/lib/constants';
+import { SidebarHeaderMenu } from '../SideBar/HeaderMenu';
 
 export function DashboardWithSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const { t } = useTranslate();
-  
+  const searchParams = useSearchParams();
+  const message = searchParams.get('message');
+
   const nav = [
     {
       title: t('search'),
@@ -59,7 +59,7 @@ export function DashboardWithSidebar({
     },
     {
       title: t('dashboard'),
-      url: '#',
+      url: '/dashboard',
       icon: Home,
       isActive: true,
     },
@@ -69,9 +69,9 @@ export function DashboardWithSidebar({
       icon: Library,
     },
     {
-      title: t('account'),
-      url: '/dashboard/account',
-      icon: User2,
+      title: 'Billing',
+      url: '/dashboard/billing',
+      icon: CreditCard,
     },
     {
       title: t('settings'),
@@ -85,30 +85,13 @@ export function DashboardWithSidebar({
     },
   ];
 
+  if (message) toast.success(message);
+
   return (
     <>
       <Sidebar className="border-r-0" {...props}>
         <SidebarHeader>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton size="lg" asChild>
-                <a href="#">
-                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg text-sidebar-primary-foreground">
-                    <Image
-                      src="/iconO4S-100x100.png"
-                      width={24}
-                      height={24}
-                      alt="Open For Sustainability"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-0.5 leading-none">
-                    <span className="font-semibold">O4S LMS</span>
-                    <span className="">v1.0.0</span>
-                  </div>
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
+          <SidebarHeaderMenu />
           <NavMain items={nav} />
         </SidebarHeader>
         <SidebarContent>
@@ -132,7 +115,7 @@ export function DashboardWithSidebar({
             </Breadcrumb>
           </div>
           <div className="ml-auto px-3">
-            <NavActions  lesson={null}/>
+            <NavActions lesson={null} />
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4">

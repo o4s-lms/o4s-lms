@@ -22,7 +22,7 @@ const formSchema = z.object({
   email: z.string().email(),
 });
 
-export const ProfileForm = ({ currentUser }: { currentUser: User }) => {
+export const AvatarForm = ({ currentUser }: { currentUser: User }) => {
   const [user, setUser] = React.useState<User>(currentUser);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<null | string>(null);

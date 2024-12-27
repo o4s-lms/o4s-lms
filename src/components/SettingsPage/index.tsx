@@ -29,7 +29,7 @@ import {
   BreadcrumbPage,
 } from '@/components/ui/breadcrumb';
 
-import ProfileForm from '@/components/ProfileForm';
+import ProfileForm from '@/components/Dashboard/Account/ProfileForm';
 import { Favorite, User } from '@/payload-types';
 import { useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';

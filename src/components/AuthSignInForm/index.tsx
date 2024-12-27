@@ -32,11 +32,8 @@ export const AuthSignInForm = () => {
   const { t } = useTranslate();
 
   const searchParams = useSearchParams();
-  const allParams = searchParams.toString()
-    ? `?${searchParams.toString()}`
-    : '';
-  //const errorParam = React.useRef(searchParams.get('error'));
   const redirect = React.useRef(searchParams.get('redirect'));
+  const message = searchParams.get('message');
 
   //if (errorParam) {
   //  toast.error(errorParam.current)
@@ -88,6 +85,8 @@ export const AuthSignInForm = () => {
       return;
     }
   }
+
+  if (message) toast.success(message);
 
   return (
     <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">

@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import {
+  CreditCard,
   GalleryVerticalEnd,
   Home,
   Library,
@@ -9,7 +10,6 @@ import {
   Search,
   Settings2,
   Sparkles,
-  User2,
 } from 'lucide-react';
 
 import { NavFavorites } from '@/components/NavFavorites';
@@ -34,6 +34,8 @@ import {
 } from '@/components/ui/breadcrumb';
 import { NavActions } from '../../NavActions';
 import { useTranslate } from '@tolgee/react';
+import { VERSION } from '@/lib/constants';
+import { SidebarHeaderMenu } from '@/components/SideBar/HeaderMenu';
 
 export function CoursesWithSidebar({
   ...props
@@ -63,9 +65,9 @@ export function CoursesWithSidebar({
       isActive: true,
     },
     {
-      title: t('account'),
-      url: '/dashboard/account',
-      icon: User2,
+      title: 'Billing',
+      url: '/dashboard/billing',
+      icon: CreditCard,
     },
     {
       title: t('settings'),
@@ -83,21 +85,7 @@ export function CoursesWithSidebar({
     <>
       <Sidebar className="border-r-0" {...props}>
         <SidebarHeader>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton size="lg" asChild>
-                <a href="#">
-                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                    <GalleryVerticalEnd className="size-4" />
-                  </div>
-                  <div className="flex flex-col gap-0.5 leading-none">
-                    <span className="font-semibold">O4S LMS</span>
-                    <span className="">v1.0.0</span>
-                  </div>
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
+          <SidebarHeaderMenu />
           <NavMain items={nav} />
         </SidebarHeader>
         <SidebarContent>

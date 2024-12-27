@@ -7,6 +7,7 @@ import { getPayload } from 'payload';
 import config from '@/payload.config';
 import { redirect } from 'next/navigation';
 import { toast } from 'sonner';
+import { getTranslate } from '@/tolgee/server';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -23,6 +24,7 @@ export default async function Verify({
   const headers = await getHeaders();
   const payload = await getPayload({ config });
   const { user } = await payload.auth({ headers });
+  const t = await getTranslate();
 
   const result = await payload.verifyEmail({
     collection: 'users',
@@ -30,17 +32,17 @@ export default async function Verify({
   });
 
   if (!result) {
-    toast.error('Something goes wrong!');
-    redirect(`/sign-up?error=${encodeURIComponent('Something goes wrong!')}`);
+    toast.error(t('error-something'));
+    redirect(`/sign-up`);
   }
 
   if (user && result) {
     redirect(
-      `/dashboard/account?message=${encodeURIComponent('You are already logged in.')}`,
+      `/dashboard/account?message=${encodeURIComponent(t('already-logged-in'))}`,
     );
   } else {
     redirect(
-      `/sign-in?message=${encodeURIComponent('Your email is verified, you can logged in.')}`,
+      `/sign-in?message=${encodeURIComponent(t('email-is-verified'))}`,
     );
   }
 
@@ -48,7 +50,7 @@ export default async function Verify({
     <div className="flex h-full items-center justify-center p-10">
       <Button asChild className="absolute right-3 top-3" variant="ghost">
         <Link href="/">
-          <Undo2 className="mr-2 h-4 w-4" /> Go back
+          <Undo2 className="mr-2 h-4 w-4" /> {t('go-back')}
         </Link>
       </Button>
     </div>

@@ -30,19 +30,20 @@ import {
   BreadcrumbPage,
 } from '@/components/ui/breadcrumb';
 
-import ProfileForm from '@/components/ProfileForm';
+import ProfileForm from '@/components/Dashboard/Account/ProfileForm';
 import type { User } from '@/payload-types';
 import { toast } from 'sonner';
 import { SidebarHeaderMenu } from '@/components/SideBar/HeaderMenu';
 import { useTranslate } from '@tolgee/react';
 import { useQueryState } from 'nuqs';
+import PasswordForm from './Password';
 
 type AccountSidebarProps = {
   user: User;
 } & React.ComponentProps<typeof Sidebar>;
 
 export function AccountWithSidebar({ user, ...props }: AccountSidebarProps) {
-  const [success, setSuccess] = useQueryState('success')
+  const [success, setSuccess] = useQueryState('success');
   const { t } = useTranslate();
 
   const nav = [
@@ -122,14 +123,16 @@ export function AccountWithSidebar({ user, ...props }: AccountSidebarProps) {
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4">
           <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div className="aspect-video rounded-xl bg-muted/50" />
-            <div className="aspect-video rounded-xl bg-muted/50" />
-            <div className="aspect-video rounded-xl bg-muted/50" />
+            <div className="aspect-video rounded-xl bg-muted/50"></div>
+            <div className="aspect-video rounded-xl bg-muted/50 p-2">
+              <ProfileForm currentUser={user} />
+            </div>
+            <div className="aspect-video rounded-xl bg-muted/50 p-2">
+              <PasswordForm currentUser={user} />
+            </div>
           </div>
 
-          <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min">
-            <ProfileForm currentUser={user} />
-          </div>
+          <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min"></div>
         </div>
       </SidebarInset>
     </>

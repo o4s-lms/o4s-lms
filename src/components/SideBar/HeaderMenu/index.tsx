@@ -4,6 +4,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { VERSION } from '@/lib/constants';
 
 export const SidebarHeaderMenu = () => {
   return (
@@ -21,7 +22,7 @@ export const SidebarHeaderMenu = () => {
             </div>
             <div className="flex flex-col gap-0.5 leading-none">
               <span className="font-semibold">O4S LMS</span>
-              <span className="">v1.0.0</span>
+              <span className="">{VERSION}</span>
             </div>
           </a>
         </SidebarMenuButton>
