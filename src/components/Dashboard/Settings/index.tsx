@@ -31,6 +31,11 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
+import {
+  IconNotification,
+  IconPalette,
+  IconTool,
+} from '@tabler/icons-react'
 
 import type { User } from '@/payload-types';
 import { toast } from 'sonner';
@@ -96,14 +101,17 @@ export function SettingsWithSidebar({
   const sidebarNavItems = [
     {
       title: 'Account',
+      icon: <IconTool size={18} />,
       step: 'account',
     },
     {
       title: 'Appearance',
+      icon: <IconPalette size={18} />,
       step: 'appearance',
     },
     {
       title: 'Notifications',
+      icon: <IconNotification size={18} />,
       step: 'notifications',
     },
   ];
@@ -168,7 +176,7 @@ export function SettingsWithSidebar({
           <div className="space-y-0.5">
             <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
             <p className="text-muted-foreground">
-              Manage your account settings and set e-mail preferences.
+              Manage your settings and preferences.
             </p>
           </div>
           <Separator className="my-6" />
@@ -191,7 +199,7 @@ export function SettingsWithSidebar({
                   <p className="text-sm text-muted-foreground">
                     {(!settingsStep || settingsStep === 'account') && (
                       <span>
-                        Manage your account settings and set e-mail preferences.
+                        Manage your account settings and set language preferences.
                       </span>
                     )}
                     {settingsStep === 'appearance' && (

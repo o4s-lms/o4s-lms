@@ -91,7 +91,7 @@ export const AuthProvider: React.FC<{
 
   const logout = useCallback<Logout>(async () => {
     if (api === 'rest') {
-      await rest(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/logout`);
+      await rest(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/logout`, {});
       setUser(null);
       setisSignedIn(false);
       return;
