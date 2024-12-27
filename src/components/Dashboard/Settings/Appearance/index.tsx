@@ -1,10 +1,12 @@
-"use client"
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { toast } from "sonner"
-import { Button } from "@/components/ui/button"
+import * as React from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
+import { Loader2 as Spinner } from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -13,37 +15,70 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+} from '@/components/ui/form';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { User } from '@/payload-types';
+import { useTheme } from '@/providers/Theme';
 
 const appearanceFormSchema = z.object({
-  theme: z.enum(["light", "dark"], {
-    required_error: "Please select a theme.",
+  theme: z.enum(['light', 'dark', 'system'], {
+    required_error: 'Please select a theme.',
   }),
-})
+});
 
-type AppearanceFormValues = z.infer<typeof appearanceFormSchema>
+type AppearanceFormValues = z.infer<typeof appearanceFormSchema>;
 
 // This can come from your database or API.
-const defaultValues: Partial<AppearanceFormValues> = {
-  theme: "light",
-}
 
-export function AppearanceForm() {
+export function AppearanceForm({ currentUser }: { currentUser: User }) {
+  const [user, setUser] = React.useState<User>(currentUser);
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const { setTheme, theme } = useTheme();
+  
+
+  const defaultValues: Partial<AppearanceFormValues> = {
+    theme: currentUser.theme,
+  };
+
   const form = useForm<AppearanceFormValues>({
     resolver: zodResolver(appearanceFormSchema),
     defaultValues,
-  })
+  });
 
-  function onSubmit(data: AppearanceFormValues) {
-    toast.info("You submitted the following values:", {
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
-  }
+  const onSubmit = React.useCallback(
+    async (values: AppearanceFormValues) => {
+      setIsLoading(true);
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/${user.id}`,
+        {
+          // Make sure to include cookies with fetch
+          body: JSON.stringify(values),
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          method: 'PATCH',
+        },
+      );
+
+      if (response.ok) {
+        const json = await response.json();
+        setUser(json.doc);
+        if (theme !== json.doc.theme) setTheme(json.doc.theme === 'system' ? null : json.doc.theme);
+        toast.info('Successfully updated preferences.');
+        form.reset({
+          theme: json.doc.theme,
+        });
+      } else {
+        toast.error('There was a problem updating your preferences.');
+      }
+
+      setIsLoading(false);
+      return;
+    },
+    [form, setTheme, theme, user.id],
+  );
 
   return (
     <Form {...form}>
@@ -120,8 +155,11 @@ export function AppearanceForm() {
           )}
         />
 
-        <Button type="submit">Update preferences</Button>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading && <Spinner className="mr-2 h-4 w-4 animate-spin" />}
+          {isLoading ? 'Processing' : 'Update preferences'}
+        </Button>
       </form>
     </Form>
-  )
+  );
 }

@@ -491,7 +491,8 @@ export interface User {
    * Maximum size: 4MB. Accepted formats: .jpg, .jpeg, .png, .gif
    */
   avatar?: (string | null) | Media;
-  settings?: (string | null) | Setting;
+  language: 'pt' | 'en' | 'fr' | 'es';
+  theme: 'light' | 'dark' | 'system';
   lastLogin?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -505,39 +506,6 @@ export interface User {
   loginAttempts?: number | null;
   lockUntil?: string | null;
   password?: string | null;
-}
-/**
- * Student preferences and settings
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "settings".
- */
-export interface Setting {
-  id: string;
-  /**
-   * The user this settings belong to
-   */
-  user: string | User;
-  preferences: {
-    /**
-     * The default theme for the user
-     */
-    theme?: ('light' | 'dark' | 'system') | null;
-    /**
-     * The default language for the user
-     */
-    language: 'pt' | 'en' | 'fr' | 'es';
-    /**
-     * Email notifications for the user
-     */
-    emailNotifications?: {
-      assignments?: boolean | null;
-      courseUpdates?: boolean | null;
-      achievements?: boolean | null;
-    };
-  };
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1090,6 +1058,39 @@ export interface NewsletterSignup {
   id: string;
   name?: string | null;
   email: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Student preferences and settings
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "settings".
+ */
+export interface Setting {
+  id: string;
+  /**
+   * The user this settings belong to
+   */
+  user: string | User;
+  preferences: {
+    /**
+     * The default theme for the user
+     */
+    theme?: ('light' | 'dark' | 'system') | null;
+    /**
+     * The default language for the user
+     */
+    language: 'pt' | 'en' | 'fr' | 'es';
+    /**
+     * Email notifications for the user
+     */
+    emailNotifications?: {
+      assignments?: boolean | null;
+      courseUpdates?: boolean | null;
+      achievements?: boolean | null;
+    };
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -1805,7 +1806,8 @@ export interface UsersSelect<T extends boolean = true> {
   name?: T;
   roles?: T;
   avatar?: T;
-  settings?: T;
+  language?: T;
+  theme?: T;
   lastLogin?: T;
   updatedAt?: T;
   createdAt?: T;

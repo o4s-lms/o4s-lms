@@ -21,6 +21,9 @@ import { useAuth } from '@/providers/Auth';
 import { checkRole } from '@/access/checkRole';
 import { useTranslate } from '@tolgee/react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useTheme } from '@/providers/Theme';
+import { useTolgee } from '@tolgee/react';
+import { setLanguage } from '@/tolgee/language';
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -29,7 +32,10 @@ const formSchema = z.object({
 
 export const AuthSignInForm = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const tolgee = useTolgee(['language']);
+  const currentLanguage = tolgee.getLanguage();
   const { t } = useTranslate();
+  const { setTheme, theme } = useTheme();
 
   const searchParams = useSearchParams();
   const redirect = React.useRef(searchParams.get('redirect'));
@@ -59,6 +65,8 @@ export const AuthSignInForm = () => {
       try {
         const user = await login(values);
         const isAdmin = checkRole(['admin'], user);
+        if (theme !== user.theme) setTheme(user.theme === 'system' ? null : user.theme);
+        if (currentLanguage !== user.language) setLanguage(user.language);
         await fetch(
           `${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/lastLogin?userId=${user.id}`,
           {

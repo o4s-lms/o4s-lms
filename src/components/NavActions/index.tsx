@@ -36,7 +36,7 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { NavUser } from '@/components/NavUser';
-import { LanguageSelector } from '../LangSelector.';
+import { LanguageSelector } from '@/components/LangSelector.';
 import { ThemeSelector } from '@/providers/Theme/ThemeSelector';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { Lesson } from '@/payload-types';

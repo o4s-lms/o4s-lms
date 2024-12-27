@@ -66,21 +66,57 @@ export const Users: CollectionConfig = {
       type: 'upload',
       relationTo: 'media',
       admin: {
-        description: 'Maximum size: 4MB. Accepted formats: .jpg, .jpeg, .png, .gif',
+        description:
+          'Maximum size: 4MB. Accepted formats: .jpg, .jpeg, .png, .gif',
       },
     },
     {
-      name: 'settings',
-      type: 'relationship',
-      relationTo: 'settings',
-      /**admin: {
-        condition: (data: { roles?: string[] }) => data.roles?.includes('user'),
-      },*/
+      type: 'tabs',
+      tabs: [
+        {
+          fields: [
+            {
+              name: 'language',
+              type: 'select',
+              admin: {
+                position: 'sidebar',
+              },
+              options: [
+                { label: 'Português', value: 'pt' },
+                { label: 'English', value: 'en' },
+                { label: 'Français', value: 'fr' },
+                { label: 'Españhol', value: 'es' },
+              ],
+              required: true,
+              defaultValue: 'en',
+            },
+            {
+              name: 'theme',
+              type: 'select',
+              admin: {
+                position: 'sidebar',
+              },
+              options: [
+                { label: 'Light', value: 'light' },
+                { label: 'Dark', value: 'dark' },
+                { label: 'System', value: 'system' },
+              ],
+              required: true,
+              defaultValue: 'system',
+            },
+          ],
+          label: 'Settings',
+        },
+      ],
     },
     {
       name: 'lastLogin',
       type: 'date',
-    }
+      admin: {
+        readOnly: true,
+        position: 'sidebar',
+      },
+    },
   ],
   timestamps: true,
 };

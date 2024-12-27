@@ -113,7 +113,7 @@ export function SettingsWithSidebar({
       case 'account':
         return <AccountForm currentUser={user} />;
       case 'appearance':
-        return <AppearanceForm />;
+        return <AppearanceForm currentUser={user} />;
       case 'notifications':
         return <NotificationsForm />;
       default:

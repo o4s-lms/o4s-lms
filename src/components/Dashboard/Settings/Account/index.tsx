@@ -36,6 +36,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { User } from '@/payload-types';
+import { setLanguage } from '@/tolgee/language';
 
 const languages = [
   { label: 'Português', value: 'pt' },
@@ -56,7 +57,7 @@ const accountFormSchema = z.object({
   dob: z.date({
     required_error: 'A date of birth is required.',
   }),
-  language: z.string({
+  language: z.enum(['pt', 'en', 'fr', 'es'], {
     required_error: 'Please select a language.',
   }),
 });
@@ -69,6 +70,7 @@ export function AccountForm({ currentUser }: { currentUser: User }) {
 
   const defaultValues: Partial<AccountFormValues> = {
     name: user.name,
+    language: user.language,
     // dob: new Date("2023-01-23"),
   };
 
@@ -97,10 +99,11 @@ export function AccountForm({ currentUser }: { currentUser: User }) {
       if (response.ok) {
         const json = await response.json();
         setUser(json.doc);
+        if (json.doc.language !== defaultValues.language) setLanguage(json.doc.language);
         toast.info('Successfully updated account.');
         form.reset({
           name: json.doc.name,
-          email: json.doc.email,
+          language: json.doc.language,
         });
       } else {
         toast.error('There was a problem updating your account.');
@@ -109,7 +112,7 @@ export function AccountForm({ currentUser }: { currentUser: User }) {
       setIsLoading(false);
       return;
     },
-    [form, user.id],
+    [defaultValues.language, form, user.id],
   );
 
   const recoverPassword = React.useCallback(async (data: { email: string }) => {
