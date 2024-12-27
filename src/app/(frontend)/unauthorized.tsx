@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { redirect } from 'next/navigation'
 
-export default function UnauthorisedError() {
+export default function UnauthorizedError() {
   return (
     <div className='h-svh'>
       <div className='m-auto flex h-full w-full flex-col items-center justify-center gap-2'>

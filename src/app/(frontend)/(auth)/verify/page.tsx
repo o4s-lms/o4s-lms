@@ -38,11 +38,11 @@ export default async function Verify({
 
   if (user && result) {
     redirect(
-      `/dashboard/account?message=${encodeURIComponent(t('already-logged-in'))}`,
+      `/dashboard/settings?message=${encodeURIComponent(t('already-logged-in'))}`,
     );
   } else {
     redirect(
-      `/sign-in?message=${encodeURIComponent(t('email-is-verified'))}`,
+      `/sign-in?message=${encodeURIComponent(t('email-is-verified'))}&redirect=/dashboard/settings`,
     );
   }
 

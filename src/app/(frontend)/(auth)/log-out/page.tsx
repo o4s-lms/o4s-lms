@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { Undo2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { LogoutPage } from '@/components/AuthLogoutPage';
+import { LogoutPage } from '@/components/Auth/LogoutPage';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),

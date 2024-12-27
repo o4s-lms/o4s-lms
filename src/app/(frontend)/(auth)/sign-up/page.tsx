@@ -6,7 +6,7 @@ import config from '@/payload.config';
 import type { Metadata } from 'next';
 import { Undo2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import AuthSignUpForm from '@/components/AuthSignUpForm';
+import AuthSignUpForm from '@/components/Auth/SignUpForm';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -21,7 +21,7 @@ export default async function SignUpPage() {
 
   if (user) {
     redirect(
-      `/dashboard/account?message=${encodeURIComponent('You are already signed un.')}`,
+      `/dashboard?message=${encodeURIComponent('You are already signed un.')}`,
     );
   }
   

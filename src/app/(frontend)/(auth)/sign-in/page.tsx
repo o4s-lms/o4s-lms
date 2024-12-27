@@ -3,7 +3,7 @@ import { headers as getHeaders } from 'next/headers';
 import type { Metadata } from 'next';
 import { Undo2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import AuthSignInForm from '@/components/AuthSignInForm';
+import AuthSignInForm from '@/components/Auth/SignInForm';
 import { getPayload } from 'payload';
 import config from '@/payload.config';
 import { redirect } from 'next/navigation';
@@ -23,7 +23,7 @@ export default async function SigninPage() {
 
   if (user) {
     redirect(
-      `/dashboard/account?message=${encodeURIComponent(t('already-logged-in'))}`,
+      `/dashboard?message=${encodeURIComponent(t('already-logged-in'))}`,
     );
   }
 
