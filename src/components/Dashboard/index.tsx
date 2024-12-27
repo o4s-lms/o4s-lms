@@ -20,9 +20,6 @@ import {
   SidebarContent,
   SidebarHeader,
   SidebarInset,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarRail,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
@@ -36,7 +33,6 @@ import {
 import { useTranslate } from '@tolgee/react';
 import { useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
-import { VERSION } from '@/lib/constants';
 import { SidebarHeaderMenu } from '../SideBar/HeaderMenu';
 
 export function DashboardWithSidebar({

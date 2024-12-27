@@ -19,9 +19,6 @@ import {
   SidebarContent,
   SidebarHeader,
   SidebarInset,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarRail,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
@@ -34,7 +31,6 @@ import {
 } from '@/components/ui/breadcrumb';
 import { NavActions } from '../../NavActions';
 import { useTranslate } from '@tolgee/react';
-import { VERSION } from '@/lib/constants';
 import { SidebarHeaderMenu } from '@/components/SideBar/HeaderMenu';
 
 export function CoursesWithSidebar({
