@@ -20,6 +20,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/providers/Auth';
 import { checkRole } from '@/access/checkRole';
 import { useTranslate } from '@tolgee/react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -28,12 +29,12 @@ const formSchema = z.object({
 
 export const AuthSignInForm = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [error, setError] = React.useState<null | string>(null);
   const { t } = useTranslate();
 
   const searchParams = useSearchParams();
   const redirect = React.useRef(searchParams.get('redirect'));
   const message = searchParams.get('message');
+  const error = searchParams.get('error');
 
   //if (errorParam) {
   //  toast.error(errorParam.current)
@@ -51,46 +52,55 @@ export const AuthSignInForm = () => {
   });
 
   // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
+  const onSubmit = React.useCallback(
+    async (values: z.infer<typeof formSchema>) => {
+      setIsLoading(true);
 
-    try {
-      setError(null);
-      const user = await login(values);
-      const isAdmin = checkRole(['admin'], user);
-      await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/lastLogin?userId=${user.id}`, {
-        method: 'POST',
-        credentials: 'include',
-      });
-      setIsLoading(false);
-      if (redirect?.current) {
-        router.push(redirect.current);
-      } else {
-        if (isAdmin) {
-          router.push('/admin');
+      try {
+        const user = await login(values);
+        const isAdmin = checkRole(['admin'], user);
+        await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/lastLogin?userId=${user.id}`,
+          {
+            method: 'POST',
+            credentials: 'include',
+          },
+        );
+        setIsLoading(false);
+        if (redirect?.current) {
+          router.push(redirect.current);
         } else {
-          router.push('/dashboard');
+          if (isAdmin) {
+            router.push('/admin');
+          } else {
+            router.push('/dashboard');
+          }
         }
+      } catch (_) {
+        toast.error(t('error-something'), {
+          description: t('error-credentials'),
+        });
       }
-    } catch (_) {
-      setError(t('error-credentials'));
-    }
 
-    setIsLoading(false);
+      setIsLoading(false);
+    },
+    [login, router, t],
+  );
 
-    if (error) {
-      toast.error(t('error-something'), {
-        description: error,
-      });
-      return;
-    }
-  }
-
-  if (message) toast.success(message);
-
+  // TODO color variant success
   return (
     <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
       <div className="flex flex-col space-y-2 text-center">
+        {message && (
+          <Alert variant="success">
+            <AlertDescription>{message}</AlertDescription>
+          </Alert>
+        )}
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
         <h1 className="text-2xl font-semibold capitalize tracking-tight text-white">
           {t('sign-in')}
         </h1>
@@ -140,7 +150,7 @@ export const AuthSignInForm = () => {
             />
             <Button type="submit" className="capitalize" disabled={isLoading}>
               {isLoading && <Spinner className="mr-2 h-4 w-4 animate-spin" />}
-              {t('sign-in-email-password')}
+              {t('sign-in').toUpperCase()}
             </Button>
           </form>
         </Form>

@@ -18,6 +18,7 @@ const DashboardPage = async () => {
   const { user } = await payload.auth({ headers });
 
   if (!user) {
+    // unauthorized()
     redirect(
       `/sign-in?error=${encodeURIComponent('You must be logged in to access your account.')}&redirect=/dashboard`,
     );
