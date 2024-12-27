@@ -31,11 +31,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import {
-  IconNotification,
-  IconPalette,
-  IconTool,
-} from '@tabler/icons-react'
+import { IconNotification, IconPalette, IconTool } from '@tabler/icons-react';
 
 import type { User } from '@/payload-types';
 import { toast } from 'sonner';
@@ -46,6 +42,8 @@ import { AccountForm } from './Account';
 import { SidebarNav } from './SidebarNav';
 import { AppearanceForm } from './Appearance';
 import { NotificationsForm } from './Notifications';
+import { Main } from '@/components/Layout/Main';
+import ContentSection from './ContentSection';
 
 type SettingsWithSidebarProps = {
   user: User;
@@ -129,6 +127,16 @@ export function SettingsWithSidebar({
     }
   };
 
+  function getDesc(): string {
+    if (!settingsStep || settingsStep === 'account')
+      return 'Manage your account settings and set language preferences.';
+    if (settingsStep === 'appearance')
+      return 'Customize the appearance of the app. Automatically switch between day and night themes.';
+    if (settingsStep === 'notifications')
+      return 'Configure how you receive notifications.';
+    return '';
+  }
+
   if (success) {
     toast.success(success);
     setSuccess(null);
@@ -172,53 +180,39 @@ export function SettingsWithSidebar({
             <NavActions lesson={null} />
           </div>
         </header>
-        <div className="hidden space-y-6 p-10 pb-16 md:block">
+        <Main fixed>
           <div className="space-y-0.5">
-            <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
+            <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+              Settings
+            </h1>
             <p className="text-muted-foreground">
               Manage your settings and preferences.
             </p>
           </div>
-          <Separator className="my-6" />
-          <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-            <aside className="-mx-4 lg:w-1/5">
+
+          <Separator className="my-4 lg:my-6" />
+          <div className="flex flex-1 flex-col space-y-2 overflow-hidden md:space-y-2 lg:flex-row lg:space-x-12 lg:space-y-0">
+            <aside className="top-0 lg:sticky lg:w-1/5">
               <SidebarNav
                 currentStep={settingsStep ? settingsStep : 'account'}
                 items={sidebarNavItems}
               />
             </aside>
-            <div className="flex-1 lg:max-w-2xl">
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-medium">
-                    {settingsStep
-                      ? settingsStep.charAt(0).toUpperCase() +
-                        settingsStep.slice(1)
-                      : 'Account'}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {(!settingsStep || settingsStep === 'account') && (
-                      <span>
-                        Manage your account settings and set language preferences.
-                      </span>
-                    )}
-                    {settingsStep === 'appearance' && (
-                      <span>
-                        Customize the appearance of the app. Automatically
-                        switch between day and night themes.
-                      </span>
-                    )}
-                    {settingsStep === 'notifications' && (
-                      <span>Configure how you receive notifications.</span>
-                    )}
-                  </p>
-                </div>
-                <Separator />
+            <div className="flex w-full overflow-y-hidden p-1 pr-4">
+              <ContentSection
+                title={
+                  settingsStep
+                    ? settingsStep.charAt(0).toUpperCase() +
+                      settingsStep.slice(1)
+                    : 'Account'
+                }
+                desc={getDesc()}
+              >
                 {renderStep()}
-              </div>
+              </ContentSection>
             </div>
           </div>
-        </div>
+        </Main>
       </SidebarInset>
     </>
   );
