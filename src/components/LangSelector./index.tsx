@@ -1,4 +1,5 @@
-import { useTolgee } from '@tolgee/react';
+'use client';
+
 import { setLanguage } from '@/tolgee/language';
 import { useCallback, useMemo } from 'react';
 import {
@@ -12,6 +13,7 @@ import { cn } from '@/utilities/cn';
 import { ALL_LANGUAGES as LANGUAGES } from '@/tolgee/shared';
 import { Languages, ChevronDown } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useTolgee } from '@tolgee/react';
 
 const getLocaleDisplayName = (locale: string, displayLocale?: string) => {
   const displayName = new Intl.DisplayNames([displayLocale || locale], {

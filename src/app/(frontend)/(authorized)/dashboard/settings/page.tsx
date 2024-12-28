@@ -3,7 +3,12 @@ import { headers as getHeaders } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
-import { SettingsWithSidebar } from '@/components/Dashboard/Settings';
+import { SettingsContent } from '@/components/Dashboard/Settings';
+import { Header } from '@/components/Layout/Header';
+import { TopNav } from '@/components/Layout/TopNav';
+import { LanguageSelector } from '@/components/LangSelector.';
+import { ThemeSwitch } from '@/components/ThemeSwitch';
+import { ProfileDropdown } from '@/components/ProfileDropdown';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -22,19 +27,47 @@ export default async function Settings() {
     );
   }
 
-  const settings = await payload.find({
-    collection: 'settings',
-    limit: 1,
-    pagination: false,
-    where: {
-      user: {
-        equals: user.id,
-      },
-    },
-  });
-
   return (
-    
-    <SettingsWithSidebar user={user} />
+    <>
+      <Header>
+        <TopNav links={topNav} />
+        <div className="ml-auto flex items-center space-x-4">
+          {/**<Search />
+                <ThemeSwitch />*/}
+          <LanguageSelector />
+          <ThemeSwitch />
+          <ProfileDropdown />
+        </div>
+      </Header>
+
+      <SettingsContent user={user} />
+    </>
   );
 }
+
+const topNav = [
+  {
+    title: 'Overview',
+    href: 'dashboard/overview',
+    isActive: true,
+    disabled: false,
+  },
+  {
+    title: 'Customers',
+    href: 'dashboard/customers',
+    isActive: false,
+    disabled: true,
+  },
+  {
+    title: 'Products',
+    href: 'dashboard/products',
+    isActive: false,
+    disabled: true,
+  },
+  {
+    title: 'Settings',
+    href: 'dashboard/settings',
+    isActive: false,
+    disabled: true,
+  },
+];
