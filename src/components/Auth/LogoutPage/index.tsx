@@ -15,6 +15,7 @@ export const LogoutPage: React.FC = () => {
           headers: {
             'Content-Type': 'application/json',
           },
+          body: JSON.stringify({}),
         });
         setSuccess('Logged out successfully.');
       } catch (_) {
@@ -32,9 +33,9 @@ export const LogoutPage: React.FC = () => {
           <h1>{error || success}</h1>
           <p>
             {'What would you like to do next? '}
-            <Link href="/">Click here</Link>
+            <Link href="/" className='text-lg font-bold transition-colors hover:text-primary'>Click here</Link>
             {` to go to the home page. To log back in, `}
-            <Link href="/sign-in">click here</Link>.
+            <Link href="/sign-in" className='text-lg font-bold transition-colors hover:text-primary'>click here</Link>.
           </p>
         </div>
       )}
