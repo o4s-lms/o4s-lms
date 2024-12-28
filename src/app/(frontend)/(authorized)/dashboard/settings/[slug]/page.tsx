@@ -16,7 +16,14 @@ export const metadata: Metadata = {
   description: 'Get started with your courses.',
 };
 
-export default async function Settings() {
+type Args = {
+  params: Promise<{
+    slug?: string;
+  }>;
+};
+
+export default async function Settings({ params: paramsPromise }: Args) {
+  const { slug = 'account' } = await paramsPromise;
   const headers = await getHeaders();
   const payload = await getPayload({ config: configPromise });
   const { user } = await payload.auth({ headers });
@@ -40,7 +47,7 @@ export default async function Settings() {
         </div>
       </Header>
 
-      <SettingsContent user={user} />
+      <SettingsContent settingsStep={slug} user={user} />
     </>
   );
 }

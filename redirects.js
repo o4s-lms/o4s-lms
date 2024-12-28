@@ -12,7 +12,13 @@ const redirects = async () => {
     source: '/:path((?!ie-incompatible.html$).*)', // all pages except the incompatibility page
   };
 
-  const redirects = [internetExplorerRedirect];
+  const settings = {
+    destination: '/dashboard/settings/account',
+    permanent: true,
+    source: '/dashboard/settings'
+  };
+
+  const redirects = [internetExplorerRedirect, settings];
 
   return redirects;
 };

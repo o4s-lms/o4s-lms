@@ -128,29 +128,19 @@ export const sidebarData= async (): Promise<SidebarData> => {
           icon: IconSettings,
           items: [
             {
-              title: 'Profile',
-              url: '/settings',
-              icon: IconUserCog,
-            },
-            {
               title: t('account'),
-              url: '/dashboard/settings?settingsStep=account',
+              url: '/dashboard/settings/account',
               icon: IconTool,
             },
             {
               title: t('appearance'),
-              url: '/dashboard/settings?settingsStep=appearance',
+              url: '/dashboard/settings/appearance',
               icon: IconPalette,
             },
             {
               title: t('notifications'),
-              url: '/dashboard/settings?settingsStep=notifications',
+              url: '/dashboard/settings/notifications',
               icon: IconNotification,
-            },
-            {
-              title: 'Display',
-              url: '/settings/display',
-              icon: IconBrowserCheck,
             },
           ],
         },

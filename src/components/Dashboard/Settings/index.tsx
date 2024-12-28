@@ -17,28 +17,30 @@ import ContentSection from './ContentSection';
 
 interface SettingsProps {
   user: User
+  settingsStep: string
 }
 
 export function SettingsContent({
   user,
+  settingsStep
 }: SettingsProps) {
   const [success, setSuccess] = useQueryState('success');
-  const [settingsStep, setSettingsStep] = useQueryState('settingsStep');
+  //const [settingsStep, setSettingsStep] = useQueryState('settingsStep');
   const { t } = useTranslate();
 
   const sidebarNavItems = [
     {
-      title: 'Account',
+      title: t('account'),
       icon: <IconTool size={18} />,
       step: 'account',
     },
     {
-      title: 'Appearance',
+      title: t('appearance'),
       icon: <IconPalette size={18} />,
       step: 'appearance',
     },
     {
-      title: 'Notifications',
+      title: t('notifications'),
       icon: <IconNotification size={18} />,
       step: 'notifications',
     },
