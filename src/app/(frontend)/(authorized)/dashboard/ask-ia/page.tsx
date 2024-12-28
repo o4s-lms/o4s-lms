@@ -8,7 +8,7 @@ import { ThemeSwitch } from '@/components/ThemeSwitch';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
-  title: 'Help Center | O4S LMS',
+  title: 'Ask IA | O4S LMS',
   description: 'Get started with your courses.',
 };
 
