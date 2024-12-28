@@ -6,6 +6,8 @@ import { admin } from '@/access/admin';
 import { render } from '@react-email/components';
 import { VerifyEmail } from '@/emails/verify';
 import { ResetPasswordEmail } from '@/emails/reset-password';
+import { DEFAULT_LANGUAGE, ALL_LANGUAGES as LANGUAGES } from '@/tolgee/shared';
+import { getLocaleDisplayName } from '@/utilities/getLocaleDisplayName';
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -81,14 +83,18 @@ export const Users: CollectionConfig = {
               admin: {
                 position: 'sidebar',
               },
-              options: [
+              options: LANGUAGES.map((locale) => ({
+                label: getLocaleDisplayName(locale),
+                value: locale,
+              })),
+              /**options: [
                 { label: 'Português', value: 'pt' },
                 { label: 'English', value: 'en' },
                 { label: 'Français', value: 'fr' },
                 { label: 'Españhol', value: 'es' },
-              ],
+              ],*/
               required: true,
-              defaultValue: 'en',
+              defaultValue: DEFAULT_LANGUAGE,
             },
             {
               name: 'theme',
@@ -103,6 +109,51 @@ export const Users: CollectionConfig = {
               ],
               required: true,
               defaultValue: 'system',
+            },
+            {
+              name: 'notifications',
+              type: 'group',
+              fields: [
+                {
+                  name: 'assignments',
+                  type: 'checkbox',
+                  defaultValue: true,
+                  label: 'Assignment notifications',
+                },
+                {
+                  name: 'courseUpdates',
+                  type: 'checkbox',
+                  defaultValue: true,
+                  label: 'Course update notifications',
+                },
+                {
+                  name: 'achievements',
+                  type: 'checkbox',
+                  defaultValue: true,
+                  label: 'Achievement notifications',
+                },
+                {
+                  name: 'security',
+                  type: 'checkbox',
+                  defaultValue: true,
+                  label: 'Security emails',
+                },
+                {
+                  name: 'communication',
+                  type: 'checkbox',
+                  defaultValue: false,
+                  label: 'Communication emails',
+                },
+                {
+                  name: 'marketing',
+                  type: 'checkbox',
+                  defaultValue: false,
+                  label: 'Marketing emails',
+                },
+              ],
+              admin: {
+                description: 'Email notifications for the user',
+              },
             },
           ],
           label: 'Settings',

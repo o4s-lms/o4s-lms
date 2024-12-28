@@ -14,13 +14,7 @@ import { ALL_LANGUAGES as LANGUAGES } from '@/tolgee/shared';
 import { Languages, ChevronDown } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useTolgee } from '@tolgee/react';
-
-const getLocaleDisplayName = (locale: string, displayLocale?: string) => {
-  const displayName = new Intl.DisplayNames([displayLocale || locale], {
-    type: 'language',
-  }).of(locale)!;
-  return displayName.charAt(0).toLocaleUpperCase() + displayName.slice(1);
-};
+import { getLocaleDisplayName } from '@/utilities/getLocaleDisplayName';
 
 export function LanguageSelector() {
   const isMobile = useIsMobile();

@@ -25,7 +25,6 @@ export interface Config {
     transactions: Transaction;
     'newsletter-signups': NewsletterSignup;
     users: User;
-    settings: Setting;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -50,7 +49,6 @@ export interface Config {
     transactions: TransactionsSelect<false> | TransactionsSelect<true>;
     'newsletter-signups': NewsletterSignupsSelect<false> | NewsletterSignupsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
-    settings: SettingsSelect<false> | SettingsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -493,6 +491,17 @@ export interface User {
   avatar?: (string | null) | Media;
   language: 'pt' | 'en' | 'fr' | 'es';
   theme: 'light' | 'dark' | 'system';
+  /**
+   * Email notifications for the user
+   */
+  notifications?: {
+    assignments?: boolean | null;
+    courseUpdates?: boolean | null;
+    achievements?: boolean | null;
+    security?: boolean | null;
+    communication?: boolean | null;
+    marketing?: boolean | null;
+  };
   lastLogin?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -1062,39 +1071,6 @@ export interface NewsletterSignup {
   createdAt: string;
 }
 /**
- * Student preferences and settings
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "settings".
- */
-export interface Setting {
-  id: string;
-  /**
-   * The user this settings belong to
-   */
-  user: string | User;
-  preferences: {
-    /**
-     * The default theme for the user
-     */
-    theme?: ('light' | 'dark' | 'system') | null;
-    /**
-     * The default language for the user
-     */
-    language: 'pt' | 'en' | 'fr' | 'es';
-    /**
-     * Email notifications for the user
-     */
-    emailNotifications?: {
-      assignments?: boolean | null;
-      courseUpdates?: boolean | null;
-      achievements?: boolean | null;
-    };
-  };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
@@ -1237,10 +1213,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: string | User;
-      } | null)
-    | ({
-        relationTo: 'settings';
-        value: string | Setting;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1808,6 +1780,16 @@ export interface UsersSelect<T extends boolean = true> {
   avatar?: T;
   language?: T;
   theme?: T;
+  notifications?:
+    | T
+    | {
+        assignments?: T;
+        courseUpdates?: T;
+        achievements?: T;
+        security?: T;
+        communication?: T;
+        marketing?: T;
+      };
   lastLogin?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -1820,28 +1802,6 @@ export interface UsersSelect<T extends boolean = true> {
   _verificationToken?: T;
   loginAttempts?: T;
   lockUntil?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "settings_select".
- */
-export interface SettingsSelect<T extends boolean = true> {
-  user?: T;
-  preferences?:
-    | T
-    | {
-        theme?: T;
-        language?: T;
-        emailNotifications?:
-          | T
-          | {
-              assignments?: T;
-              courseUpdates?: T;
-              achievements?: T;
-            };
-      };
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

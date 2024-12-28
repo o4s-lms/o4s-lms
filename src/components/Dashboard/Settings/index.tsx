@@ -53,7 +53,7 @@ export function SettingsContent({
       case 'appearance':
         return <AppearanceForm currentUser={user} />;
       case 'notifications':
-        return <NotificationsForm />;
+        return <NotificationsForm currentUser={user} />;
       default:
         return <AccountForm currentUser={user} />;
     }
@@ -79,7 +79,7 @@ export function SettingsContent({
       <Main fixed>
         <div className="space-y-0.5">
           <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
-            Settings
+            {t('settings')}
           </h1>
           <p className="text-muted-foreground">
             Manage your settings and preferences.
