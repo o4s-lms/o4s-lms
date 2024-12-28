@@ -68,7 +68,7 @@ export const lessonCompleted = inngest.createFunction(
   async ({ event, step }) => {
     const payload = await getPayload({ config });
     // step 1
-    const lessonProgress = await step.run("set-lesson-completed", async () => {
+    const lessonProgress = await step.run('set-lesson-completed', async () => {
       const result = await payload.update({
         collection: 'lesson-progress',
         depth: 0,
@@ -94,7 +94,7 @@ export const lessonCompleted = inngest.createFunction(
       return result;
     });
     // step 2
-    const courseProgress = await step.run("set-course-progress", async () => {
+    const courseProgress = await step.run('set-course-progress', async () => {
       const result = await payload.update({
         collection: 'course-progress',
         depth: 0,
@@ -120,48 +120,58 @@ export const lessonCompleted = inngest.createFunction(
       return result;
     });
     // step 3
-    const overallProgress = await step.run("set-overall-progress", async () => {
-      const { totalDocs } = await payload.count({
-        collection: 'lessons',
-        where: {
-          and: [
-            {
-              _status: {
-                equals: 'published',
+    const overallProgress = await step.run('set-overall-progress', async () => {
+      try {
+        const { totalDocs } = await payload.count({
+          collection: 'lessons',
+          where: {
+            and: [
+              {
+                _status: {
+                  equals: 'published',
+                },
               },
-            },
-            {
-              course: {
-                equals: event.data.courseId,
+              {
+                course: {
+                  equals: event.data.courseId,
+                },
               },
-            },
-          ],
+            ],
+          },
+        });
+        const numCompletedLessons =
+          courseProgress.docs[0].completedLessons?.length ?? 0;
+        if (totalDocs === 0) {
+          return 0;
         }
-      });
-      const numCompletedLessons = courseProgress.docs[0].completedLessons?.length;
-      const progress = (numCompletedLessons / totalDocs) * 100;
-      await payload.update({
-        collection: 'course-progress',
-        depth: 0,
-        where: {
-          and: [
-            {
-              student: {
-                equals: event.data.userId,
+        const progress =
+          Math.round((numCompletedLessons / totalDocs) * 100 * 10) / 10;
+        await payload.update({
+          collection: 'course-progress',
+          depth: 0,
+          where: {
+            and: [
+              {
+                student: {
+                  equals: event.data.userId,
+                },
               },
-            },
-            {
-              course: {
-                equals: event.data.courseId,
+              {
+                course: {
+                  equals: event.data.courseId,
+                },
               },
-            },
-          ],
-        },
-        data: {
-          overallProgress: progress,
-        },
-      });
-      return progress;
+            ],
+          },
+          data: {
+            overallProgress: progress,
+          },
+        });
+        return progress;
+      } catch (error) {
+        console.error('Failed to update overall progress:', error);
+        throw error;
+      }
     });
 
     return {
