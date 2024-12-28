@@ -965,26 +965,174 @@ export interface FAQBlock {
  */
 export interface CourseProgress {
   id: string;
-  student: {
+  /**
+   * The student whose progress is being tracked
+   */
+  student: string | User;
+  /**
+   * The course being tracked
+   */
+  course: string | Course;
+  /**
+   * Lessons that have been completed
+   */
+  completedLessons?: (string | LessonProgress)[] | null;
+  /**
+   * Quiz attempts and scores
+   */
+  quizAttempts?:
+    | {
+        lesson: string | Lesson;
+        score: number;
+        answers:
+          | {
+              [k: string]: unknown;
+            }
+          | unknown[]
+          | string
+          | number
+          | boolean
+          | null;
+        completedAt: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Assignment submissions and grades
+   */
+  assignments?:
+    | {
+        lesson: {
+          relationTo: 'lessons';
+          value: string | Lesson;
+        };
+        submission:
+          | {
+              [k: string]: unknown;
+            }
+          | unknown[]
+          | string
+          | number
+          | boolean
+          | null;
+        grade?: number | null;
+        feedback?: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        submittedAt: string;
+        gradedAt?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Discussion participation
+   */
+  discussions?:
+    | {
+        lesson: {
+          relationTo: 'lessons';
+          value: string | Lesson;
+        };
+        post: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        replies?:
+          | {
+              author: string | User;
+              content: {
+                root: {
+                  type: string;
+                  children: {
+                    type: string;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              };
+              postedAt: string;
+              id?: string | null;
+            }[]
+          | null;
+        postedAt: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Overall course completion percentage
+   */
+  overallProgress: number;
+  /**
+   * Total points earned in this course
+   */
+  pointsEarned: number;
+  status: 'notStarted' | 'inProgress' | 'completed';
+  /**
+   * When the student started the course
+   */
+  startedAt?: string | null;
+  /**
+   * Last time the student accessed the course
+   */
+  lastAccessed?: string | null;
+  /**
+   * When the student completed the course
+   */
+  completedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lesson-progress".
+ */
+export interface LessonProgress {
+  id: string;
+  student?: {
     relationTo: 'users';
     value: string | User;
-  };
-  course: {
-    relationTo: 'courses';
-    value: string | Course;
-  };
-  status: 'not_started' | 'in_progress' | 'completed';
-  modules: {
-    relationTo: 'module-progress';
-    value: string | ModuleProgress;
-  }[];
-  enrollmentDate?: string | null;
-  overallProgress: number;
-  lastAccessed?: string | null;
-  lastAccessedLesson?: {
+  } | null;
+  lesson?: {
     relationTo: 'lessons';
     value: string | Lesson;
   } | null;
+  /**
+   * When the student accessed the lesson
+   */
+  lastAccessed?: string | null;
+  completed?: boolean | null;
+  /**
+   * When the student completed the lesson
+   */
+  completedAt?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1004,20 +1152,6 @@ export interface ModuleProgress {
         value: string | LessonProgress;
       }[]
     | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "lesson-progress".
- */
-export interface LessonProgress {
-  id: string;
-  lesson?: {
-    relationTo: 'lessons';
-    value: string | Lesson;
-  } | null;
-  completed?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1698,12 +1832,49 @@ export interface LessonsSelect<T extends boolean = true> {
 export interface CourseProgressSelect<T extends boolean = true> {
   student?: T;
   course?: T;
-  status?: T;
-  modules?: T;
-  enrollmentDate?: T;
+  completedLessons?: T;
+  quizAttempts?:
+    | T
+    | {
+        lesson?: T;
+        score?: T;
+        answers?: T;
+        completedAt?: T;
+        id?: T;
+      };
+  assignments?:
+    | T
+    | {
+        lesson?: T;
+        submission?: T;
+        grade?: T;
+        feedback?: T;
+        submittedAt?: T;
+        gradedAt?: T;
+        id?: T;
+      };
+  discussions?:
+    | T
+    | {
+        lesson?: T;
+        post?: T;
+        replies?:
+          | T
+          | {
+              author?: T;
+              content?: T;
+              postedAt?: T;
+              id?: T;
+            };
+        postedAt?: T;
+        id?: T;
+      };
   overallProgress?: T;
+  pointsEarned?: T;
+  status?: T;
+  startedAt?: T;
   lastAccessed?: T;
-  lastAccessedLesson?: T;
+  completedAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1722,8 +1893,11 @@ export interface ModuleProgressSelect<T extends boolean = true> {
  * via the `definition` "lesson-progress_select".
  */
 export interface LessonProgressSelect<T extends boolean = true> {
+  student?: T;
   lesson?: T;
+  lastAccessed?: T;
   completed?: T;
+  completedAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }

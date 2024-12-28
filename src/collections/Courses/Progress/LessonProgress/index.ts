@@ -17,10 +17,24 @@ export const LessonProgress: CollectionConfig = {
   },
   fields: [
     {
+      name: 'student',
+      type: 'relationship',
+      label: 'Student',
+      relationTo: ['users'],
+    },
+    {
       name: 'lesson',
       type: 'relationship',
       label: 'Lesson',
       relationTo: ['lessons'],
+    },
+    {
+      name: 'lastAccessed',
+      type: 'date',
+      label: 'Last Accessed Date',
+      admin: {
+        description: 'When the student accessed the lesson',
+      },
     },
     {
       name: 'completed',
@@ -28,6 +42,12 @@ export const LessonProgress: CollectionConfig = {
       label: 'Completed',
       defaultValue: false,
     },
+    {
+      name: 'completedAt',
+      type: 'date',
+      admin: {
+        description: 'When the student completed the lesson',
+      },
+    },
   ],
-  timestamps: true,
 };
