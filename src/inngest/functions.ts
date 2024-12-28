@@ -67,6 +67,7 @@ export const lessonCompleted = inngest.createFunction(
   { event: 'lessons/lesson.completed' },
   async ({ event, step }) => {
     const payload = await getPayload({ config });
+    // step 1
     const lessonProgress = await step.run("set-lesson-completed", async () => {
       const result = await payload.update({
         collection: 'lesson-progress',
@@ -92,6 +93,7 @@ export const lessonCompleted = inngest.createFunction(
       });
       return result;
     });
+    // step 2
     const courseProgress = await step.run("set-course-progress", async () => {
       const result = await payload.update({
         collection: 'course-progress',
@@ -117,10 +119,54 @@ export const lessonCompleted = inngest.createFunction(
       });
       return result;
     });
-    // TODO step to calculate the overall progress
+    // step 3
+    const overallProgress = await step.run("set-overall-progress", async () => {
+      const { totalDocs } = await payload.count({
+        collection: 'lessons',
+        where: {
+          and: [
+            {
+              _status: {
+                equals: 'published',
+              },
+            },
+            {
+              course: {
+                equals: event.data.courseId,
+              },
+            },
+          ],
+        }
+      });
+      const numCompletedLessons = courseProgress.docs[0].completedLessons?.length;
+      const progress = (numCompletedLessons / totalDocs) * 100;
+      await payload.update({
+        collection: 'course-progress',
+        depth: 0,
+        where: {
+          and: [
+            {
+              student: {
+                equals: event.data.userId,
+              },
+            },
+            {
+              course: {
+                equals: event.data.courseId,
+              },
+            },
+          ],
+        },
+        data: {
+          overallProgress: progress,
+        },
+      });
+      return progress;
+    });
+
     return {
-      lessonProgress: lessonProgress,
-      courseProgress: courseProgress,
+      lessonProgress: lessonProgress.docs[0],
+      courseOverallProgress: overallProgress,
     };
   },
 );

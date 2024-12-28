@@ -19,7 +19,6 @@ export interface Config {
     modules: Module;
     lessons: Lesson;
     'course-progress': CourseProgress;
-    'module-progress': ModuleProgress;
     'lesson-progress': LessonProgress;
     favorites: Favorite;
     transactions: Transaction;
@@ -43,7 +42,6 @@ export interface Config {
     modules: ModulesSelect<false> | ModulesSelect<true>;
     lessons: LessonsSelect<false> | LessonsSelect<true>;
     'course-progress': CourseProgressSelect<false> | CourseProgressSelect<true>;
-    'module-progress': ModuleProgressSelect<false> | ModuleProgressSelect<true>;
     'lesson-progress': LessonProgressSelect<false> | LessonProgressSelect<true>;
     favorites: FavoritesSelect<false> | FavoritesSelect<true>;
     transactions: TransactionsSelect<false> | TransactionsSelect<true>;
@@ -1138,25 +1136,6 @@ export interface LessonProgress {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "module-progress".
- */
-export interface ModuleProgress {
-  id: string;
-  module: {
-    relationTo: 'modules';
-    value: string | Module;
-  };
-  lessonProgress?:
-    | {
-        relationTo: 'lesson-progress';
-        value: string | LessonProgress;
-      }[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "favorites".
  */
 export interface Favorite {
@@ -1323,10 +1302,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'course-progress';
         value: string | CourseProgress;
-      } | null)
-    | ({
-        relationTo: 'module-progress';
-        value: string | ModuleProgress;
       } | null)
     | ({
         relationTo: 'lesson-progress';
@@ -1875,16 +1850,6 @@ export interface CourseProgressSelect<T extends boolean = true> {
   startedAt?: T;
   lastAccessed?: T;
   completedAt?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "module-progress_select".
- */
-export interface ModuleProgressSelect<T extends boolean = true> {
-  module?: T;
-  lessonProgress?: T;
   updatedAt?: T;
   createdAt?: T;
 }
