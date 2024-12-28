@@ -1114,18 +1114,18 @@ export interface CourseProgress {
  */
 export interface LessonProgress {
   id: string;
-  student?: {
-    relationTo: 'users';
-    value: string | User;
-  } | null;
-  lesson?: {
-    relationTo: 'lessons';
-    value: string | Lesson;
-  } | null;
+  /**
+   * The student whose progress is being tracked
+   */
+  student: string | User;
+  /**
+   * The lesson being tracked
+   */
+  lesson: string | Lesson;
   /**
    * When the student accessed the lesson
    */
-  lastAccessed?: string | null;
+  lastAccessed: string;
   completed?: boolean | null;
   /**
    * When the student completed the lesson

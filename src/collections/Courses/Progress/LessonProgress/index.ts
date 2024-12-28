@@ -20,13 +20,22 @@ export const LessonProgress: CollectionConfig = {
       name: 'student',
       type: 'relationship',
       label: 'Student',
-      relationTo: ['users'],
+      relationTo: 'users',
+      admin: {
+        description: 'The student whose progress is being tracked',
+      },
+      required: true,
+      index: true,
     },
     {
       name: 'lesson',
       type: 'relationship',
       label: 'Lesson',
-      relationTo: ['lessons'],
+      relationTo: 'lessons',
+      admin: {
+        description: 'The lesson being tracked',
+      },
+      required: true,
     },
     {
       name: 'lastAccessed',
@@ -35,6 +44,7 @@ export const LessonProgress: CollectionConfig = {
       admin: {
         description: 'When the student accessed the lesson',
       },
+      required: true,
     },
     {
       name: 'completed',
