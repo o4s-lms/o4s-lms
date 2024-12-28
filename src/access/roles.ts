@@ -1,26 +1,26 @@
-import type { User } from '../payload-types'
+import { Access } from 'payload'
 
-export const isAdmin = (user?: User | null): boolean => {
+export const isAdmin: Access = ({ req: { user } }): boolean => {
   if (!user) return false
   return user?.roles.includes('admin')
 }
 
-export const isTeacher = (user?: User | null): boolean => {
+export const isTeacher: Access = ({ req: { user } }): boolean => {
   if (!user) return false
   return user?.roles.includes('teacher')
 }
 
-export const isStudent = (user?: User | null): boolean => {
+export const isStudent: Access = ({ req: { user } }): boolean => {
   if (!user) return false
   return user?.roles.includes('student')
 }
 
-export const hasRole = (user?: User | null, role?: string): boolean => {
+export const hasRole: Access = ({ req: { user } }, role?: 'admin' | 'user' | 'student' | 'teacher'): boolean => {
   if (!user || !role) return false
   return user.roles.includes(role)
 }
 
-export const isSameUser = (user?: User | null, id?: string): boolean => {
+export const isSameUser: Access = ({ req: { user } }, id?: string): boolean => {
   if (!user || !id) return false
   return user.id.toString() === id
 }

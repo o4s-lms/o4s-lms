@@ -17,7 +17,6 @@ import { Courses } from '@/collections/Courses';
 import { Modules } from '@/collections/Courses/Modules';
 import { Lessons } from '@/collections/Courses/Lessons';
 import { CourseProgress } from '@/collections/Courses/Progress';
-import { ModuleProgress } from '@/collections/Courses/Progress/ModuleProgress';
 import { LessonProgress } from '@/collections/Courses/Progress/LessonProgress';
 import { Favorites } from '@/collections/Users/Favorites';
 import { Transactions } from '@/collections/Transactions';
@@ -107,7 +106,6 @@ export default buildConfig({
     Modules,
     Lessons,
     CourseProgress,
-    ModuleProgress,
     LessonProgress,
     Favorites,
     Transactions,

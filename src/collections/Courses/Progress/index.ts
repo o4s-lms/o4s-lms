@@ -3,6 +3,7 @@ import type { CollectionConfig } from 'payload';
 import { authenticated } from '@/access/authenticated';
 import { admin } from '@/access/admin';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
+import { isSameUser } from '@/access/roles';
 
 export const CourseProgress: CollectionConfig = {
   slug: 'course-progress',
@@ -11,7 +12,7 @@ export const CourseProgress: CollectionConfig = {
     create: authenticated,
     delete: authenticated,
     read: authenticated,
-    update: authenticated,
+    update: isSameUser,
   },
   admin: {
     group: 'Courses',
