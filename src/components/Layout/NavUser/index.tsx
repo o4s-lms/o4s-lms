@@ -28,11 +28,13 @@ import { StaticImageData } from 'next/image';
 import { getClientSideURL } from '@/utilities/getURL';
 import { createAvatar } from '@dicebear/core';
 import { lorelei } from '@dicebear/collection';
+import { useRouter } from 'next/navigation';
 
 export function NavUser() {
   const { user, isSignedIn, isLoaded } = useAuth();
   const { isMobile } = useSidebar();
   const { t } = useTranslate();
+  const router = useRouter();
 
   let src: StaticImageData | string = '';
 
@@ -63,7 +65,7 @@ export function NavUser() {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-lg">
+              <Avatar className="h-8 w-8 rounded-full">
                 <AvatarImage src={src} alt={user?.name ? user.name : 'O4S'} />
                 <AvatarFallback className="rounded-lg">SN</AvatarFallback>
               </Avatar>
@@ -82,7 +84,7 @@ export function NavUser() {
           >
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
+                <Avatar className="h-8 w-8 rounded-full">
                   <AvatarImage src={src} alt={user?.name ? user.name : 'O4S'} />
                   <AvatarFallback className="rounded-lg">SN</AvatarFallback>
                 </Avatar>
@@ -95,7 +97,7 @@ export function NavUser() {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
-                <Link href="/dashboard/settings?settingsStep=account">
+                <Link href="/dashboard/settings/account">
                   <BadgeCheck />
                   {t('account')}
                 </Link>
@@ -107,18 +109,20 @@ export function NavUser() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/dashboard/settings?settingsStep=notifications">
+                <Link href="/dashboard/settings/notifications">
                   <Bell />
                   {t('notifications')}
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/logout">
-                <LogOut />
-                {t('log-out')}
-              </Link>
+            <DropdownMenuItem
+              onClick={() => {
+                router.push(`/log-out`);
+              }}
+            >
+              <LogOut />
+              {t('log-out')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

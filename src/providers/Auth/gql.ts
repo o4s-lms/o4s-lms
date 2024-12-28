@@ -4,7 +4,7 @@ export const USER = `
   name
 `;
 
-export const gql = async (query: string): Promise<any> => {
+export const gql = async (query: string): Promise<unknown> => {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/api/graphql`,

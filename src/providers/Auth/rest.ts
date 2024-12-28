@@ -2,7 +2,7 @@ import type { User } from '@/payload-types';
 
 export const rest = async (
   url: string,
-  args?: any,
+  args?: unknown,
   options?: RequestInit,
 ): Promise<null | undefined | User> => {
   const method = options?.method || 'POST';

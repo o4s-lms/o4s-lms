@@ -3,17 +3,19 @@
 import Link from 'next/link';
 import React, { Fragment, useEffect, useState } from 'react';
 
-import { useAuth } from '@/providers/Auth';
-
 export const LogoutPage: React.FC = () => {
-  const { logout } = useAuth();
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
     const performLogout = async () => {
       try {
-        await logout();
+        await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/logout`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
         setSuccess('Logged out successfully.');
       } catch (_) {
         setError('You are already logged out.');
@@ -21,7 +23,7 @@ export const LogoutPage: React.FC = () => {
     };
 
     void performLogout();
-  }, [logout]);
+  }, []);
 
   return (
     <Fragment>
