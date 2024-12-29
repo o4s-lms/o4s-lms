@@ -227,7 +227,7 @@ export const Courses: CollectionConfig<'courses'> = {
           ],
         },
         {
-          name: settings,
+          name: 'settings',
           label: 'Course settings',
           fields: [
             {
