@@ -80,8 +80,8 @@ export const Badges: CollectionConfig = {
       if (user.roles.includes('admin')) return true
       return false
     },
-    create: ({ req: { user } }: AccessArgs) => user?.roles.includes('admin'),
-    update: ({ req: { user } }: AccessArgs) => user?.roles.includes('admin'),
-    delete: ({ req: { user } }: AccessArgs) => user?.roles.includes('admin'),
+    create: ({ req: { user } }: AccessArgs) => user?.roles.includes('admin') ?? false,
+    update: ({ req: { user } }: AccessArgs) => user?.roles.includes('admin') ?? false,
+    delete: ({ req: { user } }: AccessArgs) => user?.roles.includes('admin') ?? false,
   },
 } 
