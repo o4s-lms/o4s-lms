@@ -124,7 +124,6 @@ export function NavActions({
 
   //if (lesson?.id === lessonId) setIsFavorite(true);
 
-  
   console.log('pathname: ', pathname);
   console.log('id: ', lesson?.id);
 
@@ -134,7 +133,7 @@ export function NavActions({
         objectType: 'lessons',
         objectId: lesson?.id as number,
         title: lesson?.title as string,
-        url: `${pathname}?lessonId=${lesson?.id}`
+        url: `${pathname}?lessonId=${lesson?.id}`,
       };
       return createUserFavorites(data);
     },
@@ -183,7 +182,11 @@ export function NavActions({
           size="icon"
           className="h-7 w-7"
         >
-          {favorites?.map(({ id }) => ( id )).includes(lesson.id) ? <StarOff /> : <Star />}
+          {favorites?.map(({ id }) => id).includes(lesson.id) ? (
+            <StarOff />
+          ) : (
+            <Star />
+          )}
         </Button>
       )}
       <Popover open={isOpen} onOpenChange={setIsOpen}>

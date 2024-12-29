@@ -19,12 +19,12 @@ import {
   IconUserCog,
   IconUserOff,
   IconUsers,
-} from '@tabler/icons-react'
-import { type SidebarData } from '@/components/Layout/types'
-import { getTranslate } from '@/tolgee/server'
+} from '@tabler/icons-react';
+import { type SidebarData } from '@/components/Layout/types';
+import { getTranslate } from '@/tolgee/server';
 
-export const sidebarData= async (): Promise<SidebarData> => {
-  const t = await getTranslate()
+export const sidebarData = async (): Promise<SidebarData> => {
+  const t = await getTranslate();
 
   const navGroups = [
     {
@@ -83,7 +83,7 @@ export const sidebarData= async (): Promise<SidebarData> => {
         },
       ],
     },
-  ]
+  ];
 
-  return { navGroups }
-}
+  return { navGroups };
+};

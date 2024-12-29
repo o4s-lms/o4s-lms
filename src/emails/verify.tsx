@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 
 import {
   Body,
@@ -12,7 +12,7 @@ import {
   Section,
   Tailwind,
   Text,
-} from "@react-email/components";
+} from '@react-email/components';
 
 export const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 

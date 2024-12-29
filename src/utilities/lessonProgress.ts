@@ -5,7 +5,9 @@ import configPromise from '@payload-config';
 import { getPayload, PaginatedDocs } from 'payload';
 import type { LessonProgress } from '@/payload-types';
 
-export async function getLessonProgress(lessonId: string): Promise<LessonProgress | null> {
+export async function getLessonProgress(
+  lessonId: string,
+): Promise<LessonProgress | null> {
   const headers = await getHeaders();
   const payload = await getPayload({ config: configPromise });
   const { user } = await payload.auth({ headers });
@@ -41,7 +43,7 @@ export async function getLessonProgress(lessonId: string): Promise<LessonProgres
         student: user.id,
         lesson: lessonId,
         lastAccessed: new Date().toISOString(),
-      },    
+      },
     });
     return lessonProgress;
   }

@@ -20,9 +20,7 @@ type Props = {
   params: { locale: string };
 };
 
-export default async function RootLayout({
-  children,
-}: Props) {
+export default async function RootLayout({ children }: Props) {
   const { isEnabled } = await draftMode();
 
   const locale = await getLanguage();

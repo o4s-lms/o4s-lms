@@ -1,4 +1,7 @@
-import { PayPalScriptProvider, ReactPayPalScriptOptions } from '@paypal/react-paypal-js';
+import {
+  PayPalScriptProvider,
+  ReactPayPalScriptOptions,
+} from '@paypal/react-paypal-js';
 
 const PayPalProvider = ({ children }: { children: React.ReactNode }) => {
   const initialOptions: ReactPayPalScriptOptions = {

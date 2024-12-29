@@ -1,11 +1,6 @@
 'use client';
 
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useState,
-} from 'react';
+import React, { createContext, useCallback, useContext, useState } from 'react';
 
 import type { Transaction } from '@/payload-types';
 import type { CheckoutContext, Create } from './types';
@@ -20,7 +15,7 @@ export const CheckoutProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ api = 'rest', children }) => {
   const [transaction, setTransaction] = useState<null | Transaction>();
-  
+
   const create = useCallback<Create>(
     async (args) => {
       if (api === 'rest') {

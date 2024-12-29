@@ -36,8 +36,8 @@ export default async function Page({ params: paramsPromise }: Args) {
     where: {
       language: {
         equals: language,
-      }
-    }
+      },
+    },
   });
 
   return (

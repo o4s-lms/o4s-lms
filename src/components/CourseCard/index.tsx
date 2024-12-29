@@ -113,8 +113,7 @@ export const CourseCard: React.FC<{
                   {links.map((link, i) => {
                     return (
                       <li key={i}>
-                        <CMSLink {...link}
-                        />
+                        <CMSLink {...link} />
                       </li>
                     );
                   })}

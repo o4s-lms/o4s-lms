@@ -87,79 +87,79 @@ export const AvatarForm = ({ currentUser }: { currentUser: User }) => {
         },
         method: 'POST',
       },
-    )
+    );
 
     if (response.ok) {
       toast.info('We sent an email to reset your password.');
-      setError('')
+      setError('');
     } else {
       toast.error('Something went wrong.', {
-        description: 'There was a problem while attempting to send you a password reset email. Please try again.',
+        description:
+          'There was a problem while attempting to send you a password reset email. Please try again.',
       });
     }
-  }, [])
+  }, []);
 
   return (
     <>
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
-        
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  required
-                  placeholder="Your name"
-                  {...field}
-                  className="w-full"
-                  disabled={isLoading}
-                />
-              </FormControl>
-              <FormMessage className="text-red-600" />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  required
-                  placeholder="Email Address"
-                  {...field}
-                  className="w-full"
-                  disabled={isLoading}
-                />
-              </FormControl>
-              <FormMessage className="text-red-600" />
-            </FormItem>
-          )}
-        />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    required
+                    placeholder="Your name"
+                    {...field}
+                    className="w-full"
+                    disabled={isLoading}
+                  />
+                </FormControl>
+                <FormMessage className="text-red-600" />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    required
+                    placeholder="Email Address"
+                    {...field}
+                    className="w-full"
+                    disabled={isLoading}
+                  />
+                </FormControl>
+                <FormMessage className="text-red-600" />
+              </FormItem>
+            )}
+          />
 
-        <Button type="submit" className="capitalize" disabled={isLoading}>
-          {isLoading && <Spinner className="mr-2 h-4 w-4 animate-spin" />}
-          {isLoading ? 'Processing' : 'Update account'}
+          <Button type="submit" className="capitalize" disabled={isLoading}>
+            {isLoading && <Spinner className="mr-2 h-4 w-4 animate-spin" />}
+            {isLoading ? 'Processing' : 'Update account'}
+          </Button>
+        </form>
+      </Form>
+
+      <p>
+        {'To change your password, '}
+        <Button
+          variant="link"
+          onClick={() => recoverPassword({ email: user.email })}
+          disabled={isLoading}
+        >
+          click here
         </Button>
-      </form>
-    </Form>
-   
-    <p>
-    {'To change your password, '}
-    <Button
-      variant="link"
-      onClick={() => recoverPassword({ email: user.email })}
-      disabled={isLoading}
-    >
-      click here
-    </Button>
-    .
-  </p>
-  </>
+        .
+      </p>
+    </>
   );
 };
 

@@ -99,7 +99,8 @@ export function AccountForm({ currentUser }: { currentUser: User }) {
       if (response.ok) {
         const json = await response.json();
         setUser(json.doc);
-        if (json.doc.language !== defaultValues.language) setLanguage(json.doc.language);
+        if (json.doc.language !== defaultValues.language)
+          setLanguage(json.doc.language);
         toast.info('Successfully updated account.');
         form.reset({
           name: json.doc.name,

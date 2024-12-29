@@ -39,8 +39,7 @@ export default async function AddToCart({
         equals: slug,
       },
     };
-  };
-  
+  }
 
   const result = await payload.find({
     collection: 'courses',

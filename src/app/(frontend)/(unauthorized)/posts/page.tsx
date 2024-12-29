@@ -25,7 +25,7 @@ export default async function Page() {
     where: {
       language: {
         equals: language,
-      }
+      },
     },
     select: {
       title: true,

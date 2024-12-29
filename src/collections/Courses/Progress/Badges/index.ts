@@ -1,11 +1,11 @@
-import type { CollectionConfig, Where, WhereField } from 'payload'
-import type { User } from '@/payload-types'
+import type { CollectionConfig, Where, WhereField } from 'payload';
+import type { User } from '@/payload-types';
 
 type AccessArgs = {
   req: {
-    user?: User | null
-  }
-}
+    user?: User | null;
+  };
+};
 
 export const Badges: CollectionConfig = {
   slug: 'badges',
@@ -76,12 +76,15 @@ export const Badges: CollectionConfig = {
   ],
   access: {
     read: ({ req: { user } }: AccessArgs): boolean | Where => {
-      if (!user) return false
-      if (user.roles.includes('admin')) return true
-      return false
+      if (!user) return false;
+      if (user.roles.includes('admin')) return true;
+      return false;
     },
-    create: ({ req: { user } }: AccessArgs) => user?.roles.includes('admin') ?? false,
-    update: ({ req: { user } }: AccessArgs) => user?.roles.includes('admin') ?? false,
-    delete: ({ req: { user } }: AccessArgs) => user?.roles.includes('admin') ?? false,
+    create: ({ req: { user } }: AccessArgs) =>
+      user?.roles.includes('admin') ?? false,
+    update: ({ req: { user } }: AccessArgs) =>
+      user?.roles.includes('admin') ?? false,
+    delete: ({ req: { user } }: AccessArgs) =>
+      user?.roles.includes('admin') ?? false,
   },
-} 
+};

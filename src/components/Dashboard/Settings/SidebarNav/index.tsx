@@ -31,12 +31,16 @@ export function SidebarNav({
   ...props
 }: SidebarNavProps) {
   //const [settingsStep, setSettingsStep] = useQueryState('settingsStep');
-  const [val, setVal] = useState(currentStep ? `/dashboard/settings/${currentStep}` : 'dashboard/settings/account')
+  const [val, setVal] = useState(
+    currentStep
+      ? `/dashboard/settings/${currentStep}`
+      : 'dashboard/settings/account',
+  );
   const router = useRouter();
 
   const handleSelect = (e: string) => {
     setVal(e);
-    router.push(e)
+    router.push(e);
   };
 
   return (
@@ -48,7 +52,10 @@ export function SidebarNav({
           </SelectTrigger>
           <SelectContent>
             {items.map((item) => (
-              <SelectItem key={item.title} value={`/dashboard/settings/${item.step}`}>
+              <SelectItem
+                key={item.title}
+                value={`/dashboard/settings/${item.step}`}
+              >
                 <div className="flex gap-x-4 px-2 py-1">
                   <span className="scale-125">{item.icon}</span>
                   <span className="text-md">{item.title}</span>

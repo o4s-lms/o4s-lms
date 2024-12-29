@@ -15,7 +15,7 @@ const redirects = async () => {
   const settings = {
     destination: '/dashboard/settings/account',
     permanent: true,
-    source: '/dashboard/settings'
+    source: '/dashboard/settings',
   };
 
   const redirects = [internetExplorerRedirect, settings];

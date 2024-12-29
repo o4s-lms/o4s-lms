@@ -16,7 +16,8 @@ import { useCheckout } from '@/providers/Checkout';
 
 const PaymentPageContent = () => {
   const [{ options, isPending }, dispatch] = usePayPalScriptReducer();
-  const { navigateToStep, create, courses, amount, discount, isLoading } = useCheckout();
+  const { navigateToStep, create, courses, amount, discount, isLoading } =
+    useCheckout();
   const { user, logout, isLoaded } = useAuth();
 
   if (isLoading && !isLoaded) return <Loading />;
@@ -62,17 +63,16 @@ const PaymentPageContent = () => {
         };*/
 
         const transaction = await create({
-            email: user?.email as string,
-            transactionId: data.paymentID,
-            customerId: data.payerID,
-            user: user?.id,
-            courses: courses.map(({ id }) => id),
-            provider: 'paypal',
-            discount: discount || 0,
-            amount: amount || 0,
-            status: 'completed',
-          },
-        );
+          email: user?.email as string,
+          transactionId: data.paymentID,
+          customerId: data.payerID,
+          user: user?.id,
+          courses: courses.map(({ id }) => id),
+          provider: 'paypal',
+          discount: discount || 0,
+          amount: amount || 0,
+          status: 'completed',
+        });
 
         navigateToStep(3);
       });

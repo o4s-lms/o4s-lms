@@ -24,7 +24,7 @@ export default async function SignUpPage() {
       `/dashboard?message=${encodeURIComponent('You are already signed un.')}`,
     );
   }
-  
+
   return (
     <div className="flex h-full items-center justify-center p-10">
       <Button asChild className="absolute right-3 top-3" variant="ghost">

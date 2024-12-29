@@ -78,7 +78,9 @@ export const ResetPasswordForm = () => {
         router.push('/dashboard/account?success=Password reset successfully.');
       } else {
         setIsLoading(false);
-        toast.error('There was a problem while resetting your password. Please try again later.');
+        toast.error(
+          'There was a problem while resetting your password. Please try again later.',
+        );
       }
     },
     [router, login],

@@ -20,33 +20,33 @@ export const PasswordForm = ({ currentUser }: { currentUser: User }) => {
         },
         method: 'POST',
       },
-    )
+    );
 
     if (response.ok) {
       toast.info('We sent an email to reset your password.');
     } else {
       toast.error('Something went wrong.', {
-        description: 'There was a problem while attempting to send you a password reset email. Please try again.',
+        description:
+          'There was a problem while attempting to send you a password reset email. Please try again.',
       });
       setIsLoading(false);
     }
-  }, [])
+  }, []);
 
   return (
     <>
-   
-    <p>
-    {'To change your password, '}
-    <Button
-      variant="link"
-      onClick={() => recoverPassword({ email: user.email })}
-      disabled={isLoading}
-    >
-      click here
-    </Button>
-    .
-  </p>
-  </>
+      <p>
+        {'To change your password, '}
+        <Button
+          variant="link"
+          onClick={() => recoverPassword({ email: user.email })}
+          disabled={isLoading}
+        >
+          click here
+        </Button>
+        .
+      </p>
+    </>
   );
 };
 

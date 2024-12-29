@@ -1,11 +1,11 @@
-import type { CollectionConfig, Access, Where } from 'payload'
-import type { User } from '@/payload-types'
+import type { CollectionConfig, Access, Where } from 'payload';
+import type { User } from '@/payload-types';
 
 type AccessArgs = {
   req: {
-    user?: User | null
-  }
-}
+    user?: User | null;
+  };
+};
 
 export const Enrollments: CollectionConfig = {
   slug: 'enrollments',
@@ -17,8 +17,9 @@ export const Enrollments: CollectionConfig = {
   },
   access: {
     read: ({ req: { user } }: AccessArgs) => {
-      if (!user) return false
-      if (user.roles.includes('admin') || user.roles.includes('teacher')) return true
+      if (!user) return false;
+      if (user.roles.includes('admin') || user.roles.includes('teacher'))
+        return true;
       return {
         and: [
           {
@@ -27,12 +28,13 @@ export const Enrollments: CollectionConfig = {
             },
           },
         ],
-      }
+      };
     },
     create: ({ req: { user } }: AccessArgs) => {
-      if (!user || !user.roles) return false
+      if (!user || !user.roles) return false;
       // Allow admins and instructors to enroll students
-      if (user.roles.includes('admin') || user.roles.includes('teacher')) return true
+      if (user.roles.includes('admin') || user.roles.includes('teacher'))
+        return true;
       // Allow students to self-enroll if the course allows it
       if (user.roles.includes('student')) {
         return {
@@ -43,13 +45,14 @@ export const Enrollments: CollectionConfig = {
               },
             },
           ],
-        }
+        };
       }
-      return false
+      return false;
     },
     update: ({ req: { user } }: AccessArgs) => {
-      if (!user || !user.roles) return false
-      if (user.roles.includes('admin') || user.roles.includes('teacher')) return true
+      if (!user || !user.roles) return false;
+      if (user.roles.includes('admin') || user.roles.includes('teacher'))
+        return true;
       // Students can only update their own enrollment status
       return {
         and: [
@@ -59,11 +62,11 @@ export const Enrollments: CollectionConfig = {
             },
           },
         ],
-      }
+      };
     },
     delete: ({ req: { user } }: AccessArgs) => {
-      if (!user || !user.roles) return false
-      return user.roles.includes('admin')
+      if (!user || !user.roles) return false;
+      return user.roles.includes('admin');
     },
   },
   fields: [
@@ -139,26 +142,26 @@ export const Enrollments: CollectionConfig = {
       async ({ data, operation }) => {
         // Set enrolledAt on creation
         if (operation === 'create') {
-          data.enrolledAt = new Date().toISOString()
+          data.enrolledAt = new Date().toISOString();
         }
-        
+
         // Handle status changes
         if (operation === 'update' && data.status) {
-          const now = new Date().toISOString()
+          const now = new Date().toISOString();
           switch (data.status) {
             case 'active':
-              if (!data.startedAt) data.startedAt = now
-              break
+              if (!data.startedAt) data.startedAt = now;
+              break;
             case 'completed':
-              data.completedAt = now
-              break
+              data.completedAt = now;
+              break;
             case 'dropped':
-              data.droppedAt = now
-              break
+              data.droppedAt = now;
+              break;
           }
         }
 
-        return data
+        return data;
       },
     ],
     afterChange: [
@@ -174,11 +177,11 @@ export const Enrollments: CollectionConfig = {
               //lastAccessed: new Date().toISOString(),
               status: 'notStarted',
               overallProgress: 0,
-              pointsEarned: 0
+              pointsEarned: 0,
             },
-          })
+          });
         }
       },
     ],
   },
-} 
+};

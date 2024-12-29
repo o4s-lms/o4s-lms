@@ -37,8 +37,7 @@ export function NavFavorites() {
   const queryClient = useQueryClient();
 
   const removeFavorite = useMutation({
-    mutationFn: ({ id }: { id: number }) =>
-      removeUserFavorites(id, 'lessons'),
+    mutationFn: ({ id }: { id: number }) => removeUserFavorites(id, 'lessons'),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user-favorites'] });
       toast.success('Favorite removed');

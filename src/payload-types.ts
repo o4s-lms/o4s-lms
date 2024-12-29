@@ -562,7 +562,6 @@ export interface Course {
   description?: string | null;
   price: number;
   badgeImage?: (string | null) | Media;
-  allowSelfEnrollment?: boolean | null;
   language: 'pt' | 'en' | 'fr' | 'es';
   heroImage?: (string | null) | Media;
   content: {
@@ -580,7 +579,10 @@ export interface Course {
     };
     [k: string]: unknown;
   };
-  modules: (string | Module)[];
+  modules: {
+    relationTo: 'modules';
+    value: string | Module;
+  }[];
   meta?: {
     title?: string | null;
     /**
@@ -588,6 +590,12 @@ export interface Course {
      */
     image?: (string | null) | Media;
     description?: string | null;
+  };
+  settings?: {
+    /**
+     * When enabled, students can enroll themselves in this course
+     */
+    allowSelfEnrollment?: boolean | null;
   };
   publishedAt?: string | null;
   authors?: (string | User)[] | null;
@@ -597,7 +605,6 @@ export interface Course {
         name?: string | null;
       }[]
     | null;
-  students?: (string | User)[] | null;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -1918,7 +1925,6 @@ export interface CoursesSelect<T extends boolean = true> {
   description?: T;
   price?: T;
   badgeImage?: T;
-  allowSelfEnrollment?: T;
   language?: T;
   heroImage?: T;
   content?: T;
@@ -1930,6 +1936,11 @@ export interface CoursesSelect<T extends boolean = true> {
         image?: T;
         description?: T;
       };
+  settings?:
+    | T
+    | {
+        allowSelfEnrollment?: T;
+      };
   publishedAt?: T;
   authors?: T;
   populatedAuthors?:
@@ -1938,7 +1949,6 @@ export interface CoursesSelect<T extends boolean = true> {
         id?: T;
         name?: T;
       };
-  students?: T;
   slug?: T;
   slugLock?: T;
   updatedAt?: T;

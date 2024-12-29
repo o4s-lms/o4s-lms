@@ -65,7 +65,8 @@ export const AuthSignInForm = () => {
       try {
         const user = await login(values);
         const isAdmin = checkRole(['admin'], user);
-        if (theme !== user.theme) setTheme(user.theme === 'system' ? null : user.theme);
+        if (theme !== user.theme)
+          setTheme(user.theme === 'system' ? null : user.theme);
         if (currentLanguage !== user.language) setLanguage(user.language);
         await fetch(
           `${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/lastLogin?userId=${user.id}`,

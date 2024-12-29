@@ -16,14 +16,11 @@ import { Main } from '@/components/Layout/Main';
 import ContentSection from './ContentSection';
 
 interface SettingsProps {
-  user: User
-  settingsStep: string
+  user: User;
+  settingsStep: string;
 }
 
-export function SettingsContent({
-  user,
-  settingsStep
-}: SettingsProps) {
+export function SettingsContent({ user, settingsStep }: SettingsProps) {
   const [success, setSuccess] = useQueryState('success');
   //const [settingsStep, setSettingsStep] = useQueryState('settingsStep');
   const { t } = useTranslate();

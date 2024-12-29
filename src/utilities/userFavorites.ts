@@ -53,7 +53,10 @@ export async function createUserFavorites({
   return favorite;
 }
 
-export async function removeUserFavorites(id: number, objectType: 'pages' | 'posts' | 'courses' | 'lessons') {
+export async function removeUserFavorites(
+  id: number,
+  objectType: 'pages' | 'posts' | 'courses' | 'lessons',
+) {
   const headers = await getHeaders();
   const payload = await getPayload({ config: configPromise });
   const { user } = await payload.auth({ headers });
@@ -61,7 +64,7 @@ export async function removeUserFavorites(id: number, objectType: 'pages' | 'pos
   const favorite = await payload.delete({
     collection: 'favorites',
     where: {
-      and: [ 
+      and: [
         {
           user: {
             equals: user?.id,

@@ -1,5 +1,5 @@
 import type { User } from '@/payload-types';
-import { PayloadRequest } from "payload";
+import { PayloadRequest } from 'payload';
 
 export type AccessArgs = {
   req: {

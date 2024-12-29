@@ -25,7 +25,7 @@ export const Favorites: CollectionConfig = {
       admin: {
         description: 'The user this favorite belong to',
       },
-      index: true
+      index: true,
     },
     {
       name: 'objectType',

@@ -41,21 +41,64 @@ import {
 } from '@payloadcms/richtext-lexical/lexical';
 import { NavFavorites } from '@/components/NavFavorites';
 import { parseAsInteger, useQueryState } from 'nuqs';
+import { NavGroup } from '@/components/Layout/NavGroup';
+import { IconDualScreen, IconFileDescription } from '@tabler/icons-react';
 
 type CourseSidebarProps = {
   title: string;
   data: Module[];
 } & React.ComponentProps<typeof Sidebar>;
 
-export function CourseWithSidebar({ title, data, ...props }: CourseSidebarProps) {
+export function CourseWithSidebar({
+  title,
+  data,
+  ...props
+}: CourseSidebarProps) {
   // Note: I'm using state to show active item.
   // IRL you should use the url/router.
-  const [lessonId, setLessonId] = useQueryState('lessonId', parseAsInteger)
+  const [lessonId, setLessonId] = useQueryState('lessonId');
   const [modules, setModules] = React.useState<Module[]>(data);
   const [content, setContent] = React.useState<
     SerializedEditorState | null | undefined
   >(null);
-  const [lesson, setLesson] = React.useState<{ id: number; title: string; } | null>(null);
+  const [lesson, setLesson] = React.useState<{
+    id: string;
+    title: string;
+    content: SerializedEditorState | null | undefined;
+  } | null>(null);
+
+  const groups = modules.map((module) => ({
+    title: module.title,
+    icon: IconDualScreen,
+    items: module.lessons
+      .map(({ value }) => value)
+      .filter((lesson) => typeof lesson === 'object')
+      .map((lesson) => ({
+        id: lesson.id,
+        title: lesson.title,
+        url: '#',
+        icon: IconFileDescription,
+      })),
+  }));
+
+  const nav = [
+    {
+      title: title,
+      items: groups,
+    },
+  ];
+
+  React.useEffect(() => {
+    modules.map((item) => {
+      const lessons = item.lessons
+        .map(({ value }) => value)
+        .filter((lesson) => typeof lesson === 'object');
+      const currentLesson = lessons.filter((item) => item.id === lessonId);
+      console.log('currentLesson:', JSON.stringify(currentLesson));
+      setLesson({ ...currentLesson[0] });
+      //setContent(currentLesson[0].content);
+    });
+  }, [lessonId, modules]);
 
   return (
     <>
@@ -85,6 +128,14 @@ export function CourseWithSidebar({ title, data, ...props }: CourseSidebarProps)
           <SearchForm />
         </SidebarHeader>
         <SidebarContent>
+          {nav && (
+            <>
+              {nav.map((props) => (
+                <NavGroup key={props.title} {...props} />
+              ))}
+            </>
+          )}
+
           <SidebarGroup>
             <SidebarMenu>
               {modules.map((item, index) => (
@@ -116,8 +167,8 @@ export function CourseWithSidebar({ title, data, ...props }: CourseSidebarProps)
                                   <a
                                     href="#"
                                     onClick={() => {
-                                      setContent(item.content);
-                                      setLesson({...item});
+                                      //setContent(item.content);
+                                      //setLesson({ ...item });
                                       setLessonId(item.id);
                                     }}
                                   >
@@ -168,7 +219,7 @@ export function CourseWithSidebar({ title, data, ...props }: CourseSidebarProps)
           <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min">
             <RichText
               className="mx-auto max-w-[48rem]"
-              data={content}
+              data={lesson?.content}
               enableGutter={false}
             />
           </div>

@@ -1,14 +1,17 @@
 services:
-
   inngest:
     image: inngest/inngest:latest
     container_name: inngest
+    restart: always
     environment:
       - INNGEST_EVENT_KEY=${INNGEST_EVENT_KEY}
       - INNGEST_SIGNING_KEY=${INNGEST_SIGNING_KEY}
       - REDIS_URI=${REDIS_URI}
       - INNGEST_DEV=0
-    command: 'inngest start --event-key ${INNGEST_EVENT_KEY}  --signing-key ${INNGEST_SIGNING_KEY} --redis-uri ${REDIS_URI} --sqlite-dir /app/data --sdk-url http://192.168.1.114:3000/api/inngest'
+    command:
+      'inngest start --event-key ${INNGEST_EVENT_KEY}  --signing-key
+      ${INNGEST_SIGNING_KEY} --redis-uri ${REDIS_URI} --sqlite-dir /app/data
+      --sdk-url http://192.168.1.114:3000/api/inngest'
     ports:
       - '8288:8288'
     volumes:

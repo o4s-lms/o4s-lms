@@ -36,8 +36,8 @@ export default async function Page({ params: paramsPromise }: Args) {
     where: {
       language: {
         equals: language,
-      }
-    }
+      },
+    },
   });
 
   return (
@@ -87,8 +87,8 @@ export async function generateStaticParams() {
     where: {
       language: {
         equals: language,
-      }
-    }
+      },
+    },
   });
 
   const totalPages = Math.ceil(totalDocs / 10);

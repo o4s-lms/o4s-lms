@@ -19,9 +19,7 @@ import { Page, Post } from '@/payload-types';
 import { getServerSideURL } from '@/utilities/getURL';
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
-  return doc?.title
-    ? `${doc.title} | O4S LMS`
-    : 'O4S LMS';
+  return doc?.title ? `${doc.title} | O4S LMS` : 'O4S LMS';
 };
 
 const generateURL: GenerateURL<Post | Page> = ({ doc }) => {

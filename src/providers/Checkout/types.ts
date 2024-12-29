@@ -19,4 +19,4 @@ export interface CheckoutContext {
   create: Create;
   setTransaction: (transaction: null | Transaction) => void;
   transaction?: null | Transaction;
-};
+}

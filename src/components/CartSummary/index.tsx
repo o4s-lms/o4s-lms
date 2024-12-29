@@ -42,34 +42,37 @@ function OrderContent({ cart }: OrderSummaryProps) {
   const { user, isSignedIn, isLoaded } = useAuth();
   const router = useRouter();
 
-  const updateCart = React.useCallback(async (courseId: number) => {
-    const tmpCart = currentCart;
-    let a = 0;
-    let d = 0;
-    let t = 0;
-    tmpCart.items = tmpCart.items.filter((item) => item.id !== courseId);
+  const updateCart = React.useCallback(
+    async (courseId: number) => {
+      const tmpCart = currentCart;
+      let a = 0;
+      let d = 0;
+      let t = 0;
+      tmpCart.items = tmpCart.items.filter((item) => item.id !== courseId);
 
-    if (Array.isArray(tmpCart.items) && tmpCart.items.length > 0) {
-      for (const data of tmpCart.items) {
-        a += data.price;
+      if (Array.isArray(tmpCart.items) && tmpCart.items.length > 0) {
+        for (const data of tmpCart.items) {
+          a += data.price;
+        }
+
+        if (tmpCart.items.length > 1) {
+          d = 1000 * tmpCart.items.length;
+        }
+        t = (a - d) * 0.06;
+      } else {
+        router.push('/courses');
       }
 
-      if (tmpCart.items.length > 1) {
-        d = 1000 * tmpCart.items.length;
-      }
-      t = (a - d) * 0.06;
-    } else {
-      router.push('/courses');
-    }
+      tmpCart.amount = a;
+      tmpCart.discount = d;
+      tmpCart.tax = t;
+      tmpCart.total = a - d + t;
 
-    tmpCart.amount = a;
-    tmpCart.discount = d;
-    tmpCart.tax = t;
-    tmpCart.total = a - d + t;
-
-    setCurrentCart(tmpCart);
-    setKey(key + 1);
-  }, [currentCart, key, router]);
+      setCurrentCart(tmpCart);
+      setKey(key + 1);
+    },
+    [currentCart, key, router],
+  );
 
   const paypalbuttonTransactionProps: PayPalButtonsComponentProps = {
     style: { layout: 'vertical' },
@@ -96,7 +99,6 @@ function OrderContent({ cart }: OrderSummaryProps) {
                 },
               }
             }),*/
-            
           },
         ],
       });
@@ -129,7 +131,9 @@ function OrderContent({ cart }: OrderSummaryProps) {
         };*/
 
         const transaction = await create({
-          email: isSignedIn ? user?.email as string : details?.payer?.email_address as string,
+          email: isSignedIn
+            ? (user?.email as string)
+            : (details?.payer?.email_address as string),
           orderId: data.orderID,
           transactionId: data.paymentID,
           customerId: data.payerID,
@@ -143,7 +147,9 @@ function OrderContent({ cart }: OrderSummaryProps) {
           status: 'completed',
         });
 
-        router.push(`/checkout/completion?guest=${isSignedIn ? 'false' : 'true'}false&transactionId=${data.paymentID}`);
+        router.push(
+          `/checkout/completion?guest=${isSignedIn ? 'false' : 'true'}false&transactionId=${data.paymentID}`,
+        );
       });
     },
   };
@@ -171,20 +177,17 @@ function OrderContent({ cart }: OrderSummaryProps) {
                   <div className="flex items-center justify-between md:order-3 md:justify-end">
                     <div className="flex items-center">
                       <p className="text-base font-bold text-gray-900 dark:text-white">
-                      {formatPrice(item.price)}
+                        {formatPrice(item.price)}
                       </p>
                     </div>
                     <div className="text-end md:order-4 md:w-32">
-                      
                       <button
                         onClick={() => updateCart(item.id)}
                         type="button"
                         className="inline-flex items-center text-sm font-medium text-red-600 hover:underline dark:text-red-500"
                       >
                         <X size={18} />
-                        
                       </button>
-                      
                     </div>
                   </div>
 
@@ -198,9 +201,7 @@ function OrderContent({ cart }: OrderSummaryProps) {
                       {item.title}
                     </a>
 
-                    <div className="flex items-center gap-4">
-                      
-                    </div>
+                    <div className="flex items-center gap-4"></div>
                   </div>
                 </div>
               </div>

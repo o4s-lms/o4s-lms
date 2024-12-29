@@ -26,9 +26,7 @@ export const generateMeta = async (args: {
 
   const ogImage = getImageURL(doc?.meta?.image);
 
-  const title = doc?.meta?.title
-    ? doc?.meta?.title + ' | O4S LMS'
-    : 'O4S LMS';
+  const title = doc?.meta?.title ? doc?.meta?.title + ' | O4S LMS' : 'O4S LMS';
 
   return {
     description: doc?.meta?.description,

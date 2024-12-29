@@ -22,21 +22,20 @@ export const CourseProgress: CollectionConfig = {
   hooks: {
     beforeChange: [
       async ({ data, operation }) => {
-        
         // Handle status changes
         if (operation === 'update' && data.status) {
-          const now = new Date().toISOString()
+          const now = new Date().toISOString();
           switch (data.status) {
             case 'inProgress':
-              if (!data.startedAt) data.startedAt = now
-              break
+              if (!data.startedAt) data.startedAt = now;
+              break;
             case 'completed':
-              data.completedAt = now
-              break
+              data.completedAt = now;
+              break;
           }
         }
 
-        return data
+        return data;
       },
     ],
   },

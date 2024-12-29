@@ -1,11 +1,16 @@
-import type { CollectionConfig, Where, WhereField, ValidateOptions } from 'payload'
-import type { User } from '@/payload-types'
+import type {
+  CollectionConfig,
+  Where,
+  WhereField,
+  ValidateOptions,
+} from 'payload';
+import type { User } from '@/payload-types';
 
 type AccessArgs = {
   req: {
-    user?: User | null
-  }
-}
+    user?: User | null;
+  };
+};
 
 export const Points: CollectionConfig = {
   slug: 'points',
@@ -82,7 +87,8 @@ export const Points: CollectionConfig = {
           type: 'relationship',
           relationTo: 'achievements',
           admin: {
-            condition: (data, siblingData) => siblingData?.type === 'achievements',
+            condition: (data, siblingData) =>
+              siblingData?.type === 'achievements',
           },
           index: true,
         },
@@ -98,25 +104,27 @@ export const Points: CollectionConfig = {
   ],
   access: {
     read: ({ req: { user } }: AccessArgs): boolean | Where => {
-      if (!user) return false
-      if (user.roles.includes('admin') || user.roles.includes('teacher')) return true
+      if (!user) return false;
+      if (user.roles.includes('admin') || user.roles.includes('teacher'))
+        return true;
       return {
         student: {
           equals: user.id,
         } as WhereField,
-      }
+      };
     },
     create: () => false, // Only created by system
     update: () => false, // Points are immutable
-    delete: ({ req: { user } }: AccessArgs) => user?.roles.includes('admin') ?? false,
+    delete: ({ req: { user } }: AccessArgs) =>
+      user?.roles.includes('admin') ?? false,
   },
   hooks: {
     beforeChange: [
       async ({ data, operation }) => {
         if (operation === 'update') {
-          throw new Error('Points cannot be modified after creation')
+          throw new Error('Points cannot be modified after creation');
         }
-        return data
+        return data;
       },
     ],
     afterChange: [
@@ -126,11 +134,11 @@ export const Points: CollectionConfig = {
           const sourceDoc = await req.payload.findByID({
             collection: doc.source.type,
             id: doc.source[doc.source.type]?.id,
-          })
+          });
 
           if (!sourceDoc?.course) {
-            console.warn('No course found for source document')
-            return
+            console.warn('No course found for source document');
+            return;
           }
 
           // Find the progress record for this student and course
@@ -150,7 +158,7 @@ export const Points: CollectionConfig = {
                 },
               ],
             },
-          })
+          });
 
           if (progress.docs.length > 0) {
             await req.payload.update({
@@ -159,12 +167,12 @@ export const Points: CollectionConfig = {
               data: {
                 pointsEarned: (progress.docs[0].pointsEarned || 0) + doc.amount,
               },
-            })
+            });
           } else {
-            console.warn('No progress record found for student and course')
+            console.warn('No progress record found for student and course');
           }
         }
       },
     ],
   },
-}
+};

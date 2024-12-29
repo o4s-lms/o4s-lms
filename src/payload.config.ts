@@ -1,6 +1,6 @@
 // storage-adapter-import-placeholder
 //import { postgresAdapter } from '@payloadcms/db-postgres';
-import { mongooseAdapter } from '@payloadcms/db-mongodb'
+import { mongooseAdapter } from '@payloadcms/db-mongodb';
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer';
 import { s3Storage } from '@payloadcms/storage-s3';
 

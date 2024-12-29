@@ -41,14 +41,12 @@ export function NavUser() {
   const { t } = useTranslate();
   let src: StaticImageData | string = '';
 
-  if (!isLoaded) return null
+  if (!isLoaded) return null;
 
-  if (!isSignedIn && isLoaded) return null
+  if (!isSignedIn && isLoaded) return null;
 
   if (user?.avatar && typeof user?.avatar === 'object') {
-    const {
-      url,
-    } = user?.avatar;
+    const { url } = user?.avatar;
 
     src = `${getClientSideURL()}${url}`;
   }
@@ -71,10 +69,7 @@ export function NavUser() {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground md:h-8 md:p-0"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage
-                  src={src}
-                  alt={user?.name || ''}
-                />
+                <AvatarImage src={src} alt={user?.name || ''} />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
               {!isMobile && (
@@ -97,10 +92,7 @@ export function NavUser() {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage
-                    src={src}
-                    alt={user?.name || ''}
-                  />
+                  <AvatarImage src={src} alt={user?.name || ''} />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
 

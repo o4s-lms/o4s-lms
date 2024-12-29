@@ -24,7 +24,7 @@ export default async function CoursesPage() {
     where: {
       language: {
         equals: language,
-      }
+      },
     },
     select: {
       title: true,

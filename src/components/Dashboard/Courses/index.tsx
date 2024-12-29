@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { useTranslate } from '@tolgee/react';
 
-
 export function CoursesContent() {
   const { t } = useTranslate();
 

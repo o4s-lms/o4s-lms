@@ -8,4 +8,4 @@ export type Subscribe = (args: {
 export interface NewsletterContext {
   subscribe: Subscribe;
   //unsubscrive: Boolean;
-};
+}

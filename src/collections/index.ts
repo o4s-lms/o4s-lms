@@ -30,4 +30,4 @@ export const collections = [
   Newsletter,
   Users,
   Settings,
-]
+];

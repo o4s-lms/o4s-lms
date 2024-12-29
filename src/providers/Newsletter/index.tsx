@@ -1,10 +1,6 @@
 'use client';
 
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-} from 'react';
+import React, { createContext, useCallback, useContext } from 'react';
 
 import type { NewsletterSignup } from '@/payload-types';
 import type { NewsletterContext, Subscribe } from './types';
@@ -18,7 +14,6 @@ export const NewsletterProvider: React.FC<{
   api?: 'gql' | 'rest';
   children: React.ReactNode;
 }> = ({ api = 'rest', children }) => {
-  
   const subscribe = useCallback<Subscribe>(
     async (args) => {
       if (api === 'rest') {
@@ -31,7 +26,8 @@ export const NewsletterProvider: React.FC<{
       }
 
       if (api === 'gql') {
-        const { createNewsletterSignup: newslettersignup } = await gql(`mutation {
+        const { createNewsletterSignup: newslettersignup } =
+          await gql(`mutation {
           createNewsletterSignup(data: {
             name: "${args.name}",
             email: "${args.email}" }) {
@@ -39,7 +35,6 @@ export const NewsletterProvider: React.FC<{
           }
         }`);
 
-        
         return newslettersignup;
       }
     },

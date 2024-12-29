@@ -34,7 +34,6 @@ export function AppearanceForm({ currentUser }: { currentUser: User }) {
   const [user, setUser] = React.useState<User>(currentUser);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const { setTheme, theme } = useTheme();
-  
 
   const defaultValues: Partial<AppearanceFormValues> = {
     theme: currentUser.theme,
@@ -65,7 +64,8 @@ export function AppearanceForm({ currentUser }: { currentUser: User }) {
       if (response.ok) {
         const json = await response.json();
         setUser(json.doc);
-        if (theme !== json.doc.theme) setTheme(json.doc.theme === 'system' ? null : json.doc.theme);
+        if (theme !== json.doc.theme)
+          setTheme(json.doc.theme === 'system' ? null : json.doc.theme);
         toast.info('Successfully updated preferences.');
         form.reset({
           theme: json.doc.theme,

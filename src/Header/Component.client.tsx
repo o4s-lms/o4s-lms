@@ -40,10 +40,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
       {...(theme ? { 'data-theme': theme } : {})}
     >
       <aside className="dark:text-white">
-        <Link
-          href={'/'}
-          className="flex items-center gap-[4px]"
-        >
+        <Link href={'/'} className="flex items-center gap-[4px]">
           <p className="text-3xl font-bold">O4S</p>
           <Image
             src="/iconO4S-100x100.png"

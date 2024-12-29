@@ -51,8 +51,9 @@ export const Courses: CollectionConfig<'courses'> = {
     },
     delete: admin,
     read: ({ req: { user } }: AccessArgs): boolean | Where => {
-      if (user?.roles.includes('admin') || user?.roles.includes('teacher')) return true
-    
+      if (user?.roles.includes('admin') || user?.roles.includes('teacher'))
+        return true;
+
       return {
         _status: {
           equals: 'published',
@@ -193,11 +194,11 @@ export const Courses: CollectionConfig<'courses'> = {
                 isSortable: true,
               },
               label: 'Modules',
-              relationTo: 'modules',
+              relationTo: ['modules'],
               required: true,
             },
           ],
-          label: 'Sections',
+          label: 'Learning Modules',
         },
         {
           name: 'meta',
@@ -296,15 +297,6 @@ export const Courses: CollectionConfig<'courses'> = {
           type: 'text',
         },
       ],
-    },
-    {
-      name: 'students',
-      type: 'relationship',
-      admin: {
-        position: 'sidebar',
-      },
-      hasMany: true,
-      relationTo: 'users',
     },
     ...slugField(),
   ],

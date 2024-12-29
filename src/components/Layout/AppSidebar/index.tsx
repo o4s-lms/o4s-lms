@@ -18,19 +18,48 @@ import { VERSION } from '@/lib/constants';
 import { useEffect, useState } from 'react';
 import type { SidebarData } from '@/components/Layout/types';
 import { useTolgee } from '@tolgee/react';
+import { Module } from '@/payload-types';
+import { IconDualScreen, IconFileDescription } from '@tabler/icons-react';
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+type AppSidebarProps = {
+  title?: string;
+  modules?: Module[];
+} & React.ComponentProps<typeof Sidebar>;
+
+export function AppSidebar({ title, modules, ...props }: AppSidebarProps) {
   const [nav, setNav] = useState<SidebarData | null>(null);
   const tolgee = useTolgee(['language']);
   const currentLanguage = tolgee.getLanguage();
 
   useEffect(() => {
     async function getNav() {
-      setNav(await sidebarData());
+      const groups = await sidebarData();
+      if (title) {
+        const tmp = modules?.map((module) => ({
+          title: module.title,
+          icon: IconDualScreen,
+          items: module.lessons
+            .map(({ value }) => value)
+            .filter((lesson) => typeof lesson === 'object')
+            .map((lesson) => ({
+              id: lesson.id,
+              title: lesson.title,
+              url: '#',
+              icon: IconFileDescription,
+            })),
+        }));
+        const courseNav = {
+          title: title,
+          items: tmp,
+        };
+
+        groups.navGroups.unshift(courseNav);
+      }
+      setNav(groups);
     }
 
-    getNav();
-  }, [currentLanguage]);
+    void getNav();
+  }, [currentLanguage, title, modules]);
 
   return (
     <Sidebar collapsible="icon" variant="floating" {...props}>

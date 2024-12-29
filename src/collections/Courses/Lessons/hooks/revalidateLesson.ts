@@ -43,7 +43,7 @@ export const revalidateDelete: CollectionAfterDeleteHook<Course> = ({
     const path = `/courses/${doc?.slug}`;
 
     revalidatePath(path);
-    revalidateTag('courses-sitemap')
+    revalidateTag('courses-sitemap');
   }
 
   return doc;
