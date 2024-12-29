@@ -12,7 +12,7 @@ export const helloWorld = inngest.createFunction(
 export const lastLogin = inngest.createFunction(
   { id: 'last-login' },
   { event: 'users/last.login' },
-  async ({ event, step, payload }) => {
+  async ({ event, step, payload, logger }) => {
     // step 1
     const result = await step.run('update-last-login', async () => {
       try {
@@ -28,9 +28,12 @@ export const lastLogin = inngest.createFunction(
             lastLogin: new Date().toISOString(),
           },
         });
-        return { message: 'User last login updated', userId: event.data.userId};
+        return {
+          message: 'User last login updated',
+          userId: event.data.userId,
+        };
       } catch (error) {
-        console.error('Failed to update last login:', error);
+        logger.error('Failed to update last login:', error);
         throw error;
       }
     });
@@ -41,12 +44,11 @@ export const lastLogin = inngest.createFunction(
 export const lastLessonAccess = inngest.createFunction(
   { id: 'last-lesson-access' },
   { event: 'lessons/last.lesson.access' },
-  async ({ event, step, payload }) => {
+  async ({ event, step, payload, logger }) => {
     // step 1
-    const lastAccessed = await step.run(
-      'update-last-lesson-access',
-      async () => {
-        const result = await payload.update({
+    const result = await step.run('update-last-lesson-access', async () => {
+      try {
+        await payload.update({
           collection: 'lesson-progress',
           depth: 0,
           where: {
@@ -67,73 +69,90 @@ export const lastLessonAccess = inngest.createFunction(
             lastAccessed: new Date().toISOString(),
           },
         });
-        return result;
-      },
-    );
-    return lastAccessed;
+        return {
+          message: 'Lesson last access updated',
+          user: event.data.userId,
+          lesson: event.data.lessonId,
+        };
+      } catch (error) {
+        logger.error('Failed to update lesson last access:', error);
+        throw error;
+      }
+    });
+    return result;
   },
 );
 
 export const lessonCompleted = inngest.createFunction(
   { id: 'lesson-completed' },
   { event: 'lessons/lesson.completed' },
-  async ({ event, step, payload }) => {
+  async ({ event, step, payload, logger }) => {
     // step 1
     const lessonProgress = await step.run(
       'update-lesson-completed',
       async () => {
-        const result = await payload.update({
-          collection: 'lesson-progress',
-          depth: 0,
-          where: {
-            and: [
-              {
-                student: {
-                  equals: event.data.userId,
+        try {
+          const result = await payload.update({
+            collection: 'lesson-progress',
+            depth: 0,
+            where: {
+              and: [
+                {
+                  student: {
+                    equals: event.data.userId,
+                  },
                 },
-              },
-              {
-                lesson: {
-                  equals: event.data.lessonId,
+                {
+                  lesson: {
+                    equals: event.data.lessonId,
+                  },
                 },
-              },
-            ],
-          },
-          data: {
-            completed: true,
-            completedAt: new Date().toISOString(),
-          },
-        });
-        return result;
+              ],
+            },
+            data: {
+              completed: true,
+              completedAt: new Date().toISOString(),
+            },
+          });
+          return result;
+        } catch (error) {
+          logger.error('Failed to update lesson completed:', error);
+          throw error;
+        }
       },
     );
     // step 2
     const courseProgress = await step.run(
       'update-course-progress',
       async () => {
-        const result = await payload.update({
-          collection: 'course-progress',
-          depth: 0,
-          where: {
-            and: [
-              {
-                student: {
-                  equals: event.data.userId,
+        try {
+          const result = await payload.update({
+            collection: 'course-progress',
+            depth: 0,
+            where: {
+              and: [
+                {
+                  student: {
+                    equals: event.data.userId,
+                  },
                 },
-              },
-              {
-                course: {
-                  equals: event.data.courseId,
+                {
+                  course: {
+                    equals: event.data.courseId,
+                  },
                 },
-              },
-            ],
-          },
-          data: {
-            completedLessons: event.data.lessonId,
-            lastAccessed: new Date().toISOString(),
-          },
-        });
-        return result;
+              ],
+            },
+            data: {
+              completedLessons: event.data.lessonId,
+              lastAccessed: new Date().toISOString(),
+            },
+          });
+          return result;
+        } catch (error) {
+          logger.error('Failed to update course progress:', error);
+          throw error;
+        }
       },
     );
     // step 3
@@ -163,8 +182,13 @@ export const lessonCompleted = inngest.createFunction(
           if (totalDocs === 0) {
             return 0;
           }
-          const progress =
-            Math.round((numCompletedLessons / totalDocs) * 100 * 10) / 10;
+
+          const rawProgress = (numCompletedLessons / totalDocs) * 100;
+          const progress = Math.min(
+            100,
+            Math.max(0, Math.round(rawProgress * 10) / 10),
+          );
+
           await payload.update({
             collection: 'course-progress',
             depth: 0,
@@ -188,7 +212,7 @@ export const lessonCompleted = inngest.createFunction(
           });
           return progress;
         } catch (error) {
-          console.error('Failed to update overall progress:', error);
+          logger.error('Failed to update overall progress:', error);
           throw error;
         }
       },
