@@ -16,8 +16,12 @@ import { Posts } from '@/collections/Posts';
 import { Courses } from '@/collections/Courses';
 import { Modules } from '@/collections/Courses/Modules';
 import { Lessons } from '@/collections/Courses/Lessons';
+import { Enrollments } from '@/collections/Courses/Enrollments';
 import { CourseProgress } from '@/collections/Courses/Progress';
 import { LessonProgress } from '@/collections/Courses/Progress/LessonProgress';
+import { Achievements } from '@/collections/Courses/Progress/Achievements';
+import { Points } from '@/collections/Courses/Progress/Points';
+import { Badges } from '@/collections/Courses/Progress/Badges';
 import { Favorites } from '@/collections/Users/Favorites';
 import { Transactions } from '@/collections/Transactions';
 import { Newsletter } from '@/collections/Newsletter';
@@ -103,10 +107,14 @@ export default buildConfig({
     Media,
     Categories,
     Courses,
+    Enrollments,
     Modules,
     Lessons,
     CourseProgress,
     LessonProgress,
+    Achievements,
+    Points,
+    Badges,
     Favorites,
     Transactions,
     Newsletter,

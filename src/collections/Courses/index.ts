@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload';
+import type { CollectionConfig, Where } from 'payload';
 
 import {
   BlocksFeature,
@@ -29,16 +29,50 @@ import { slugField } from '@/fields/slug';
 import { languageSelectOptions } from '@/utilities/languages';
 import { FAQBlock } from '@/blocks/FAQBlock/config';
 import { anyone } from '@/access/anyone';
+import { User } from '@/payload-types';
+import { settings } from '@/payload-generated-schema';
+
+type AccessArgs = {
+  req: {
+    user?: User | null;
+  };
+};
 
 export const Courses: CollectionConfig<'courses'> = {
   slug: 'courses',
-  
+
   access: {
     admin: admin,
-    create: admin,
+    create: ({ req: { user } }: AccessArgs): boolean | Where => {
+      if (!user || !user.roles) return false;
+      if (user.roles.includes('admin') || user.roles.includes('teacher'))
+        return true;
+      return false;
+    },
     delete: admin,
-    read: anyone,
-    update: admin,
+    read: ({ req: { user } }: AccessArgs): boolean | Where => {
+      if (user?.roles.includes('admin') || user?.roles.includes('teacher')) return true
+    
+      return {
+        _status: {
+          equals: 'published',
+        },
+      };
+    },
+    update: ({ req: { user } }: AccessArgs): boolean | Where => {
+      if (!user || !user.roles) return false;
+      if (user.roles.includes('admin')) return true;
+      // Teachers can only update their own courses
+      return {
+        and: [
+          {
+            authors: {
+              in: user.id,
+            },
+          },
+        ],
+      };
+    },
   },
   // This config controls what's populated by default when a post is referenced
   // https://payloadcms.com/docs/queries/select#defaultpopulate-collection-config-property
@@ -159,7 +193,7 @@ export const Courses: CollectionConfig<'courses'> = {
                 isSortable: true,
               },
               label: 'Modules',
-              relationTo: ['modules'],
+              relationTo: 'modules',
               required: true,
             },
           ],
@@ -190,6 +224,22 @@ export const Courses: CollectionConfig<'courses'> = {
               titlePath: 'meta.title',
               descriptionPath: 'meta.description',
             }),
+          ],
+        },
+        {
+          name: settings,
+          label: 'Course settings',
+          fields: [
+            {
+              name: 'allowSelfEnrollment',
+              type: 'checkbox',
+              defaultValue: true,
+              label: 'Allow Self Enrollment',
+              admin: {
+                description:
+                  'When enabled, students can enroll themselves in this course',
+              },
+            },
           ],
         },
       ],

@@ -16,10 +16,14 @@ export interface Config {
     media: Media;
     categories: Category;
     courses: Course;
+    enrollments: Enrollment;
     modules: Module;
     lessons: Lesson;
     'course-progress': CourseProgress;
     'lesson-progress': LessonProgress;
+    achievements: Achievement;
+    points: Point;
+    badges: Badge;
     favorites: Favorite;
     transactions: Transaction;
     'newsletter-signups': NewsletterSignup;
@@ -39,10 +43,14 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     courses: CoursesSelect<false> | CoursesSelect<true>;
+    enrollments: EnrollmentsSelect<false> | EnrollmentsSelect<true>;
     modules: ModulesSelect<false> | ModulesSelect<true>;
     lessons: LessonsSelect<false> | LessonsSelect<true>;
     'course-progress': CourseProgressSelect<false> | CourseProgressSelect<true>;
     'lesson-progress': LessonProgressSelect<false> | LessonProgressSelect<true>;
+    achievements: AchievementsSelect<false> | AchievementsSelect<true>;
+    points: PointsSelect<false> | PointsSelect<true>;
+    badges: BadgesSelect<false> | BadgesSelect<true>;
     favorites: FavoritesSelect<false> | FavoritesSelect<true>;
     transactions: TransactionsSelect<false> | TransactionsSelect<true>;
     'newsletter-signups': NewsletterSignupsSelect<false> | NewsletterSignupsSelect<true>;
@@ -554,6 +562,7 @@ export interface Course {
   description?: string | null;
   price: number;
   badgeImage?: (string | null) | Media;
+  allowSelfEnrollment?: boolean | null;
   language: 'pt' | 'en' | 'fr' | 'es';
   heroImage?: (string | null) | Media;
   content: {
@@ -571,10 +580,7 @@ export interface Course {
     };
     [k: string]: unknown;
   };
-  modules: {
-    relationTo: 'modules';
-    value: string | Module;
-  }[];
+  modules: (string | Module)[];
   meta?: {
     title?: string | null;
     /**
@@ -958,6 +964,46 @@ export interface FAQBlock {
   blockType: 'faq';
 }
 /**
+ * Student course enrollments
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "enrollments".
+ */
+export interface Enrollment {
+  id: string;
+  /**
+   * The enrolled student
+   */
+  student: string | User;
+  /**
+   * The course being enrolled in
+   */
+  course: string | Course;
+  status: 'active' | 'completed' | 'dropped' | 'pending';
+  /**
+   * When the enrollment was created
+   */
+  enrolledAt: string;
+  /**
+   * When the student started the course
+   */
+  startedAt?: string | null;
+  /**
+   * When the student completed the course
+   */
+  completedAt?: string | null;
+  /**
+   * When the student dropped the course
+   */
+  droppedAt?: string | null;
+  /**
+   * When the enrollment expires
+   */
+  expiresAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "course-progress".
  */
@@ -1135,6 +1181,133 @@ export interface LessonProgress {
   createdAt: string;
 }
 /**
+ * Achievement definitions and criteria
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "achievements".
+ */
+export interface Achievement {
+  id: string;
+  /**
+   * Name of the achievement
+   */
+  name: string;
+  /**
+   * Detailed description of how to earn this achievement
+   */
+  description: string;
+  /**
+   * Type of activity tracked
+   */
+  type: 'courseProgress' | 'quizScore' | 'assignment' | 'discussion' | 'custom';
+  criteria: {
+    /**
+     * What to measure
+     */
+    metric: 'count' | 'score' | 'duration' | 'custom';
+    /**
+     * Target value to achieve
+     */
+    threshold: number;
+    /**
+     * Time period to measure over
+     */
+    timeframe?: ('allTime' | 'daily' | 'weekly' | 'monthly') | null;
+    /**
+     * Custom achievement criteria logic
+     */
+    customRule?: string | null;
+  };
+  /**
+   * Badge awarded for this achievement
+   */
+  badge: string | Badge;
+  /**
+   * Points awarded for this achievement
+   */
+  points: number;
+  /**
+   * Hide this achievement until unlocked
+   */
+  secret?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Achievement badges for gamification
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "badges".
+ */
+export interface Badge {
+  id: string;
+  /**
+   * Name of the badge
+   */
+  name: string;
+  /**
+   * Detailed description of how to earn this badge
+   */
+  description: string;
+  /**
+   * Badge icon image
+   */
+  icon: string | Media;
+  /**
+   * Badge rarity level
+   */
+  rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
+  /**
+   * Badge category
+   */
+  category: 'progress' | 'performance' | 'engagement' | 'special';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Point transactions for gamification
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "points".
+ */
+export interface Point {
+  id: string;
+  /**
+   * Student who earned the points
+   */
+  student: string | User;
+  /**
+   * Type of activity that earned points
+   */
+  type: 'lessonComplete' | 'quizScore' | 'assignmentSubmit' | 'discussionPost' | 'achievementUnlock';
+  /**
+   * Number of points earned
+   */
+  amount: number;
+  /**
+   * Source that generated these points
+   */
+  source: {
+    type: 'lessons' | 'achievements';
+    lesson?: (string | null) | Lesson;
+    achievement?: (string | null) | Achievement;
+  };
+  /**
+   * Additional context about the points earned
+   */
+  metadata?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "favorites".
  */
@@ -1292,6 +1465,10 @@ export interface PayloadLockedDocument {
         value: string | Course;
       } | null)
     | ({
+        relationTo: 'enrollments';
+        value: string | Enrollment;
+      } | null)
+    | ({
         relationTo: 'modules';
         value: string | Module;
       } | null)
@@ -1306,6 +1483,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'lesson-progress';
         value: string | LessonProgress;
+      } | null)
+    | ({
+        relationTo: 'achievements';
+        value: string | Achievement;
+      } | null)
+    | ({
+        relationTo: 'points';
+        value: string | Point;
+      } | null)
+    | ({
+        relationTo: 'badges';
+        value: string | Badge;
       } | null)
     | ({
         relationTo: 'favorites';
@@ -1729,6 +1918,7 @@ export interface CoursesSelect<T extends boolean = true> {
   description?: T;
   price?: T;
   badgeImage?: T;
+  allowSelfEnrollment?: T;
   language?: T;
   heroImage?: T;
   content?: T;
@@ -1754,6 +1944,22 @@ export interface CoursesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "enrollments_select".
+ */
+export interface EnrollmentsSelect<T extends boolean = true> {
+  student?: T;
+  course?: T;
+  status?: T;
+  enrolledAt?: T;
+  startedAt?: T;
+  completedAt?: T;
+  droppedAt?: T;
+  expiresAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1863,6 +2069,60 @@ export interface LessonProgressSelect<T extends boolean = true> {
   lastAccessed?: T;
   completed?: T;
   completedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "achievements_select".
+ */
+export interface AchievementsSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  type?: T;
+  criteria?:
+    | T
+    | {
+        metric?: T;
+        threshold?: T;
+        timeframe?: T;
+        customRule?: T;
+      };
+  badge?: T;
+  points?: T;
+  secret?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "points_select".
+ */
+export interface PointsSelect<T extends boolean = true> {
+  student?: T;
+  type?: T;
+  amount?: T;
+  source?:
+    | T
+    | {
+        type?: T;
+        lesson?: T;
+        achievement?: T;
+      };
+  metadata?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "badges_select".
+ */
+export interface BadgesSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  icon?: T;
+  rarity?: T;
+  category?: T;
   updatedAt?: T;
   createdAt?: T;
 }
