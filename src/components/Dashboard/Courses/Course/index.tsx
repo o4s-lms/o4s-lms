@@ -14,7 +14,7 @@ interface CourseSidebarProps {
   data: Module[];
 }
 
-export function CourseContent() {
+export function CourseContent({ userId }: { userId: string }) {
   const [lessonId, setLessonId] = useQueryState('lessonId');
   //const [modules, setModules] = React.useState<Module[]>(data);
   const [lesson, setLesson] = React.useState<
@@ -31,6 +31,15 @@ export function CourseContent() {
     const getLesson = async () => {
       const l = await getLessonById(lessonId);
       setLesson({ ...l });
+      if (lessonId) {
+        await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/lastLessonAccess?userId=${userId}&lessonId=${lessonId}`,
+          {
+            method: 'POST',
+            credentials: 'include',
+          },
+        );
+      }
     };
 
     void getLesson();

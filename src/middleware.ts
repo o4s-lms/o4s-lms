@@ -6,7 +6,7 @@ import { checkRole } from './access/checkRole';
 //const protectedRoutes = ["/dashboard", "/admin"];
 
 export default async function authMiddleware(request: NextRequest) {
-  const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard');
+  const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard') || request.nextUrl.pathname.startsWith('/learn');
   const isAdminRoute = request.nextUrl.pathname.startsWith('/admin');
   //const path = request.nextUrl.pathname;
   //const isProtectedRoute = protectedRoutes.includes(path);
@@ -40,7 +40,7 @@ export default async function authMiddleware(request: NextRequest) {
   if (!isAdmin && isAdminRoute) {
     return NextResponse.redirect(
       new URL(
-        `/dashboard/account?error=${encodeURIComponent('Only admins have access to admin dashboard.')}`,
+        `/dashboard?error=${encodeURIComponent('Only admins have access to admin dashboard.')}`,
         request.url,
       ),
     );

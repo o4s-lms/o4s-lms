@@ -1,4 +1,14 @@
+import { Where } from 'payload';
 import { inngest } from './client';
+
+/**const handlePayloadError = async <T>(operation: () => Promise<T>, errorMsg: string): Promise<T> => {
+  try {
+    return await operation();
+  } catch (error) {
+    logger.error(errorMsg, error);
+    throw error;
+  }
+}; */
 
 export const helloWorld = inngest.createFunction(
   { id: 'hello-world' },
@@ -45,41 +55,86 @@ export const lastLessonAccess = inngest.createFunction(
   { id: 'last-lesson-access' },
   { event: 'lessons/last.lesson.access' },
   async ({ event, step, payload, logger }) => {
-    // step 1
-    const result = await step.run('update-last-lesson-access', async () => {
+    const { userId, lessonId } = event.data;
+    const now = new Date().toISOString();
+    const whereCondition: Where = {
+      and: [
+        {
+          student: {
+            equals: event.data.userId,
+          },
+        },
+        {
+          lesson: {
+            equals: event.data.lessonId,
+          },
+        },
+      ],
+    };
+    // step 1 - verify if exist
+    const exist = await step.run('verify-last-lesson-access', async () => {
       try {
-        await payload.update({
+        const docs = await payload.find({
           collection: 'lesson-progress',
           depth: 0,
-          where: {
-            and: [
-              {
-                student: {
-                  equals: event.data.userId,
-                },
-              },
-              {
-                lesson: {
-                  equals: event.data.lessonId,
-                },
-              },
-            ],
-          },
-          data: {
-            lastAccessed: new Date().toISOString(),
-          },
+          pagination: false,
+          limit: 1,
+          where: whereCondition,
         });
-        return {
-          message: 'Lesson last access updated',
-          user: event.data.userId,
-          lesson: event.data.lessonId,
-        };
+        if (docs && docs.totalDocs === 1) return true;
+        return false;
       } catch (error) {
         logger.error('Failed to update lesson last access:', error);
         throw error;
       }
     });
-    return result;
+    // step 2 - update/create
+    if (exist) {
+      const result = await step.run('update-last-lesson-access', async () => {
+        try {
+          await payload.update({
+            collection: 'lesson-progress',
+            depth: 0,
+            where: whereCondition,
+            data: {
+              lastAccessed: now,
+            },
+          });
+          return {
+            message: 'Lesson last access updated',
+            user: userId,
+            lesson: lessonId,
+          };
+        } catch (error) {
+          logger.error('Failed to update lesson last access:', error);
+          throw error;
+        }
+      });
+      return result;
+    } else {
+      const result = await step.run('create-last-lesson-access', async () => {
+        try {
+          await payload.create({
+            collection: 'lesson-progress',
+            depth: 0,
+            data: {
+              student: userId,
+              lesson: lessonId,
+              lastAccessed: now,
+            },
+          });
+          return {
+            message: 'Lesson last access created',
+            user: userId,
+            lesson: lessonId,
+          };
+        } catch (error) {
+          logger.error('Failed to update lesson last access:', error);
+          throw error;
+        }
+      });
+      return result;
+    }
   },
 );
 
@@ -87,6 +142,21 @@ export const lessonCompleted = inngest.createFunction(
   { id: 'lesson-completed' },
   { event: 'lessons/lesson.completed' },
   async ({ event, step, payload, logger }) => {
+    const { userId, courseId, lessonId } = event.data;
+    const whereCondition: Where = {
+      and: [
+        {
+          student: {
+            equals: userId,
+          },
+        },
+        {
+          course: {
+            equals: courseId,
+          },
+        },
+      ],
+    }
     // step 1
     const lessonProgress = await step.run(
       'update-lesson-completed',
@@ -99,12 +169,12 @@ export const lessonCompleted = inngest.createFunction(
               and: [
                 {
                   student: {
-                    equals: event.data.userId,
+                    equals: userId,
                   },
                 },
                 {
                   lesson: {
-                    equals: event.data.lessonId,
+                    equals: lessonId,
                   },
                 },
               ],
@@ -129,20 +199,7 @@ export const lessonCompleted = inngest.createFunction(
           const result = await payload.update({
             collection: 'course-progress',
             depth: 0,
-            where: {
-              and: [
-                {
-                  student: {
-                    equals: event.data.userId,
-                  },
-                },
-                {
-                  course: {
-                    equals: event.data.courseId,
-                  },
-                },
-              ],
-            },
+            where: whereCondition,
             data: {
               completedLessons: event.data.lessonId,
               lastAccessed: new Date().toISOString(),
@@ -171,7 +228,7 @@ export const lessonCompleted = inngest.createFunction(
                 },
                 {
                   course: {
-                    equals: event.data.courseId,
+                    equals: courseId,
                   },
                 },
               ],
@@ -192,20 +249,7 @@ export const lessonCompleted = inngest.createFunction(
           await payload.update({
             collection: 'course-progress',
             depth: 0,
-            where: {
-              and: [
-                {
-                  student: {
-                    equals: event.data.userId,
-                  },
-                },
-                {
-                  course: {
-                    equals: event.data.courseId,
-                  },
-                },
-              ],
-            },
+            where: whereCondition,
             data: {
               overallProgress: progress,
             },
