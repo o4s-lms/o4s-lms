@@ -38,6 +38,15 @@ export const LessonProgress: CollectionConfig = {
       required: true,
     },
     {
+      name: 'course',
+      type: 'relationship',
+      label: 'Course',
+      relationTo: 'courses',
+      admin: {
+        description: 'The lesson course',
+      },
+    },
+    {
       name: 'lastAccessed',
       type: 'date',
       label: 'Last Accessed Date',

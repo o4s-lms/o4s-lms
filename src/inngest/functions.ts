@@ -55,7 +55,7 @@ export const lastLessonAccess = inngest.createFunction(
   { id: 'last-lesson-access' },
   { event: 'lessons/last.lesson.access' },
   async ({ event, step, payload, logger }) => {
-    const { userId, lessonId } = event.data;
+    const { userId, courseId, lessonId } = event.data;
     const now = new Date().toISOString();
     const whereCondition: Where = {
       and: [
@@ -120,6 +120,7 @@ export const lastLessonAccess = inngest.createFunction(
             data: {
               student: userId,
               lesson: lessonId,
+              course: courseId,
               lastAccessed: now,
             },
           });

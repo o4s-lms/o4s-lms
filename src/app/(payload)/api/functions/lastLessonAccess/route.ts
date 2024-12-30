@@ -7,12 +7,14 @@ export const dynamic = 'force-dynamic';
 export async function POST(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const userId = searchParams.get('userId');
+  const courseId = searchParams.get('courseId');
   const lessonId = searchParams.get('lessonId');
   // Send your event payload to Inngest
   await inngest.send({
     name: 'lessons/last.lesson.access',
     data: {
       userId: userId,
+      courseId: courseId,
       lessonId: lessonId,
     },
   });

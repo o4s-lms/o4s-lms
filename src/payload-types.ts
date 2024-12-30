@@ -1176,6 +1176,10 @@ export interface LessonProgress {
    */
   lesson: string | Lesson;
   /**
+   * The lesson course
+   */
+  course?: (string | null) | Course;
+  /**
    * When the student accessed the lesson
    */
   lastAccessed: string;
@@ -2076,6 +2080,7 @@ export interface CourseProgressSelect<T extends boolean = true> {
 export interface LessonProgressSelect<T extends boolean = true> {
   student?: T;
   lesson?: T;
+  course?: T;
   lastAccessed?: T;
   completed?: T;
   completedAt?: T;

@@ -20,6 +20,7 @@ import type { SidebarData } from '@/components/Layout/types';
 import { useTolgee } from '@tolgee/react';
 import { Module } from '@/payload-types';
 import { IconDualScreen, IconFileDescription } from '@tabler/icons-react';
+import { NavFavorites } from '../NavFavorites';
 
 type AppSidebarProps = {
   title?: string;
@@ -90,6 +91,7 @@ export function AppSidebar({ title, modules, ...props }: AppSidebarProps) {
           {nav.navGroups.map((props) => (
             <NavGroup key={props.title} {...props} />
           ))}
+          <NavFavorites />
         </SidebarContent>
       )}
       <SidebarFooter>

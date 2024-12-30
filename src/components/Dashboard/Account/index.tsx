@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 
 import { NavMain } from '@/components/NavMain';
-import { NavFavorites } from '@/components/NavFavorites';
+import { NavFavorites } from '@/components/Layout/NavFavorites';
 import { NavActions } from '@/components/NavActions';
 import {
   Sidebar,

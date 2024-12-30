@@ -39,7 +39,7 @@ import {
   SerializedEditorState,
   SerializedLexicalNode,
 } from '@payloadcms/richtext-lexical/lexical';
-import { NavFavorites } from '@/components/NavFavorites';
+import { NavFavorites } from '@/components/Layout/NavFavorites';
 import { parseAsInteger, useQueryState } from 'nuqs';
 import { NavGroup } from '@/components/Layout/NavGroup';
 import { IconDualScreen, IconFileDescription } from '@tabler/icons-react';

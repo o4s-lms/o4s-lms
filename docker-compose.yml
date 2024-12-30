@@ -19,5 +19,30 @@ services:
     extra_hosts:
       - 'host.docker.internal:host-gateway'
 
+  #formbricks:
+  #  image: ghcr.io/formbricks/formbricks:latest
+  #  restart: always
+  #  container_name: formbricks
+  #  ports:
+  #    - 9000:3000
+  #  volumes:
+  #    - formbricks_uploads:/home/nextjs/apps/web/uploads/
+  #  environment:
+  #    - WEBAPP_URL=http://localhost:9000
+  #    - NEXTAUTH_URL=http://localhost:9000
+  #    - DATABASE_URL=${FORM_DATABASE_URL}
+  #    - MIGRATE_DATABASE_URL=${FORM_MIGRATE_DATABASE_URL}
+  #    - NEXTAUTH_SECRET=${FORM_NEXTAUTH_SECRET}
+  #    - ENCRYPTION_KEY=${FORM_ENCRYPTION_KEY}
+  #    - CRON_SECRET=${FORM_CRON_SECRET}
+  #    - SMTP_HOST=${SMTP_HOST}
+  #    - SMTP_PORT=2525
+  #    - SMTP_FROM=${SMTP_FROM}
+  #    - SMTP_USER=${SMTP_USER}
+  #    - SMTP_PASSWORD=${SMTP_PASS}
+  #    - SMTP_SECURE_ENABLED=0
+    
+
 volumes:
   inngest_data:
+  #formbricks_uploads:
