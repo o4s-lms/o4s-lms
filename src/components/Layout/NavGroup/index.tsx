@@ -133,7 +133,7 @@ const SidebarMenuCollapsible = ({
                     <a
                       href="#"
                       onClick={() => {
-                        setLessonId(subItem.id);
+                        setLessonId(subItem.id as string);
                       }}
                       className={`${lessonId === subItem.id ? 'bg-secondary' : ''}`}
                     >

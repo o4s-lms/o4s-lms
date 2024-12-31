@@ -4,6 +4,39 @@ import { headers as getHeaders } from 'next/headers';
 import configPromise from '@payload-config';
 import { getPayload } from 'payload';
 
+export async function verifyIsFavorite(userId: string, lessonId: string) {
+  const payload = await getPayload({ config: configPromise });
+
+  const favorite = await payload.find({
+    collection: 'favorites',
+    depth: 0,
+    limit: 1,
+    pagination: false,
+    where: {
+      and: [
+        {
+          user: {
+            equals: userId,
+          },
+        },
+        {
+          objectType: {
+            equals: 'lessons'
+          },
+        },
+        {
+          objectId: {
+            equals: lessonId,
+          },
+        },
+      ],
+    },
+  });
+
+  if (favorite && favorite.docs.length > 0) return true;
+
+  return false;
+}
 export async function getUserFavorites() {
   const headers = await getHeaders();
   const payload = await getPayload({ config: configPromise });
@@ -12,7 +45,7 @@ export async function getUserFavorites() {
   const favorites = await payload.find({
     collection: 'favorites',
     depth: 0,
-    limit: 50,
+    limit: 10,
     pagination: false,
     where: {
       user: {

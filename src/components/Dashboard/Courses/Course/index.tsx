@@ -9,7 +9,7 @@ import { getLessonById, getLessonProgress } from '@/utilities/lessons';
 import { usePathname } from 'next/navigation';
 import type { LessonProgress } from '@/payload-types';
 import { Speeddial } from '@/components/ui/animata/fabs/speed-dial';
-import { Copy, Share2, SquarePen, Star, Trash } from 'lucide-react';
+import { Check, Copy, Share2, SquarePen, Star, StarOff, Trash } from 'lucide-react';
 import { Main } from '@/components/Layout/Main';
 import { ContentSection } from './ContentSection';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -17,9 +17,11 @@ import type { FavoriteMutationData } from '@/hooks/useFavorites';
 import {
   createUserFavorites,
   removeUserFavorites,
+  verifyIsFavorite,
 } from '@/utilities/favorites';
 import { toast } from 'sonner';
 import { format } from 'timeago.js';
+import { useTranslate } from '@tolgee/react';
 
 interface CourseProps {
   userId: string;
@@ -29,6 +31,7 @@ interface CourseProps {
 export function CourseContent({ userId, courseId }: CourseProps) {
   const [lessonId, setLessonId] = useQueryState('lessonId');
   const pathname = usePathname();
+  const { t } = useTranslate();
   const [lesson, setLesson] = React.useState<
     | {
         id: string;
@@ -41,6 +44,7 @@ export function CourseContent({ userId, courseId }: CourseProps) {
   const [progress, setLessonProgress] = React.useState<LessonProgress | null>(
     null,
   );
+  const [isFavorite, setIsFavorite] = React.useState<boolean>(false);
   const queryClient = useQueryClient();
 
   React.useEffect(() => {
@@ -50,6 +54,8 @@ export function CourseContent({ userId, courseId }: CourseProps) {
         setLesson({ ...l });
         const p = await getLessonProgress(userId, lessonId);
         setLessonProgress(p);
+        const f = await verifyIsFavorite(userId, lessonId);
+        setIsFavorite(f);
         await fetch(
           `${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/lastLessonAccess?userId=${userId}&courseId=${courseId}&lessonId=${lessonId}`,
           {
@@ -97,6 +103,20 @@ export function CourseContent({ userId, courseId }: CourseProps) {
     },
   });
 
+  const handleFavorite = () => {
+    console.log('isFavorite: ', isFavorite);
+    if (isFavorite) {
+      removeFavorite.mutate()
+    } else {
+      createFavorite.mutate()
+    }
+  }
+
+  const renderIcon = () => {
+    if (isFavorite) return <StarOff />
+    return <Star />
+  }
+
   return (
     <Main fixed>
       <div className="flex flex-1 flex-col space-y-2 overflow-hidden md:space-y-2 lg:flex-row lg:space-x-12 lg:space-y-0">
@@ -104,16 +124,17 @@ export function CourseContent({ userId, courseId }: CourseProps) {
           <Speeddial
             actionButtons={[
               {
-                action: () => {createFavorite.mutate(lesson?.id)},
-                icon: <Star />,
+                action: () => {handleFavorite()},
+                //icon: {!isFavorite ? <Star /> : <StarOff />},
+                icon: renderIcon(),
                 key: 'favorite',
                 label: 'Favorite',
               },
               {
                 action: () => {},
-                icon: <SquarePen />,
-                key: 'edit',
-                label: 'Edit',
+                icon: <Check />,
+                key: 'complete',
+                label: 'Complete',
               },
               {
                 action: () => {},
