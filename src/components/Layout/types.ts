@@ -5,6 +5,7 @@ interface BaseNavItem {
   title: string;
   badge?: string;
   icon?: React.ElementType;
+  isFavorite?: boolean;
 }
 
 type NavLink = BaseNavItem & {

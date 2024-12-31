@@ -48,9 +48,11 @@ export default async function Page({ params: paramsPromise }: Args) {
     .map(({ value }) => value)
     .filter((module) => typeof module === 'object');
 
+  const favorites = await queryFavoritesByUserId({ userId: user.id })
+
   return (
     <>
-      <AppSidebar title={course.title} modules={modules} />
+      <AppSidebar title={course.title} modules={modules} favorites={favorites} />
       <div
         id="content"
         className={cn(
@@ -103,6 +105,24 @@ const queryCourseBySlug = cache(async ({ slug }: { slug: string }) => {
   });
 
   return result.docs?.[0] || null;
+});
+
+const queryFavoritesByUserId = cache(async ({ userId }: { userId: string }) => {
+  const payload = await getPayload({ config: configPromise });
+
+  const result = await payload.find({
+    collection: 'favorites',
+    depth: 0,
+    limit: 10,
+    pagination: false,
+    where: {
+      user: {
+        equals: userId,
+      },
+    },
+  });
+
+  return result.docs || null;
 });
 
 const topNav = [

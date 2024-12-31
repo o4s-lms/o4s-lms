@@ -17,24 +17,40 @@ import { sidebarData } from '@/components/Layout/Data/AppSidebar';
 import { VERSION } from '@/lib/constants';
 import { useEffect, useState } from 'react';
 import type { SidebarData } from '@/components/Layout/types';
-import { useTolgee } from '@tolgee/react';
-import { Module } from '@/payload-types';
-import { IconDualScreen, IconFileDescription } from '@tabler/icons-react';
-import { NavFavorites } from '../NavFavorites';
+import { useTolgee, useTranslate } from '@tolgee/react';
+import { Favorite, Module } from '@/payload-types';
+import { IconDualScreen, IconFileDescription, IconStar } from '@tabler/icons-react';
 
 type AppSidebarProps = {
   title?: string;
   modules?: Module[];
+  favorites?: Favorite[];
 } & React.ComponentProps<typeof Sidebar>;
 
-export function AppSidebar({ title, modules, ...props }: AppSidebarProps) {
+export function AppSidebar({ title, modules, favorites, ...props }: AppSidebarProps) {
   const [nav, setNav] = useState<SidebarData | null>(null);
   const tolgee = useTolgee(['language']);
   const currentLanguage = tolgee.getLanguage();
+  const { t } = useTranslate();
 
   useEffect(() => {
     async function getNav() {
       const groups = await sidebarData();
+      if (favorites && favorites.length > 0) {
+        const favs = favorites?.map((favorite) => ({
+          title: favorite?.title,
+          url: favorite.url,
+          icon: IconStar,
+          isFavorite: true,
+        }))
+
+        const favoritesNav = {
+          title: t('favorites'),
+          items: favs,
+        }
+        groups.navGroups.push(favoritesNav);
+      }
+      
       if (title) {
         const tmp = modules?.map((module) => ({
           title: module.title,
@@ -56,11 +72,12 @@ export function AppSidebar({ title, modules, ...props }: AppSidebarProps) {
 
         groups.navGroups.unshift(courseNav);
       }
+
       setNav(groups);
     }
 
     void getNav();
-  }, [currentLanguage, title, modules]);
+  }, [currentLanguage, title, modules, t, favorites]);
 
   return (
     <Sidebar collapsible="icon" variant="floating" {...props}>
@@ -91,7 +108,6 @@ export function AppSidebar({ title, modules, ...props }: AppSidebarProps) {
           {nav.navGroups.map((props) => (
             <NavGroup key={props.title} {...props} />
           ))}
-          <NavFavorites />
         </SidebarContent>
       )}
       <SidebarFooter>

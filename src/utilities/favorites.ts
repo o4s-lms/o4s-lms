@@ -31,7 +31,7 @@ export async function createUserFavorites({
   url,
 }: {
   objectType: 'pages' | 'posts' | 'courses' | 'lessons';
-  objectId: number;
+  objectId: string;
   title: string;
   url?: string;
 }) {
@@ -41,8 +41,9 @@ export async function createUserFavorites({
 
   const favorite = await payload.create({
     collection: 'favorites',
+    depth: 0,
     data: {
-      user: user?.id,
+      user: user?.id as string,
       objectType: objectType,
       objectId: objectId,
       title: title,
@@ -54,7 +55,7 @@ export async function createUserFavorites({
 }
 
 export async function removeUserFavorites(
-  id: number,
+  id: string,
   objectType: 'pages' | 'posts' | 'courses' | 'lessons',
 ) {
   const headers = await getHeaders();

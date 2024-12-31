@@ -2,7 +2,13 @@
 
 import { ReactNode } from 'react';
 import Link from 'next/link';
-import { ChevronRight } from 'lucide-react';
+import {
+  ArrowUpRight,
+  ChevronRight,
+  MoreHorizontal,
+  StarOff,
+  Trash2,
+} from 'lucide-react';
 import {
   Collapsible,
   CollapsibleContent,
@@ -12,6 +18,7 @@ import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
+  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
@@ -157,6 +164,7 @@ const SidebarMenuCollapsedDropdown = ({
   href: string;
 }) => {
   const [lessonId, setLessonId] = useQueryState('lessonId');
+
   return (
     <SidebarMenuItem>
       <DropdownMenu>
@@ -204,6 +212,7 @@ const SidebarMenuCollapsedDropdown = ({
                 </a>
               )}
             </DropdownMenuItem>
+            
           ))}
         </DropdownMenuContent>
       </DropdownMenu>

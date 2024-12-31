@@ -4,6 +4,7 @@ import {
   ArrowUpRight,
   Link,
   MoreHorizontal,
+  Star,
   StarOff,
   Trash2,
 } from 'lucide-react';
@@ -22,13 +23,17 @@ import {
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   useSidebar,
 } from '@/components/ui/sidebar';
 import { useUserFavorites } from '@/hooks/useFavorites';
 import { useTranslate } from '@tolgee/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { removeUserFavorites } from '@/utilities/userFavorites';
+import { removeUserFavorites } from '@/utilities/favorites';
 import { toast } from 'sonner';
+import { IconStar } from '@tabler/icons-react';
 
 export function NavFavorites() {
   const { isMobile } = useSidebar();
@@ -37,7 +42,7 @@ export function NavFavorites() {
   const queryClient = useQueryClient();
 
   const removeFavorite = useMutation({
-    mutationFn: ({ id }: { id: number }) => removeUserFavorites(id, 'lessons'),
+    mutationFn: ({ id }: { id: string }) => removeUserFavorites(id, 'lessons'),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user-favorites'] });
       toast.success('Favorite removed');
@@ -48,7 +53,7 @@ export function NavFavorites() {
     },
   });
 
-  const remove = (id: number) => {
+  const remove = (id: string) => {
     removeFavorite.mutate({ id });
   };
 
@@ -61,15 +66,15 @@ export function NavFavorites() {
       {!isError && favorites?.length > 0 && (
         <SidebarGroup className="group-data-[collapsible=icon]:hidden">
           <SidebarGroupLabel>{t('favorites')}</SidebarGroupLabel>
-          <SidebarMenu>
+          <SidebarMenuSub>
             {favorites?.map((item) => (
-              <SidebarMenuItem key={item.id}>
-                <SidebarMenuButton asChild>
+              <SidebarMenuSubItem key={item.id}>
+                <SidebarMenuSubButton asChild>
                   <a href={item.url} title={item.title}>
-                    {/**<span>{item.emoji}</span>*/}
+                    <span><IconStar /></span>
                     <span>{item.title}</span>
                   </a>
-                </SidebarMenuButton>
+                </SidebarMenuSubButton>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <SidebarMenuAction showOnHover>
@@ -102,7 +107,7 @@ export function NavFavorites() {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-              </SidebarMenuItem>
+              </SidebarMenuSubItem>
             ))}
             <SidebarMenuItem>
               <SidebarMenuButton className="text-sidebar-foreground/70">
@@ -110,7 +115,7 @@ export function NavFavorites() {
                 <span>{t('more')}</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
-          </SidebarMenu>
+          </SidebarMenuSub>
         </SidebarGroup>
       )}
     </>

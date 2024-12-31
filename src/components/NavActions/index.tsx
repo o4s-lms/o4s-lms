@@ -44,7 +44,7 @@ import { FavoriteMutationData, useUserFavorites } from '@/hooks/useFavorites';
 import {
   createUserFavorites,
   removeUserFavorites,
-} from '@/utilities/userFavorites';
+} from '@/utilities/favorites';
 import { toast } from 'sonner';
 import { usePathname } from 'next/navigation';
 

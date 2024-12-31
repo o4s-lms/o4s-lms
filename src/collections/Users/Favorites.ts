@@ -41,7 +41,7 @@ export const Favorites: CollectionConfig = {
     },
     {
       name: 'objectId',
-      type: 'number',
+      type: 'text',
       required: true,
     },
     {

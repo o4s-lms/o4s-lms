@@ -1329,7 +1329,7 @@ export interface Favorite {
    */
   user: string | User;
   objectType: 'lessons' | 'courses' | 'posts' | 'pages';
-  objectId: number;
+  objectId: string;
   title: string;
   url?: string | null;
   updatedAt: string;
