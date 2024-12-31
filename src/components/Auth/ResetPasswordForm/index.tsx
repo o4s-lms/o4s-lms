@@ -70,12 +70,31 @@ export const ResetPasswordForm = () => {
         const json = await response.json();
 
         // Automatically log the user in after they successfully reset password
-        await login({ email: json.user.email, password: values.password });
+        try {
+          const user = await login({ email: json.user.email, password: values.password });
+          await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/lastLogin?userId=${user.id}`,
+            {
+              method: 'POST',
+              credentials: 'include',
+            },
+          );
+        } catch (error) {
+          throw error;
+        }
+
+        await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/emailPasswordUpdated?email=${json.user.email}`,
+          {
+            method: 'POST',
+            credentials: 'include',
+          },
+        );
 
         setIsLoading(false);
 
-        // Redirect them to `/account` with success message in URL
-        router.push('/dashboard/account?success=Password reset successfully.');
+        // Redirect them to `/dashboard` with success message in URL
+        router.push(`/dashboard?success=${encodeURIComponent('Password reset successfully.')}`);
       } else {
         setIsLoading(false);
         toast.error(

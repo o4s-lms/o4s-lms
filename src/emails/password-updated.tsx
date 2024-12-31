@@ -16,11 +16,11 @@ import {
 
 export const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
-export function ResetPasswordEmail({ token }: { token: string }) {
+export function PasswordResetEmail() {
   return (
     <Html>
       <Head />
-      <Preview>Reset your password</Preview>
+      <Preview>Your password has been updated</Preview>
       <Tailwind>
         <React.Fragment>
           <Body className="mx-auto my-auto bg-white font-sans">
@@ -37,28 +37,19 @@ export function ResetPasswordEmail({ token }: { token: string }) {
 
               <Section className="mb-[32px] mt-[32px] text-center">
                 <Text className="mb-8 text-[14px] font-medium leading-[24px] text-black">
-                  Click the following link to reset your password
+                  If you think someone is entering your email by mistake, you
+                  can turn off password resets for your account. To do this,
+                  click the let us know link in your email.
                 </Text>
 
                 <Text className="text-[14px] font-medium leading-[24px] text-black">
                   <Link
-                    href={`${BASE_URL}/reset-password?token=${token}`}
+                    href={`${BASE_URL}/reset-password`}
                     target="_blank"
                     className="text-[#2754C5] underline"
                   >
-                    Reset Password
+                    Secure your account
                   </Link>
-                </Text>
-              </Section>
-
-              <Section className="mb-[32px] mt-[16px] text-center">
-                <Text className="mb-8 text-[14px] font-medium leading-[24px] text-black">
-                  If you received this email and you didn&apos;t request, it&apos;s likely
-                  that someone accidentally entered your email when attempting
-                  to log in to their account. This often happens if you have a
-                  popular email address. As long as you don&apos;t click the link to
-                  reset your password, no action will be taken and your account
-                  will remain secure.
                 </Text>
               </Section>
 
