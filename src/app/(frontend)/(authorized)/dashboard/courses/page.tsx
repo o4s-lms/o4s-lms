@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { headers as getHeaders } from 'next/headers';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
-import { CoursesContent } from '@/components/Dashboard/Courses';
+import { CoursesContent } from '@/components/Learn/Courses';
 import { redirect } from 'next/navigation';
 import { Header } from '@/components/Layout/Header';
 import { TopNav } from '@/components/Layout/TopNav';

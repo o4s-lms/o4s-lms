@@ -8,7 +8,7 @@ import { TopNav } from '@/components/Layout/TopNav';
 import { LanguageSelector } from '@/components/LangSelector.';
 import { ThemeSwitch } from '@/components/ThemeSwitch';
 import { ProfileDropdown } from '@/components/ProfileDropdown';
-import { CourseContent } from '@/components/Dashboard/Courses/Course';
+import { CourseContent } from '@/components/Learn/Course';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),

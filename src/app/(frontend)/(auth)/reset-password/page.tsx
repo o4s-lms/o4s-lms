@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { Undo2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import ResetPasswordForm from '@/components/ResetPasswordForm';
+import ResetPasswordForm from '@/components/Auth/ResetPasswordForm';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),

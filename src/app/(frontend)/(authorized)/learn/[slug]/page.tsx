@@ -7,7 +7,7 @@ import React, { cache } from 'react';
 import { PayloadRedirects } from '@/components/PayloadRedirects';
 import { AppSidebar } from '@/components/Layout/AppSidebar';
 import { cn } from '@/lib/utils';
-import { CourseContent } from '@/components/Dashboard/Courses/Course';
+import { CourseContent } from '@/components/Learn/Course';
 import { Header } from '@/components/Layout/Header';
 import { TopNav } from '@/components/Layout/TopNav';
 import { LanguageSelector } from '@/components/LangSelector.';

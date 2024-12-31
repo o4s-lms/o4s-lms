@@ -63,7 +63,7 @@ export const sidebarData = async (): Promise<SidebarData> => {
       items: [
         {
           title: t('courses'),
-          url: '/dashboard/courses',
+          url: '/learn',
           icon: IconBooks,
         },
         {
