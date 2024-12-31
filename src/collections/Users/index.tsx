@@ -66,7 +66,7 @@ export const Users: CollectionConfig = {
     {
       name: 'avatar',
       type: 'upload',
-      relationTo: 'media',
+      relationTo: 'avatar',
       admin: {
         description:
           'Maximum size: 4MB. Accepted formats: .jpg, .jpeg, .png, .gif',
@@ -87,12 +87,6 @@ export const Users: CollectionConfig = {
                 label: getLocaleDisplayName(locale),
                 value: locale,
               })),
-              /**options: [
-                { label: 'Português', value: 'pt' },
-                { label: 'English', value: 'en' },
-                { label: 'Français', value: 'fr' },
-                { label: 'Españhol', value: 'es' },
-              ],*/
               required: true,
               defaultValue: DEFAULT_LANGUAGE,
             },

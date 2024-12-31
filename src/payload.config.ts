@@ -26,6 +26,7 @@ import { Favorites } from '@/collections/Users/Favorites';
 import { Transactions } from '@/collections/Transactions';
 import { Newsletter } from '@/collections/Newsletter';
 import { Users } from '@/collections/Users';
+import { Avatar } from '@/collections/Users/Avatar';
 import { FooterPt } from '@/Footer/pt/config';
 import { FooterEn } from '@/Footer/en/config';
 import { FooterFr } from '@/Footer/fr/config';
@@ -119,6 +120,7 @@ export default buildConfig({
     Transactions,
     Newsletter,
     Users,
+    Avatar,
   ],
   cors: [getServerSideURL()].filter(Boolean),
   csrf: [getServerSideURL()].filter(Boolean),
@@ -129,6 +131,7 @@ export default buildConfig({
     s3Storage({
       collections: {
         media: true,
+        avatar: true,
       },
       bucket: process.env.S3_BUCKET || '',
       config: {
