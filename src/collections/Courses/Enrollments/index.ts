@@ -89,16 +89,24 @@ export const Enrollments: CollectionConfig = {
       },
     },
     {
+      name: 'progress',
+      type: 'relationship',
+      relationTo: 'course-progress',
+      admin: {
+        description: 'The student progress of the course being enrolled in',
+      },
+    },
+    {
       name: 'status',
       type: 'select',
       required: true,
-      defaultValue: 'active',
       options: [
         { label: 'Active', value: 'active' },
         { label: 'Completed', value: 'completed' },
         { label: 'Dropped', value: 'dropped' },
         { label: 'Pending', value: 'pending' },
       ],
+      defaultValue: 'active',
     },
     {
       name: 'enrolledAt',
@@ -168,7 +176,7 @@ export const Enrollments: CollectionConfig = {
       async ({ doc, operation, req }) => {
         // Create initial progress record on enrollment
         if (operation === 'create') {
-          await req.payload.create({
+          const progress = await req.payload.create({
             collection: 'course-progress',
             data: {
               student: doc.student,
@@ -179,6 +187,17 @@ export const Enrollments: CollectionConfig = {
               overallProgress: 0,
               pointsEarned: 0,
             },
+          });
+          await req.payload.update({
+            collection: 'enrollments',
+            where: {
+              id: {
+                equals: doc.id,
+              },
+            },
+            data: {
+              progress: progress,
+            }
           });
         }
       },

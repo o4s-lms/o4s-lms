@@ -1017,6 +1017,10 @@ export interface Enrollment {
    * The course being enrolled in
    */
   course: string | Course;
+  /**
+   * The student progress of the course being enrolled in
+   */
+  progress?: (string | null) | CourseProgress;
   status: 'active' | 'completed' | 'dropped' | 'pending';
   /**
    * When the enrollment was created
@@ -2001,6 +2005,7 @@ export interface CoursesSelect<T extends boolean = true> {
 export interface EnrollmentsSelect<T extends boolean = true> {
   student?: T;
   course?: T;
+  progress?: T;
   status?: T;
   enrolledAt?: T;
   startedAt?: T;

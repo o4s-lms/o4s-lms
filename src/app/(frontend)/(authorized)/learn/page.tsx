@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
 import { headers as getHeaders } from 'next/headers';
-import { getPayload } from 'payload';
-import configPromise from '@payload-config';
 import { CoursesContent } from '@/components/Learn/Courses';
 import { redirect } from 'next/navigation';
 import { Header } from '@/components/Layout/Header';
@@ -11,6 +9,8 @@ import { ThemeSwitch } from '@/components/ThemeSwitch';
 import { ProfileDropdown } from '@/components/ProfileDropdown';
 import { AppSidebar } from '@/components/Layout/AppSidebar';
 import { cn } from '@/lib/utils';
+import { cache } from 'react';
+import { createPayloadClient } from '@/lib/payload';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   const headers = await getHeaders();
-  const payload = await getPayload({ config: configPromise });
+  const payload = await createPayloadClient();
   const { user } = await payload.auth({ headers });
 
   if (!user) {
@@ -28,6 +28,8 @@ export default async function Page() {
       `/sign-in?error=${encodeURIComponent('You must be logged in to access your account.')}&redirect=/dashboard/courses`,
     );
   }
+
+  const enrollments = await queryEnrollmentsByUser({ userId: user.id})
 
   return (
     <>
@@ -55,11 +57,29 @@ export default async function Page() {
           </div>
         </Header>
 
-        <CoursesContent />
+        <CoursesContent userId={user.id} enrollments={enrollments} />
       </div>
     </>
   );
 }
+
+const queryEnrollmentsByUser = cache(async ({ userId }: { userId: string }) => {
+  const payload = await createPayloadClient();
+
+  const result = await payload.find({
+    collection: 'enrollments',
+    depth: 2,
+    limit: 10,
+    pagination: false,
+    where: {
+      student: {
+        equals: userId,
+      },
+    },
+  });
+
+  return result.docs ?? null;
+});
 
 const topNav = [
   {

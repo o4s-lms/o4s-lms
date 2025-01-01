@@ -5,6 +5,39 @@ import { getPayload, PaginatedDocs } from 'payload';
 import { unstable_cache } from 'next/cache';
 import type { LessonProgress } from '@/payload-types';
 
+export async function getLastLessonAccessed(userId: string, courseId: string) {
+  const payload = await getPayload({ config: configPromise });
+
+  const result = await payload.find({
+    collection: 'lesson-progress',
+    depth: 0,
+    limit: 1,
+    sort: '-lastAccessed',
+    where: {
+      and: [
+        {
+          student: {
+            equals: userId,
+          },
+        },
+        {
+          course: {
+            equals: courseId,
+          },
+        },
+      ],
+    },
+  });
+
+  if (result.docs.length > 0) {
+    //const lesson =  result.docs.map(({ lesson }) => lesson)
+    //.filter((lesson) => typeof lesson === 'object')
+    return result.docs[0].lesson as string;
+  }
+  
+  return null;
+}
+
 export async function getLessonById(lessonId: string | null, depth = 0) {
   const payload = await getPayload({ config: configPromise });
 

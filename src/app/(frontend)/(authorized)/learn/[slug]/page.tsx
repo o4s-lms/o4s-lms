@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
 import { headers as getHeaders } from 'next/headers';
 import { redirect } from 'next/navigation';
-import configPromise from '@payload-config';
-import { getPayload } from 'payload';
 import React, { cache } from 'react';
 import { PayloadRedirects } from '@/components/PayloadRedirects';
 import { AppSidebar } from '@/components/Layout/AppSidebar';
@@ -13,6 +11,7 @@ import { TopNav } from '@/components/Layout/TopNav';
 import { LanguageSelector } from '@/components/LangSelector.';
 import { ThemeSwitch } from '@/components/ThemeSwitch';
 import { ProfileDropdown } from '@/components/ProfileDropdown';
+import { createPayloadClient } from '@/lib/payload';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -28,7 +27,7 @@ type Args = {
 
 export default async function Page({ params: paramsPromise }: Args) {
   const headers = await getHeaders();
-  const payload = await getPayload({ config: configPromise });
+  const payload = await createPayloadClient();
   const { user } = await payload.auth({ headers });
 
   if (!user) {
@@ -90,7 +89,7 @@ export default async function Page({ params: paramsPromise }: Args) {
 }
 
 const queryCourseBySlug = cache(async ({ slug }: { slug: string }) => {
-  const payload = await getPayload({ config: configPromise });
+  const payload = await createPayloadClient();
 
   const result = await payload.find({
     collection: 'courses',
@@ -104,11 +103,11 @@ const queryCourseBySlug = cache(async ({ slug }: { slug: string }) => {
     },
   });
 
-  return result.docs?.[0] || null;
+  return result.docs?.[0] ?? null;
 });
 
 const queryFavoritesByUserId = cache(async ({ userId }: { userId: string }) => {
-  const payload = await getPayload({ config: configPromise });
+  const payload = await createPayloadClient();
 
   const result = await payload.find({
     collection: 'favorites',
@@ -122,7 +121,7 @@ const queryFavoritesByUserId = cache(async ({ userId }: { userId: string }) => {
     },
   });
 
-  return result.docs || null;
+  return result.docs ?? null;
 });
 
 const topNav = [

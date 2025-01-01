@@ -9,7 +9,7 @@ import { getLessonById, getLessonProgress } from '@/utilities/lessons';
 import { usePathname } from 'next/navigation';
 import type { LessonProgress } from '@/payload-types';
 import { Speeddial } from '@/components/ui/animata/fabs/speed-dial';
-import { Check, Copy, Share2, SquarePen, Star, StarOff, Trash } from 'lucide-react';
+import { Check, Share2, SquarePen, Star, StarOff, Trash } from 'lucide-react';
 import { Main } from '@/components/Layout/Main';
 import { ContentSection } from './ContentSection';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -104,7 +104,6 @@ export function CourseContent({ userId, courseId }: CourseProps) {
   });
 
   const handleFavorite = () => {
-    console.log('isFavorite: ', isFavorite);
     if (isFavorite) {
       removeFavorite.mutate()
     } else {
@@ -119,7 +118,7 @@ export function CourseContent({ userId, courseId }: CourseProps) {
 
   return (
     <Main fixed>
-      <div className="flex flex-1 flex-col space-y-2 overflow-hidden md:space-y-2 lg:flex-row lg:space-x-12 lg:space-y-0">
+      <div id="lesson-content" className="flex flex-1 flex-col space-y-2 overflow-hidden md:space-y-2 lg:flex-row lg:space-x-12 lg:space-y-0">
         <aside className="hidden lg:block top-0 lg:sticky lg:w-16">
           <Speeddial
             actionButtons={[
