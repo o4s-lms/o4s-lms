@@ -21,12 +21,14 @@
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "reinstall": "cross-env NODE_OPTIONS=--no-deprecation rm -rf node_modules && rm pnpm-lock.yaml && pnpm --ignore-workspace install",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+    "zero-build-schema": "tsx ./src/zero/schema.ts",
     "ui": "pnpm dlx shadcn@latest"
   },
   "dependencies": {
     "@dicebear/collection": "^9.2.2",
     "@dicebear/core": "^9.2.2",
     "@hookform/resolvers": "^3.9.1",
+    "@million/lint": "^1.0.14",
     "@payloadcms/db-mongodb": "^3.12.0",
     "@payloadcms/email-nodemailer": "^3.12.0",
     "@payloadcms/live-preview-react": "^3.12.0",
@@ -57,6 +59,7 @@
     "@radix-ui/react-switch": "^1.1.2",
     "@radix-ui/react-tooltip": "^1.1.6",
     "@react-email/components": "0.0.31",
+    "@rocicorp/zero": "^0.10.2024122404",
     "@tabler/icons-react": "^3.26.0",
     "@tanstack/react-query": "^5.62.11",
     "@tolgee/format-icu": "^5.33.2",
@@ -105,6 +108,7 @@
     "prettier-plugin-tailwindcss": "^0.6.9",
     "react-email": "3.0.4",
     "tailwindcss": "^3.4.17",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   },
   "packageManager": "pnpm@9.15.0+sha512.76e2379760a4328ec4415815bcd6628dee727af3779aaa4c914e3944156c4299921a89f976381ee107d41f12cfa4b66681ca9c718f0668fa0831ed4c6d8ba56c"

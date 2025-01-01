@@ -1,3 +1,4 @@
+//import MillionLint from '@million/lint'; 
 import type { NextConfig } from 'next';
 import { withPayload } from '@payloadcms/next/withPayload';
 
@@ -28,3 +29,5 @@ const nextConfig: NextConfig = {
 };
 
 export default withPayload(nextConfig);
+
+//export default MillionLint.next({ enabled: true, rsc: true })(withPayload(nextConfig));

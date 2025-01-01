@@ -19,6 +19,22 @@ services:
     extra_hosts:
       - 'host.docker.internal:host-gateway'
 
+  zero:
+    image: rocicorp/zero:0.10.2024123000-80a3bf
+    container_name: zero
+    restart: always
+    environment:
+      - ZERO_UPSTREAM_DB=${ZERO_UPSTREAM_DB}
+      - ZERO_CVR_DB=${ZERO_CVR_DB}
+      - ZERO_CHANGE_DB=${ZERO_CHANGE_DB}
+      - ZERO_REPLICA_FILE='/data/db/zstart_replica.db'
+      - ZERO_AUTH_SECRET=${ZERO_AUTH_SECRET}
+    ports:
+      - '4848:4848'
+    volumes:
+      - 
+      - zero_data:/data/db
+
   #formbricks:
   #  image: ghcr.io/formbricks/formbricks:latest
   #  restart: always
@@ -45,4 +61,5 @@ services:
 
 volumes:
   inngest_data:
+  zero_data:
   #formbricks_uploads:

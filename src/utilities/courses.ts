@@ -1,8 +1,8 @@
 'use server';
 
-import configPromise from '@payload-config';
-import { getPayload, PaginatedDocs } from 'payload';
 import type { CourseProgress } from '@/payload-types';
+import { createPayloadClient } from '@/lib/payload';
+import { PaginatedDocs } from 'payload';
 
 export interface StartCourseMutationData {
   userId: string;
@@ -13,7 +13,7 @@ export async function getCourseProgress(
   userId: string,
   courseId: string,
 ): Promise<CourseProgress | null> {
-  const payload = await getPayload({ config: configPromise });
+  const payload = await createPayloadClient();
 
   const result: PaginatedDocs<CourseProgress> = await payload.find({
     collection: 'course-progress',
@@ -43,7 +43,7 @@ export async function getCourseProgress(
 }
 
 export async function startCourse(data: StartCourseMutationData) {
-  const payload = await getPayload({ config: configPromise });
+  const payload = await createPayloadClient();
   const now = new Date().toISOString();
 
   try {

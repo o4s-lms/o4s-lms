@@ -1,11 +1,4 @@
-import type { CollectionConfig, Access, Where } from 'payload';
-import type { User } from '@/payload-types';
-
-type AccessArgs = {
-  req: {
-    user?: User | null;
-  };
-};
+import type { CollectionConfig, AccessArgs } from 'payload';
 
 export const Enrollments: CollectionConfig = {
   slug: 'enrollments',
@@ -78,6 +71,7 @@ export const Enrollments: CollectionConfig = {
       admin: {
         description: 'The enrolled student',
       },
+      index: true,
     },
     {
       name: 'course',
@@ -87,6 +81,7 @@ export const Enrollments: CollectionConfig = {
       admin: {
         description: 'The course being enrolled in',
       },
+      index: true,
     },
     {
       name: 'progress',
