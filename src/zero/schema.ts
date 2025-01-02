@@ -16,6 +16,8 @@ const userSchema = createTableSchema({
   tableName: 'user',
   columns: {
     id: 'string',
+    name: 'string',
+    roles: json<['string']>(),
   },
   primaryKey: 'id',
 });
@@ -24,6 +26,7 @@ const notificationSchema = createTableSchema({
   tableName: 'notification',
   columns: {
     id: 'string',
+    recipient: 'string',
     subject: 'string',
     content: 'string',
     type: enumeration<
@@ -41,65 +44,24 @@ const notificationSchema = createTableSchema({
   },
   primaryKey: 'id',
   relationships: {
-    recipients: {
-      sourceField: 'id',
-      destField: 'notificationID',
-      destSchema: () => recipientSchema,
-    },
+    to: {
+      sourceField: 'recipient',
+      destSchema: userSchema,
+      destField: 'id',
+    }
   },
 });
-
-const announcementSchema = createTableSchema({
-  tableName: 'announcement',
-  columns: {
-    id: 'string',
-    title: 'string',
-    content: 'string',
-    type: enumeration<'general' | 'course' | 'system' | 'maintenance'>(),
-    priority: enumeration<'low' | 'medium' | 'high'>(),
-    audience:
-      json<[typeof enumeration<'all' | 'student' | 'teacher' | 'admin'>]>(),
-    status: enumeration<'draft' | 'published' | 'scheduled' | 'archived'>(),
-    schedule: json<{ publishAt: number; expireAt: number }>(),
-  },
-  primaryKey: 'id',
-});
-
-const recipientSchema = {
-  tableName: 'recipient',
-  columns: {
-    notificationID: 'string',
-    userID: 'string',
-  },
-  primaryKey: ['notificationID', 'userID'],
-  relationships: {
-    notification: {
-      sourceField: 'notificationID',
-      destField: 'id',
-      destSchema: () => notificationSchema,
-    },
-    user: {
-      sourceField: 'userID',
-      destField: 'id',
-      destSchema: () => userSchema,
-    },
-  },
-} as const;
 
 export const schema = createSchema({
   version: 1,
   tables: {
     user: userSchema,
     notification: notificationSchema,
-    announcement: announcementSchema,
-    recipient: recipientSchema,
   },
 });
 
 export type Schema = typeof schema;
 export type Notification = Row<typeof notificationSchema>;
-export type Announcement = Row<typeof announcementSchema>;
-export type Recipient = Row<typeof recipientSchema>;
 export type User = Row<typeof schema.tables.user>;
 
 
@@ -134,27 +96,6 @@ export const permissions = definePermissions<AuthData, Schema>(schema, () => {
         update: {
           preMutation: ANYONE_CAN,
         },
-        delete: ANYONE_CAN,
-      },
-    },
-    recipient: {
-      row: {
-        insert: ANYONE_CAN,
-        update: {
-          preMutation: ANYONE_CAN,
-        },
-        delete: ANYONE_CAN,
-      },
-    },
-    announcement: {
-      row: {
-        // anyone can insert
-        insert: ANYONE_CAN,
-        // only sender can edit their own messages
-        update: {
-          preMutation: ANYONE_CAN,
-        },
-        // must be logged in to delete
         delete: ANYONE_CAN,
       },
     },

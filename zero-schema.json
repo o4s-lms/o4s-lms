@@ -9,62 +9,11 @@
       "row": {
         "update": {}
       }
-    },
-    "recipient": {
-      "row": {
-        "update": {}
-      }
-    },
-    "announcement": {
-      "row": {
-        "update": {}
-      }
     }
   },
   "schema": {
     "version": 1,
     "tables": {
-      "announcement": {
-        "tableName": "announcement",
-        "primaryKey": [
-          "id"
-        ],
-        "columns": {
-          "audience": {
-            "type": "json",
-            "optional": false
-          },
-          "content": {
-            "type": "string",
-            "optional": false
-          },
-          "id": {
-            "type": "string",
-            "optional": false
-          },
-          "priority": {
-            "type": "string",
-            "optional": false
-          },
-          "schedule": {
-            "type": "json",
-            "optional": false
-          },
-          "status": {
-            "type": "string",
-            "optional": false
-          },
-          "title": {
-            "type": "string",
-            "optional": false
-          },
-          "type": {
-            "type": "string",
-            "optional": false
-          }
-        },
-        "relationships": {}
-      },
       "notification": {
         "tableName": "notification",
         "primaryKey": [
@@ -87,6 +36,10 @@
             "type": "boolean",
             "optional": false
           },
+          "recipient": {
+            "type": "string",
+            "optional": false
+          },
           "reference": {
             "type": "json",
             "optional": false
@@ -101,46 +54,9 @@
           }
         },
         "relationships": {
-          "recipients": {
+          "to": {
             "sourceField": [
-              "id"
-            ],
-            "destField": [
-              "notificationID"
-            ],
-            "destSchema": "recipient"
-          }
-        }
-      },
-      "recipient": {
-        "tableName": "recipient",
-        "primaryKey": [
-          "notificationID",
-          "userID"
-        ],
-        "columns": {
-          "notificationID": {
-            "type": "string",
-            "optional": false
-          },
-          "userID": {
-            "type": "string",
-            "optional": false
-          }
-        },
-        "relationships": {
-          "notification": {
-            "sourceField": [
-              "notificationID"
-            ],
-            "destField": [
-              "id"
-            ],
-            "destSchema": "notification"
-          },
-          "user": {
-            "sourceField": [
-              "userID"
+              "recipient"
             ],
             "destField": [
               "id"
@@ -157,6 +73,14 @@
         "columns": {
           "id": {
             "type": "string",
+            "optional": false
+          },
+          "name": {
+            "type": "string",
+            "optional": false
+          },
+          "roles": {
+            "type": "json",
             "optional": false
           }
         },

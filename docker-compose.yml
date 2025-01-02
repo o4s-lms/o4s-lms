@@ -27,12 +27,13 @@ services:
       - ZERO_UPSTREAM_DB=${ZERO_UPSTREAM_DB}
       - ZERO_CVR_DB=${ZERO_CVR_DB}
       - ZERO_CHANGE_DB=${ZERO_CHANGE_DB}
-      - ZERO_REPLICA_FILE='/data/db/zstart_replica.db'
+      - ZERO_REPLICA_FILE=${ZERO_REPLICA_FILE}
       - ZERO_AUTH_SECRET=${ZERO_AUTH_SECRET}
+      - ZERO_SCHEMA_FILE=${ZERO_SCHEMA_FILE}
     ports:
       - '4848:4848'
     volumes:
-      - 
+      - ./zero-schema.json:/data/schema/zero-schema.json
       - zero_data:/data/db
 
   #formbricks:
