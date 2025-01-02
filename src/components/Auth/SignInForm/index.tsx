@@ -13,7 +13,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -126,7 +125,6 @@ export const AuthSignInForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input
                       required
@@ -145,15 +143,6 @@ export const AuthSignInForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <div className="flex items-center justify-between">
-                    <FormLabel>{t('password')}</FormLabel>
-                    <Link
-                      href="/forgot-password"
-                      className="text-sm font-medium text-muted-foreground hover:opacity-75"
-                    >
-                      {t('forgot-password')}?
-                    </Link>
-                  </div>
                   <FormControl>
                     <Input
                       required
@@ -164,7 +153,16 @@ export const AuthSignInForm = () => {
                       disabled={isLoading}
                     />
                   </FormControl>
+
                   <FormMessage className="text-red-600" />
+                  <div className="flex items-center justify-end">
+                    <Link
+                      href="/forgot-password"
+                      className="text-sm font-medium text-muted-foreground hover:opacity-75"
+                    >
+                      {t('forgot-password')}?
+                    </Link>
+                  </div>
                 </FormItem>
               )}
             />

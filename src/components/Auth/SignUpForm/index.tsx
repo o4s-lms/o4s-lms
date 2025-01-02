@@ -18,6 +18,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/providers/Auth';
+import { useTranslate } from '@tolgee/react';
 
 const formSchema = z
   .object({
@@ -37,6 +38,7 @@ interface AuthFormProps {
 }
 
 export const AuthSignUpForm = ({ variant, id }: AuthFormProps) => {
+  const { t } = useTranslate();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<null | string>(null);
 
@@ -234,20 +236,19 @@ export const AuthSignUpForm = ({ variant, id }: AuthFormProps) => {
           </Link>
         </p>
         <p className="px-8 text-center text-xs text-muted-foreground">
-          By clicking {secondaryMessage} with Email and Password, you agree to
-          our{' '}
+          {t('clicking-continue')}{' '}
           <Link
             className="underline underline-offset-4 hover:text-primary"
             href="/terms"
           >
-            Terms
+            {t('terms')}
           </Link>{' '}
-          and{' '}
+          {t('and')}{' '}
           <Link
             className="underline underline-offset-4 hover:text-primary"
             href="/privacy"
           >
-            Privacy Policy
+            {t('privacy')}
           </Link>
           .
         </p>
