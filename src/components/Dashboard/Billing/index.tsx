@@ -81,6 +81,13 @@ export const columns: ColumnDef<Partial<Transaction>>[] = [
     enableHiding: false,
   },
   {
+    accessorKey: 'id',
+    header: 'Transaction ID',
+    cell: ({ row }) => (
+      <div>{row.getValue('id')}</div>
+    ),
+  },
+  {
     accessorKey: 'status',
     header: 'Status',
     cell: ({ row }) => (
