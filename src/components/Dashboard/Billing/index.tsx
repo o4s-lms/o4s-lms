@@ -44,6 +44,18 @@ import {
 } from '@/components/ui/table';
 import type { Transaction } from '@/payload-types';
 import { Main } from '@/components/Layout/Main';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { toast } from 'sonner';
 
 export const columns: ColumnDef<Partial<Transaction>>[] = [
   {
@@ -88,7 +100,9 @@ export const columns: ColumnDef<Partial<Transaction>>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="capitalize">{row.getValue('provider')}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue('provider')}</div>
+    ),
   },
   {
     accessorKey: 'amount',
@@ -166,13 +180,80 @@ export const columns: ColumnDef<Partial<Transaction>>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(transaction.id as string)}
-            >
-              Copy transaction ID
+            <DropdownMenuItem asChild>
+              <Button
+                onClick={() =>
+                  navigator.clipboard.writeText(transaction.id as string)
+                }
+                variant="outline"
+                className="p-4"
+              >
+                Copy transaction ID
+              </Button>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View transaction details</DropdownMenuItem>
+            {transaction.status === 'awaiting' && (
+              <>
+                <DropdownMenuItem asChild>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="outline">Payment instructions</Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Payment instructions:
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Payment instructions:
+                          <Button
+                            onClick={async () => {
+                              await fetch(
+                                `${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/emailPaymentInstructions?transactionId=${transaction.id}&email=${transaction.email}&total=${parseFloat(transaction.total) / 100}`,
+                                {
+                                  method: 'POST',
+                                  credentials: 'include',
+                                },
+                              );
+                              toast.info(
+                                'Payment instructions sent via email!',
+                              );
+                            }}
+                            variant="outline"
+                          >
+                            Send payment instructions via email
+                          </Button>
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction>Continue</AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+              </>
+            )}
+            <DropdownMenuItem asChild>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="outline">View transaction details</Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Transaction details:</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Transaction ID: {transaction.id}
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction>Continue</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -189,8 +270,7 @@ export function Billing({ transactions }: { transactions: Transaction[] }) {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const data = transactions.map(((transaction) => transaction))
-
+  const data = transactions.map((transaction) => transaction);
 
   const table = useReactTable({
     data,

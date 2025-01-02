@@ -7,6 +7,7 @@ import {
   lessonCompleted,
 } from '@/inngest/functions';
 import { emailPasswordUpdated } from '@/inngest/auth'
+import { emailPaymentInstructions } from '@/inngest/transactions';
 
 // Create an API that serves zero functions
 export const { GET, POST, PUT } = serve({
@@ -18,5 +19,6 @@ export const { GET, POST, PUT } = serve({
     lastLessonAccess,
     lessonCompleted,
     emailPasswordUpdated,
+    emailPaymentInstructions,
   ],
 });
