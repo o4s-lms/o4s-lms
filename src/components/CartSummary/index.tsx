@@ -15,7 +15,10 @@ import { Media } from '../Media';
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
-import { createTransaction, TransactionMutationData } from '@/utilities/transactions';
+import {
+  createTransaction,
+  TransactionMutationData,
+} from '@/utilities/transactions';
 
 export interface Cart {
   items: {
@@ -39,7 +42,7 @@ function OrderContent({ cart }: OrderSummaryProps) {
   const [currentCart, setCurrentCart] = React.useState<Cart>(cart);
   const [key, setKey] = React.useState(0);
   const [{ options, isPending }, dispatch] = usePayPalScriptReducer();
-  const { user, isSignedIn, isLoaded } = useAuth();
+  const { user, isSignedIn } = useAuth();
   const router = useRouter();
 
   const updateCart = React.useCallback(
@@ -76,7 +79,7 @@ function OrderContent({ cart }: OrderSummaryProps) {
 
   const create = useMutation({
     mutationFn: async (data: TransactionMutationData) => {
-      return await createTransaction({...data});
+      return await createTransaction({ ...data });
     },
     onSuccess: () => {
       toast.success('Transaction created');
@@ -128,7 +131,8 @@ function OrderContent({ cart }: OrderSummaryProps) {
        */
       const details = await actions.order?.capture();
       toast.info(
-        `Transaction ${data.paymentID} completed by ${details?.payer?.name?.given_name ?? 'No details'}`);
+        `Transaction ${data.paymentID} completed by ${details?.payer?.name?.given_name ?? 'No details'}`,
+      );
       /**const transactionData: Partial<Transaction> = {
         email: user?.email,
         transactionId: data.paymentID,
@@ -148,7 +152,7 @@ function OrderContent({ cart }: OrderSummaryProps) {
         orderId: data.orderID ?? undefined,
         transactionId: data.paymentID ?? undefined,
         customerId: data.payerID ?? undefined,
-        user: user?.id ?? undefined,
+        user: isSignedIn ? user?.id : undefined,
         courses: currentCart.items.map(({ id }) => id),
         provider: 'paypal',
         discount: currentCart.discount || 0,
@@ -159,7 +163,8 @@ function OrderContent({ cart }: OrderSummaryProps) {
       });
 
       router.push(
-        `/checkout/completion?guest=${isSignedIn ? 'false' : 'true'}false&transactionId=${data.paymentID}`);
+        `/checkout/completion?guest=${isSignedIn ? 'false' : 'true'}false&transactionId=${data.paymentID}`,
+      );
     },
   };
 

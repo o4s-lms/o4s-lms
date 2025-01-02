@@ -1387,7 +1387,10 @@ export interface Transaction {
   total: number;
   status: 'pending' | 'awaiting' | 'cancelled' | 'declined' | 'refunded' | 'disputed' | 'completed';
   user?: (string | null) | User;
-  courses: (string | Course)[];
+  courses: {
+    relationTo: 'courses';
+    value: string | Course;
+  }[];
   updatedAt: string;
   createdAt: string;
 }
