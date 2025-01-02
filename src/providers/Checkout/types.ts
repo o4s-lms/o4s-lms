@@ -5,8 +5,8 @@ export type Create = (args: {
   orderId: string | null | undefined;
   customerId: string | null | undefined;
   transactionId: string | null | undefined;
-  user: number | undefined;
-  courses: number[];
+  user: string | undefined;
+  courses: string[];
   provider: string;
   amount: number;
   discount: number;

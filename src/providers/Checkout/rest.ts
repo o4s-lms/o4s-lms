@@ -2,7 +2,7 @@ import type { Transaction } from '@/payload-types';
 
 export const rest = async (
   url: string,
-  args?: any,
+  args?: unknown,
   options?: RequestInit,
 ): Promise<null | undefined | Transaction> => {
   const method = options?.method || 'POST';

@@ -101,7 +101,7 @@ export const Transactions: CollectionConfig = {
       name: 'courses',
       type: 'relationship',
       hasMany: true,
-      relationTo: 'courses',
+      relationTo: ['courses'],
       required: true,
     },
   ],

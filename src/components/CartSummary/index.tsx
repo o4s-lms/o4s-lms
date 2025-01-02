@@ -1,7 +1,6 @@
 'use client';
 
 import { formatPrice } from '@/lib/utils';
-import { useCheckout } from '@/providers/Checkout';
 import PayPalProvider from './PayPalProvider';
 import {
   PayPalButtons,
@@ -15,10 +14,12 @@ import { ArrowRight, X } from 'lucide-react';
 import { Media } from '../Media';
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
+import { createTransaction, TransactionMutationData } from '@/utilities/transactions';
 
 export interface Cart {
   items: {
-    id: number;
+    id: string;
     title: string;
     slug?: string | null | undefined;
     price: number;
@@ -38,12 +39,11 @@ function OrderContent({ cart }: OrderSummaryProps) {
   const [currentCart, setCurrentCart] = React.useState<Cart>(cart);
   const [key, setKey] = React.useState(0);
   const [{ options, isPending }, dispatch] = usePayPalScriptReducer();
-  const { create } = useCheckout();
   const { user, isSignedIn, isLoaded } = useAuth();
   const router = useRouter();
 
   const updateCart = React.useCallback(
-    async (courseId: number) => {
+    async (courseId: string) => {
       const tmpCart = currentCart;
       let a = 0;
       let d = 0;
@@ -74,6 +74,19 @@ function OrderContent({ cart }: OrderSummaryProps) {
     [currentCart, key, router],
   );
 
+  const create = useMutation({
+    mutationFn: async (data: TransactionMutationData) => {
+      return await createTransaction({...data});
+    },
+    onSuccess: () => {
+      toast.success('Transaction created');
+    },
+    onError: (error) => {
+      toast.error('Failed to create transaction');
+      console.error('Failed to create transaction:', error);
+    },
+  });
+
   const paypalbuttonTransactionProps: PayPalButtonsComponentProps = {
     style: { layout: 'vertical' },
     createOrder(data, actions) {
@@ -103,7 +116,7 @@ function OrderContent({ cart }: OrderSummaryProps) {
         ],
       });
     },
-    onApprove(data, actions) {
+    async onApprove(data, actions) {
       /**
        * data: {
        *   orderID: string;
@@ -113,44 +126,40 @@ function OrderContent({ cart }: OrderSummaryProps) {
        *   facilitatorAccesstoken: string;
        * }
        */
-      return actions.order.capture().then(async (details) => {
-        toast.info(
-          `Transaction ${data.paymentID} completed by ${details?.payer.name.given_name ?? 'No details'}`,
-        );
+      const details = await actions.order?.capture();
+      toast.info(
+        `Transaction ${data.paymentID} completed by ${details?.payer?.name?.given_name ?? 'No details'}`);
+      /**const transactionData: Partial<Transaction> = {
+        email: user?.email,
+        transactionId: data.paymentID,
+        customerId: data.payerID,
+        user: user?.id,
+        courses: courses.map(({ id }) => ( id )),
+        provider: 'paypal',
+        discount: discount || 0,
+        amount: amount || 0,
+        status: 'completed',
+      };*/
 
-        /**const transactionData: Partial<Transaction> = {
-          email: user?.email,
-          transactionId: data.paymentID,
-          customerId: data.payerID,
-          user: user?.id,
-          courses: courses.map(({ id }) => ( id )),
-          provider: 'paypal',
-          discount: discount || 0,
-          amount: amount || 0,
-          status: 'completed',
-        };*/
-
-        const transaction = await create({
-          email: isSignedIn
-            ? (user?.email as string)
-            : (details?.payer?.email_address as string),
-          orderId: data.orderID,
-          transactionId: data.paymentID,
-          customerId: data.payerID,
-          user: user?.id,
-          courses: currentCart.items.map(({ id }) => id),
-          provider: 'paypal',
-          discount: currentCart.discount || 0,
-          amount: currentCart.amount || 0,
-          tax: currentCart.amount || 0,
-          total: currentCart.total || 0,
-          status: 'completed',
-        });
-
-        router.push(
-          `/checkout/completion?guest=${isSignedIn ? 'false' : 'true'}false&transactionId=${data.paymentID}`,
-        );
+      create.mutate({
+        email: isSignedIn
+          ? (user?.email as string)
+          : (details?.payer?.email_address as string),
+        orderId: data.orderID ?? undefined,
+        transactionId: data.paymentID ?? undefined,
+        customerId: data.payerID ?? undefined,
+        user: user?.id ?? undefined,
+        courses: currentCart.items.map(({ id }) => id),
+        provider: 'paypal',
+        discount: currentCart.discount || 0,
+        amount: currentCart.amount || 0,
+        tax: currentCart.amount || 0,
+        total: currentCart.total || 0,
+        status: 'completed',
       });
+
+      router.push(
+        `/checkout/completion?guest=${isSignedIn ? 'false' : 'true'}false&transactionId=${data.paymentID}`);
     },
   };
 
