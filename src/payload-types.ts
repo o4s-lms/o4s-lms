@@ -1377,6 +1377,7 @@ export interface Favorite {
 export interface Transaction {
   id: string;
   email: string;
+  name?: string | null;
   orderId?: string | null;
   customerId?: string | null;
   transactionId?: string | null;
@@ -2203,6 +2204,7 @@ export interface FavoritesSelect<T extends boolean = true> {
  */
 export interface TransactionsSelect<T extends boolean = true> {
   email?: T;
+  name?: T;
   orderId?: T;
   customerId?: T;
   transactionId?: T;

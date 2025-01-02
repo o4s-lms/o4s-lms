@@ -26,6 +26,10 @@ export const Transactions: CollectionConfig = {
       index: true,
     },
     {
+      name: 'name',
+      type: 'text',
+    },
+    {
       name: 'orderId',
       type: 'text',
     },

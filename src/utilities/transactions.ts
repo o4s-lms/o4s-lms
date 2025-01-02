@@ -1,14 +1,16 @@
 'use server';
 
 import { createPayloadClient } from '@/lib/payload';
+import { Course } from '@/payload-types';
 
 export interface TransactionMutationData {
   email: string
+  name?: string
   orderId?: string
   transactionId?: string
   customerId?: string
   user?: string
-  courses: string[]
+  courses: { relationTo: "courses"; value: string | Course; }[]
   provider: 'stripe' | 'paypal' | 'transfer' | 'mbway'
   discount: number
   amount: number

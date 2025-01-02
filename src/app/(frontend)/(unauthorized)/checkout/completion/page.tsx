@@ -11,17 +11,18 @@ type Args = {
   searchParams: Promise<{
     guest: string;
     transactionId: string;
+    provider: string;
   }>;
 };
 export default async function CompletionPage({
   searchParams: searchParamsPromise,
 }: Args) {
-  const { guest, transactionId } = await searchParamsPromise;
+  const { guest, transactionId, provider } = await searchParamsPromise;
 
   return (
     <div className="py-16 antialiased md:py-24">
       <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
-        <Completion transactionId={transactionId} />
+        <Completion guest={guest === 'true' ? true : false} transactionId={transactionId} provider={provider} />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import { formatPrice } from '@/lib/utils';
+import { formatPrice, until } from '@/lib/utils';
 import PayPalProvider from './PayPalProvider';
 import {
   PayPalButtons,
@@ -13,12 +13,26 @@ import { Media as MediaType } from '@/payload-types';
 import { ArrowRight, X } from 'lucide-react';
 import { Media } from '../Media';
 import * as React from 'react';
+import * as z from 'zod';
+import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import {
   createTransaction,
   TransactionMutationData,
 } from '@/utilities/transactions';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { useTranslate } from '@tolgee/react';
+import Link from 'next/link';
 
 export interface Cart {
   items: {
@@ -26,7 +40,7 @@ export interface Cart {
     title: string;
     slug?: string | null | undefined;
     price: number;
-    badgeImage?: ((number | null) | MediaType) | undefined;
+    badgeImage?: number | MediaType | undefined;
   }[];
   discount: number;
   amount: number;
@@ -38,12 +52,29 @@ type OrderSummaryProps = {
   cart: Cart;
 };
 
+const formSchema = z.object({
+  name: z.string().min(8),
+  email: z.string().email(),
+});
+
 function OrderContent({ cart }: OrderSummaryProps) {
   const [currentCart, setCurrentCart] = React.useState<Cart>(cart);
   const [key, setKey] = React.useState(0);
+  const [paymentType, setPaymentType] = React.useState<'paypal' | 'transfer'>(
+    'transfer',
+  );
   const [{ options, isPending }, dispatch] = usePayPalScriptReducer();
   const { user, isSignedIn } = useAuth();
   const router = useRouter();
+  const { t } = useTranslate();
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: user?.name ?? '',
+      email: user?.email ?? '',
+    },
+  });
 
   const updateCart = React.useCallback(
     async (courseId: string) => {
@@ -81,14 +112,47 @@ function OrderContent({ cart }: OrderSummaryProps) {
     mutationFn: async (data: TransactionMutationData) => {
       return await createTransaction({ ...data });
     },
-    onSuccess: () => {
-      toast.success('Transaction created');
+    onSuccess: (data) => {
+      router.push(
+        `/checkout/completion?guest=${isSignedIn ? 'false' : 'true'}&transactionId=${data?.id}&provider=${data?.provider}`,
+      );
     },
-    onError: (error) => {
+    /**onError: (error) => {
       toast.error('Failed to create transaction');
       console.error('Failed to create transaction:', error);
-    },
+    },*/
   });
+
+  const onSubmit = React.useCallback(
+    async (values: z.infer<typeof formSchema>) => {
+      try {
+        const transaction = await create.mutateAsync({
+          email: values.email,
+          name: values.name,
+          user: isSignedIn ? user?.id : undefined,
+          courses: currentCart.items.map(({ id }) => {
+            return {
+              relationTo: 'courses',
+              value: id,
+            };
+          }),
+          provider: 'transfer',
+          discount: currentCart.discount || 0,
+          amount: currentCart.amount || 0,
+          tax: currentCart.tax || 0,
+          total: currentCart.total || 0,
+          status: 'awaiting',
+        });
+        console.log(transaction);
+      } catch (error) {
+        toast.error('Failed to create transaction');
+        console.error('Failed to create transaction:', error);
+      } finally {
+        toast.success('Transaction created');
+      }
+    },
+    [create, currentCart, isSignedIn, user?.id],
+  );
 
   const paypalbuttonTransactionProps: PayPalButtonsComponentProps = {
     style: { layout: 'vertical' },
@@ -145,26 +209,36 @@ function OrderContent({ cart }: OrderSummaryProps) {
         status: 'completed',
       };*/
 
-      create.mutate({
-        email: isSignedIn
-          ? (user?.email as string)
-          : (details?.payer?.email_address as string),
-        orderId: data.orderID ?? undefined,
-        transactionId: data.paymentID ?? undefined,
-        customerId: data.payerID ?? undefined,
-        user: isSignedIn ? user?.id : undefined,
-        courses: currentCart.items.map(({ id }) => id),
-        provider: 'paypal',
-        discount: currentCart.discount || 0,
-        amount: currentCart.amount || 0,
-        tax: currentCart.amount || 0,
-        total: currentCart.total || 0,
-        status: 'completed',
-      });
-
-      router.push(
-        `/checkout/completion?guest=${isSignedIn ? 'false' : 'true'}false&transactionId=${data.paymentID}`,
-      );
+      try {
+        const transaction = await create.mutateAsync({
+          email: isSignedIn
+            ? (user?.email as string)
+            : (details?.payer?.email_address as string),
+          name: details?.payer?.name?.full_name ?? undefined,
+          orderId: data.orderID ?? undefined,
+          transactionId: data.paymentID ?? undefined,
+          customerId: data.payerID ?? undefined,
+          user: isSignedIn ? user?.id : undefined,
+          courses: currentCart.items.map(({ id }) => {
+            return {
+              relationTo: 'courses',
+              value: id,
+            };
+          }),
+          provider: 'paypal',
+          discount: currentCart.discount || 0,
+          amount: currentCart.amount || 0,
+          tax: currentCart.tax || 0,
+          total: currentCart.total || 0,
+          status: 'completed',
+        });
+        console.log(transaction);
+      } catch (error) {
+        toast.error('Failed to create transaction');
+        console.error('Failed to create transaction:', error);
+      } finally {
+        toast.success('Transaction created');
+      }
     },
   };
 
@@ -274,6 +348,74 @@ function OrderContent({ cart }: OrderSummaryProps) {
 
           {isPending ? <h2>Load Smart Payment Button...</h2> : null}
           <PayPalButtons {...paypalbuttonTransactionProps} />
+          {paymentType === 'transfer' && (
+            <div className="grid gap-6">
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="grid gap-2"
+                >
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            required
+                            placeholder="Your name"
+                            {...field}
+                            className="w-full"
+                            disabled={isSignedIn}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-red-600" />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            required
+                            placeholder={t('email')}
+                            {...field}
+                            className="w-full"
+                            disabled={isSignedIn}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-red-600" />
+                      </FormItem>
+                    )}
+                  />
+
+                  <Button type="submit" className="capitalize">
+                    Pay by Bank Transfer
+                  </Button>
+                </form>
+              </Form>
+              <p className="px-8 text-center text-xs text-muted-foreground">
+                {t('clicking-continue')}{' '}
+                <Link
+                  className="underline underline-offset-4 hover:text-primary"
+                  href="/terms"
+                >
+                  {t('terms')}
+                </Link>{' '}
+                {t('and')}{' '}
+                <Link
+                  className="underline underline-offset-4 hover:text-primary"
+                  href="/privacy"
+                >
+                  {t('privacy')}
+                </Link>
+                .
+              </p>
+            </div>
+          )}
 
           <div className="flex items-center justify-center gap-2">
             <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
