@@ -1,9 +1,6 @@
 import type { Metadata } from 'next';
 import { headers as getHeaders } from 'next/headers';
-import { DashboardWithSidebar } from '@/components/Dashboard';
 import React from 'react';
-import configPromise from '@payload-config';
-import { getPayload } from 'payload';
 import { redirect } from 'next/navigation';
 import { Header } from '@/components/Layout/Header';
 import { TopNav } from '@/components/Layout/TopNav';
@@ -11,8 +8,7 @@ import { LanguageSelector } from '@/components/LangSelector.';
 import { ThemeSwitch } from '@/components/ThemeSwitch';
 import { ProfileDropdown } from '@/components/ProfileDropdown';
 import ComingSoon from '@/components/ComingSoon';
-import SkipToMain from '@/components/SkipToMain';
-import { AppSidebar } from '@/components/Layout/AppSidebar';
+import { createPayloadClient } from '@/lib/payload';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -49,7 +45,7 @@ const topNav = [
 
 const DashboardPage = async () => {
   const headers = await getHeaders();
-  const payload = await getPayload({ config: configPromise });
+  const payload = await createPayloadClient();
   const { user } = await payload.auth({ headers });
 
   if (!user) {

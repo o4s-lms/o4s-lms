@@ -19,6 +19,7 @@ import {
   IconUserCog,
   IconUserOff,
   IconUsers,
+  IconCreditCard,
 } from '@tabler/icons-react';
 import { type SidebarData } from '@/components/Layout/types';
 import { getTranslate } from '@/tolgee/server';
@@ -55,6 +56,11 @@ export const sidebarData = async (): Promise<SidebarData> => {
               icon: IconNotification,
             },
           ],
+        },
+        {
+          title: t('billing'),
+          url: '/dashboard/billing',
+          icon: IconCreditCard,
         },
       ],
     },
