@@ -102,13 +102,13 @@ export type Announcement = Row<typeof announcementSchema>;
 export type Recipient = Row<typeof recipientSchema>;
 export type User = Row<typeof schema.tables.user>;
 
-/**
+
 type AuthData = {
   sub: string | null;
 };
 
 export const permissions = definePermissions<AuthData, Schema>(schema, () => {
-  const allowIfLoggedIn = (
+  /**const allowIfLoggedIn = (
     authData: AuthData,
     { cmpLit }: ExpressionBuilder<TableSchema>,
   ) => cmpLit(authData.sub, 'IS NOT', null);
@@ -116,39 +116,47 @@ export const permissions = definePermissions<AuthData, Schema>(schema, () => {
   const allowIfMessageSender = (
     authData: AuthData,
     { cmp }: ExpressionBuilder<typeof messageSchema>,
-  ) => cmp('senderID', '=', authData.sub ?? '');
+  ) => cmp('senderID', '=', authData.sub ?? ''); */
 
   return {
     notification: {
       row: {
-        insert: NOBODY_CAN,
+        insert: ANYONE_CAN,
         update: {
-          preMutation: NOBODY_CAN,
+          preMutation: ANYONE_CAN,
         },
-        delete: NOBODY_CAN,
+        delete: ANYONE_CAN,
       },
     },
     user: {
       row: {
-        insert: NOBODY_CAN,
+        insert: ANYONE_CAN,
         update: {
-          preMutation: NOBODY_CAN,
+          preMutation: ANYONE_CAN,
         },
-        delete: NOBODY_CAN,
+        delete: ANYONE_CAN,
       },
     },
-    message: {
+    recipient: {
+      row: {
+        insert: ANYONE_CAN,
+        update: {
+          preMutation: ANYONE_CAN,
+        },
+        delete: ANYONE_CAN,
+      },
+    },
+    announcement: {
       row: {
         // anyone can insert
         insert: ANYONE_CAN,
         // only sender can edit their own messages
         update: {
-          preMutation: [allowIfMessageSender],
+          preMutation: ANYONE_CAN,
         },
         // must be logged in to delete
-        delete: [allowIfLoggedIn],
+        delete: ANYONE_CAN,
       },
     },
   };
 });
- */

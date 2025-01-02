@@ -21,7 +21,8 @@
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "reinstall": "cross-env NODE_OPTIONS=--no-deprecation rm -rf node_modules && rm pnpm-lock.yaml && pnpm --ignore-workspace install",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
-    "zero-build-schema": "tsx ./src/zero/schema.ts",
+    "dev:zero-cache": "zero-cache-dev -p src/zero/schema.ts",
+    "zero-build-schema": "tsx src/zero/schema.ts",
     "ui": "pnpm dlx shadcn@latest"
   },
   "dependencies": {
