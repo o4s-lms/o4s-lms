@@ -7,15 +7,11 @@ export const dynamic = 'force-dynamic';
 export async function POST(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const transactionId = searchParams.get('transactionId');
-  const email = searchParams.get('email');
-  const total = searchParams.get('total');
   // Send your event payload to Inngest
   await inngest.send({
     name: 'transactions/payment.instructions',
     data: {
       transactionId: transactionId,
-      email: email,
-      total: total,
     },
   });
 

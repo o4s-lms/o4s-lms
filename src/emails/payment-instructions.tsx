@@ -13,15 +13,11 @@ import {
   Tailwind,
   Text,
 } from '@react-email/components';
+import { Transaction } from '@/payload-types';
 
 export const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
-interface PaymentInstructionsEmailProps {
-  transactionId: string
-  total: string
-}
-
-export function PaymentInstructionsEmail({ transactionId, total }: PaymentInstructionsEmailProps) {
+export function PaymentInstructionsEmail({ transaction }: { transaction: Transaction}) {
   return (
     <Html>
       <Head />
@@ -40,16 +36,26 @@ export function PaymentInstructionsEmail({ transactionId, total }: PaymentInstru
                 />
               </Section>
 
+              <Section className="mb-[32px] mt-[32px]">
+              <Text className="mb-8 text-[14px] font-medium leading-[24px] text-black">
+                  Hi {transaction.name},
+                </Text>
+              </Section>
+
+
               <Section className="mb-[32px] mt-[32px] text-center">
                 <Text className="mb-8 text-[14px] font-medium leading-[24px] text-black">
                   payment instructions...<br />
-                  Transaction ID: {transactionId}<br />
-                  Total: {total} €
+                  Transaction ID: {transaction.id}<br />
+                  Total: {new Intl.NumberFormat('pt-PT', {
+                                    style: 'currency',
+                                    currency: 'EUR',
+                                  }).format(transaction.total / 100)}
                 </Text>
 
                 <Text className="text-[14px] font-medium leading-[24px] text-black">
                   <Link
-                    href={`${BASE_URL}/checkout/payment?transactionId=${transactionId}`}
+                    href={`${BASE_URL}/checkout/payment?transactionId=${transaction.id}`}
                     target="_blank"
                     className="text-[#2754C5] underline"
                   >

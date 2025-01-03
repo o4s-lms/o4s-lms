@@ -37,7 +37,10 @@ export function VerifyEmail({ token }: { token: string }) {
 
               <Section className="mb-[32px] mt-[32px] text-center">
                 <Text className="mb-8 text-[14px] font-medium leading-[24px] text-black">
-                  Click the following link to verify your email
+                  Thanks for starting the new O4S LMS account creation process.
+                  We want to make sure it&apos;s really you. Please following link to
+                  verify your email. If you don&apos;t want to create an account, you
+                  can ignore this message.
                 </Text>
 
                 <Text className="text-[14px] font-medium leading-[24px] text-black">
@@ -46,7 +49,7 @@ export function VerifyEmail({ token }: { token: string }) {
                     target="_blank"
                     className="text-[#2754C5] underline"
                   >
-                    Verify Email
+                    Click to verify your email
                   </Link>
                 </Text>
               </Section>

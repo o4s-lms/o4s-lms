@@ -5,6 +5,8 @@ import { Header } from '@/components/Layout/Header';
 import { TopNav } from '@/components/Layout/TopNav';
 import { ProfileDropdown } from '@/components/ProfileDropdown';
 import { ThemeSwitch } from '@/components/ThemeSwitch';
+import { AppSidebar } from '@/components/Layout/AppSidebar';
+import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -15,17 +17,32 @@ export const metadata: Metadata = {
 export default function AskAIPage() {
   return (
     <>
-      <Header>
-        <TopNav links={topNav} />
-        <div className="ml-auto flex items-center space-x-4">
-          {/**<Search />
-                <ThemeSwitch />*/}
-          <LanguageSelector />
-          <ThemeSwitch />
-          <ProfileDropdown />
-        </div>
-      </Header>
-      <ComingSoon />
+      <AppSidebar />
+      <div
+        id="content"
+        className={cn(
+          'ml-auto w-full max-w-full',
+          'peer-data-[state=collapsed]:w-[calc(100%-var(--sidebar-width-icon)-1rem)]',
+          'peer-data-[state=expanded]:w-[calc(100%-var(--sidebar-width))]',
+          'transition-[width] duration-200 ease-linear',
+          'flex h-svh flex-col',
+          'group-data-[scroll-locked=1]/body:h-full',
+          'group-data-[scroll-locked=1]/body:has-[main.fixed-main]:h-svh',
+        )}
+      >
+        <Header>
+          <TopNav links={topNav} />
+          <div className="ml-auto flex items-center space-x-4">
+            {/**<Search />
+                                   <ThemeSwitch />*/}
+            <LanguageSelector />
+            <ThemeSwitch />
+            <ProfileDropdown />
+          </div>
+        </Header>
+
+        <ComingSoon />
+      </div>
     </>
   );
 }

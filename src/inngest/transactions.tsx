@@ -8,17 +8,31 @@ export const emailPaymentInstructions = inngest.createFunction(
   { event: 'transactions/payment.instructions' },
   async ({ event, step, payload }) => {
 
-    await step.run('send-payment.instructions-email', async () => {
+    const transaction = await step.run('get-transaction-details', async () => {
+      try {
+        const t = await payload.findByID({
+          collection: 'transactions',
+          id: event.data.transactionId,
+          depth: 0,
+        });
+        return t;
+      } catch (error) {
+        throw error;
+      }
+    })
+
+    await step.run('send-payment-instructions-email', async () => {
       try {
       await payload.sendEmail({
-        to: event.data.email,
+        to: transaction.email,
         subject: 'Payment instructions',
-        html: await render(<PaymentInstructionsEmail transactionId={event.data.transactionId} total={event.data.total} />),
+        html: await render(<PaymentInstructionsEmail transaction={transaction} />),
       });
     } catch (error) {
       throw error;
     }
     });
-    return { message: `Payment instructions sent to ${event.data.email}!` };
+    
+    return { message: `Payment instructions sent to ${transaction.email}!` };
   },
 );

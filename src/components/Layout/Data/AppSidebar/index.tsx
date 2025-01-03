@@ -74,7 +74,7 @@ export const sidebarData = async (): Promise<SidebarData> => {
         },
         {
           title: t('ask-ai'),
-          url: '/dashboard/ask-ai',
+          url: '/learn/ask-ai',
           icon: IconMessageCircleQuestion,
         },
       ],

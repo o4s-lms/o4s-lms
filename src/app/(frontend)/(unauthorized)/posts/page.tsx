@@ -3,40 +3,19 @@ import type { Metadata } from 'next/types';
 import { CollectionArchive } from '@/components/CollectionArchive';
 import { PageRange } from '@/components/PageRange';
 import { Pagination } from '@/components/Pagination';
-import configPromise from '@payload-config';
-import { getPayload } from 'payload';
-import React from 'react';
+import React, { cache } from 'react';
 import PageClient from './page.client';
 import { HighLight } from '@/heros/HighLight';
 import { getLanguage } from '@/tolgee/language';
+import { createPayloadClient } from '@/lib/payload';
 
 export const dynamic = 'force-static';
 export const revalidate = 600;
 
 export default async function Page() {
-  const language = getLanguage();
-  const payload = await getPayload({ config: configPromise });
+  const language = await getLanguage();
 
-  const posts = await payload.find({
-    collection: 'posts',
-    depth: 1,
-    limit: 12,
-    overrideAccess: false,
-    where: {
-      language: {
-        equals: language,
-      },
-    },
-    select: {
-      title: true,
-      slug: true,
-      heroImage: true,
-      categories: true,
-      populatedAuthors: true,
-      publishedAt: true,
-      meta: true,
-    },
-  });
+  const posts = await queryPostsByLanguage({ language: language })
 
   return (
     <div className="pb-24 pt-24">
@@ -66,6 +45,34 @@ export default async function Page() {
     </div>
   );
 }
+
+const queryPostsByLanguage = cache(async ({ language }: { language: string }) => {
+  const payload = await createPayloadClient();
+
+  const posts = await payload.find({
+    collection: 'posts',
+    depth: 1,
+    limit: 12,
+    overrideAccess: false,
+    where: {
+      language: {
+        equals: language,
+      },
+    },
+    select: {
+      title: true,
+      slug: true,
+      heroImage: true,
+      categories: true,
+      populatedAuthors: true,
+      publishedAt: true,
+      meta: true,
+    },
+  });
+
+  return posts ?? null;
+
+});
 
 export function generateMetadata(): Metadata {
   return {
