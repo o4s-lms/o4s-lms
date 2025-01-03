@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { headers as getHeaders } from 'next/headers';
 import type { Metadata } from 'next';
 import { Undo2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -7,6 +6,7 @@ import { redirect } from 'next/navigation';
 import { toast } from 'sonner';
 import { getTranslate } from '@/tolgee/server';
 import { createPayloadClient } from '@/lib/payload';
+import { currentUser } from '@/lib/session';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -20,9 +20,8 @@ export default async function Verify({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const { token } = await searchParams;
-  const headers = await getHeaders();
   const payload = await createPayloadClient();
-  const { user } = await payload.auth({ headers });
+  const user = await currentUser();
   const t = await getTranslate();
 
   const result = await payload.verifyEmail({
@@ -48,7 +47,7 @@ export default async function Verify({
   return (
     <div className="flex h-full items-center justify-center p-10">
       <Button asChild className="absolute right-3 top-3" variant="ghost">
-        <Link href="#" onClick={() => redirect('/')}>
+        <Link href="#" >
           <Undo2 className="mr-2 h-4 w-4" /> {t('go-back')}
         </Link>
       </Button>
