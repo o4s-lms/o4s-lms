@@ -40,7 +40,7 @@ export interface Cart {
     title: string;
     slug?: string | null | undefined;
     price: number;
-    badgeImage?: number | MediaType | undefined;
+    badgeImage?: string | MediaType | null | undefined;
   }[];
   discount: number;
   amount: number;

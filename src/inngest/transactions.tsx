@@ -1,6 +1,7 @@
 import { render } from '@react-email/components';
 import { inngest } from './client';
 import { PaymentInstructionsEmail } from '@/emails/payment-instructions';
+import { ProofOfPaymentEmail } from '@/emails/proof-of-payment';
 
 
 export const emailPaymentInstructions = inngest.createFunction(
@@ -34,5 +35,26 @@ export const emailPaymentInstructions = inngest.createFunction(
     });
     
     return { message: `Payment instructions sent to ${transaction.email}!` };
+  },
+);
+
+export const emailProofOfPayment = inngest.createFunction(
+  { id: 'proof-of-payment-email' },
+  { event: 'transactions/proof.of.payment' },
+  async ({ event, step, payload }) => {
+
+    await step.run('send-proof-of-payment-email', async () => {
+      try {
+      await payload.sendEmail({
+        to: 'joseantcordeiro@gmail.com',
+        subject: 'Proof of payment received',
+        html: await render(<ProofOfPaymentEmail transactionId={event.data.transactionId} files={event.data.files}/>),
+      });
+    } catch (error) {
+      throw error;
+    }
+    });
+    
+    return { message: `Proof of payment received sent joseantcordeiro@gmail.com!` };
   },
 );

@@ -13,11 +13,18 @@ import {
   Tailwind,
   Text,
 } from '@react-email/components';
-import { Transaction } from '@/payload-types';
 
 export const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
-export function PaymentInstructionsEmail({ transaction }: { transaction: Transaction}) {
+interface ProofOfPaymentEmail {
+  transactionId: string;
+  files: [unknown];
+}
+
+export function ProofOfPaymentEmail({
+  transactionId,
+  files,
+}: ProofOfPaymentEmail) {
   return (
     <Html>
       <Head />
@@ -37,32 +44,28 @@ export function PaymentInstructionsEmail({ transaction }: { transaction: Transac
               </Section>
 
               <Section className="mb-[32px] mt-[32px]">
-              <Text className="mb-8 text-[14px] font-medium leading-[24px] text-black">
-                  Hi {transaction.name},
-                </Text>
-              </Section>
-
-
-              <Section className="mb-[32px] mt-[32px] text-center">
                 <Text className="mb-8 text-[14px] font-medium leading-[24px] text-black">
-                  payment instructions...<br />
-                  Transaction ID: {transaction.id}<br />
-                  Total: {new Intl.NumberFormat('pt-PT', {
-                                    style: 'currency',
-                                    currency: 'EUR',
-                                  }).format(transaction.total / 100)}
-                </Text>
-
-                <Text className="text-[14px] font-medium leading-[24px] text-black">
-                  <Link
-                    href={`${BASE_URL}/checkout/proof-of-payment?transactionId=${transaction.id}`}
-                    target="_blank"
-                    className="text-[#2754C5] underline"
-                  >
-                    Send us the proof of the payment
-                  </Link>
+                  Proof of payment for transaction ID: {transactionId} received,
                 </Text>
               </Section>
+
+              {files.map((file) => (
+                <>
+                  <Section className="mt-[32px]">
+                    <Img
+                      key={file.uuid}
+                      src={`${file.cdnUrl}/-/preview/-/resize/x400/`}
+                      width="400"
+                      height="400"
+                      alt={file.fileInfo.originalFilename || ''}
+                      title={file.fileInfo.originalFilename || ''}
+                    />
+                  </Section>
+                  <Text className="mb-8 text-[14px] font-medium leading-[24px] text-black">
+                    {file.fileInfo.originalFilename}
+                  </Text>
+                </>
+              ))}
 
               <Hr className="mx-0 my-[26px] w-full border border-solid border-[#eaeaea]" />
 

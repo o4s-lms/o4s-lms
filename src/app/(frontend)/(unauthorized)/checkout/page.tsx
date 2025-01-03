@@ -1,7 +1,7 @@
 import type { Metadata } from 'next/types';
-import configPromise from '@payload-config';
-import { getPayload, type Where } from 'payload';
 import { Cart, OrderSummary } from '@/components/CartSummary';
+import { createPayloadClient } from '@/lib/payload';
+import { Where } from 'payload';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -19,8 +19,7 @@ export default async function AddToCart({
   searchParams: searchParamsPromise,
 }: Args) {
   const { slug, language } = await searchParamsPromise;
-
-  const payload = await getPayload({ config: configPromise });
+  const payload = await createPayloadClient();
 
   let amount = 0;
   let discount = 0;
