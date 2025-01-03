@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import { headers as getHeaders } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { getPayload } from 'payload';
-import config from '@/payload.config';
 import type { Metadata } from 'next';
 import { Undo2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ForgotPasswordForm } from '@/components/Auth/ForgotPasswordForm';
+import { getTranslate } from '@/tolgee/server';
+import { createPayloadClient } from '@/lib/payload';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -16,8 +16,9 @@ export const metadata: Metadata = {
 
 export default async function ForgotPasswordPage() {
   const headers = await getHeaders();
-  const payload = await getPayload({ config });
+  const payload = await createPayloadClient();
   const { user } = await payload.auth({ headers });
+  const t = await getTranslate();
 
   if (user) {
     redirect(
@@ -28,8 +29,8 @@ export default async function ForgotPasswordPage() {
   return (
     <div className="flex h-full items-center justify-center p-10">
       <Button asChild className="absolute right-3 top-3" variant="ghost">
-        <Link href="/">
-          <Undo2 className="mr-2 h-4 w-4" /> Go back
+        <Link href="#" onClick={() => redirect('/')}>
+          <Undo2 className="mr-2 h-4 w-4" /> {t('go-back')}
         </Link>
       </Button>
       <ForgotPasswordForm />
