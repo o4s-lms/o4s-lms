@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { headers as getHeaders } from 'next/headers';
 import { CoursesContent } from '@/components/Learn/Courses';
 import { redirect } from 'next/navigation';
 import { Header } from '@/components/Layout/Header';
@@ -11,6 +10,7 @@ import { AppSidebar } from '@/components/Layout/AppSidebar';
 import { cn } from '@/lib/utils';
 import { cache } from 'react';
 import { createPayloadClient } from '@/lib/payload';
+import { currentUser } from '@/lib/session';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -19,9 +19,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const headers = await getHeaders();
-  const payload = await createPayloadClient();
-  const { user } = await payload.auth({ headers });
+  const user = await currentUser();
 
   if (!user) {
     redirect(

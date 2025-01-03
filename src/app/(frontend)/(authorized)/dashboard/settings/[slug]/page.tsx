@@ -1,14 +1,12 @@
 import type { Metadata } from 'next';
-import { headers as getHeaders } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { getPayload } from 'payload';
-import configPromise from '@payload-config';
 import { SettingsContent } from '@/components/Dashboard/Settings';
 import { Header } from '@/components/Layout/Header';
 import { TopNav } from '@/components/Layout/TopNav';
 import { LanguageSelector } from '@/components/LangSelector.';
 import { ThemeSwitch } from '@/components/ThemeSwitch';
 import { ProfileDropdown } from '@/components/ProfileDropdown';
+import { currentUser } from '@/lib/session';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -24,9 +22,7 @@ type Args = {
 
 export default async function Settings({ params: paramsPromise }: Args) {
   const { slug = 'account' } = await paramsPromise;
-  const headers = await getHeaders();
-  const payload = await getPayload({ config: configPromise });
-  const { user } = await payload.auth({ headers });
+  const user = await currentUser();
 
   if (!user) {
     redirect(

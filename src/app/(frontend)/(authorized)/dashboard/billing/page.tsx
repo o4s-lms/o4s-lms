@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { headers as getHeaders } from 'next/headers';
 import { LanguageSelector } from '@/components/LangSelector.';
 import { Header } from '@/components/Layout/Header';
 import { TopNav } from '@/components/Layout/TopNav';
@@ -9,6 +8,7 @@ import { createPayloadClient } from '@/lib/payload';
 import { redirect } from 'next/navigation';
 import { Billing } from '@/components/Dashboard/Billing';
 import { cache } from 'react';
+import { currentUser } from '@/lib/session';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -17,9 +17,7 @@ export const metadata: Metadata = {
 };
 
 export default async function BillingPage() {
-  const headers = await getHeaders();
-  const payload = await createPayloadClient();
-  const { user } = await payload.auth({ headers });
+  const user = await currentUser();
 
   if (!user) {
     // unauthorized()
