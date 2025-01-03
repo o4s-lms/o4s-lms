@@ -52,7 +52,7 @@ const queryTransactionsByUser = cache(async ({ email }: { email: string }) => {
 
   const result = await payload.find({
     collection: 'transactions',
-    depth: 0,
+    depth: 1,
     limit: 10,
     pagination: false,
     where: {

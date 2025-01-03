@@ -83,9 +83,7 @@ export const columns: ColumnDef<Partial<Transaction>>[] = [
   {
     accessorKey: 'id',
     header: 'Transaction ID',
-    cell: ({ row }) => (
-      <div>{row.getValue('id')}</div>
-    ),
+    cell: ({ row }) => <div>{row.getValue('id')}</div>,
   },
   {
     accessorKey: 'status',
@@ -110,6 +108,25 @@ export const columns: ColumnDef<Partial<Transaction>>[] = [
     cell: ({ row }) => (
       <div className="capitalize">{row.getValue('provider')}</div>
     ),
+  },
+  {
+    accessorKey: 'courses',
+    header: 'Courses',
+    cell: ({ row }) => {
+      const c = row.original.courses;
+      const courses = c
+        ?.map(({ value }) => value)
+        .filter((course) => typeof course === 'object');
+      return (
+        <div className="flex items-center">
+          <ul>
+            {courses?.map((course, index) => (
+              <li key={index}>{course.title}</li>
+            ))}
+          </ul>
+        </div>
+      );
+    },
   },
   {
     accessorKey: 'amount',
@@ -250,8 +267,67 @@ export const columns: ColumnDef<Partial<Transaction>>[] = [
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle>Transaction details:</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Transaction ID: {transaction.id}
+                    <AlertDialogDescription asChild>
+                      <div className="mb-4 flex items-center gap-4">
+                        <table>
+                          <tbody>
+                            <tr>
+                              <td>Transaction ID:</td>
+                              <td>{transaction.id}</td>
+                            </tr>
+                            <tr>
+                              <td>Buyer name:</td>
+                              <td>{transaction.name}</td>
+                            </tr>
+                            <tr>
+                              <td>Buyer email:</td>
+                              <td>{transaction.email}</td>
+                            </tr>
+                            {transaction.provider === 'paypal' && (
+                              <tr>
+                                <td>Paypal transaction ID:</td>
+                                <td>{transaction.transactionId}</td>
+                              </tr>
+                            )}
+                            <tr>
+                              <td>Amount:</td>
+                              <td>
+                                {new Intl.NumberFormat('pt-PT', {
+                                  style: 'currency',
+                                  currency: 'EUR',
+                                }).format(transaction.amount / 100)}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Discount:</td>
+                              <td>
+                                {new Intl.NumberFormat('pt-PT', {
+                                  style: 'currency',
+                                  currency: 'EUR',
+                                }).format(transaction.discount / 100)}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Tax:</td>
+                              <td>
+                                {new Intl.NumberFormat('pt-PT', {
+                                  style: 'currency',
+                                  currency: 'EUR',
+                                }).format(transaction.tax / 100)}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Total:</td>
+                              <td>
+                                {new Intl.NumberFormat('pt-PT', {
+                                  style: 'currency',
+                                  currency: 'EUR',
+                                }).format(transaction.total / 100)}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
