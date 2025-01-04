@@ -1,12 +1,11 @@
 import { Inngest } from 'inngest';
 import { InngestMiddleware } from 'inngest';
-import configPromise from '@payload-config';
-import { getPayload } from 'payload';
+import { createPayloadClient } from '@/lib/payload';
 
 const payloadMiddleware = new InngestMiddleware({
   name: 'Payload Middleware',
   async init() {
-    const payload = await getPayload({ config: configPromise });
+    const payload = await createPayloadClient();
 
     return {
       onFunctionRun(ctx) {
