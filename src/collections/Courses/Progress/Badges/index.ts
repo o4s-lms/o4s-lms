@@ -77,14 +77,14 @@ export const Badges: CollectionConfig = {
   access: {
     read: ({ req: { user } }: AccessArgs): boolean | Where => {
       if (!user) return false;
-      if (user.roles.includes('admin')) return true;
+      if (user.role === 'admin') return true;
       return false;
     },
     create: ({ req: { user } }: AccessArgs) =>
-      user?.roles.includes('admin') ?? false,
+      user?.role === 'admin',
     update: ({ req: { user } }: AccessArgs) =>
-      user?.roles.includes('admin') ?? false,
+      user?.role === 'admin',
     delete: ({ req: { user } }: AccessArgs) =>
-      user?.roles.includes('admin') ?? false,
+      user?.role === 'admin',
   },
 };

@@ -105,7 +105,7 @@ export const Points: CollectionConfig = {
   access: {
     read: ({ req: { user } }: AccessArgs): boolean | Where => {
       if (!user) return false;
-      if (user.roles.includes('admin') || user.roles.includes('teacher'))
+      if (user.role === 'admin' || user.role === 'teacher')
         return true;
       return {
         student: {
@@ -116,7 +116,7 @@ export const Points: CollectionConfig = {
     create: () => false, // Only created by system
     update: () => false, // Points are immutable
     delete: ({ req: { user } }: AccessArgs) =>
-      user?.roles.includes('admin') ?? false,
+      user?.role === 'admin',
   },
   hooks: {
     beforeChange: [
