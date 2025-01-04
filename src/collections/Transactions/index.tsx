@@ -1,8 +1,7 @@
-import type { CollectionConfig } from 'payload';
+import type { AccessArgs, CollectionConfig } from 'payload';
 
 import { admin } from '@/access/admin';
 import { anyone } from '@/access/anyone';
-import { authenticated } from '@/access/authenticated';
 
 export const Transactions: CollectionConfig = {
   slug: 'transactions',
@@ -10,7 +9,19 @@ export const Transactions: CollectionConfig = {
     admin: admin,
     create: anyone,
     delete: admin,
-    read: authenticated,
+    read: ({ req: { user } }: AccessArgs) => {
+      if (!user) return false;
+      if (user.role === 'admin') return true;
+      return {
+        and: [
+          {
+            user: {
+              equals: user.id,
+            },
+          },
+        ],
+      };
+    },
     update: admin,
   },
   admin: {

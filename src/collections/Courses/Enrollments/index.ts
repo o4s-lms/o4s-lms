@@ -11,7 +11,7 @@ export const Enrollments: CollectionConfig = {
   access: {
     read: ({ req: { user } }: AccessArgs) => {
       if (!user) return false;
-      if (user.roles.includes('admin') || user.roles.includes('teacher'))
+      if (user.role === 'admin' || user.role === 'teacher')
         return true;
       return {
         and: [
@@ -24,12 +24,12 @@ export const Enrollments: CollectionConfig = {
       };
     },
     create: ({ req: { user } }: AccessArgs) => {
-      if (!user || !user.roles) return false;
+      if (!user || !user.role) return false;
       // Allow admins and instructors to enroll students
-      if (user.roles.includes('admin') || user.roles.includes('teacher'))
+      if (user.role === 'admin' || user.role === 'teacher')
         return true;
       // Allow students to self-enroll if the course allows it
-      if (user.roles.includes('student')) {
+      if (user.role === 'student') {
         return {
           and: [
             {
@@ -43,8 +43,8 @@ export const Enrollments: CollectionConfig = {
       return false;
     },
     update: ({ req: { user } }: AccessArgs) => {
-      if (!user || !user.roles) return false;
-      if (user.roles.includes('admin') || user.roles.includes('teacher'))
+      if (!user || !user.role) return false;
+      if (user.role === 'admin' || user.role === 'teacher')
         return true;
       // Students can only update their own enrollment status
       return {
@@ -58,8 +58,8 @@ export const Enrollments: CollectionConfig = {
       };
     },
     delete: ({ req: { user } }: AccessArgs) => {
-      if (!user || !user.roles) return false;
-      return user.roles.includes('admin');
+      if (!user || !user.role) return false;
+      return user.role === 'admin';
     },
   },
   fields: [

@@ -1,5 +1,5 @@
 import { CollectionConfig } from 'payload'
-import { isAdmin, isAdminOrTeacher } from '@/access/roles'
+import { isAdmin, isAdminOrTeacher, isTeacher } from '@/access/roles'
 import { AccessArgs } from 'payload'
 
 export const Announcements: CollectionConfig = {
@@ -66,6 +66,7 @@ export const Announcements: CollectionConfig = {
             { label: 'All Users', value: 'all' },
             { label: 'Students', value: 'student' },
             { label: 'Teacher', value: 'teacher' },
+            { label: 'User', value: 'user' },
             { label: 'Admins', value: 'admin' },
           ],
         },

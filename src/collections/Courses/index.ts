@@ -44,14 +44,14 @@ export const Courses: CollectionConfig<'courses'> = {
   access: {
     admin: admin,
     create: ({ req: { user } }: AccessArgs): boolean | Where => {
-      if (!user || !user.roles) return false;
-      if (user.roles.includes('admin') || user.roles.includes('teacher'))
+      if (!user || !user.role) return false;
+      if (user.role === 'admin' || user.role === 'teacher')
         return true;
       return false;
     },
     delete: admin,
     read: ({ req: { user } }: AccessArgs): boolean | Where => {
-      if (user?.roles.includes('admin') || user?.roles.includes('teacher'))
+      if (user?.role === 'admin' || user?.role === 'teacher')
         return true;
 
       return {
@@ -61,8 +61,8 @@ export const Courses: CollectionConfig<'courses'> = {
       };
     },
     update: ({ req: { user } }: AccessArgs): boolean | Where => {
-      if (!user || !user.roles) return false;
-      if (user.roles.includes('admin')) return true;
+      if (!user || !user.role) return false;
+      if (user.role === 'admin') return true;
       // Teachers can only update their own courses
       return {
         and: [

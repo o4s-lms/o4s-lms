@@ -1,7 +1,6 @@
 import type { CollectionConfig } from 'payload';
 
 import { anyone } from '@/access/anyone';
-import { authenticated } from '@/access/authenticated';
 import { languageSelectOptions } from '@/utilities/languages';
 
 import {
@@ -12,14 +11,15 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields';
 import { slugField } from '@/fields/slug';
+import { admin } from '@/access/admin';
 
 export const Categories: CollectionConfig = {
   slug: 'categories',
   access: {
-    create: authenticated,
-    delete: authenticated,
+    create: admin,
+    delete: admin,
     read: anyone,
-    update: authenticated,
+    update: admin,
   },
   admin: {
     group: 'Blog',

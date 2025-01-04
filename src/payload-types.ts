@@ -492,7 +492,7 @@ export interface Post {
 export interface User {
   id: string;
   name?: string | null;
-  roles: ('admin' | 'user' | 'student' | 'teacher')[];
+  role: 'admin' | 'user' | 'student' | 'teacher';
   /**
    * Maximum size: 4MB. Accepted formats: .jpg, .jpeg, .png, .gif
    */
@@ -2235,7 +2235,7 @@ export interface NewsletterSignupsSelect<T extends boolean = true> {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
-  roles?: T;
+  role?: T;
   avatar?: T;
   language?: T;
   theme?: T;

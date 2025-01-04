@@ -1,19 +1,11 @@
 import type { User } from '@/payload-types';
 
 export const checkRole = (
-  allRoles: User['roles'],
+  role: User['role'],
   user: User | null | undefined,
 ): boolean => {
   if (user) {
-    if (
-      allRoles.some((role) => {
-        return user?.roles?.some((individualRole) => {
-          return individualRole === role;
-        });
-      })
-    ) {
-      return true;
-    }
+    return user.role === role;
   }
 
   return false;

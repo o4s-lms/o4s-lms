@@ -48,12 +48,11 @@ export const Users: CollectionConfig = {
       type: 'text',
     },
     {
-      name: 'roles',
+      name: 'role',
       type: 'select',
       admin: {
         position: 'sidebar',
       },
-      hasMany: true,
       options: [
         { label: 'Admin', value: 'admin' },
         { label: 'User', value: 'user' },
@@ -61,7 +60,7 @@ export const Users: CollectionConfig = {
         { label: 'Teacher', value: 'teacher' },
       ],
       required: true,
-      defaultValue: ['user'],
+      defaultValue: 'user',
     },
     {
       name: 'avatar',

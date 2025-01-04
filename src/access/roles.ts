@@ -2,22 +2,22 @@ import { Access, AccessArgs } from 'payload';
 
 export const isAdmin: Access = ({ req: { user } }: AccessArgs): boolean => {
   if (!user) return false;
-  return user?.roles.includes('admin');
+  return user?.role === 'admin';
 };
 
 export const isTeacher: Access = ({ req: { user } }: AccessArgs): boolean => {
   if (!user) return false;
-  return user?.roles.includes('teacher');
+  return user?.role === 'teacher';
 };
 
 export const isAdminOrTeacher: Access = ({ req: { user } }: AccessArgs): boolean => {
   if (!user) return false;
-  return user?.roles.includes('admin') || user?.roles.includes('teacher');
+  return user?.role === 'admin' || user?.role === 'teacher';
 };
 
 export const isStudent: Access = ({ req: { user } }: AccessArgs): boolean => {
   if (!user) return false;
-  return user?.roles.includes('student');
+  return user?.role === 'student';
 };
 
 export const hasRole: Access = (
@@ -25,7 +25,7 @@ export const hasRole: Access = (
   role?: 'admin' | 'user' | 'student' | 'teacher',
 ): boolean => {
   if (!user || !role) return false;
-  return user.roles.includes(role);
+  return user.role === role;
 };
 
 export const isSameUser: Access = ({ req: { user } }: AccessArgs, id?: string): boolean => {

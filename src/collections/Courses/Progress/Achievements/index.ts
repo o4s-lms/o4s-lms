@@ -1,16 +1,6 @@
 import type {
   CollectionConfig,
-  Where,
-  WhereField,
-  FilterOptionsProps,
 } from 'payload';
-import type { User } from '@/payload-types';
-
-type AccessArgs = {
-  req: {
-    user?: User | null;
-  };
-};
 
 export const Achievements: CollectionConfig = {
   slug: 'achievements',

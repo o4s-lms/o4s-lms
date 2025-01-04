@@ -1,5 +1,3 @@
-import { betterFetch } from '@better-fetch/fetch';
-import type { Session } from 'better-auth/types';
 import { NextResponse, type NextRequest } from 'next/server';
 import { checkRole } from './access/checkRole';
 
@@ -35,7 +33,7 @@ export default async function authMiddleware(request: NextRequest) {
     );
   }
 
-  const isAdmin = user.id === '676d9f913e197080a3dd3a48';
+  const isAdmin = checkRole('admin', user);
 
   if (!isAdmin && isAdminRoute) {
     return NextResponse.redirect(

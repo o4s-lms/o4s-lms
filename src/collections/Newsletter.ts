@@ -1,7 +1,6 @@
 import { admin } from '@/access/admin';
 import { anyone } from '@/access/anyone';
-import { authenticated } from '@/access/authenticated';
-import type { CollectionConfig } from 'payload';
+import type { AccessArgs, CollectionConfig } from 'payload';
 
 //import { generateEmailHTML } from '../email/generateEmailHTML'
 
@@ -9,9 +8,33 @@ export const Newsletter: CollectionConfig = {
   slug: 'newsletter-signups',
   access: {
     create: anyone,
-    delete: authenticated,
-    read: authenticated,
-    update: authenticated,
+    delete: admin,
+    read: ({ req: { user } }: AccessArgs) => {
+      if (!user) return false;
+      if (user.role === 'admin') return true;
+      return {
+        and: [
+          {
+            email: {
+              equals: user.email,
+            },
+          },
+        ],
+      };
+    },
+    update: ({ req: { user } }: AccessArgs) => {
+      if (!user) return false;
+      if (user.role === 'admin') return true;
+      return {
+        and: [
+          {
+            email: {
+              equals: user.email,
+            },
+          },
+        ],
+      };
+    },
   },
   admin: {
     group: 'Newsletters',

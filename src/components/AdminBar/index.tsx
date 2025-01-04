@@ -44,7 +44,7 @@ export const AdminBar: React.FC<{
   const router = useRouter();
 
   const onAuthChange = React.useCallback((user) => {
-    const isAdmin = checkRole(['admin'], user);
+    const isAdmin = checkRole('admin', user);
     if (isAdmin) setShow(user?.id);
   }, []);
 
