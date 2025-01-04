@@ -118,7 +118,7 @@ export function CourseContent({ userId, courseId }: CourseProps) {
 
   return (
     <Main fixed>
-      <div id="lesson-content" className="flex flex-1 flex-col space-y-2 overflow-hidden md:space-y-2 lg:flex-row lg:space-x-12 lg:space-y-0">
+      <div key="lesson-content" className="flex flex-1 flex-col space-y-2 overflow-hidden md:space-y-2 lg:flex-row lg:space-x-12 lg:space-y-0">
         <aside className="hidden lg:block top-0 lg:sticky lg:w-16">
           <Speeddial
             actionButtons={[
