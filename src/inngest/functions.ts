@@ -8,16 +8,7 @@ import { inngest } from './client';
     logger.error(errorMsg, error);
     throw error;
   }
-}; */
-
-export const helloWorld = inngest.createFunction(
-  { id: 'hello-world' },
-  { event: 'test/hello.world' },
-  async ({ event, step }) => {
-    await step.sleep('wait-a-moment', '1s');
-    return { message: `Hello ${event.data.email}!` };
-  },
-);
+}; 
 
 export const lastLogin = inngest.createFunction(
   { id: 'last-login' },
@@ -49,7 +40,7 @@ export const lastLogin = inngest.createFunction(
     });
     return result;
   },
-);
+); */
 
 export const lastLessonAccess = inngest.createFunction(
   { id: 'last-lesson-access' },

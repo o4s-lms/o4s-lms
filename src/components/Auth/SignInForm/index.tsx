@@ -68,13 +68,13 @@ export const AuthSignInForm = () => {
         if (theme !== user.theme)
           setTheme(user.theme === 'system' ? null : user.theme);
         if (currentLanguage !== user.language) setLanguage(user.language);
-        await fetch(
+        /**await fetch(
           `${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/lastLogin?userId=${user.id}`,
           {
             method: 'POST',
             credentials: 'include',
           },
-        );
+        );*/
         setIsLoading(false);
         if (redirect?.current) {
           router.push(redirect.current);

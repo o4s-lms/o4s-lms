@@ -1,6 +1,5 @@
-import type { CollectionConfig } from 'payload';
+import type { AccessArgs, CollectionConfig } from 'payload';
 
-import { authenticated } from '@/access/authenticated';
 import { anyone } from '@/access/anyone';
 import { admin } from '@/access/admin';
 import { render } from '@react-email/components';
@@ -14,9 +13,45 @@ export const Users: CollectionConfig = {
   access: {
     admin: admin,
     create: anyone,
-    delete: authenticated,
-    read: authenticated,
-    update: authenticated,
+    delete: ({ req: { user } }: AccessArgs) => {
+      if (!user) return false;
+      if (user.role === 'admin') return true;
+      return {
+        and: [
+          {
+            id: {
+              equals: user.id,
+            },
+          },
+        ],
+      };
+    },
+    read: ({ req: { user } }: AccessArgs) => {
+      if (!user) return false;
+      if (user.role === 'admin') return true;
+      return {
+        and: [
+          {
+            id: {
+              equals: user.id,
+            },
+          },
+        ],
+      };
+    },
+    update: ({ req: { user } }: AccessArgs) => {
+      if (!user) return false;
+      if (user.role === 'admin') return true;
+      return {
+        and: [
+          {
+            id: {
+              equals: user.id,
+            },
+          },
+        ],
+      };
+    },
   },
   admin: {
     group: 'System',
@@ -24,6 +59,7 @@ export const Users: CollectionConfig = {
     useAsTitle: 'name',
   },
   auth: {
+    useAPIKey: true,
     tokenExpiration: 7200, // How many seconds to keep the user logged in
     //verify: true, // Require email verification before being allowed to authenticate
     maxLoginAttempts: 5, // Automatically lock a user out after X amount of failed logins
@@ -41,6 +77,23 @@ export const Users: CollectionConfig = {
         return await render(<ResetPasswordEmail token={token} />);
       },
     },
+  },
+  hooks: {
+    afterLogin: [
+      async ({ req, user }) => {
+        await req.payload.update({
+          collection: 'users',
+          where: {
+            id: {
+              equals: user.id,
+            },
+          },
+          data: {
+            lastLogin: new Date().toISOString(),
+          },
+        });
+      },
+    ],
   },
   fields: [
     {
@@ -61,6 +114,12 @@ export const Users: CollectionConfig = {
       ],
       required: true,
       defaultValue: 'user',
+      access: {
+        update: ({ req: { user } }) => {
+          if (user?.role === 'admin') return true;
+          return false;
+        }
+      },
     },
     {
       name: 'avatar',
