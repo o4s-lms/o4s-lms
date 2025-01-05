@@ -1390,6 +1390,8 @@ export interface Transaction {
   tax: number;
   total: number;
   status: 'pending' | 'awaiting' | 'cancelled' | 'declined' | 'refunded' | 'disputed' | 'completed';
+  processed?: boolean | null;
+  processedAt?: string | null;
   user?: (string | null) | User;
   courses: {
     relationTo: 'courses';
@@ -2217,6 +2219,8 @@ export interface TransactionsSelect<T extends boolean = true> {
   tax?: T;
   total?: T;
   status?: T;
+  processed?: T;
+  processedAt?: T;
   user?: T;
   courses?: T;
   updatedAt?: T;

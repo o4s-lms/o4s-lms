@@ -94,6 +94,25 @@ export const Users: CollectionConfig = {
         });
       },
     ],
+    afterChange: [
+      async ({ req, doc, operation }) => {
+        // Set enrolledAt on creation
+        if (operation === 'create') {
+          // update eventual existing transactions
+          await req.payload.update({
+            collection: 'transactions',
+            where: {
+              email: {
+                equals: doc.email,
+              },
+            },
+            data: {
+              user: doc,
+            },
+          });
+        }
+      },
+    ],
   },
   fields: [
     {
@@ -118,7 +137,7 @@ export const Users: CollectionConfig = {
         update: ({ req: { user } }) => {
           if (user?.role === 'admin') return true;
           return false;
-        }
+        },
       },
     },
     {

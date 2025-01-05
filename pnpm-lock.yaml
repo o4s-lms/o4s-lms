@@ -185,6 +185,9 @@ importers:
       prism-react-renderer:
         specifier: ^2.4.1
         version: 2.4.1(react@19.0.0)
+      qs-esm:
+        specifier: ^7.0.2
+        version: 7.0.2
       react:
         specifier: ^19.0.0
         version: 19.0.0

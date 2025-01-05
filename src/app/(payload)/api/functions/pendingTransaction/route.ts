@@ -5,14 +5,13 @@ import { inngest } from '@/inngest/client'; // Import our client
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const email = searchParams.get('email');
+  const body = await request.json();
   // Send your event payload to Inngest
   await inngest.send({
-    name: 'auth/password.updated',
-    user: {
-      email: email,
-    }
+    name: 'transactions/pending.transaction',
+    data: {
+      transaction: body,
+    },
   });
 
   return NextResponse.json({ message: 'Event sent!' });

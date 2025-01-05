@@ -85,6 +85,7 @@
     "payload": "^3.13.0",
     "payload-admin-bar": "^1.0.6",
     "prism-react-renderer": "^2.4.1",
+    "qs-esm": "^7.0.2",
     "react": "^19.0.0",
     "react-day-picker": "8.10.1",
     "react-dom": "^19.0.0",

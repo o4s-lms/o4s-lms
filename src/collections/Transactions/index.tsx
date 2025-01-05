@@ -29,6 +29,70 @@ export const Transactions: CollectionConfig = {
     defaultColumns: ['email', 'provider', 'transactionId', 'total'],
     useAsTitle: 'email',
   },
+  hooks: {
+    beforeChange: [
+      async ({ data, originalDoc, operation }) => {
+
+        // Handle status changes
+        if (operation === 'update' && data.status && originalDoc.processed) {
+          
+          switch (data.status) {
+            
+            case 'disputed':
+              // transaction disputed - revoke the student access
+              break;
+            case 'refunded':
+              // transaction refunded - revoke the student access
+              break;
+          }
+        }
+
+        return data; 
+      },
+    ],
+    afterChange: [
+      async ({ doc, operation }) => {
+        
+        if (operation === 'create' && doc.status === 'completed') {
+          const f = doc.user ? 'processTransaction' : 'waitUserSignUp';
+       
+          await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/${f}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(doc),
+        
+          });
+        }
+
+        if (operation === 'update' && doc.processed === false) {
+          
+          switch (doc.status) {
+            case 'completed':
+              const f = doc.user ? 'processTransaction' : 'waitUserSignUp';
+              await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/${f}`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify(doc),
+            
+              });
+              break;
+            case 'disputed':
+              // transaction disputed - revoke the student access
+              break;
+            case 'refunded':
+              // transaction refunded - revoke the student access
+              break;
+          }
+        }
+      },
+    ],
+  },
   fields: [
     {
       name: 'email',
@@ -106,6 +170,21 @@ export const Transactions: CollectionConfig = {
       ],
       required: true,
       defaultValue: 'pending',
+    },
+    {
+      name: 'processed',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'processedAt',
+      type: 'date',
+      admin: {
+        position: 'sidebar',
+      },
     },
     {
       name: 'user',

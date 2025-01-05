@@ -6,13 +6,15 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const email = searchParams.get('email');
+  const userId = searchParams.get('userId');
+  const role = searchParams.get('role');
   // Send your event payload to Inngest
   await inngest.send({
-    name: 'auth/password.updated',
+    name: 'auth/update.user.role',
     user: {
-      email: email,
-    }
+      id: userId,
+      role: role,
+    },
   });
 
   return NextResponse.json({ message: 'Event sent!' });

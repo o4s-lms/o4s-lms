@@ -171,6 +171,7 @@ export const Enrollments: CollectionConfig = {
       async ({ doc, operation, req }) => {
         // Create initial progress record on enrollment
         if (operation === 'create') {
+          await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/function/updateUserRole?userId=${doc.student}&role=student`);
           const progress = await req.payload.create({
             collection: 'course-progress',
             data: {
