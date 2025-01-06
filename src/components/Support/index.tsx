@@ -39,47 +39,68 @@ import { useForm } from 'react-hook-form';
 import { usePathname } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { createSupportTicket } from '@/utilities/support';
-import type { SupportTicket } from '@/payload-types';
+import {
+  createSupportTicket,
+  type CreateSupportTicketData,
+} from '@/utilities/support';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { Check, ChevronsUpDown, Link } from 'lucide-react';
+import { Check, ChevronsUpDown, Link, Loader2 as Spinner } from 'lucide-react';
 import { Command, CommandGroup, CommandItem, CommandList } from '../ui/command';
 import { cn } from '@/lib/utils';
 
 const supportFormSchema = z.object({
   url: z.string(),
-  description: z.string(),
-  name: z.string().nullable(),
-  email: z.string().email().nullable(),
+  description: z.string().min(30),
+  guest: z
+    .object({
+      name: z.string(),
+      email: z.string().email(),
+    })
+    .optional(),
   category: z.enum(['other', 'bug', 'account', 'payments', 'learn']),
   priority: z.enum(['low', 'medium', 'high']),
+  status: z.enum(['new', 'done', 'canceled', 'unanswered']),
 });
 
 type SupportFormValues = z.infer<typeof supportFormSchema>;
 
+interface Guest {
+  name: string;
+  email: string;
+}
+
 export function Support(props: ButtonHTMLAttributes<HTMLButtonElement>) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [guest, setGuest] = React.useState<Guest | undefined>({
+    name: '',
+    email: '',
+  });
   const id = React.useId();
   const pathname = usePathname();
   const { user, isSignedIn, isLoaded } = useAuth();
 
-  const defaultValues: Partial<SupportFormValues> = {
+  const defaultValues: SupportFormValues = {
     url: pathname as string,
     description: '',
-    name: isSignedIn ? user?.name : null,
-    email: isSignedIn ? user?.email : null,
     category: 'other',
     priority: 'medium',
+    status: 'new',
+    guest: guest,
   };
 
   const form = useForm<SupportFormValues>({
     resolver: zodResolver(supportFormSchema),
     defaultValues,
-    mode: 'onChange',
   });
 
+  React.useEffect(() => {
+    if (isSignedIn) {
+      form.setValue('guest', { name: user?.name, email: user?.email });
+    }
+  }, [form, isSignedIn, user?.email, user?.name]);
+
   const create = useMutation({
-    mutationFn: (data: Partial<SupportTicket>) => createSupportTicket(data),
+    mutationFn: (data: CreateSupportTicketData) => createSupportTicket(data),
     onSuccess: () => {
       toast.success('Support ticket created');
       form.reset(defaultValues);
@@ -89,35 +110,30 @@ export function Support(props: ButtonHTMLAttributes<HTMLButtonElement>) {
     },
   });
 
-  const onSubmit = React.useCallback(
-    async (values: SupportFormValues) => {
-      setIsLoading(true);
-      const data: Partial<SupportTicket> = {
-        url: pathname,
-        description: values.description,
-        category: values.category,
-        priority: values.priority,
-        status: 'new',
-        guest: { name: values.name, email: values.email },
-        user: user ?? null,
-      };
+  const onSubmit = async (values: SupportFormValues) => {
+    setIsLoading(true);
+    const data: CreateSupportTicketData = {
+      ...values,
+      user: user ?? undefined,
+    };
 
-      //await create.mutateAsync(data);
-      toast.info('Form values', {
-        description: `${JSON.stringify(values)}`,
-      });
-      form.reset(defaultValues);
-      setIsLoading(false);
-    },
-    [create, pathname, user],
-  );
+    await create.mutateAsync(data);
+    /**toast.info('Form values', {
+      description: `${JSON.stringify(values)}`,
+    });
+    form.reset(defaultValues);*/
+    setIsLoading(false);
+  };
 
   return (
     <Dialog>
       <DialogTrigger {...props} />
       <DialogPortal>
         <DialogOverlay className="bg-fd-background/50 data-[state=closed]:animate-fd-fade-out data-[state=open]:animate-fd-fade-in fixed inset-0 z-50 backdrop-blur-sm" />
-        <DialogContent className="bg-fd-popover text-fd-popover-foreground data-[state=closed]:animate-fd-dialog-out data-[state=open]:animate-fd-dialog-in fixed left-1/2 z-50 my-[5vh] flex max-h-[90dvh] w-[98vw] max-w-[860px] origin-left -translate-x-1/2 flex-col rounded-lg border shadow-lg focus-visible:outline-none">
+        <DialogContent
+          aria-describedby={undefined}
+          className="bg-fd-popover text-fd-popover-foreground data-[state=closed]:animate-fd-dialog-out data-[state=open]:animate-fd-dialog-in fixed left-1/2 z-50 my-[5vh] flex max-h-[90dvh] w-[98vw] max-w-[860px] origin-left -translate-x-1/2 flex-col rounded-lg border shadow-lg focus-visible:outline-none"
+        >
           <DialogTitle className="sr-only">Support</DialogTitle>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -248,7 +264,10 @@ export function Support(props: ButtonHTMLAttributes<HTMLButtonElement>) {
                     />
                   </div>
                   <div className="grid gap-2">
-                    <p><Link /> url {defaultValues.url}</p>
+                    <div className="flex">
+                      <Link className="mr-2 h-3 w-3 opacity-50" />
+                      {defaultValues.url}
+                    </div>
                   </div>
                   <FormField
                     control={form.control}
@@ -263,6 +282,7 @@ export function Support(props: ButtonHTMLAttributes<HTMLButtonElement>) {
                             {...field}
                           />
                         </FormControl>
+                        <FormMessage className="text-red-600" />
                       </div>
                     )}
                   />
@@ -270,30 +290,31 @@ export function Support(props: ButtonHTMLAttributes<HTMLButtonElement>) {
                     <>
                       <FormField
                         control={form.control}
-                        name="name"
+                        name="guest.name"
                         render={({ field }) => (
                           <div className="grid gap-2">
                             <FormItem>
                               <FormLabel>Name</FormLabel>
                               <FormControl>
                                 <Input
-                                required
-                                placeholder="Your name"
-                                {...field}
-                                disabled={isLoading}
+                                  required
+                                  placeholder="Your name"
+                                  {...field}
+                                  disabled={isLoading}
                                 />
                               </FormControl>
-                              <FormMessage />
+                              <FormMessage className="text-red-600" />
                             </FormItem>
                           </div>
                         )}
                       />
                       <FormField
                         control={form.control}
-                        name="email"
+                        name="guest.email"
                         render={({ field }) => (
                           <div className="grid gap-2">
                             <FormItem>
+                              <FormLabel>Email</FormLabel>
                               <FormControl>
                                 <Input
                                   required
@@ -314,11 +335,16 @@ export function Support(props: ButtonHTMLAttributes<HTMLButtonElement>) {
                 </CardContent>
                 <CardFooter className="justify-between space-x-2">
                   <DialogClose asChild>
-                    <Button variant="ghost" size="sm">
+                    <Button variant="ghost" size="sm" disabled={isLoading}>
                       Cancel
                     </Button>
                   </DialogClose>
-                  <Button size="sm">Submit</Button>
+                  <Button size="sm" disabled={isLoading}>
+                    {isLoading && (
+                      <Spinner className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    Submit
+                  </Button>
                 </CardFooter>
               </Card>
             </form>
