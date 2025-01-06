@@ -70,6 +70,8 @@ export const pendingTransaction = inngest.createFunction(
   { id: 'pending-transaction' },
   { event: 'transactions/pending.transaction' },
   async ({ event, step, payload }) => {
+    const { transaction } = event.data;
+
     const transactionCompleted = await step.waitForEvent(
       'wait-for-transaction-completed',
       {
@@ -83,7 +85,7 @@ export const pendingTransaction = inngest.createFunction(
       await step.run('cancel-transaction', async () => {
         try {
           await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_URL}/api/transactions/${event.data.transaction.id}`,
+            `${process.env.NEXT_PUBLIC_SERVER_URL}/api/transactions/${transaction.id}`,
             {
               method: 'PATCH',
               headers: {
@@ -97,11 +99,11 @@ export const pendingTransaction = inngest.createFunction(
           );
           // send message to the user
           await payload.sendEmail({
-            to: event.data.transaction.email,
+            to: transaction.email,
             subject: 'Transaction cancelled',
             html: await render(
               <TransactionCancelledEmail
-                transaction={event.data.transaction}
+                transaction={transaction}
               />,
             ),
           });
@@ -112,7 +114,7 @@ export const pendingTransaction = inngest.createFunction(
     } else {
       await step.sendEvent('send-process-transaction-event', {
         name: 'transactions/process.transaction',
-        data: { transaction: event.data.transaction },
+        data: { transaction: transaction },
       });
     }
   },
@@ -122,17 +124,19 @@ export const processTransaction = inngest.createFunction(
   { id: 'process-transaction' },
   { event: 'transactions/process.transaction' },
   async ({ event, step, payload }) => {
+    const { transaction } = event.data;
+
     await step.sendEvent('send-update-role-event', {
       name: 'auth/update.user.role',
-      user: { id: event.data.transaction.user, role: 'student' },
+      user: { id: transaction.user, role: 'student' },
     });
     await step.run('create-courses-enrollments', async () => {
-      event.data.transaction.courses.map(async (course) => {
+      transaction.courses.map(async (course) => {
         try {
           await payload.create({
             collection: 'enrollments',
             data: {
-              student: event.data.transaction.user,
+              student: transaction.user,
               course: course.value,
               status: 'active',
               enrolledAt: new Date().toISOString(),
@@ -144,10 +148,10 @@ export const processTransaction = inngest.createFunction(
       });
     });
 
-    const transaction = await step.run('update-transaction-to-processed', async () => {
+    const t = await step.run('update-transaction-to-processed', async () => {
       try {
         const result = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/transactions/${event.data.transaction.id}`,
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/transactions/${transaction.id}`,
           {
             method: 'PATCH',
             headers: {
@@ -169,7 +173,7 @@ export const processTransaction = inngest.createFunction(
 
     return {
       message: 'Transaction processed',
-      transaction: transaction,
+      transaction: t,
     };
   },
 );
