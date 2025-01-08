@@ -5,7 +5,7 @@ import { TopNav } from '@/components/Layout/TopNav';
 import { ProfileDropdown } from '@/components/Layout/ProfileDropdown';
 import { ThemeSwitch } from '@/components/ThemeSwitch';
 import { createPayloadClient } from '@/lib/payload';
-import { AppAdminSupport } from '@/components/Support/AppAdmin';
+import { AppAdminSupport } from '@/components/AppAdmin/Support';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),

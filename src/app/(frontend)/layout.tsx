@@ -33,7 +33,7 @@ export default async function RootLayout({ children }: Props) {
   const staticData = await getStaticData([locale]);
 
   return (
-    <html className={font.className} lang="en" suppressHydrationWarning>
+    <html className={font.className} lang={locale} suppressHydrationWarning>
       <head>
         <InitTheme />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
