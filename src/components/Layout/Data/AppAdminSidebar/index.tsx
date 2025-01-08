@@ -21,7 +21,7 @@ import {
   IconUsers,
   IconCreditCard,
 } from '@tabler/icons-react';
-import { type SidebarData } from '@/components/Layout/types';
+import type { SidebarData } from '@/components/Layout/types';
 import { getTranslate } from '@/tolgee/server';
 
 export const sidebarData = async (): Promise<SidebarData> => {
@@ -37,25 +37,9 @@ export const sidebarData = async (): Promise<SidebarData> => {
           icon: IconUsers,
         },
         {
-          title: t('settings'),
-          icon: IconSettings,
-          items: [
-            {
-              title: t('account'),
-              url: '/dashboard/settings/account',
-              icon: IconTool,
-            },
-            {
-              title: t('appearance'),
-              url: '/dashboard/settings/appearance',
-              icon: IconPalette,
-            },
-            {
-              title: t('notifications'),
-              url: '/dashboard/settings/notifications',
-              icon: IconNotification,
-            },
-          ],
+          title: 'Support tickets',
+          url: '/app-admin/support',
+          icon: IconMessageCircleQuestion,
         },
         {
           title: t('billing'),

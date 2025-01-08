@@ -26,3 +26,14 @@ export async function createSupportTicket(data: CreateSupportTicketData): Promis
 
   return ticket ?? null
 }
+
+export async function getSupportTickets(): Promise<SupportTicket[]> {
+  const payload = await createPayloadClient();
+
+  const tickets = await payload.find({
+    collection: 'support-tickets',
+    depth: 1,
+  })
+
+  return tickets.docs
+}

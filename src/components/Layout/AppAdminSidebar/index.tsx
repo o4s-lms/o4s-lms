@@ -12,7 +12,7 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar';
 import { NavGroup } from '@/components/Layout/NavGroup';
-import { NavUser } from '@/components/Layout/NavUser';
+// import { NavUser } from '@/components/Layout/NavUser';
 import { sidebarData } from '@/components/Layout/Data/AppAdminSidebar';
 import { VERSION } from '@/lib/constants';
 import { useEffect, useState } from 'react';
@@ -63,7 +63,7 @@ export function AppAdminSidebar({ ...props }: React.ComponentProps<typeof Sideba
         </SidebarContent>
       )}
       <SidebarFooter>
-        <NavUser />
+        
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
