@@ -5,7 +5,7 @@ import { Header } from '@/components/Layout/Header';
 import { TopNav } from '@/components/Layout/TopNav';
 import { LanguageSelector } from '@/components/LangSelector.';
 import { ThemeSwitch } from '@/components/ThemeSwitch';
-import { ProfileDropdown } from '@/components/ProfileDropdown';
+import { ProfileDropdown } from '@/components/Layout/ProfileDropdown';
 import { currentUser } from '@/lib/session';
 
 export const metadata: Metadata = {

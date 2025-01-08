@@ -19,10 +19,14 @@ import { getClientSideURL } from '@/utilities/getURL';
 import { createAvatar } from '@dicebear/core';
 import { lorelei } from '@dicebear/collection';
 import { StaticImageData } from 'next/image';
+import { checkRole } from '@/access/checkRole';
+import { BadgeCheck, BookUser, CreditCard, LogOut, Settings } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export function ProfileDropdown() {
   const { user, isSignedIn, isLoaded } = useAuth();
   const { t } = useTranslate();
+  const router = useRouter();
 
   let src: StaticImageData | string = '';
 
@@ -65,27 +69,47 @@ export function ProfileDropdown() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
+          {checkRole('admin', user) && (
+            <>
+              <DropdownMenuItem asChild>
+                <Link href="/app-admin">
+                  <BadgeCheck />
+                  App Admin
+                  <DropdownMenuShortcut>⇧⌘A</DropdownMenuShortcut>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+            </>
+          )}
           <DropdownMenuItem asChild>
             <Link href="/dashboard/courses">
+              <BookUser />
               {t('courses')}
               <DropdownMenuShortcut>⇧⌘C</DropdownMenuShortcut>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href="/settings">
+              <CreditCard />
               {t('billing')}
               <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href="/dashboard/settings">
+            <Link href="/dashboard/settings/account">
+              <Settings />
               {t('settings')}
               <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            router.push(`/log-out`);
+          }}
+        >
+          <LogOut />
           {t('log-out')}
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>

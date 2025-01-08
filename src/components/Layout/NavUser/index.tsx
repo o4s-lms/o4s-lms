@@ -29,6 +29,7 @@ import { getClientSideURL } from '@/utilities/getURL';
 import { createAvatar } from '@dicebear/core';
 import { lorelei } from '@dicebear/collection';
 import { useRouter } from 'next/navigation';
+import { checkRole } from '@/access/checkRole';
 
 export function NavUser() {
   const { user, isSignedIn, isLoaded } = useAuth();
@@ -96,6 +97,17 @@ export function NavUser() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
+              {checkRole('admin', user) && (
+                <>
+                  <DropdownMenuItem asChild>
+                    <Link href="/app-admin">
+                      <BadgeCheck />
+                      App Admin
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </>
+              )}
               <DropdownMenuItem asChild>
                 <Link href="/dashboard/settings/account">
                   <BadgeCheck />

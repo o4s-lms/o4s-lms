@@ -3,7 +3,7 @@ import ComingSoon from '@/components/ComingSoon';
 import { LanguageSelector } from '@/components/LangSelector.';
 import { Header } from '@/components/Layout/Header';
 import { TopNav } from '@/components/Layout/TopNav';
-import { ProfileDropdown } from '@/components/ProfileDropdown';
+import { ProfileDropdown } from '@/components/Layout/ProfileDropdown';
 import { ThemeSwitch } from '@/components/ThemeSwitch';
 
 export const metadata: Metadata = {

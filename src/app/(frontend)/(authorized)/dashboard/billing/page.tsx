@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { LanguageSelector } from '@/components/LangSelector.';
 import { Header } from '@/components/Layout/Header';
 import { TopNav } from '@/components/Layout/TopNav';
-import { ProfileDropdown } from '@/components/ProfileDropdown';
+import { ProfileDropdown } from '@/components/Layout/ProfileDropdown';
 import { ThemeSwitch } from '@/components/ThemeSwitch';
 import { createPayloadClient } from '@/lib/payload';
 import { redirect } from 'next/navigation';
