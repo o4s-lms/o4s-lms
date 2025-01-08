@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import ComingSoon from '@/components/ComingSoon';
 import { LanguageSelector } from '@/components/LangSelector.';
 import { Header } from '@/components/Layout/Header';
 import { TopNav } from '@/components/Layout/TopNav';

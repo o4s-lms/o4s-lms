@@ -1,4 +1,4 @@
-import { AppSidebar } from '@/components/Layout/AppSidebar';
+import { AppAdminSidebar } from '@/components/Layout/AppAdminSidebar';
 import SkipToMain from '@/components/SkipToMain';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { cn } from '@/lib/utils';
@@ -12,7 +12,7 @@ const Layout = (props: Props) => {
   return (
     <SidebarProvider>
       <SkipToMain />
-      <AppSidebar />
+      <AppAdminSidebar />
       <div
         id="content"
         className={cn(
