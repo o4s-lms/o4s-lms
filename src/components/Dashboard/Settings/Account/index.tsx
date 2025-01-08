@@ -13,6 +13,20 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
+  Dropzone,
+  DropZoneArea,
+  DropzoneDescription,
+  DropzoneFileList,
+  DropzoneFileListItem,
+  DropzoneFileMessage,
+  DropzoneTrigger,
+  DropzoneMessage,
+  DropzoneRemoveFile,
+  DropzoneRetryFile,
+  InfiniteProgress,
+  useDropzone,
+} from '@/components/ui/dropzone';
+import {
   Command,
   CommandEmpty,
   CommandGroup,
@@ -37,6 +51,9 @@ import {
 } from '@/components/ui/popover';
 import { User } from '@/payload-types';
 import { setLanguage } from '@/tolgee/language';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { getClientSideURL } from '@/utilities/getURL';
+import { StaticImageData } from 'next/image';
 
 const languages = [
   { label: 'Português', value: 'pt' },
@@ -48,15 +65,12 @@ const languages = [
 const accountFormSchema = z.object({
   name: z
     .string()
-    .min(2, {
-      message: 'Name must be at least 2 characters.',
+    .min(8, {
+      message: 'Name must be at least 8 characters.',
     })
     .max(30, {
       message: 'Name must not be longer than 30 characters.',
     }),
-  dob: z.date({
-    required_error: 'A date of birth is required.',
-  }),
   language: z.enum(['pt', 'en', 'fr', 'es'], {
     required_error: 'Please select a language.',
   }),
@@ -67,11 +81,12 @@ type AccountFormValues = z.infer<typeof accountFormSchema>;
 export function AccountForm({ currentUser }: { currentUser: User }) {
   const [user, setUser] = React.useState<User>(currentUser);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  
+  let src: StaticImageData | string = '';
 
   const defaultValues: Partial<AccountFormValues> = {
     name: user.name,
     language: user.language,
-    // dob: new Date("2023-01-23"),
   };
 
   const form = useForm<AccountFormValues>({
@@ -140,8 +155,99 @@ export function AccountForm({ currentUser }: { currentUser: User }) {
     }
   }, []);
 
+  const dropzone = useDropzone({
+    onDropFile: async (file: File) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/avatar`,
+        {
+          method: 'POST',
+          credentials: 'include',
+          body: formData,
+          /**
+           * Do not manually add the Content-Type Header
+           * the browser will handle this.
+           *
+           * headers: {
+           *  'Content-Type': 'multipart/form-data'
+           * }
+           */
+        },
+      );
+
+      if (response.ok) {
+        const json = await response.json();
+
+        await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/${user.id}`,
+          {
+            // Make sure to include cookies with fetch
+            body: JSON.stringify({
+              avatar: json.doc.id,
+            }),
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            method: 'PATCH',
+          },
+        );
+
+        return {
+          status: 'success',
+          result: json.doc.url,
+        };
+      }
+
+      return {
+        status: 'error',
+        error: 'Something is wrong',
+      };
+    },
+    validation: {
+      accept: {
+        'image/*': ['.png', '.jpg', '.jpeg'],
+      },
+      maxSize: 1024 * 1024,
+      maxFiles: 1,
+    },
+    shiftOnMaxFiles: true,
+  });
+
+  if (user?.avatar && typeof user?.avatar === 'object') {
+    const { url } = user?.avatar;
+
+    src = `${getClientSideURL()}${url}`;
+  }
+
+  const avatarSrc = dropzone.fileStatuses[0]?.result ?? src;
+  const isPending = dropzone.fileStatuses[0]?.status === 'pending';
+
   return (
     <>
+      <div className="flex flex-col pb-8">
+        <Dropzone {...dropzone}>
+          <div className="flex justify-between">
+            <DropzoneMessage />
+          </div>
+          <DropZoneArea>
+            <DropzoneTrigger className="flex gap-8 bg-transparent text-sm">
+              <Avatar className={cn(isPending && 'animate-pulse')}>
+                <AvatarImage className="object-cover" src={avatarSrc} />
+                <AvatarFallback>JG</AvatarFallback>
+              </Avatar>
+              <div className="flex flex-col gap-1 font-semibold">
+                <p>Upload a new avatar</p>
+                <p className="text-xs text-muted-foreground">
+                  Please select an image smaller than 1MB
+                </p>
+              </div>
+            </DropzoneTrigger>
+          </DropZoneArea>
+        </Dropzone>
+      </div>
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
@@ -161,50 +267,7 @@ export function AccountForm({ currentUser }: { currentUser: User }) {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="dob"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Date of birth</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={'outline'}
-                        className={cn(
-                          'w-[240px] pl-3 text-left font-normal',
-                          !field.value && 'text-muted-foreground',
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, 'PPP')
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) =>
-                        date > new Date() || date < new Date('1900-01-01')
-                      }
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-                <FormDescription>
-                  Your date of birth is used to calculate your age.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          
           <FormField
             control={form.control}
             name="language"
