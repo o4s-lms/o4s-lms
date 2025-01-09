@@ -4,22 +4,15 @@ import { Header } from '@/components/Layout/Header';
 import { TopNav } from '@/components/Layout/TopNav';
 import { ProfileDropdown } from '@/components/Layout/ProfileDropdown';
 import { ThemeSwitch } from '@/components/ThemeSwitch';
-import { createPayloadClient } from '@/lib/payload';
-import { AppAdminSupport } from '@/components/AppAdmin/Support';
+import { AppAdminDashboard } from '@/components/AppAdmin';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
-  title: 'Support | O4S LMS',
+  title: 'App Admin Dashboard | O4S LMS',
   description: 'Get started with your courses.',
 };
 
-export default async function AppAdminSupportPage() {
-  const payload = await createPayloadClient();
-
-  const tickets = await payload.find({
-    collection: 'support-tickets',
-    depth: 2,
-  });
+export default async function AppAdminPage() {
 
   return (
     <>
@@ -33,7 +26,7 @@ export default async function AppAdminSupportPage() {
           <ProfileDropdown />
         </div>
       </Header>
-      <AppAdminSupport tickets={tickets.docs} />
+      <AppAdminDashboard />
     </>
   );
 }
