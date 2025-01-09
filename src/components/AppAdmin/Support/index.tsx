@@ -32,16 +32,16 @@ import { StaticImageData } from 'next/image';
 //import { conversations } from './data/convo.json'
 
 interface Conversations {
-  id: string
-  profile: string
-  fullName: string
-  title: string
+  id: string;
+  profile: string;
+  fullName: string;
+  title: string;
   messages: {
-    id: string
-    message: string
-    timestamp: string
-    sender: string
-  }[]
+    id: string;
+    message: string;
+    timestamp: string;
+    sender: string;
+  }[];
 }
 
 type ChatUser = Conversations[number];
@@ -53,25 +53,31 @@ export function AppAdminSupport({ tickets }: { tickets: SupportTicket[] }) {
     React.useState<ChatUser | null>(null);
 
   const conversations = tickets.map((ticket) => {
-    let src: StaticImageData | string = '';
-
     const user = (ticket.user as User) ?? null;
 
-    if (user?.avatar && typeof user?.avatar === 'object') {
-      const { url } = user?.avatar;
+    const src = () => {
+      let src: StaticImageData | string = '';
 
-      src = `${getClientSideURL()}${url}`;
-    } else {
-      src = createAvatar(lorelei, {
-        seed: user ? user.name : ticket.guest?.name,
-        size: 128,
-        // ... other options
-      }).toDataUri();
-    }
+      if (user?.avatar && typeof user?.avatar === 'object') {
+        const { url } = user?.avatar;
+
+        src = `${getClientSideURL()}${url}`;
+      }
+
+      if (src === '') {
+        src = createAvatar(lorelei, {
+          seed: user?.name || '',
+          size: 128,
+          // ... other options
+        }).toDataUri();
+      }
+
+      return src;
+    };
 
     return {
       id: ticket.id,
-      profile: src,
+      profile: src(),
       fullName: user ? user.name : ticket.guest?.name,
       title: user ? 'User' : 'Guest',
       messages: ticket.messages,

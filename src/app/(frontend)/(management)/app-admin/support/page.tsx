@@ -18,7 +18,7 @@ export default async function AppAdminSupportPage() {
 
   const tickets = await payload.find({
     collection: 'support-tickets',
-    depth: 1,
+    depth: 2,
   });
 
   return (

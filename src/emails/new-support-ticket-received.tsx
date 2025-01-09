@@ -17,7 +17,11 @@ import type { SupportTicket } from '@/payload-types';
 
 export const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
-export function NewSupportTicketEmail({ ticket }: { ticket: SupportTicket}) {
+export function NewSupportTicketReceivedEmail({
+  ticket,
+}: {
+  ticket: SupportTicket;
+}) {
   return (
     <Html>
       <Head />
@@ -37,28 +41,40 @@ export function NewSupportTicketEmail({ ticket }: { ticket: SupportTicket}) {
               </Section>
 
               <Section className="mb-[32px] mt-[32px]">
-              <Text className="mb-8 text-[14px] font-medium leading-[24px] text-black">
-                  Hi,
+                <Text className="mb-8 text-[14px] font-medium leading-[24px] text-black">
+                  Hi {ticket.guest?.name},
                 </Text>
               </Section>
 
-
               <Section className="mb-[32px] mt-[32px] text-center">
                 <Text className="mb-8 text-[14px] font-medium leading-[24px] text-black">
-                  New support Ticket ID: {ticket.id}
+                  We received your support Ticket ID: {ticket.id}
                 </Text>
                 <Text className="mb-8 text-[14px] font-medium leading-[24px] text-black">
                   {ticket.messages[0].message}
                 </Text>
 
                 <Text className="text-[14px] font-medium leading-[24px] text-black">
-                  <Link
-                    href={`${BASE_URL}/app-admin/support`}
-                    target="_blank"
-                    className="text-[#2754C5] underline"
-                  >
-                    View the support tickets
-                  </Link>
+                  {ticket.key ? (
+                    <Link
+                      href={`${BASE_URL}/support?key=${ticket.key}`}
+                      target="_blank"
+                      className="text-[#2754C5] underline"
+                    >
+                      View the support ticket
+                    </Link>
+                  ) : (
+                    <Link
+                      href={`${BASE_URL}/dashboard/support`}
+                      target="_blank"
+                      className="text-[#2754C5] underline"
+                    >
+                      View the support ticket
+                    </Link>
+                  )}
+                </Text>
+                <Text className="mb-8 text-[14px] font-medium leading-[24px] text-black">
+                  We will reply as soon as possible (no more that 24 hours)
                 </Text>
               </Section>
 

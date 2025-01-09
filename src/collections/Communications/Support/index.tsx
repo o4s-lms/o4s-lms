@@ -5,6 +5,7 @@ import { anyone } from '@/access/anyone';
 import { NewSupportTicketEmail } from '@/emails/new-support-ticket';
 import { render } from '@react-email/components';
 import { PRIORITY, TICKETS_CATEGORY, TICKETS_STATUS } from '@/lib/constants';
+import { NewSupportTicketReceivedEmail } from '@/emails/new-support-ticket-received';
 
 export const SupportTickets: CollectionConfig = {
   slug: 'support-tickets',
@@ -118,6 +119,11 @@ export const SupportTickets: CollectionConfig = {
     afterChange: [
       async ({ req, doc, operation }) => {
         if (operation === 'create') {
+          await req.payload.sendEmail({
+            to: doc.guest.email,
+            subject: 'New support ticket received',
+            html: await render(<NewSupportTicketReceivedEmail ticket={doc} />),
+          });
           await req.payload.sendEmail({
             to: process.env.SUPPORT_TO,
             subject: 'New support ticket received',

@@ -118,7 +118,7 @@ export function Support(props: ButtonHTMLAttributes<HTMLButtonElement>) {
     const data: CreateSupportTicketData = {
       ...values,
       user: user ?? undefined,
-      key: user ? undefined : crypto.randomBytes(64).toString('hex'),
+      key: user ? undefined : crypto.randomBytes(32).toString('hex'),
       messages: [
         {
           message: values.description,
