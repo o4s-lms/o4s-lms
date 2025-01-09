@@ -33,8 +33,8 @@ services:
     ports:
       - '4848:4848'
     volumes:
-      - ./zero-schema.json:/data/schema/zero-schema.json
-      - zero_data:/data/db
+      - ./src/zero/zero-schema.json:/data/schema/zero-schema.json
+      - zero_data:/data
 
   #formbricks:
   #  image: ghcr.io/formbricks/formbricks:latest

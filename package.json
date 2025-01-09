@@ -22,7 +22,7 @@
     "reinstall": "cross-env NODE_OPTIONS=--no-deprecation rm -rf node_modules && rm pnpm-lock.yaml && pnpm --ignore-workspace install",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "dev:zero-cache": "zero-cache-dev -p src/zero/schema.ts",
-    "zero-build-schema": "tsx src/zero/schema.ts",
+    "zero-build-schema": "zero-build-schema -p src/zero/schema.ts -o src/zero/zero-schema.json",
     "ui": "pnpm dlx shadcn@latest"
   },
   "dependencies": {

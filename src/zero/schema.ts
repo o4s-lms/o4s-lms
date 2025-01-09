@@ -12,16 +12,6 @@ import {
 
 const { enumeration, json } = column;
 
-const userSchema = createTableSchema({
-  tableName: 'user',
-  columns: {
-    id: 'string',
-    name: 'string',
-    roles: json<['string']>(),
-  },
-  primaryKey: 'id',
-});
-
 const notificationSchema = createTableSchema({
   tableName: 'notification',
   columns: {
@@ -43,60 +33,43 @@ const notificationSchema = createTableSchema({
     reference: json<{ collection: 'string'; id: 'string' }>(),
   },
   primaryKey: 'id',
-  relationships: {
-    to: {
-      sourceField: 'recipient',
-      destSchema: userSchema,
-      destField: 'id',
-    }
-  },
 });
 
 export const schema = createSchema({
   version: 1,
   tables: {
-    user: userSchema,
     notification: notificationSchema,
   },
 });
 
 export type Schema = typeof schema;
 export type Notification = Row<typeof notificationSchema>;
-export type User = Row<typeof schema.tables.user>;
-
 
 type AuthData = {
-  sub: string | null;
+  id: string | null;
 };
 
 export const permissions = definePermissions<AuthData, Schema>(schema, () => {
-  /**const allowIfLoggedIn = (
+
+  const allowIfAdmin = (
     authData: AuthData,
     { cmpLit }: ExpressionBuilder<TableSchema>,
-  ) => cmpLit(authData.sub, 'IS NOT', null);
+  ) => cmpLit(authData.id, '=', '676d9f913e197080a3dd3a48');
 
-  const allowIfMessageSender = (
+  const allowIfMessageRecipient = (
     authData: AuthData,
-    { cmp }: ExpressionBuilder<typeof messageSchema>,
-  ) => cmp('senderID', '=', authData.sub ?? ''); */
+    { cmp }: ExpressionBuilder<typeof notificationSchema>,
+  ) => cmp('recipient', '=', authData.id ?? '');
 
   return {
     notification: {
       row: {
-        insert: ANYONE_CAN,
+        read: allowIfMessageRecipient,
+        insert: allowIfAdmin,
         update: {
-          preMutation: ANYONE_CAN,
+          preMutation: allowIfMessageRecipient,
         },
-        delete: ANYONE_CAN,
-      },
-    },
-    user: {
-      row: {
-        insert: ANYONE_CAN,
-        update: {
-          preMutation: ANYONE_CAN,
-        },
-        delete: ANYONE_CAN,
+        delete: NOBODY_CAN,
       },
     },
   };
