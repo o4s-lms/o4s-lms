@@ -1,758 +1,337 @@
 'use client';
 
 import * as React from 'react';
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  RowData,
-  SortingState,
-  VisibilityState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
-import {
-  ArrowUpDown,
-  Check,
-  ChevronDown,
-  ChevronsUpDown,
-  MoreHorizontal,
-} from 'lucide-react';
-
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import type { SupportTicket, User } from '@/payload-types';
 import { Main } from '@/components/Layout/Main';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import {
-  Command,
-  CommandGroup,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command';
 import { PRIORITY, TICKETS_CATEGORY, TICKETS_STATUS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
+import {
+  IconArrowLeft,
+  IconDotsVertical,
+  IconEdit,
+  IconMessages,
+  IconPaperclip,
+  IconPhone,
+  IconPhotoPlus,
+  IconPlus,
+  IconSearch,
+  IconSend,
+  IconVideo,
+} from '@tabler/icons-react';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { format } from 'timeago.js';
+import { getClientSideURL } from '@/utilities/getURL';
+import { createAvatar } from '@dicebear/core';
+import { lorelei } from '@dicebear/collection';
+import { StaticImageData } from 'next/image';
 
-declare module '@tanstack/react-table' {
-  interface TableMeta<TData extends RowData> {
-    updateData: (rowIndex: number, columnId: string, value: unknown) => void;
-  }
+//import { conversations } from './data/convo.json'
+
+interface Conversations {
+  id: string
+  profile: string
+  fullName: string
+  title: string
+  messages: {
+    id: string
+    message: string
+    timestamp: string
+    sender: string
+  }[]
 }
 
-const Cols = () => {
-  const columns: ColumnDef<Partial<SupportTicket>>[] = [
-    {
-      id: 'select',
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && 'indeterminate')
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
-      accessorKey: 'id',
-      header: 'Ticket ID',
-      cell: ({ row }) => <div>{row.getValue('id')}</div>,
-    },
-    {
-      accessorKey: 'category',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Category
-            <ArrowUpDown />
-          </Button>
-        );
-      },
-      cell: ({ getValue, row, column: { id }, table }) => {
-        const initialValue = getValue();
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const [value, setValue] = React.useState(initialValue);
-
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        React.useEffect(() => {
-          setValue(initialValue);
-        }, [initialValue]);
-
-        const onBlur = () => {
-          table.options.meta?.updateData(row.index, id, value);
-        };
-
-        return (
-          <>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  className={cn(
-                    'justify-between',
-                    !value && 'text-muted-foreground',
-                  )}
-                >
-                  {value
-                    ? TICKETS_CATEGORY.find((item) => item.value === value)
-                        ?.label
-                    : 'Select category'}
-                  <ChevronsUpDown className="opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-[200px] p-0">
-                <Command>
-                  <CommandList>
-                    <CommandGroup>
-                      {TICKETS_CATEGORY.map((item) => (
-                        <CommandItem
-                          value={item.label}
-                          key={item.value}
-                          onSelect={async () => {
-                            try {
-                              await fetch(
-                                `${process.env.NEXT_PUBLIC_SERVER_URL}/api/support-tickets/${row.getValue('id')}`,
-                                {
-                                  method: 'PATCH',
-                                  credentials: 'include',
-                                  headers: {
-                                    'Content-Type': 'application/json',
-                                  },
-                                  body: JSON.stringify({
-                                    category: item.value,
-                                  }),
-                                },
-                              );
-                              setValue(item.value);
-                              void onBlur();
-                            } catch (error) {
-                              throw error;
-                            }
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              'mr-2',
-                              item.value === value
-                                ? 'opacity-100'
-                                : 'opacity-0',
-                            )}
-                          />
-                          {item.label}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
-          </>
-        );
-      },
-    },
-    {
-      accessorKey: 'status',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Status
-            <ArrowUpDown />
-          </Button>
-        );
-      },
-      cell: ({ getValue, row, column: { id }, table }) => {
-        const initialValue = getValue();
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const [value, setValue] = React.useState(initialValue);
-
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        React.useEffect(() => {
-          setValue(initialValue);
-        }, [initialValue]);
-
-        const onBlur = () => {
-          table.options.meta?.updateData(row.index, id, value);
-        };
-        return (
-          <>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  className={cn(
-                    'justify-between',
-                    !value && 'text-muted-foreground',
-                  )}
-                >
-                  {value
-                    ? TICKETS_STATUS.find((item) => item.value === value)?.label
-                    : 'Select status'}
-                  <ChevronsUpDown className="opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-[200px] p-0">
-                <Command>
-                  <CommandList>
-                    <CommandGroup>
-                      {TICKETS_STATUS.map((item) => (
-                        <CommandItem
-                          value={item.label}
-                          key={item.value}
-                          onSelect={async () => {
-                            try {
-                              await fetch(
-                                `${process.env.NEXT_PUBLIC_SERVER_URL}/api/support-tickets/${row.getValue('id')}`,
-                                {
-                                  method: 'PATCH',
-                                  credentials: 'include',
-                                  headers: {
-                                    'Content-Type': 'application/json',
-                                  },
-                                  body: JSON.stringify({
-                                    status: item.value,
-                                  }),
-                                },
-                              );
-                              setValue(item.value);
-                              void onBlur();
-                            } catch (error) {
-                              throw error;
-                            }
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              'mr-2',
-                              item.value === value
-                                ? 'opacity-100'
-                                : 'opacity-0',
-                            )}
-                          />
-                          {item.label}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
-          </>
-        );
-      },
-    },
-    {
-      accessorKey: 'description',
-      header: 'Description',
-      cell: ({ row }) => <div>{row.getValue('description')}</div>,
-    },
-    {
-      accessorKey: 'recipient',
-      header: 'Recipient',
-      cell: ({ row }) => {
-        const ticket = row.original;
-        const user = ticket.user as User;
-
-        return (
-          <div>
-            {user ? (
-              <>
-                {user.name} ({user.email})
-              </>
-            ) : (
-              <>
-                {ticket.guest?.name} ({ticket.guest?.email})
-              </>
-            )}
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: 'priority',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Priority
-            <ArrowUpDown />
-          </Button>
-        );
-      },
-      cell: ({ getValue, row, column: { id }, table }) => {
-        //const priority = row.getValue('priority');
-        const initialValue = getValue();
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const [value, setValue] = React.useState(initialValue);
-
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        React.useEffect(() => {
-          setValue(initialValue);
-        }, [initialValue]);
-
-        const onBlur = () => {
-          table.options.meta?.updateData(row.index, id, value);
-        };
-
-        return (
-          <>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  className={cn(
-                    'justify-between',
-                    !value && 'text-muted-foreground',
-                  )}
-                >
-                  {value
-                    ? PRIORITY.find((item) => item.value === value)?.label
-                    : 'Select priority'}
-                  <ChevronsUpDown className="opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-[200px] p-0">
-                <Command>
-                  <CommandList>
-                    <CommandGroup>
-                      {PRIORITY.map((item) => (
-                        <CommandItem
-                          value={item.label}
-                          key={item.value}
-                          onSelect={async () => {
-                            try {
-                              await fetch(
-                                `${process.env.NEXT_PUBLIC_SERVER_URL}/api/support-tickets/${row.getValue('id')}`,
-                                {
-                                  method: 'PATCH',
-                                  credentials: 'include',
-                                  headers: {
-                                    'Content-Type': 'application/json',
-                                  },
-                                  body: JSON.stringify({
-                                    priority: item.value,
-                                  }),
-                                },
-                              );
-                              setValue(item.value);
-                              void onBlur();
-                            } catch (error) {
-                              throw error;
-                            }
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              'mr-2',
-                              item.value === value
-                                ? 'opacity-100'
-                                : 'opacity-0',
-                            )}
-                          />
-                          {item.label}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
-          </>
-        );
-      },
-    },
-    {
-      id: 'actions',
-      enableHiding: false,
-      cell: ({ row }) => {
-        const ticket = row.original;
-        const user = ticket.user as User;
-
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem asChild>
-                <Button
-                  onClick={() =>
-                    navigator.clipboard.writeText(ticket.id as string)
-                  }
-                  variant="outline"
-                  className="p-4"
-                >
-                  Copy ticket ID
-                </Button>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              {ticket.status === 'new' && (
-                <>
-                  <DropdownMenuItem asChild>
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button variant="outline">Reply</Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Reply:</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            <Button
-                              onClick={async () => {
-                                await fetch(
-                                  `${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/emailPaymentInstructions?transactionId=${ticket.id}`,
-                                  {
-                                    method: 'POST',
-                                    credentials: 'include',
-                                  },
-                                );
-                                toast.info(
-                                  'Payment instructions sent via email!',
-                                );
-                              }}
-                              variant="outline"
-                            >
-                              Send payment instructions via email
-                            </Button>
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction>Continue</AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                </>
-              )}
-              <DropdownMenuItem asChild>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="outline">View ticket details</Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Ticket details:</AlertDialogTitle>
-                      <AlertDialogDescription asChild>
-                        <div className="mb-4 flex items-center gap-4">
-                          <table>
-                            <tbody>
-                              <tr>
-                                <td>Ticket ID:</td>
-                                <td>{ticket.id}</td>
-                              </tr>
-                              <tr>
-                                <td>Category:</td>
-                                <td className="capitalize">
-                                  {ticket.category}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Status:</td>
-                                <td className="capitalize">{ticket.status}</td>
-                              </tr>
-                              <tr>
-                                <td>Description:</td>
-                                <td>{ticket.description}</td>
-                              </tr>
-                              {user ? (
-                                <>
-                                  <tr>
-                                    <td>User Name:</td>
-                                    <td>{user.name}</td>
-                                  </tr>
-                                  <tr>
-                                    <td>User Email:</td>
-                                    <td>{user.email}</td>
-                                  </tr>
-                                </>
-                              ) : (
-                                <>
-                                  <tr>
-                                    <td>Guest Name:</td>
-                                    <td>{ticket.guest?.name}</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Guest Email:</td>
-                                    <td>{ticket.guest?.email}</td>
-                                  </tr>
-                                </>
-                              )}
-                              <tr>
-                                <td>Priority:</td>
-                                <td className="capitalize">
-                                  {ticket.priority}
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction>Continue</AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
-    },
-  ];
-
-  return columns;
-};
+type ChatUser = Conversations[number];
+type Convo = ChatUser['messages'][number];
 
 export function AppAdminSupport({ tickets }: { tickets: SupportTicket[] }) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
-  const [data, setData] = React.useState(tickets);
+  const [search, setSearch] = React.useState('');
+  const [mobileSelectedUser, setMobileSelectedUser] =
+    React.useState<ChatUser | null>(null);
 
-  const columns = React.useMemo(() => Cols(), []);
+  const conversations = tickets.map((ticket) => {
+    let src: StaticImageData | string = '';
 
-  const table = useReactTable({
-    data,
-    columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility: {
-        id: false,
-      },
-      rowSelection,
-    },
-    meta: {
-      updateData: (rowIndex, columnId, value) => {
-        // Skip page index reset until after next rerender
-        //skipAutoResetPageIndex()
-        setData((old) =>
-          old.map((row, index) => {
-            if (index === rowIndex) {
-              return {
-                ...old[rowIndex]!,
-                [columnId]: value,
-              };
-            }
-            return row;
-          }),
-        );
-      },
-    },
+    const user = (ticket.user as User) ?? null;
+
+    if (user?.avatar && typeof user?.avatar === 'object') {
+      const { url } = user?.avatar;
+
+      src = `${getClientSideURL()}${url}`;
+    } else {
+      src = createAvatar(lorelei, {
+        seed: user ? user.name : ticket.guest?.name,
+        size: 128,
+        // ... other options
+      }).toDataUri();
+    }
+
+    return {
+      id: ticket.id,
+      profile: src,
+      fullName: user ? user.name : ticket.guest?.name,
+      title: user ? 'User' : 'Guest',
+      messages: ticket.messages,
+    };
   });
 
+  const [selectedUser, setSelectedUser] = React.useState<ChatUser>(
+    conversations[0],
+  );
+
+  // Filtered data based on the search query
+  const filteredChatList = conversations.filter(({ fullName }) =>
+    fullName?.toLowerCase().includes(search.trim().toLowerCase()),
+  );
+
+  const currentMessage = selectedUser.messages.reduce(
+    (acc: Record<string, Convo[]>, obj) => {
+      const key = format(obj.timestamp, 'd MMM, yyyy');
+
+      // Create an array for the category if it doesn't exist
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+
+      // Push the current object to the array
+      acc[key].push(obj);
+
+      return acc;
+    },
+    {},
+  );
   return (
     <Main fixed>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">Support Tickets</CardTitle>
-          <CardDescription>Manage all support tickets.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="mb-4 flex items-center gap-4">
-            <Input
-              placeholder="Filter status..."
-              value={
-                (table.getColumn('status')?.getFilterValue() as string) ?? ''
-              }
-              onChange={(event) =>
-                table.getColumn('status')?.setFilterValue(event.target.value)
-              }
-              className="max-w-sm"
-            />
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="ml-auto">
-                  Columns <ChevronDown />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {table
-                  .getAllColumns()
-                  .filter((column) => column.getCanHide())
-                  .map((column) => {
-                    return (
-                      <DropdownMenuCheckboxItem
-                        key={column.id}
-                        className="capitalize"
-                        checked={column.getIsVisible()}
-                        onCheckedChange={(value) =>
-                          column.toggleVisibility(!!value)
-                        }
-                      >
-                        {column.id}
-                      </DropdownMenuCheckboxItem>
-                    );
-                  })}
-              </DropdownMenuContent>
-            </DropdownMenu>
+      <section className="flex h-full gap-6">
+        {/* Left Side */}
+        <div className="flex w-full flex-col gap-2 sm:w-56 lg:w-72 2xl:w-80">
+          <div className="sticky top-0 z-10 -mx-4 bg-background px-4 pb-3 shadow-md sm:static sm:z-auto sm:mx-0 sm:p-0 sm:shadow-none">
+            <div className="flex items-center justify-between py-2">
+              <div className="flex gap-2">
+                <h1 className="text-2xl font-bold">Inbox</h1>
+                <IconMessages size={20} />
+              </div>
+
+              <Button size="icon" variant="ghost" className="rounded-lg">
+                <IconEdit size={24} className="stroke-muted-foreground" />
+              </Button>
+            </div>
+
+            <label className="flex h-12 w-full items-center space-x-0 rounded-md border border-input pl-2 focus-within:outline-none focus-within:ring-1 focus-within:ring-ring">
+              <IconSearch size={15} className="mr-2 stroke-slate-500" />
+              <span className="sr-only">Search</span>
+              <input
+                type="text"
+                className="w-full flex-1 bg-inherit text-sm focus-visible:outline-none"
+                placeholder="Search chat..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </label>
           </div>
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                      return (
-                        <TableHead
-                          key={header.id}
-                          className="[&:has([role=checkbox])]:pl-3"
-                        >
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext(),
+
+          <ScrollArea className="-mx-3 h-full p-3">
+            {filteredChatList.map((chatUsr) => {
+              const { id, profile, messages, fullName } = chatUsr;
+              const lastConvo = messages[0];
+              const lastMsg =
+                lastConvo.sender === 'system'
+                  ? `You: ${lastConvo.message}`
+                  : lastConvo.message;
+              return (
+                <React.Fragment key={id}>
+                  <button
+                    type="button"
+                    className={cn(
+                      `-mx-1 flex w-full rounded-md px-2 py-2 text-left text-sm hover:bg-secondary/75`,
+                      selectedUser.id === id && 'sm:bg-muted',
+                    )}
+                    onClick={() => {
+                      setSelectedUser(chatUsr);
+                      setMobileSelectedUser(chatUsr);
+                    }}
+                  >
+                    <div className="flex gap-2">
+                      <Avatar>
+                        <AvatarImage src={profile} alt={fullName as string} />
+                        <AvatarFallback>{fullName}</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <span className="col-start-2 row-span-2 font-medium">
+                          {fullName}
+                        </span>
+                        <span className="col-start-2 row-span-2 row-start-2 line-clamp-2 text-ellipsis text-muted-foreground">
+                          {lastMsg}
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+                  <Separator className="my-1" />
+                </React.Fragment>
+              );
+            })}
+          </ScrollArea>
+        </div>
+
+        {/* Right Side */}
+        <div
+          className={cn(
+            'absolute inset-0 left-full z-50 hidden w-full flex-1 flex-col rounded-md border bg-primary-foreground shadow-sm transition-all duration-200 sm:static sm:z-auto sm:flex',
+            mobileSelectedUser && 'left-0 flex',
+          )}
+        >
+          {/* Top Part */}
+          <div className="mb-1 flex flex-none justify-between rounded-t-md bg-secondary p-4 shadow-lg">
+            {/* Left */}
+            <div className="flex gap-3">
+              <Button
+                size="icon"
+                variant="ghost"
+                className="-ml-2 h-full sm:hidden"
+                onClick={() => setMobileSelectedUser(null)}
+              >
+                <IconArrowLeft />
+              </Button>
+              <div className="flex items-center gap-2 lg:gap-4">
+                <Avatar className="size-9 lg:size-11">
+                  <AvatarImage
+                    src={selectedUser.profile}
+                    alt={selectedUser.fullName}
+                  />
+                  <AvatarFallback>{selectedUser.fullName}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <span className="col-start-2 row-span-2 text-sm font-medium lg:text-base">
+                    {selectedUser.fullName}
+                  </span>
+                  <span className="col-start-2 row-span-2 row-start-2 line-clamp-1 block max-w-32 text-ellipsis text-nowrap text-xs text-muted-foreground lg:max-w-none lg:text-sm">
+                    {selectedUser.title}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right */}
+            <div className="-mr-1 flex items-center gap-1 lg:gap-2">
+              <Button
+                size="icon"
+                variant="ghost"
+                className="hidden size-8 rounded-full sm:inline-flex lg:size-10"
+              >
+                <IconVideo size={22} className="stroke-muted-foreground" />
+              </Button>
+              <Button
+                size="icon"
+                variant="ghost"
+                className="hidden size-8 rounded-full sm:inline-flex lg:size-10"
+              >
+                <IconPhone size={22} className="stroke-muted-foreground" />
+              </Button>
+              <Button
+                size="icon"
+                variant="ghost"
+                className="h-10 rounded-md sm:h-8 sm:w-4 lg:h-10 lg:w-6"
+              >
+                <IconDotsVertical className="stroke-muted-foreground sm:size-5" />
+              </Button>
+            </div>
+          </div>
+
+          {/* Conversation */}
+          <div className="flex flex-1 flex-col gap-2 rounded-md px-4 pb-4 pt-0">
+            <div className="flex size-full flex-1">
+              <div className="chat-text-container relative -mr-4 flex flex-1 flex-col overflow-y-hidden">
+                <div className="chat-flex flex h-40 w-full flex-grow flex-col-reverse justify-start gap-4 overflow-y-auto py-2 pb-4 pr-4">
+                  {currentMessage &&
+                    Object.keys(currentMessage).map((key) => (
+                      <React.Fragment key={key}>
+                        {currentMessage[key].map((msg, index) => (
+                          <div
+                            key={`${msg.sender}-${msg.timestamp}-${index}`}
+                            className={cn(
+                              'chat-box max-w-96 break-words px-3 py-2 shadow-lg',
+                              msg.sender === 'You'
+                                ? 'self-end rounded-[16px_16px_0_16px] bg-primary/85 text-primary-foreground/75'
+                                : 'self-start rounded-[16px_16px_16px_0] bg-secondary',
+                            )}
+                          >
+                            {msg.message}{' '}
+                            <span
+                              className={cn(
+                                'mt-1 block text-xs font-light italic text-muted-foreground',
+                                msg.sender === 'You' && 'text-right',
                               )}
-                        </TableHead>
-                      );
-                    })}
-                  </TableRow>
-                ))}
-              </TableHeader>
-              <TableBody>
-                {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && 'selected'}
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell
-                          key={cell.id}
-                          className="[&:has([role=checkbox])]:pl-3"
-                        >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext(),
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="h-24 text-center"
-                    >
-                      No results.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-          <div className="flex items-center justify-end space-x-2 pt-4">
-            <div className="flex-1 text-sm text-muted-foreground">
-              {table.getFilteredSelectedRowModel().rows.length} of{' '}
-              {table.getFilteredRowModel().rows.length} row(s) selected.
+                            >
+                              {format(msg.timestamp, 'h:mm a')}
+                            </span>
+                          </div>
+                        ))}
+                        <div className="text-center text-xs">{key}</div>
+                      </React.Fragment>
+                    ))}
+                </div>
+              </div>
             </div>
-            <div className="space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}
-              >
-                Previous
+            <form className="flex w-full flex-none gap-2">
+              <div className="flex flex-1 items-center gap-2 rounded-md border border-input px-2 py-1 focus-within:outline-none focus-within:ring-1 focus-within:ring-ring lg:gap-4">
+                <div className="space-x-1">
+                  <Button
+                    size="icon"
+                    type="button"
+                    variant="ghost"
+                    className="h-8 rounded-md"
+                  >
+                    <IconPlus size={20} className="stroke-muted-foreground" />
+                  </Button>
+                  <Button
+                    size="icon"
+                    type="button"
+                    variant="ghost"
+                    className="hidden h-8 rounded-md lg:inline-flex"
+                  >
+                    <IconPhotoPlus
+                      size={20}
+                      className="stroke-muted-foreground"
+                    />
+                  </Button>
+                  <Button
+                    size="icon"
+                    type="button"
+                    variant="ghost"
+                    className="hidden h-8 rounded-md lg:inline-flex"
+                  >
+                    <IconPaperclip
+                      size={20}
+                      className="stroke-muted-foreground"
+                    />
+                  </Button>
+                </div>
+                <label className="flex-1">
+                  <span className="sr-only">Chat Text Box</span>
+                  <input
+                    type="text"
+                    placeholder="Type your messages..."
+                    className="h-8 w-full bg-inherit focus-visible:outline-none"
+                  />
+                </label>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="hidden sm:inline-flex"
+                >
+                  <IconSend size={20} />
+                </Button>
+              </div>
+              <Button className="h-full sm:hidden">
+                <IconSend size={18} /> Send
               </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
-              >
-                Next
-              </Button>
-            </div>
+            </form>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </section>
     </Main>
   );
 }

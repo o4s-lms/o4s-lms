@@ -36,7 +36,7 @@ const notificationSchema = createTableSchema({
 });
 
 export const schema = createSchema({
-  version: 1,
+  version: 2,
   tables: {
     notification: notificationSchema,
   },
@@ -50,10 +50,9 @@ type AuthData = {
 };
 
 export const permissions = definePermissions<AuthData, Schema>(schema, () => {
-
   const allowIfAdmin = (
     authData: AuthData,
-    { cmpLit }: ExpressionBuilder<TableSchema>,
+    { cmpLit }: ExpressionBuilder<typeof notificationSchema>,
   ) => cmpLit(authData.id, '=', '676d9f913e197080a3dd3a48');
 
   const allowIfMessageRecipient = (

@@ -19,7 +19,15 @@ import { useEffect, useState } from 'react';
 import type { SidebarData } from '@/components/Layout/types';
 import { useTolgee, useTranslate } from '@tolgee/react';
 import { Favorite, Module } from '@/payload-types';
-import { IconDualScreen, IconFileDescription, IconStar } from '@tabler/icons-react';
+import {
+  IconDualScreen,
+  IconFileDescription,
+  IconStar,
+} from '@tabler/icons-react';
+import { Support } from '@/components/Support';
+import { MessageCircle } from 'lucide-react';
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 type AppSidebarProps = {
   title?: string;
@@ -27,7 +35,12 @@ type AppSidebarProps = {
   favorites?: Favorite[];
 } & React.ComponentProps<typeof Sidebar>;
 
-export function AppSidebar({ title, modules, favorites, ...props }: AppSidebarProps) {
+export function AppSidebar({
+  title,
+  modules,
+  favorites,
+  ...props
+}: AppSidebarProps) {
   const [nav, setNav] = useState<SidebarData | null>(null);
   const tolgee = useTolgee(['language']);
   const currentLanguage = tolgee.getLanguage();
@@ -42,15 +55,15 @@ export function AppSidebar({ title, modules, favorites, ...props }: AppSidebarPr
           url: favorite.url,
           icon: IconStar,
           isFavorite: true,
-        }))
+        }));
 
         const favoritesNav = {
           title: t('favorites'),
           items: favs,
-        }
+        };
         groups.navGroups.push(favoritesNav);
       }
-      
+
       if (title) {
         const tmp = modules?.map((module) => ({
           title: module.title,
@@ -111,7 +124,17 @@ export function AppSidebar({ title, modules, favorites, ...props }: AppSidebarPr
         </SidebarContent>
       )}
       <SidebarFooter>
-        <NavUser />
+        <Support
+          className={cn(
+            buttonVariants({
+              variant: 'secondary',
+            }),
+            'text-fd-secondary-foreground/80 bottom-4 right-4 z-10 gap-2 rounded-xl bg-secondary/50 shadow-lg backdrop-blur-lg md:bottom-8 md:right-8',
+          )}
+        >
+          <MessageCircle className="size-4" />
+          <span className="max-w-52 text-wrap">Support</span>
+        </Support>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

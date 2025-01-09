@@ -5,7 +5,6 @@ import type { SupportTicket, User } from '@/payload-types';
 
 export interface CreateSupportTicketData {
   url: string
-  description: string
   category: 'other' | 'bug' | 'account' | 'payments' | 'learn'
   priority: 'low' | 'medium' | 'high'
   status: 'new' | 'done' | 'canceled' | 'unanswered'
@@ -14,6 +13,12 @@ export interface CreateSupportTicketData {
     email: string
   }
   user?: User
+  key?: string
+  messages: {
+    message: string
+    timestamp: string
+    sender: 'guest' | 'user' | 'system'
+  }[]
 }
 
 export async function createSupportTicket(data: CreateSupportTicketData): Promise<SupportTicket | null> {

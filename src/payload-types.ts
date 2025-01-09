@@ -30,7 +30,6 @@ export interface Config {
     users: User;
     avatar: Avatar;
     'support-tickets': SupportTicket;
-    'support-ticket-replies': SupportTicketReply;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -60,7 +59,6 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     avatar: AvatarSelect<false> | AvatarSelect<true>;
     'support-tickets': SupportTicketsSelect<false> | SupportTicketsSelect<true>;
-    'support-ticket-replies': SupportTicketRepliesSelect<false> | SupportTicketRepliesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -1424,7 +1422,6 @@ export interface NewsletterSignup {
 export interface SupportTicket {
   id: string;
   url: string;
-  description: string;
   category: 'other' | 'bug' | 'account' | 'payments' | 'learn';
   priority?: ('low' | 'medium' | 'high') | null;
   status?: ('new' | 'done' | 'canceled' | 'unanswered') | null;
@@ -1433,24 +1430,13 @@ export interface SupportTicket {
     email?: string | null;
   };
   user?: (string | null) | User;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * System-wide support
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "support-ticket-replies".
- */
-export interface SupportTicketReply {
-  id: string;
-  description: string;
-  type: 'system' | 'user';
-  recipient?: {
-    name?: string | null;
-    email?: string | null;
-  };
-  parent: string | SupportTicket;
+  key?: string | null;
+  messages: {
+    message: string;
+    timestamp: string;
+    sender?: ('guest' | 'user' | 'system') | null;
+    id?: string | null;
+  }[];
   updatedAt: string;
   createdAt: string;
 }
@@ -1617,10 +1603,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'support-tickets';
         value: string | SupportTicket;
-      } | null)
-    | ({
-        relationTo: 'support-ticket-replies';
-        value: string | SupportTicketReply;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -2361,7 +2343,6 @@ export interface AvatarSelect<T extends boolean = true> {
  */
 export interface SupportTicketsSelect<T extends boolean = true> {
   url?: T;
-  description?: T;
   category?: T;
   priority?: T;
   status?: T;
@@ -2372,23 +2353,15 @@ export interface SupportTicketsSelect<T extends boolean = true> {
         email?: T;
       };
   user?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "support-ticket-replies_select".
- */
-export interface SupportTicketRepliesSelect<T extends boolean = true> {
-  description?: T;
-  type?: T;
-  recipient?:
+  key?: T;
+  messages?:
     | T
     | {
-        name?: T;
-        email?: T;
+        message?: T;
+        timestamp?: T;
+        sender?: T;
+        id?: T;
       };
-  parent?: T;
   updatedAt?: T;
   createdAt?: T;
 }

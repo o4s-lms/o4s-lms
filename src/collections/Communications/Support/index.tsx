@@ -33,11 +33,6 @@ export const SupportTickets: CollectionConfig = {
       required: true,
     },
     {
-      name: 'description',
-      type: 'textarea',
-      required: true,
-    },
-    {
       name: 'category',
       type: 'select',
       required: true,
@@ -75,6 +70,48 @@ export const SupportTickets: CollectionConfig = {
       type: 'relationship',
       relationTo: 'users',
     },
+    {
+      name: 'key',
+      type: 'text',
+    },
+    {
+      name: 'messages',
+      type: 'array',
+      fields: [
+        // required
+        {
+          name: 'message',
+          type: 'textarea',
+          required: true
+        },
+        {
+          name: 'timestamp',
+          type: 'date',
+          required: true,
+        },
+        {
+          name: 'sender',
+          type: 'select',
+          options: [
+            {
+              label: 'Guest',
+              value: 'guest',
+            },
+            {
+              label: 'User',
+              value: 'user',
+            },
+            {
+              label: 'System',
+              value: 'system',
+            }
+          ],
+          defaultValue: 'guest',
+        },
+      ],
+      required: true,
+    },
+    
   ],
   timestamps: true,
   hooks: {

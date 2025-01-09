@@ -14,10 +14,6 @@ import './globals.css';
 import { getLanguage } from '@/tolgee/language';
 import { getStaticData } from '@/tolgee/shared';
 import { TolgeeNextProvider } from '@/tolgee/client';
-import { MessageCircle } from 'lucide-react';
-import { buttonVariants } from '@/components/ui/button';
-import { Support } from '@/components/Support';
-import { cn } from '@/lib/utils';
 
 type Props = {
   children: React.ReactNode;
@@ -49,17 +45,6 @@ export default async function RootLayout({ children }: Props) {
           <TolgeeNextProvider language={locale} staticData={staticData}>
             {children}
           </TolgeeNextProvider>
-          <Support
-            className={cn(
-              buttonVariants({
-                variant: 'secondary',
-              }),
-              'text-fd-secondary-foreground/80 fixed bottom-4 right-4 z-10 gap-2 rounded-xl bg-secondary/50 shadow-lg backdrop-blur-lg md:bottom-8 md:right-8',
-            )}
-          >
-            <MessageCircle className="size-4" />
-            Support
-          </Support>
         </Providers>
         <Toaster richColors={true} position="top-center" />
       </body>

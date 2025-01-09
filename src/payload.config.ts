@@ -28,7 +28,6 @@ import { Newsletter } from '@/collections/Newsletter';
 import { Users } from '@/collections/Users';
 import { Avatar } from '@/collections/Users/Avatar';
 import { SupportTickets } from '@/collections/Communications/Support';
-import { SupportTicketReplies } from '@/collections/Communications/Support/Reply';
 import { FooterPt } from '@/Footer/pt/config';
 import { FooterEn } from '@/Footer/en/config';
 import { FooterFr } from '@/Footer/fr/config';
@@ -124,7 +123,6 @@ export default buildConfig({
     Users,
     Avatar,
     SupportTickets,
-    SupportTicketReplies,
   ],
   cors: [getServerSideURL()].filter(Boolean),
   csrf: [getServerSideURL()].filter(Boolean),
