@@ -1,4 +1,6 @@
-import { useState } from 'react'
+'use client';
+
+import { useState } from 'react';
 
 /**
  * Custom hook for confirm dialog

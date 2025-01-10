@@ -5,7 +5,7 @@ import { UsersPrimaryButtons } from '@/components/AppAdmin/Users/UsersPrimaryBut
 import { UsersTable } from '@/components/AppAdmin/Users/UsersTable';
 import UsersProvider from '@/providers/UsersContext';
 import { userListSchema } from './Data/schema';
-import type { User } from '@/payload-types'
+import type { User } from '@/components/AppAdmin/Users/Data/schema'
 
 export default function AppAdminUsers({ users }: { users: User[] }) {
   // Parse user list

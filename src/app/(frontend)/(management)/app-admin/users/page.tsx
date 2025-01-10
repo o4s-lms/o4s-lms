@@ -18,7 +18,16 @@ export default async function AppAdminUsersPage() {
 
   const users = await payload.find({
     collection: 'users',
-    depth: 1
+    depth: 1,
+    select: {
+      name: true,
+      email: true,
+      language: true,
+      role: true,
+      lastLogin: true,
+      createdAt: true,
+      updatedAt: true,
+    }
   })
 
   return (

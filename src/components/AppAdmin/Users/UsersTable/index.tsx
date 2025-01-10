@@ -1,4 +1,6 @@
-import { useState } from 'react'
+'use client';
+
+import { useState } from 'react';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -13,7 +15,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from '@tanstack/react-table'
+} from '@tanstack/react-table';
 import {
   Table,
   TableBody,
@@ -21,8 +23,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { User } from '../Data/schema'
+} from '@/components/ui/table';
+import { User } from '../Data/schema';
 import { DataTablePagination } from '@/components/AppAdmin/Users/DataTablePagination';
 import { DataTableToolbar } from '@/components/AppAdmin/Users/DataTableToolbar';
 

@@ -1,3 +1,5 @@
+'use client';
+
 import { IconMailPlus, IconUserPlus } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { useUsers } from '@/providers/UsersContext';

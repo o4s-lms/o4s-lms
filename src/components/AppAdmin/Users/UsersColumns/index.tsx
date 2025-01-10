@@ -1,12 +1,14 @@
+'use client';
+
 import { ColumnDef } from '@tanstack/react-table';
 import { cn } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import LongText from '@/components/LongText';
-import { callTypes, userTypes } from '../Data/data';
+import { userTypes } from '../Data/data';
 import { User } from '../Data/schema';
 import { DataTableColumnHeader } from '@/components/AppAdmin/Users/DataTableColumnHeader';
 import { DataTableRowActions } from '@/components/AppAdmin/Users/DataTableRowActions';
+import { getLocaleDisplayName } from '@/utilities/getLocaleDisplayName';
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -45,7 +47,7 @@ export const columns: ColumnDef<User>[] = [
       <DataTableColumnHeader column={column} title='ID' />
     ),
     cell: ({ row }) => (
-      <LongText className='max-w-36'>{row.getValue('id')}</LongText>
+      <div className='max-w-36'>{row.getValue('id')}</div>
     ),
     meta: {
       className: cn(
@@ -76,7 +78,7 @@ export const columns: ColumnDef<User>[] = [
       <div className='w-fit text-nowrap'>{row.getValue('email')}</div>
     ),
   },
-  {
+  /**{
     accessorKey: 'status',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Status' />
@@ -97,7 +99,7 @@ export const columns: ColumnDef<User>[] = [
     },
     enableHiding: false,
     enableSorting: false,
-  },
+  }, */
   {
     accessorKey: 'role',
     header: ({ column }) => (
@@ -125,6 +127,16 @@ export const columns: ColumnDef<User>[] = [
     },
     enableSorting: false,
     enableHiding: false,
+  },
+  {
+    accessorKey: 'language',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Language' />
+    ),
+    cell: ({ row }) => (
+      <div className='w-fit text-nowrap'>{getLocaleDisplayName(row.getValue('language'))}</div>
+    ),
+    enableSorting: false,
   },
   {
     id: 'actions',

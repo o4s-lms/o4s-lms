@@ -20,8 +20,9 @@ const userSchema = z.object({
   id: z.string(),
   name: z.string(),
   email: z.string(),
-  status: userStatusSchema,
+  language: z.string(),
   role: userRoleSchema,
+  lastLogin: z.coerce.date(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
 })

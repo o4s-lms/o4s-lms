@@ -1,3 +1,5 @@
+'use client';
+
 import { useUsers } from '@/providers/UsersContext';
 import { UsersActionDialog } from '@/components/AppAdmin/Users/UsersActionDialog';
 import { UsersDeleteDialog } from '@/components/AppAdmin/Users/UsersDeleteDialog';
