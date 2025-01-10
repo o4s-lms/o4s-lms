@@ -36,6 +36,11 @@ services:
       - ./src/zero/zero-schema.json:/data/schema/zero-schema.json
       - zero_data:/data
 
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
   #formbricks:
   #  image: ghcr.io/formbricks/formbricks:latest
   #  restart: always

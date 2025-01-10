@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import ComingSoon from '@/components/ComingSoon';
+//import ComingSoon from '@/components/ComingSoon';
 import { LanguageSelector } from '@/components/LangSelector.';
 import { Header } from '@/components/Layout/Header';
 import { TopNav } from '@/components/Layout/TopNav';
@@ -7,6 +7,7 @@ import { ProfileDropdown } from '@/components/Layout/ProfileDropdown';
 import { ThemeSwitch } from '@/components/ThemeSwitch';
 import { AppSidebar } from '@/components/Layout/AppSidebar';
 import { cn } from '@/lib/utils';
+import { AskAi } from '@/components/Learn/AskAi';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -41,7 +42,7 @@ export default function AskAIPage() {
           </div>
         </Header>
 
-        <ComingSoon />
+        <AskAi />
       </div>
     </>
   );
