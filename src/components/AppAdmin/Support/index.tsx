@@ -9,16 +9,12 @@ import { PRIORITY, TICKETS_CATEGORY, TICKETS_STATUS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import {
   IconArrowLeft,
-  IconDotsVertical,
-  IconEdit,
   IconMessages,
   IconPaperclip,
-  IconPhone,
   IconPhotoPlus,
   IconPlus,
   IconSearch,
   IconSend,
-  IconVideo,
 } from '@tabler/icons-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
@@ -28,14 +24,36 @@ import { getClientSideURL } from '@/utilities/getURL';
 import { createAvatar } from '@dicebear/core';
 import { lorelei } from '@dicebear/collection';
 import { StaticImageData } from 'next/image';
-
-//import { conversations } from './data/convo.json'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
+  Command,
+  CommandGroup,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { fetcher } from '@/lib/fetcher';
 
 interface Conversations {
   id: string;
   profile: string;
   fullName: string;
   title: string;
+  category: 'other' | 'bug' | 'account' | 'payments' | 'learn';
+  priority: 'low' | 'medium' | 'high';
+  status: 'new' | 'done' | 'canceled' | 'unanswered';
   messages: {
     id: string;
     message: string;
@@ -49,6 +67,7 @@ type Convo = ChatUser['messages'][number];
 
 export function AppAdminSupport({ tickets }: { tickets: SupportTicket[] }) {
   const [search, setSearch] = React.useState('');
+  const [statusFilter, setStatusFilter] = React.useState('new');
   const [mobileSelectedUser, setMobileSelectedUser] =
     React.useState<ChatUser | null>(null);
 
@@ -80,20 +99,36 @@ export function AppAdminSupport({ tickets }: { tickets: SupportTicket[] }) {
       profile: src(),
       fullName: user ? user.name : ticket.guest?.name,
       title: user ? 'User' : 'Guest',
+      category: ticket.category,
+      priority: ticket.priority,
+      status: ticket.status,
       messages: ticket.messages,
     };
   });
 
-  const [selectedUser, setSelectedUser] = React.useState<ChatUser>(
+  const [selectedTicket, setSelectedTicket] = React.useState<ChatUser>(
     conversations[0],
   );
+  let [filteredChatList, setFilteredChatList] = React.useState(conversations);
 
   // Filtered data based on the search query
-  const filteredChatList = conversations.filter(({ fullName }) =>
-    fullName?.toLowerCase().includes(search.trim().toLowerCase()),
+  //filteredChatList = conversations.filter(({ fullName }) =>
+  //  fullName?.toLowerCase().includes(search.trim().toLowerCase()),
+  //);
+
+  const handleSearch = (value: string) => {
+    setSearch(value);
+    const filtered = filteredChatList.filter(({ fullName }) =>
+      fullName?.toLowerCase().includes(search.trim().toLowerCase()),
+    );
+    setFilteredChatList(filtered);
+  };
+
+  filteredChatList = conversations.filter(({ status }) =>
+    status?.toLowerCase().includes(statusFilter.trim().toLowerCase()),
   );
 
-  const currentMessage = selectedUser.messages.reduce(
+  const currentMessage = selectedTicket.messages.reduce(
     (acc: Record<string, Convo[]>, obj) => {
       const key = format(obj.timestamp, 'd MMM, yyyy');
 
@@ -115,15 +150,21 @@ export function AppAdminSupport({ tickets }: { tickets: SupportTicket[] }) {
         {/* Left Side */}
         <div className="flex w-full flex-col gap-2 sm:w-56 lg:w-72 2xl:w-80">
           <div className="sticky top-0 z-10 -mx-4 bg-background px-4 pb-3 shadow-md sm:static sm:z-auto sm:mx-0 sm:p-0 sm:shadow-none">
-            <div className="flex items-center justify-between py-2">
-              <div className="flex gap-2">
-                <h1 className="text-2xl font-bold">Inbox</h1>
-                <IconMessages size={20} />
-              </div>
-
-              <Button size="icon" variant="ghost" className="rounded-lg">
-                <IconEdit size={24} className="stroke-muted-foreground" />
-              </Button>
+            <div className="flex w-full items-center justify-between py-2">
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="text-2xl font-bold">
+                  <SelectValue />
+                  <IconMessages size={20} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="new">New</SelectItem>
+                    <SelectItem value="done">Done</SelectItem>
+                    <SelectItem value="canceled">Canceled</SelectItem>
+                    <SelectItem value="unanswered">Unanswered</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
 
             <label className="flex h-12 w-full items-center space-x-0 rounded-md border border-input pl-2 focus-within:outline-none focus-within:ring-1 focus-within:ring-ring">
@@ -134,7 +175,7 @@ export function AppAdminSupport({ tickets }: { tickets: SupportTicket[] }) {
                 className="w-full flex-1 bg-inherit text-sm focus-visible:outline-none"
                 placeholder="Search chat..."
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => handleSearch(e.target.value)}
               />
             </label>
           </div>
@@ -153,10 +194,10 @@ export function AppAdminSupport({ tickets }: { tickets: SupportTicket[] }) {
                     type="button"
                     className={cn(
                       `-mx-1 flex w-full rounded-md px-2 py-2 text-left text-sm hover:bg-secondary/75`,
-                      selectedUser.id === id && 'sm:bg-muted',
+                      selectedTicket.id === id && 'sm:bg-muted',
                     )}
                     onClick={() => {
-                      setSelectedUser(chatUsr);
+                      setSelectedTicket(chatUsr);
                       setMobileSelectedUser(chatUsr);
                     }}
                   >
@@ -204,17 +245,17 @@ export function AppAdminSupport({ tickets }: { tickets: SupportTicket[] }) {
               <div className="flex items-center gap-2 lg:gap-4">
                 <Avatar className="size-9 lg:size-11">
                   <AvatarImage
-                    src={selectedUser.profile}
-                    alt={selectedUser.fullName}
+                    src={selectedTicket.profile}
+                    alt={selectedTicket.fullName}
                   />
-                  <AvatarFallback>{selectedUser.fullName}</AvatarFallback>
+                  <AvatarFallback>{selectedTicket.fullName}</AvatarFallback>
                 </Avatar>
                 <div>
                   <span className="col-start-2 row-span-2 text-sm font-medium lg:text-base">
-                    {selectedUser.fullName}
+                    {selectedTicket.fullName}
                   </span>
                   <span className="col-start-2 row-span-2 row-start-2 line-clamp-1 block max-w-32 text-ellipsis text-nowrap text-xs text-muted-foreground lg:max-w-none lg:text-sm">
-                    {selectedUser.title}
+                    {selectedTicket.title}
                   </span>
                 </div>
               </div>
@@ -222,27 +263,119 @@ export function AppAdminSupport({ tickets }: { tickets: SupportTicket[] }) {
 
             {/* Right */}
             <div className="-mr-1 flex items-center gap-1 lg:gap-2">
-              <Button
-                size="icon"
-                variant="ghost"
-                className="hidden size-8 rounded-full sm:inline-flex lg:size-10"
-              >
-                <IconVideo size={22} className="stroke-muted-foreground" />
-              </Button>
-              <Button
-                size="icon"
-                variant="ghost"
-                className="hidden size-8 rounded-full sm:inline-flex lg:size-10"
-              >
-                <IconPhone size={22} className="stroke-muted-foreground" />
-              </Button>
-              <Button
-                size="icon"
-                variant="ghost"
-                className="h-10 rounded-md sm:h-8 sm:w-4 lg:h-10 lg:w-6"
-              >
-                <IconDotsVertical className="stroke-muted-foreground sm:size-5" />
-              </Button>
+              <Popover>
+                <PopoverTrigger asChild className="stroke-muted-foreground">
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    className={cn(
+                      'justify-between',
+                      !selectedTicket.category && 'stroke-muted-foreground',
+                    )}
+                  >
+                    {selectedTicket.category
+                      ? TICKETS_CATEGORY.find(
+                          (item) => item.value === selectedTicket.category,
+                        )?.label
+                      : 'Select category'}
+                    <ChevronsUpDown className="opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[200px] p-0">
+                  <Command>
+                    <CommandList>
+                      <CommandGroup>
+                        {TICKETS_CATEGORY.map((item) => (
+                          <CommandItem
+                            value={item.label}
+                            key={item.value}
+                            onSelect={async () => {
+                              try {
+                                await fetcher(`/api/support-tickets/${selectedTicket.id}`, {
+                                  method: 'PATCH',
+                                  body: JSON.stringify({
+                                    category: item.value,
+                                  }),
+                                });
+                                toast.info(`Category changed to ${item.value}`);
+                              } catch (error) {
+                                throw error;
+                              }
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                'mr-2',
+                                item.value === selectedTicket.category
+                                  ? 'opacity-100'
+                                  : 'opacity-0',
+                              )}
+                            />
+                            {item.label}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    className={cn(
+                      'justify-between',
+                      !selectedTicket.priority && 'text-muted-foreground',
+                    )}
+                  >
+                    {selectedTicket.priority
+                      ? PRIORITY.find(
+                          (item) => item.value === selectedTicket.priority,
+                        )?.label
+                      : 'Select priority'}
+                    <ChevronsUpDown className="opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[200px] p-0">
+                  <Command>
+                    <CommandList>
+                      <CommandGroup>
+                        {PRIORITY.map((item) => (
+                          <CommandItem
+                            value={item.label}
+                            key={item.value}
+                            onSelect={async () => {
+                              try {
+                                await fetcher(`/api/support-tickets/${selectedTicket.id}`, {
+                                  method: 'PATCH',
+                                  body: JSON.stringify({
+                                    priority: item.value,
+                                  }),
+                                });
+                                toast.info(`Priority changed to ${item.value}`);
+                              } catch (error) {
+                                throw error;
+                              }
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                'mr-2',
+                                item.value === selectedTicket.priority
+                                  ? 'opacity-100'
+                                  : 'opacity-0',
+                              )}
+                            />
+                            {item.label}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
 

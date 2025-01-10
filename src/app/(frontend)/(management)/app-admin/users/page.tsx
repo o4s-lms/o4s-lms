@@ -5,28 +5,21 @@ import { TopNav } from '@/components/Layout/TopNav';
 import { ProfileDropdown } from '@/components/Layout/ProfileDropdown';
 import { ThemeSwitch } from '@/components/ThemeSwitch';
 import { createPayloadClient } from '@/lib/payload';
-import { TicketChat } from '@/components/AppAdmin/Support/TicketChat';
+import AppAdminUsers from '@/components/AppAdmin/Users';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
-  title: 'Support | O4S LMS',
+  title: 'App Admin Dashboard | O4S LMS',
   description: 'Get started with your courses.',
 };
 
-type Args = {
-  params: Promise<{
-    id?: string;
-  }>;
-};
-
-export default async function AppAdminTicketSupportPage({ params: paramsPromise }: Args) {
-  const { id = '' } = await paramsPromise;
+export default async function AppAdminUsersPage() {
   const payload = await createPayloadClient();
 
-  const ticket = await payload.findByID({
-    collection: 'support-tickets',
-    id: id,
-  });
+  const users = await payload.find({
+    collection: 'users',
+    depth: 1
+  })
 
   return (
     <>
@@ -40,7 +33,7 @@ export default async function AppAdminTicketSupportPage({ params: paramsPromise 
           <ProfileDropdown />
         </div>
       </Header>
-      <TicketChat ticket={ticket} />
+      <AppAdminUsers users={users.docs} />
     </>
   );
 }
