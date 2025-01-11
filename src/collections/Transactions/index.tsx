@@ -2,6 +2,7 @@ import type { AccessArgs, CollectionConfig } from 'payload';
 
 import { admin } from '@/access/admin';
 import { anyone } from '@/access/anyone';
+import { fetcher } from '@/lib/fetcher';
 
 export const Transactions: CollectionConfig = {
   slug: 'transactions',
@@ -56,12 +57,8 @@ export const Transactions: CollectionConfig = {
         if (operation === 'create' && doc.status === 'completed') {
           const f = doc.user ? 'processTransaction' : 'waitUserSignUp';
        
-          await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/${f}`, {
+          await fetcher(`/api/functions/${f}`, {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            credentials: 'include',
             body: JSON.stringify(doc),
         
           });
@@ -72,12 +69,8 @@ export const Transactions: CollectionConfig = {
           switch (doc.status) {
             case 'completed':
               const f = doc.user ? 'processTransaction' : 'waitUserSignUp';
-              await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/${f}`, {
+              await fetcher(`/api/functions/${f}`, {
                 method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                credentials: 'include',
                 body: JSON.stringify(doc),
             
               });

@@ -32,6 +32,11 @@ export const sidebarData = async (): Promise<SidebarData> => {
       title: 'General',
       items: [
         {
+          title: t('dashboard'),
+          url: '/app-admin',
+          icon: IconLayoutDashboard,
+        },
+        {
           title: 'Users',
           url: '/app-admin/users',
           icon: IconUsers,

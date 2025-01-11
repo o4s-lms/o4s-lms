@@ -5,7 +5,7 @@ import { Table } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { userTypes } from '../Data/data';
-import { DataTableFacetedFilter } from '@/components/AppAdmin/Users/DataTableFacetedFilter';
+import { DataTableFacetedFilter } from '@/components/Table/DataTableFacetedFilter';
 import { DataTableViewOptions } from '@/components/AppAdmin/Users/DataTableViewOptions';
 import { ALL_LANGUAGES as LANGUAGES } from '@/tolgee/shared';
 import { getLocaleDisplayName } from '@/utilities/getLocaleDisplayName';

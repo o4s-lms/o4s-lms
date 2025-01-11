@@ -24,7 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { User } from '../Data/schema';
+import { Transaction } from '../Data/schema';
 import { DataTablePagination } from '@/components/Table/DataTablePagination';
 import { DataTableToolbar } from '@/components/AppAdmin/Users/DataTableToolbar';
 
@@ -36,11 +36,11 @@ declare module '@tanstack/react-table' {
 }
 
 interface DataTableProps {
-  columns: ColumnDef<User>[]
-  data: User[]
+  columns: ColumnDef<Transaction>[]
+  data: Transaction[]
 }
 
-export function UsersTable({ columns, data }: DataTableProps) {
+export function TransactionsTable({ columns, data }: DataTableProps) {
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])

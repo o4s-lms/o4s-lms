@@ -6,9 +6,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import LongText from '@/components/LongText';
 import { userTypes } from '../Data/data';
 import { User } from '../Data/schema';
-import { DataTableColumnHeader } from '@/components/AppAdmin/Users/DataTableColumnHeader';
+import { DataTableColumnHeader } from '@/components/Table/DataTableColumnHeader';
 import { DataTableRowActions } from '@/components/AppAdmin/Users/DataTableRowActions';
 import { getLocaleDisplayName } from '@/utilities/getLocaleDisplayName';
+import { format } from 'timeago.js';
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -137,6 +138,15 @@ export const columns: ColumnDef<User>[] = [
       <div className='w-fit text-nowrap'>{getLocaleDisplayName(row.getValue('language'))}</div>
     ),
     enableSorting: false,
+  },
+  {
+    accessorKey: 'lastLogin',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Last Login' />
+    ),
+    cell: ({ row }) => (
+      <div className='w-fit text-nowrap'>{format(row.getValue('lastLogin'))}</div>
+    ),
   },
   {
     id: 'actions',
