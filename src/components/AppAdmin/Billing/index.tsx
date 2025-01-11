@@ -8,7 +8,7 @@ import { transactionListSchema } from './Data/schema';
 import type { Transaction } from '@/components/AppAdmin/Billing/Data/schema'
 
 export default function AppAdminTransactions({ transactions }: { transactions: Transaction[] }) {
-  // Parse user list
+  // Parse transaction list
   const transactionList = transactionListSchema.parse(transactions)
 
   return (

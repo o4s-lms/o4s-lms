@@ -48,6 +48,10 @@ export const Transactions: CollectionConfig = {
           }
         }
 
+        if (operation === 'update' && data.processed) {
+          if (data.processed && !data.processedAt) data.processedAt = new Date().toISOString();
+        }
+
         return data; 
       },
     ],

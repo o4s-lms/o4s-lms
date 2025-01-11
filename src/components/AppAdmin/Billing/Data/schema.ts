@@ -22,7 +22,7 @@ const transactionSchema = z.object({
   id: z.string(),
   email: z.string(),
   name: z.string(),
-  transactionId: z.string(),
+  transactionId: z.string().optional(),
   provider: transactionProviderSchema,
   amount: z.number(),
   discount: z.number(),
@@ -30,7 +30,7 @@ const transactionSchema = z.object({
   total: z.number(),
   status: transactionStatusSchema,
   processed: z.boolean(),
-  processedAt: z.coerce.date(),
+  processedAt: z.coerce.date().optional(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
 })

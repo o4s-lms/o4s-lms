@@ -153,11 +153,11 @@ export const columns: ColumnDef<Transaction>[] = [
       <DataTableColumnHeader column={column} title="Processed" />
     ),
     cell: ({ row }) => {
-      const isProcessed = row.getValue('processed');
-      if (isProcessed) {
+      const { processed, processedAt } = row.original;
+      if (processed) {
         return (
           <div className="w-fit text-nowrap">
-            {format(row.getValue('processedAt'))}
+            {format(processedAt as Date)}
           </div>
         );
       } else {

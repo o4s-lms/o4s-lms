@@ -26,7 +26,7 @@ import {
 } from '@/components/ui/table';
 import { Transaction } from '../Data/schema';
 import { DataTablePagination } from '@/components/Table/DataTablePagination';
-import { DataTableToolbar } from '@/components/AppAdmin/Users/DataTableToolbar';
+import { DataTableToolbar } from '@/components/AppAdmin/Billing/DataTableToolbar';
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
