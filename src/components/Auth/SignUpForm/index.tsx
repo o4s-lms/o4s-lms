@@ -19,6 +19,7 @@ import { Input } from '@/components/ui/input';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/providers/Auth';
 import { useTranslate } from '@tolgee/react';
+import { PasswordInput } from '@/components/PasswordInput';
 
 const formSchema = z
   .object({
@@ -188,12 +189,11 @@ export const AuthSignUpForm = ({ variant, id }: AuthFormProps) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
+                    <PasswordInput
                       required
-                      type="password"
-                      placeholder="Password"
-                      {...field}
+                      placeholder="e.g., S3cur3P@ssw0rd"
                       className="w-full"
+                      {...field}
                       disabled={isLoading}
                     />
                   </FormControl>
@@ -207,12 +207,11 @@ export const AuthSignUpForm = ({ variant, id }: AuthFormProps) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
+                    <PasswordInput
                       required
-                      type="password"
                       placeholder="Confirm Password"
-                      {...field}
                       className="w-full"
+                      {...field}
                       disabled={isLoading}
                     />
                   </FormControl>
