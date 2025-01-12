@@ -15,10 +15,11 @@
   "delete": "Delete",
   "email": "Email Address",
   "email-is-verified": "Your email is verified, you can logged in.",
-  "email-password-to-sign-in": "Enter your email and password below to sign in",
+  "email-password-to-sign-in": "Enter your email and password",
   "error-credentials": "There was an error with the credentials provided. Please try again.",
   "error-something": "Something went wrong.",
   "favorites": "Favorites",
+  "forgot-password": "Forgot the password?",
   "forgot-password-error": "There was a problem while attempting to send you a password reset email. Please try again.",
   "go-back": "Go back",
   "help": "Help",
@@ -41,5 +42,6 @@
   "sign-in": "Sign In",
   "sign-in-email-password": "Sign In with Email and Password",
   "sign-up": "Sign Up",
+  "support": "Support",
   "terms": "Terms and Conditions"
 }

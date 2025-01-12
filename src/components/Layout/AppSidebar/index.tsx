@@ -12,7 +12,6 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar';
 import { NavGroup } from '@/components/Layout/NavGroup';
-import { NavUser } from '@/components/Layout/NavUser';
 import { sidebarData } from '@/components/Layout/Data/AppSidebar';
 import { VERSION } from '@/lib/constants';
 import { useEffect, useState } from 'react';
@@ -133,7 +132,7 @@ export function AppSidebar({
           )}
         >
           <MessageCircle className="size-4" />
-          <span className="max-w-52 text-wrap">Support</span>
+          <span className="max-w-52 text-wrap">{t('support')}</span>
         </Support>
       </SidebarFooter>
       <SidebarRail />

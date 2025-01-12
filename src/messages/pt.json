@@ -15,10 +15,11 @@
   "delete": "Eliminar",
   "email": "Endereço de e-mail",
   "email-is-verified": "O seu e-mail foi verificado, pode fazer login.",
-  "email-password-to-sign-in": "Introduza o seu e-mail e palavra-passe abaixo para fazer login",
+  "email-password-to-sign-in": "Introduza o seu e-mail e palavra-passe",
   "error-credentials": "Ocorreu um erro com as credenciais fornecidas. Por favor, tente novamente.",
   "error-something": "Algo correu mal.",
   "favorites": "Favoritos",
+  "forgot-password": "Esqueceu-se da senha?",
   "forgot-password-error": "Ocorreu um problema ao tentar enviar um e-mail de redefinição de palavra-passe. Por favor, tente novamente.",
   "go-back": "Volte",
   "help": "Ajuda",
@@ -41,5 +42,6 @@
   "sign-in": "Entrar",
   "sign-in-email-password": "Faça login com e-mail e password",
   "sign-up": "Inscrever-se",
+  "support": "Suporte",
   "terms": "Termos e Condições"
 }

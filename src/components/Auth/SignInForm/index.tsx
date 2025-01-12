@@ -24,6 +24,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useTheme } from '@/providers/Theme';
 import { useTolgee } from '@tolgee/react';
 import { setLanguage } from '@/tolgee/language';
+import { PasswordInput } from '@/components/PasswordInput';
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -144,12 +145,11 @@ export const AuthSignInForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
+                    <PasswordInput
                       required
-                      type="password"
                       placeholder={t('password')}
-                      {...field}
                       className="w-full"
+                      {...field}
                       disabled={isLoading}
                     />
                   </FormControl>

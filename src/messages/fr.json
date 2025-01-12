@@ -15,10 +15,11 @@
   "delete": "Supprimer",
   "email": "Adresse email",
   "email-is-verified": "Votre email est vérifié, vous pouvez vous connecter.",
-  "email-password-to-sign-in": "Entrez votre email et votre mot de passe ci-dessous pour vous connecter",
+  "email-password-to-sign-in": "Entrez votre email et votre mot de passe",
   "error-credentials": "Une erreur s'est produite avec les informations d'identification fournies. Veuillez réessayer.",
   "error-something": "Quelque chose s'est mal passé.",
   "favorites": "Favoris",
+  "forgot-password": "Mot de passe oublié?",
   "forgot-password-error": "Un problème est survenu lors de la tentative d'envoi d'un e-mail de réinitialisation de mot de passe. Veuillez réessayer.",
   "go-back": "Retourner",
   "help": "Aide",
@@ -41,5 +42,6 @@
   "sign-in": "Se connecter",
   "sign-in-email-password": "Connectez-vous avec votre e-mail et votre mot de passe",
   "sign-up": "S'inscrire",
+  "support": "Support",
   "terms": "Termes et Conditions"
 }

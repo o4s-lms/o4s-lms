@@ -15,10 +15,11 @@
   "delete": "Borrar",
   "email": "Correo electrónico",
   "email-is-verified": "Tu correo electrónico está verificado, puedes iniciar sesión.",
-  "email-password-to-sign-in": "Ingrese su correo electrónico y contraseña a continuación para iniciar sesión",
+  "email-password-to-sign-in": "Ingrese su correo electrónico y contraseña",
   "error-credentials": "Se produjo un error con las credenciales proporcionadas. Inténtalo nuevamente.",
   "error-something": "Algo salió mal.",
   "favorites": "Favoritos",
+  "forgot-password": "¿Olvidaste la contraseña?",
   "forgot-password-error": "Se produjo un problema al intentar enviarle un correo electrónico para restablecer su contraseña. Inténtelo nuevamente.",
   "go-back": "Volver",
   "help": "Ayuda",
@@ -41,5 +42,6 @@
   "sign-in": "Iniciar sesión",
   "sign-in-email-password": "Iniciar sesión con correo electrónico y contraseña",
   "sign-up": "Inscribirse",
+  "support": "Soporte",
   "terms": "Términos y Condiciones"
 }

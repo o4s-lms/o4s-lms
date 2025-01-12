@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import useDialogState from '@/hooks/use-dialog-state';
 import { Transaction } from '@/components/AppAdmin/Billing/Data/schema';
 
-type TransactionsDialogType = 'invite' | 'add' | 'edit' | 'delete'
+type TransactionsDialogType = 'add' | 'edit' | 'delete'
 
 interface TransactionsContextType {
   open: TransactionsDialogType | null
@@ -19,7 +19,7 @@ interface Props {
   children: React.ReactNode
 }
 
-export default function UsersProvider({ children }: Props) {
+export default function TransactionsProvider({ children }: Props) {
   const [open, setOpen] = useDialogState<TransactionsDialogType>(null)
   const [currentRow, setCurrentRow] = useState<Transaction | null>(null)
 
