@@ -1,6 +1,6 @@
 import { serve } from 'inngest/next';
 import { inngest } from '@/inngest/client';
-import { lastLessonAccess, lessonCompleted } from '@/inngest/functions';
+import { lastLessonAccess } from '@/inngest/functions';
 import {
   emailPasswordUpdated,
   updateUserRole,
@@ -12,6 +12,7 @@ import {
   pendingTransaction,
   processTransaction,
 } from '@/inngest/transactions';
+import { computeCourseProgress } from '@/inngest/courses';
 
 // Create an API that serves zero functions
 export const { GET, POST, PUT } = serve({
@@ -19,7 +20,6 @@ export const { GET, POST, PUT } = serve({
   functions: [
     /* your functions will be passed here later! */
     lastLessonAccess,
-    lessonCompleted,
     waitUserSignUp,
     updateUserRole,
     emailPasswordUpdated,
@@ -27,5 +27,6 @@ export const { GET, POST, PUT } = serve({
     emailProofOfPayment,
     pendingTransaction,
     processTransaction,
+    computeCourseProgress,
   ],
 });

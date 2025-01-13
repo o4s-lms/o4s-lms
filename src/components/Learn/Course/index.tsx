@@ -58,7 +58,7 @@ export function CourseContent({ userId, courseId }: CourseProps) {
         setLessonProgress(p);
         const f = await verifyIsFavorite(userId, lessonId);
         setIsFavorite(f);
-        await fetcher(
+        fetcher(
           `/api/functions/lastLessonAccess?userId=${userId}&courseId=${courseId}&lessonId=${lessonId}`,
           {
             method: 'POST',
@@ -152,6 +152,12 @@ export function CourseContent({ userId, courseId }: CourseProps) {
                 action: async () => {
                   const l = await lessonCompleted.mutateAsync(!progress?.completed);
                   if (l) setLessonProgress(l);
+                  fetcher(
+                    `/api/functions/computeCourseProgress?userId=${userId}&courseId=${courseId}`,
+                    {
+                      method: 'POST',
+                    },
+                  );
                 },
                 icon: renderCompletedIcon(),
                 key: 'complete',
@@ -207,7 +213,7 @@ export function CourseContent({ userId, courseId }: CourseProps) {
         </aside>
 
         <div className="flex w-full overflow-y-hidden p-1 pr-4">
-          <ContentSection title={lesson?.title} desc={`Last access: ${format(progress?.lastAccessed as string)} / Progress: ${progress?.completed ? `Completed at ${format(progress?.completedAt as string)}` : 'In Progress'}`} completed={progress?.completed}>
+          <ContentSection title={lesson?.title} desc={`Last access: ${format(progress?.lastAccessed as string)} - Progress: ${progress?.completed ? `Completed ${format(progress?.completedAt as string)}` : 'In Progress'}`} completed={progress?.completed}>
             <RichText
               className="mx-auto max-w-[96rem]"
               data={lesson?.content}

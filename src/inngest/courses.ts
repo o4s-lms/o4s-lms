@@ -1,9 +1,10 @@
+import { Where } from 'payload';
 import { inngest } from './client';
 
 export const createCourseProgress = inngest.createFunction(
   { id: 'create-course-progress' },
   { event: 'courses/create.progress.record' },
-  async ({ event, step, payload }) => {
+  async ({ event, step, payload, logger }) => {
     // Create initial progress record on enrollment
     // step 1 - create course progress record
     const progress = await step.run(
@@ -54,6 +55,119 @@ export const createCourseProgress = inngest.createFunction(
       message: `Initial progress record on enrollment created successful!`,
       enrollmentId: enrollment.docs[0].id,
       progressId: progress.id,
+    };
+  },
+);
+
+export const computeCourseProgress = inngest.createFunction(
+  { id: 'compute-course-progress' },
+  { event: 'courses/compute.course.progress' },
+  async ({ event, step, payload, logger }) => {
+    // step 1 - num lessons
+    const lessons = await step.run('get-num-lessons', async () => {
+      try {
+        const lessons = await payload.count({
+          collection: 'lessons',
+          where: {
+            and: [
+              {
+                course: {
+                  equals: event.data.courseId,
+                },
+              },
+              {
+                _status: {
+                  equals: 'published',
+                },
+              },
+            ],
+          },
+        });
+        logger.info(`Num lessons: ${lessons.totalDocs}`);
+        return lessons.totalDocs;
+      } catch (error) {
+        throw error;
+      }
+    });
+
+    const lessonsCompleted = await step.run(
+      'get-num-lessons-completed',
+      async () => {
+        try {
+          const progress = await payload.count({
+            collection: 'lesson-progress',
+            depth: 0,
+            where: {
+              and: [
+                {
+                  student: {
+                    equals: event.data.userId,
+                  },
+                },
+                {
+                  course: {
+                    equals: event.data.courseId,
+                  },
+                },
+                {
+                  completed: {
+                    equals: true,
+                  },
+                },
+              ],
+            },
+          });
+          logger.info(`Num completed lessons: ${progress.totalDocs}`);
+          return progress.totalDocs;
+        } catch (error) {
+          throw error;
+        }
+      },
+    );
+
+    const rawProgress = (lessonsCompleted / lessons) * 100;
+    const progress = Math.min(
+      100,
+      Math.max(0, Math.round(rawProgress * 10) / 10),
+    );
+
+    logger.info(`Overall Progress: ${progress}`);
+
+    // step 2 - update enrollment with qhe course progress
+    const courseProgress = await step.run(
+      'update-course-progress',
+      async () => {
+        try {
+          const courseProgress = await payload.update({
+            collection: 'course-progress',
+            where: {
+              and: [
+                {
+                  student: {
+                    equals: event.data.userId,
+                  },
+                },
+                {
+                  course: {
+                    equals: event.data.courseId,
+                  },
+                },
+              ],
+            },
+            data: {
+              overallProgress: progress,
+            },
+          });
+          return courseProgress.docs[0];
+        } catch (error) {
+          throw error;
+        }
+      },
+    );
+
+    return {
+      message: `Course progress updated successful!`,
+      courseProgress: courseProgress.overallProgress,
     };
   },
 );
