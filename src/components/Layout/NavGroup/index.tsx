@@ -201,7 +201,7 @@ const SidebarMenuCollapsedDropdown = ({
                 <a
                   href="#"
                   onClick={() => {
-                    setLessonId(sub.id);
+                    setLessonId(sub.id as string);
                   }}
                 >
                   {sub.icon && <sub.icon />}

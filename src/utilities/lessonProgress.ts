@@ -1,18 +1,14 @@
 'use server';
 
-import { headers as getHeaders } from 'next/headers';
-import configPromise from '@payload-config';
-import { getPayload, PaginatedDocs } from 'payload';
 import type { LessonProgress } from '@/payload-types';
+import { createPayloadClient } from '@/lib/payload';
+import { PaginatedDocs } from 'payload';
 
 export async function getLessonProgress(
+  userId: string,
   lessonId: string,
 ): Promise<LessonProgress | null> {
-  const headers = await getHeaders();
-  const payload = await getPayload({ config: configPromise });
-  const { user } = await payload.auth({ headers });
-
-  if (!user) return null;
+  const payload = await createPayloadClient();
 
   const result: PaginatedDocs<LessonProgress> = await payload.find({
     collection: 'lesson-progress',
@@ -22,7 +18,7 @@ export async function getLessonProgress(
       and: [
         {
           student: {
-            equals: user.id,
+            equals: userId,
           },
         },
         {
@@ -40,7 +36,7 @@ export async function getLessonProgress(
       collection: 'lesson-progress',
       depth: 0,
       data: {
-        student: user.id,
+        student: userId,
         lesson: lessonId,
         lastAccessed: new Date().toISOString(),
       },
@@ -49,4 +45,37 @@ export async function getLessonProgress(
   }
 
   return result.docs[0];
+}
+
+export async function updateLessonProgress(
+  userId: string,
+  lessonId: string,
+  state: boolean,
+): Promise<LessonProgress | null> {
+  const payload = await createPayloadClient();
+
+  const result = await payload.update({
+    collection: 'lesson-progress',
+    depth: 0,
+    where: {
+      and: [
+        {
+          student: {
+            equals: userId,
+          },
+        },
+        {
+          lesson: {
+            equals: lessonId,
+          },
+        },
+      ],
+    },
+    data: {
+      completed: state,
+      completedAt: state ? new Date().toISOString() : undefined,
+    },
+  });
+
+  return result.docs[0] ?? null;
 }

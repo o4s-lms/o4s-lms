@@ -9,7 +9,7 @@ import { getLessonById, getLessonProgress } from '@/utilities/lessons';
 import { usePathname } from 'next/navigation';
 import type { LessonProgress } from '@/payload-types';
 import { Speeddial } from '@/components/ui/animata/fabs/speed-dial';
-import { Check, Share2, SquarePen, Star, StarOff, Trash } from 'lucide-react';
+import { Check, Share2, SquarePen, Star, StarOff, Trash, X } from 'lucide-react';
 import { Main } from '@/components/Layout/Main';
 import { ContentSection } from './ContentSection';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -22,6 +22,8 @@ import {
 import { toast } from 'sonner';
 import { format } from 'timeago.js';
 import { useTranslate } from '@tolgee/react';
+import { fetcher } from '@/lib/fetcher';
+import { updateLessonProgress } from '@/utilities/lessonProgress';
 
 interface CourseProps {
   userId: string;
@@ -56,11 +58,10 @@ export function CourseContent({ userId, courseId }: CourseProps) {
         setLessonProgress(p);
         const f = await verifyIsFavorite(userId, lessonId);
         setIsFavorite(f);
-        await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/lastLessonAccess?userId=${userId}&courseId=${courseId}&lessonId=${lessonId}`,
+        await fetcher(
+          `/api/functions/lastLessonAccess?userId=${userId}&courseId=${courseId}&lessonId=${lessonId}`,
           {
             method: 'POST',
-            credentials: 'include',
           },
         );
       }
@@ -68,6 +69,19 @@ export function CourseContent({ userId, courseId }: CourseProps) {
 
     void getLesson();
   }, [courseId, lessonId, userId]);
+
+  const lessonCompleted = useMutation({
+    mutationFn: (state: boolean) => {
+      return updateLessonProgress(userId, lesson?.id as string, state);
+    },
+    onSuccess: () => {
+      toast.success('Lesson progress updated');
+    },
+    onError: (error) => {
+      toast.error('Failed to update lesson progress');
+      console.error('Failed to update lesson progress:', error);
+    },
+  });
 
   const createFavorite = useMutation({
     mutationFn: () => {
@@ -116,6 +130,11 @@ export function CourseContent({ userId, courseId }: CourseProps) {
     return <Star />
   }
 
+  const renderCompletedIcon = () => {
+    if (progress?.completed) return <X />
+    return <Check />
+  }
+
   return (
     <Main fixed>
       <div key="lesson-content" className="flex flex-1 flex-col space-y-2 overflow-hidden md:space-y-2 lg:flex-row lg:space-x-12 lg:space-y-0">
@@ -130,8 +149,11 @@ export function CourseContent({ userId, courseId }: CourseProps) {
                 label: 'Favorite',
               },
               {
-                action: () => {},
-                icon: <Check />,
+                action: async () => {
+                  const l = await lessonCompleted.mutateAsync(!progress?.completed);
+                  if (l) setLessonProgress(l);
+                },
+                icon: renderCompletedIcon(),
                 key: 'complete',
                 label: 'Complete',
               },
@@ -185,7 +207,7 @@ export function CourseContent({ userId, courseId }: CourseProps) {
         </aside>
 
         <div className="flex w-full overflow-y-hidden p-1 pr-4">
-          <ContentSection title={lesson?.title} desc={`Last access: ${format(progress?.lastAccessed)}`}>
+          <ContentSection title={lesson?.title} desc={`Last access: ${format(progress?.lastAccessed as string)} / Progress: ${progress?.completed ? `Completed at ${format(progress?.completedAt as string)}` : 'In Progress'}`} completed={progress?.completed}>
             <RichText
               className="mx-auto max-w-[96rem]"
               data={lesson?.content}
