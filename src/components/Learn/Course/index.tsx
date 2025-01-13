@@ -28,10 +28,10 @@ import {
   verifyIsFavorite,
 } from '@/utilities/favorites';
 import { toast } from 'sonner';
-import { format } from 'timeago.js';
 import { useTranslate } from '@tolgee/react';
 import { fetcher } from '@/lib/fetcher';
 import { updateLessonProgress } from '@/utilities/lessonProgress';
+import { fromNow } from '@/lib/utils';
 
 interface CourseProps {
   userId: string;
@@ -133,7 +133,7 @@ export function CourseContent({ userId, courseId }: CourseProps) {
     }
   };
 
-  const renderIcon = () => {
+  const renderFavoriteIcon = () => {
     if (isFavorite) return <StarOff />;
     return <Star />;
   };
@@ -156,8 +156,7 @@ export function CourseContent({ userId, courseId }: CourseProps) {
                 action: () => {
                   handleFavorite();
                 },
-                //icon: {!isFavorite ? <Star /> : <StarOff />},
-                icon: renderIcon(),
+                icon: renderFavoriteIcon(),
                 key: 'favorite',
                 label: 'Favorite',
               },
@@ -201,16 +200,31 @@ export function CourseContent({ userId, courseId }: CourseProps) {
           <Speeddial
             actionButtons={[
               {
-                action: () => {},
-                icon: <Star />,
-                key: 'copy',
-                label: 'Copy',
+                action: () => {
+                  handleFavorite();
+                },
+                icon: renderFavoriteIcon(),
+                key: 'favorite',
+                label: 'Favorite',
               },
               {
-                action: () => {},
-                icon: <SquarePen />,
-                key: 'edit',
-                label: 'Edit',
+                action: async () => {
+                  const l = await lessonCompleted.mutateAsync(
+                    !progress?.completed,
+                  );
+                  if (l) {
+                    setLessonProgress(l);
+                    fetcher(
+                      `/api/functions/computeCourseProgress?userId=${userId}&courseId=${courseId}`,
+                      {
+                        method: 'POST',
+                      },
+                    );
+                  }
+                },
+                icon: renderCompletedIcon(),
+                key: 'complete',
+                label: 'Complete',
               },
               {
                 action: () => {},
@@ -232,7 +246,7 @@ export function CourseContent({ userId, courseId }: CourseProps) {
         <div className="flex w-full overflow-y-hidden p-1 pr-4">
           <ContentSection
             title={lesson?.title}
-            desc={`Last access: ${format(progress?.lastAccessed as string)} - Progress: ${progress?.completed ? `Completed ${format(progress?.completedAt as string)}` : 'In Progress'}`}
+            desc={`Last access: ${fromNow(progress?.lastAccessed as string, 'pt')} - Progress: ${progress?.completed ? `Completed ${fromNow(progress?.completedAt as string, 'pt')}` : 'In Progress'}`}
             completed={progress?.completed}
           >
             <RichText

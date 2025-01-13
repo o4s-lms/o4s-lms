@@ -1,6 +1,14 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import * as z from 'zod';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/pt';
+import 'dayjs/locale/en';
+import 'dayjs/locale/fr';
+import 'dayjs/locale/es';
+
+dayjs.extend(relativeTime);
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -47,12 +55,12 @@ export const randBetween = (min: number, max: number) =>
 export const randInt = (max: number) => randBetween(0, max);
 export const randID = () => Math.random().toString(36).slice(2);
 
-export function until(conditionFunction) {
+export function toNow(date: string, language: 'pt' | 'en' | 'fr' | 'es') {
+  dayjs.locale(language);
+  return dayjs(date).toNow()
+}
 
-  const poll = resolve => {
-    if(conditionFunction()) resolve();
-    else setTimeout(_ => poll(resolve), 400);
-  }
-
-  return new Promise(poll);
+export function fromNow(date: string, language: 'pt' | 'en' | 'fr' | 'es') {
+  dayjs.locale(language);
+  return dayjs(new Date()).from(date)
 }

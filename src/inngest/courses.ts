@@ -1,10 +1,9 @@
-import { Where } from 'payload';
 import { inngest } from './client';
 
 export const createCourseProgress = inngest.createFunction(
   { id: 'create-course-progress' },
   { event: 'courses/create.progress.record' },
-  async ({ event, step, payload, logger }) => {
+  async ({ event, step, payload }) => {
     // Create initial progress record on enrollment
     // step 1 - create course progress record
     const progress = await step.run(
@@ -62,7 +61,7 @@ export const createCourseProgress = inngest.createFunction(
 export const computeCourseProgress = inngest.createFunction(
   { id: 'compute-course-progress' },
   { event: 'courses/compute.course.progress' },
-  async ({ event, step, payload, logger }) => {
+  async ({ event, step, payload }) => {
     // step 1 - num lessons
     const lessons = await step.run('get-num-lessons', async () => {
       try {
@@ -83,13 +82,13 @@ export const computeCourseProgress = inngest.createFunction(
             ],
           },
         });
-        logger.info(`Num lessons: ${lessons.totalDocs}`);
+
         return lessons.totalDocs;
       } catch (error) {
         throw error;
       }
     });
-
+    // step 2 - num lessons completed
     const lessonsCompleted = await step.run(
       'get-num-lessons-completed',
       async () => {
@@ -117,7 +116,7 @@ export const computeCourseProgress = inngest.createFunction(
               ],
             },
           });
-          logger.info(`Num completed lessons: ${progress.totalDocs}`);
+
           return progress.totalDocs;
         } catch (error) {
           throw error;
@@ -131,9 +130,7 @@ export const computeCourseProgress = inngest.createFunction(
       Math.max(0, Math.round(rawProgress * 10) / 10),
     );
 
-    logger.info(`Overall Progress: ${progress}`);
-
-    // step 2 - update enrollment with qhe course progress
+    // step 3 - update course progress
     const courseProgress = await step.run(
       'update-course-progress',
       async () => {
