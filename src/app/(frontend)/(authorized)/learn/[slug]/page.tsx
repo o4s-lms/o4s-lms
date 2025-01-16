@@ -28,16 +28,15 @@ type Args = {
 
 export default async function Page({ params: paramsPromise }: Args) {
   const user = await currentUser();
+  const { slug = '' } = await paramsPromise;
+  const url = '/learn/' + slug;
 
   if (!user) {
     // unauthorized()
     redirect(
-      `/sign-in?error=${encodeURIComponent('You must be logged in to access your account.')}&redirect=/dashboard`,
+      `/sign-in?error=${encodeURIComponent('You must be logged in to access your course.')}&redirect=${url}`,
     );
   }
-
-  const { slug = '' } = await paramsPromise;
-  const url = '/learn/' + slug;
   const course = await queryCourseBySlug({ slug });
 
   if (!course) return <PayloadRedirects url={url} />;
@@ -46,14 +45,12 @@ export default async function Page({ params: paramsPromise }: Args) {
     .map(({ value }) => value)
     .filter((module) => typeof module === 'object');
 
-  //const favorites = await queryFavoritesByUserId({ userId: user.id })
-
-  //const courseNav = await getLessons(course.title, course.modules);
+  const favorites = await queryFavoritesByUserId({ userId: user.id })
 
   console.log(JSON.stringify(course.modules));
 
   return (
-    <AppSideBarDataProvider title={course.title} modules={modules} >
+    <AppSideBarDataProvider title={course.title} modules={modules} favorites={favorites} >
       <AppSidebar />
       <div
         id="content"
@@ -96,7 +93,7 @@ const queryCourseBySlug = cache(async ({ slug }: { slug: string }) => {
 
   const result = await payload.find({
     collection: 'courses',
-    depth: 0,
+    depth: 2,
     limit: 2,
     pagination: false,
     where: {
@@ -109,7 +106,7 @@ const queryCourseBySlug = cache(async ({ slug }: { slug: string }) => {
   return result.docs?.[0] ?? null;
 });
 
-/**const queryFavoritesByUserId = cache(async ({ userId }: { userId: string }) => {
+const queryFavoritesByUserId = cache(async ({ userId }: { userId: string }) => {
   const payload = await createPayloadClient();
 
   const result = await payload.find({
@@ -125,7 +122,7 @@ const queryCourseBySlug = cache(async ({ slug }: { slug: string }) => {
   });
 
   return result.docs ?? null;
-});*/
+});
 
 const topNav = [
   {

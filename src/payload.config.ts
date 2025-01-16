@@ -16,6 +16,7 @@ import { Posts } from '@/collections/Posts';
 import { Courses } from '@/collections/Courses';
 import { Modules } from '@/collections/Courses/Modules';
 import { Lessons } from '@/collections/Courses/Lessons';
+import { LessonsContent } from '@/collections/Courses/Lessons/LessonContent';
 import { Enrollments } from '@/collections/Courses/Enrollments';
 import { CourseProgress } from '@/collections/Courses/Progress';
 import { LessonProgress } from '@/collections/Courses/Progress/LessonProgress';
@@ -112,6 +113,7 @@ export default buildConfig({
     Enrollments,
     Modules,
     Lessons,
+    LessonsContent,
     CourseProgress,
     LessonProgress,
     Achievements,

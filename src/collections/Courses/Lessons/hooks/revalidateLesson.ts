@@ -35,7 +35,7 @@ export const revalidateLesson: CollectionAfterChangeHook<Lesson> = ({
   return doc;
 };
 
-export const revalidateDelete: CollectionAfterDeleteHook<Course> = ({
+export const revalidateDelete: CollectionAfterDeleteHook<Lesson> = ({
   doc,
   req: { context },
 }) => {

@@ -56,6 +56,29 @@ export async function getLessonById(lessonId: string | null, depth = 0) {
   return lesson;
 }
 
+export async function getLessonContent(lessonId: string | null, depth = 0) {
+  const payload = await getPayload({ config: configPromise });
+
+  if (!lessonId) return null;
+
+  const lesson = await payload.find({
+    collection: 'lessons-content',
+    depth,
+    limit: 1,
+    where: {
+      lesson: {
+        equals: lessonId,
+      }
+    },
+    select: {
+      title: true,
+      content: true,
+    },
+  });
+
+  return lesson.docs[0] ?? null;
+}
+
 export async function getLessonProgress(
   userId: string,
   lessonId: string,

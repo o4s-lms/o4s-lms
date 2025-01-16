@@ -2,9 +2,14 @@
 
 import * as React from 'react';
 import { sidebarData } from '@/components/Layout/Data/AppSidebar';
-import { IconDualScreen, IconFileDescription } from '@tabler/icons-react';
+import {
+  IconDualScreen,
+  IconFileDescription,
+  IconStar,
+} from '@tabler/icons-react';
 import { SidebarData } from '@/components/Layout/types';
-import type { Module } from '@/payload-types';
+import type { Favorite, Module } from '@/payload-types';
+import { useTranslate } from '@tolgee/react';
 
 interface AppSideBarDataContextType {
   nav: SidebarData;
@@ -16,11 +21,18 @@ const AppSideBarDataContext =
 interface Props {
   title?: string;
   modules?: Module[];
+  favorites?: Favorite[];
   children: React.ReactNode;
 }
 
-export function AppSideBarDataProvider({ title, modules, children }: Props) {
+export function AppSideBarDataProvider({
+  title,
+  modules,
+  favorites,
+  children,
+}: Props) {
   const [nav, setNav] = React.useState<SidebarData | null>(null);
+  const { t } = useTranslate();
   //const [favorites, setFavorites] = React.useState<Favorite[] | null>(null);
   //const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -32,20 +44,20 @@ export function AppSideBarDataProvider({ title, modules, children }: Props) {
   React.useEffect(() => {
     async function getNav() {
       const groups = await sidebarData();
-      /**if (favorites && favorites.length > 0) {
-          const favs = favorites?.map((favorite) => ({
-            title: favorite?.title,
-            url: favorite.url,
-            icon: IconStar,
-            isFavorite: true,
-          }));
-  
-          const favoritesNav = {
-            title: t('favorites'),
-            items: favs,
-          };
-          groups.navGroups.push(favoritesNav);
-        }*/
+      if (favorites && favorites.length > 0) {
+        const favs = favorites?.map((favorite) => ({
+          title: favorite?.title,
+          url: favorite.url,
+          icon: IconStar,
+          isFavorite: true,
+        }));
+
+        const favoritesNav = {
+          title: t('favorites'),
+          items: favs,
+        };
+        groups.navGroups.push(favoritesNav);
+      }
 
       if (title) {
         const tmp = modules?.map((module) => ({
@@ -73,7 +85,7 @@ export function AppSideBarDataProvider({ title, modules, children }: Props) {
     }
 
     void getNav();
-  }, [modules, title]);
+  }, [favorites, modules, t, title]);
 
   const value: AppSideBarDataContextType = React.useMemo(
     () => ({

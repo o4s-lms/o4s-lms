@@ -5,7 +5,7 @@ import * as React from 'react';
 import RichText from '@/components/RichText';
 import { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical';
 import { useQueryState } from 'nuqs';
-import { getLessonById, getLessonProgress } from '@/utilities/lessons';
+import { getLessonContent, getLessonProgress } from '@/utilities/lessons';
 import type { LessonProgress } from '@/payload-types';
 import { Speeddial } from '@/components/ui/animata/fabs/speed-dial';
 import {
@@ -32,10 +32,10 @@ interface CourseProps {
 
 export function CourseContent({ userId, courseId }: CourseProps) {
   const [lessonId, setLessonId] = useQueryState('lessonId');
+
   const { t } = useTranslate();
   const [lesson, setLesson] = React.useState<
     | {
-        id: string;
         title: string;
         content: SerializedEditorState | null | undefined;
       }
@@ -51,7 +51,7 @@ export function CourseContent({ userId, courseId }: CourseProps) {
   React.useEffect(() => {
     const getLesson = async () => {
       if (lessonId) {
-        const l = await getLessonById(lessonId);
+        const l = await getLessonContent(lessonId);
         setLesson({ ...l });
         const p = await getLessonProgress(userId, lessonId);
         setLessonProgress(p);
