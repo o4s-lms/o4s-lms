@@ -57,8 +57,8 @@ importers:
         specifier: ^3.17.1
         version: 3.17.1(@types/react@19.0.7)(monaco-editor@0.52.2)(next@15.1.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4))(payload@3.17.1(graphql@16.10.0)(monaco-editor@0.52.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3)
       '@paypal/react-paypal-js':
-        specifier: ^8.7.0
-        version: 8.7.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        specifier: ^8.8.1
+        version: 8.8.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@radix-ui/react-accordion':
         specifier: ^1.2.2
         version: 1.2.2(@types/react-dom@19.0.3(@types/react@19.0.7))(@types/react@19.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -120,8 +120,8 @@ importers:
         specifier: 0.0.32
         version: 0.0.32(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@rocicorp/zero':
-        specifier: ^0.10.2024122404
-        version: 0.10.2025011400
+        specifier: ^0.11.2025011402
+        version: 0.11.2025011402
       '@tabler/icons-react':
         specifier: ^3.28.1
         version: 3.28.1(react@19.0.0)
@@ -163,16 +163,16 @@ importers:
         version: 1.11.13
       flowise-embed-react:
         specifier: ^1.0.7
-        version: 1.0.7(@types/node@22.10.6)(flowise-embed@2.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4)(typescript@5.7.3)
+        version: 1.0.7(@types/node@22.10.7)(flowise-embed@2.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4)(typescript@5.7.3)
       framer-motion:
-        specifier: ^11.17.0
+        specifier: ^11.18.0
         version: 11.18.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       graphql:
         specifier: ^16.10.0
         version: 16.10.0
       inngest:
-        specifier: ^3.29.3
-        version: 3.29.3(express@4.21.2)(fastify@5.2.1)(hono@4.6.16)(next@15.1.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4))(typescript@5.7.3)
+        specifier: ^3.30.0
+        version: 3.30.0(express@4.21.2)(fastify@5.2.1)(hono@4.6.16)(next@15.1.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4))(typescript@5.7.3)
       jsonwebtoken:
         specifier: ^9.0.2
         version: 9.0.2
@@ -186,7 +186,7 @@ importers:
         specifier: ^4.2.3
         version: 4.2.3(next@15.1.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4))
       nuqs:
-        specifier: ^2.3.0
+        specifier: ^2.3.1
         version: 2.3.1(next@15.1.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4))(react@19.0.0)
       payload:
         specifier: ^3.17.1
@@ -225,8 +225,8 @@ importers:
         specifier: ^0.33.5
         version: 0.33.5
       sonner:
-        specifier: ^1.7.1
-        version: 1.7.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        specifier: ^1.7.2
+        version: 1.7.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       tailwind-merge:
         specifier: ^2.6.0
         version: 2.6.0
@@ -253,10 +253,10 @@ importers:
         specifier: ^0.5.16
         version: 0.5.16(tailwindcss@3.4.17)
       '@types/node':
-        specifier: ^22.10.5
-        version: 22.10.6
+        specifier: ^22.10.7
+        version: 22.10.7
       '@types/react':
-        specifier: ^19.0.6
+        specifier: ^19.0.7
         version: 19.0.7
       '@types/react-dom':
         specifier: ^19.0.3
@@ -277,14 +277,14 @@ importers:
         specifier: 15.1.4
         version: 15.1.4(eslint@9.18.0(jiti@1.21.7))(typescript@5.7.3)
       postcss:
-        specifier: ^8.4.49
+        specifier: ^8.5.1
         version: 8.5.1
       prettier:
         specifier: 3.4.2
         version: 3.4.2
       prettier-plugin-tailwindcss:
-        specifier: ^0.6.9
-        version: 0.6.9(prettier@3.4.2)
+        specifier: ^0.6.10
+        version: 0.6.10(prettier@3.4.2)
       react-email:
         specifier: 3.0.6
         version: 3.0.6(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4)
@@ -2150,6 +2150,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@inngest/ai@0.0.0':
+    resolution: {integrity: sha512-Zic5ECvciYFgLyreuAwlD09/QrlHdCLBBZDodf+h9mTicXB1eq6sWgBOMQ4XiR31qVKVj19ADU7mtqF1+f7Lbg==}
+
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
     engines: {node: '>=12'}
@@ -2810,11 +2813,11 @@ packages:
   '@paypal/paypal-js@8.1.3':
     resolution: {integrity: sha512-DBqg0e0Q49RvW0rTkJUCR4BCGt9pz81kUwq8oKOBZBlBd7okA56NvG0ViTqdFLTRpbS1tnbfod4ePCgOq/nQyA==}
 
-  '@paypal/react-paypal-js@8.7.0':
-    resolution: {integrity: sha512-KW4EdL8hlLWBY6f9l1csxQ8Szh5bhMFLxl+DV29jHNwdlM6z3s+w4LZQ7GtgHktSrlNBHgblNNvwLNpcDtsZgg==}
+  '@paypal/react-paypal-js@8.8.1':
+    resolution: {integrity: sha512-Nz/1XkW71NbcV1RTp++9rICTV2xhnyue9iHPtO5ZGVjkwYaBkGeDO2WWumpt7TAFy1Eyh2reFGJ4NNEeYi/akw==}
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react: ^16.8.0 || ^17 || ^18 || ^19
+      react-dom: ^16.8.0 || ^17 || ^18 || ^19
 
   '@paypal/sdk-constants@1.0.151':
     resolution: {integrity: sha512-mmGLiMt7BYAKtoK1gxhUakvP1ua7lnbCR7LAaHsPc1KETWw9yMMARlpVEdfz9XGHrbzzNQep6U02zUtzXuncIA==}
@@ -3504,8 +3507,8 @@ packages:
     resolution: {integrity: sha512-bm+VUdF4CnKVjUj/dSCmVu0hjcyXaF/nKkw2rNhZUjGeBOMRy/hh8z/32h311es4dxCVvcZ3+QHQHMxF2YG5Kw==}
     hasBin: true
 
-  '@rocicorp/zero@0.10.2025011400':
-    resolution: {integrity: sha512-9c+AaHJWZKbmo/n2hQ/GI7uf8NxnLfv/Dk/O3UvUHTvVQN6YyJVUBMeF+x8bdeVMnLCSMvGz5nyOBGn1cEr7ag==}
+  '@rocicorp/zero@0.11.2025011402':
+    resolution: {integrity: sha512-9auqKPPXeZHVlGdFbhl2qTHmCjYWV/BQILiDUeBRCtME0bVokg3RKv8gF/MhB/kBZ5OyptDJC+dJaADcKecyog==}
     engines: {node: '>=20'}
     hasBin: true
 
@@ -3884,8 +3887,8 @@ packages:
   '@types/ms@0.7.34':
     resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
 
-  '@types/node@22.10.6':
-    resolution: {integrity: sha512-qNiuwC4ZDAUNcY47xgaSuS92cjf8JbSUoaKS77bmLG1rU7MlATVSiw/IlrjtIyyskXBZ8KkNfjK/P5na7rgXbQ==}
+  '@types/node@22.10.7':
+    resolution: {integrity: sha512-V09KvXxFiutGp6B7XkpaDXlNadZxrzajcY50EuoLIpQ6WWYCSvf19lVIazzfIzQvhUN2HjX12spLojTnhuKlGg==}
 
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
@@ -5619,8 +5622,8 @@ packages:
     resolution: {integrity: sha512-7PnF4oN3CvZF23ADhA5wRaYEQpJ8qygSkbtTXWBeXWXmEVRXK+1ITciHWwHhsjv1TmW0MgacIv6hEi5pX5NQdA==}
     engines: {node: '>=10'}
 
-  inngest@3.29.3:
-    resolution: {integrity: sha512-ZPeimUDL3QxuR6JiY+dYqiSApSnhBUN/uilfe4epM6wBCcr+jTGoNHmfvV9ohdHcuo8DH/eYx4rvFGR823nHVg==}
+  inngest@3.30.0:
+    resolution: {integrity: sha512-MLl66ylItUVqAxVr9dqYPaynh45DKBZo9TV+hfWk5x4A8vFC52aIhTM5EsCp4o2kTfZSYjNnalR7ROMbK56plA==}
     engines: {node: '>=14'}
     peerDependencies:
       '@sveltejs/kit': '>=1.27.3'
@@ -6858,15 +6861,15 @@ packages:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
 
-  prettier-plugin-tailwindcss@0.6.9:
-    resolution: {integrity: sha512-r0i3uhaZAXYP0At5xGfJH876W3HHGHDp+LCRUJrs57PBeQ6mYHMwr25KH8NPX44F2yGTvdnH7OqCshlQx183Eg==}
+  prettier-plugin-tailwindcss@0.6.10:
+    resolution: {integrity: sha512-ndj2WLDaMzACnr1gAYZiZZLs5ZdOeBYgOsbBmHj3nvW/6q8h8PymsXiEnKvj/9qgCCAoHyvLOisoQdIcsDvIgw==}
     engines: {node: '>=14.21.3'}
     peerDependencies:
       '@ianvs/prettier-plugin-sort-imports': '*'
       '@prettier/plugin-pug': '*'
       '@shopify/prettier-plugin-liquid': '*'
       '@trivago/prettier-plugin-sort-imports': '*'
-      '@zackad/prettier-plugin-twig-melody': '*'
+      '@zackad/prettier-plugin-twig': '*'
       prettier: ^3.0
       prettier-plugin-astro: '*'
       prettier-plugin-css-order: '*'
@@ -6888,7 +6891,7 @@ packages:
         optional: true
       '@trivago/prettier-plugin-sort-imports':
         optional: true
-      '@zackad/prettier-plugin-twig-melody':
+      '@zackad/prettier-plugin-twig':
         optional: true
       prettier-plugin-astro:
         optional: true
@@ -7497,8 +7500,8 @@ packages:
   sonic-boom@4.2.0:
     resolution: {integrity: sha512-INb7TM37/mAcsGmc9hyyI6+QR3rR1zVRu36B0NeGXKnOOLiZOfER5SA+N7X7k3yUYRzLWafduTDvJAfDswwEww==}
 
-  sonner@1.7.1:
-    resolution: {integrity: sha512-b6LHBfH32SoVasRFECrdY8p8s7hXPDn3OHUFbZZbiB1ctLS9Gdh6rpX2dVrpQA0kiL5jcRzDDldwwLkSKk3+QQ==}
+  sonner@1.7.2:
+    resolution: {integrity: sha512-zMbseqjrOzQD1a93lxahm+qMGxWovdMxBlkTbbnZdNqVLt4j+amF9PQxUCL32WfztOFt9t9ADYkejAL3jF9iNA==}
     peerDependencies:
       react: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
       react-dom: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
@@ -10318,6 +10321,11 @@ snapshots:
   '@img/sharp-win32-x64@0.33.5':
     optional: true
 
+  '@inngest/ai@0.0.0':
+    dependencies:
+      '@types/node': 22.10.7
+      typescript: 5.7.3
+
   '@isaacs/cliui@8.0.2':
     dependencies:
       string-width: 5.1.2
@@ -10353,7 +10361,7 @@ snapshots:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
-  '@ladle/react@2.5.1(@types/node@22.10.6)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4)(typescript@5.7.3)':
+  '@ladle/react@2.5.1(@types/node@22.10.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4)(typescript@5.7.3)':
     dependencies:
       '@babel/code-frame': 7.26.2
       '@babel/core': 7.26.0
@@ -10368,7 +10376,7 @@ snapshots:
       '@babel/traverse': 7.26.5
       '@babel/types': 7.26.5
       '@ladle/react-context': 1.0.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      '@vitejs/plugin-react': 3.1.0(vite@4.5.5(@types/node@22.10.6)(sass@1.77.4))
+      '@vitejs/plugin-react': 3.1.0(vite@4.5.5(@types/node@22.10.7)(sass@1.77.4))
       axe-core: 4.10.2
       boxen: 7.1.1
       chokidar: 3.6.0
@@ -10390,8 +10398,8 @@ snapshots:
       react-dom: 19.0.0(react@19.0.0)
       react-frame-component: 5.2.7(prop-types@15.8.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react-inspector: 6.0.2(react@19.0.0)
-      vite: 4.5.5(@types/node@22.10.6)(sass@1.77.4)
-      vite-tsconfig-paths: 4.3.2(typescript@5.7.3)(vite@4.5.5(@types/node@22.10.6)(sass@1.77.4))
+      vite: 4.5.5(@types/node@22.10.7)(sass@1.77.4)
+      vite-tsconfig-paths: 4.3.2(typescript@5.7.3)(vite@4.5.5(@types/node@22.10.7)(sass@1.77.4))
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -11054,7 +11062,7 @@ snapshots:
       qs-esm: 7.0.2
       react-diff-viewer-continued: 3.2.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       sass: 1.77.4
-      sonner: 1.7.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      sonner: 1.7.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       uuid: 10.0.0
     transitivePeerDependencies:
       - '@types/react'
@@ -11198,7 +11206,7 @@ snapshots:
       react-image-crop: 10.1.8(react@19.0.0)
       react-select: 5.9.0(@types/react@19.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       scheduler: 0.25.0
-      sonner: 1.7.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      sonner: 1.7.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       ts-essentials: 10.0.3(typescript@5.7.3)
       use-context-selector: 2.0.0(react@19.0.0)(scheduler@0.25.0)
       uuid: 10.0.0
@@ -11212,7 +11220,7 @@ snapshots:
     dependencies:
       promise-polyfill: 8.3.0
 
-  '@paypal/react-paypal-js@8.7.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
+  '@paypal/react-paypal-js@8.8.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
       '@paypal/paypal-js': 8.1.3
       '@paypal/sdk-constants': 1.0.151
@@ -11904,7 +11912,7 @@ snapshots:
       bindings: 1.5.0
       prebuild-install: 7.1.2
 
-  '@rocicorp/zero@0.10.2025011400':
+  '@rocicorp/zero@0.11.2025011402':
     dependencies:
       '@badrap/valita': 0.3.11
       '@databases/escape-identifier': 1.0.3
@@ -12373,13 +12381,13 @@ snapshots:
 
   '@types/busboy@1.5.4':
     dependencies:
-      '@types/node': 22.10.6
+      '@types/node': 22.10.7
 
   '@types/cookie@0.4.1': {}
 
   '@types/cors@2.8.17':
     dependencies:
-      '@types/node': 22.10.6
+      '@types/node': 22.10.7
 
   '@types/css-font-loading-module@0.0.7': {}
 
@@ -12439,7 +12447,7 @@ snapshots:
 
   '@types/ms@0.7.34': {}
 
-  '@types/node@22.10.6':
+  '@types/node@22.10.7':
     dependencies:
       undici-types: 6.20.0
 
@@ -12589,14 +12597,14 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@vitejs/plugin-react@3.1.0(vite@4.5.5(@types/node@22.10.6)(sass@1.77.4))':
+  '@vitejs/plugin-react@3.1.0(vite@4.5.5(@types/node@22.10.7)(sass@1.77.4))':
     dependencies:
       '@babel/core': 7.26.0
       '@babel/plugin-transform-react-jsx-self': 7.25.9(@babel/core@7.26.0)
       '@babel/plugin-transform-react-jsx-source': 7.25.9(@babel/core@7.26.0)
       magic-string: 0.27.0
       react-refresh: 0.14.2
-      vite: 4.5.5(@types/node@22.10.6)(sass@1.77.4)
+      vite: 4.5.5(@types/node@22.10.7)(sass@1.77.4)
     transitivePeerDependencies:
       - supports-color
 
@@ -13488,7 +13496,7 @@ snapshots:
     dependencies:
       '@types/cookie': 0.4.1
       '@types/cors': 2.8.17
-      '@types/node': 22.10.6
+      '@types/node': 22.10.7
       accepts: 1.3.8
       base64id: 2.0.0
       cookie: 0.7.2
@@ -14171,9 +14179,9 @@ snapshots:
 
   flatted@3.3.2: {}
 
-  flowise-embed-react@1.0.7(@types/node@22.10.6)(flowise-embed@2.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4)(typescript@5.7.3):
+  flowise-embed-react@1.0.7(@types/node@22.10.7)(flowise-embed@2.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4)(typescript@5.7.3):
     dependencies:
-      '@ladle/react': 2.5.1(@types/node@22.10.6)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4)(typescript@5.7.3)
+      '@ladle/react': 2.5.1(@types/node@22.10.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4)(typescript@5.7.3)
       flowise-embed: 2.1.0
       react: 19.0.0
     transitivePeerDependencies:
@@ -14529,8 +14537,9 @@ snapshots:
 
   ini@2.0.0: {}
 
-  inngest@3.29.3(express@4.21.2)(fastify@5.2.1)(hono@4.6.16)(next@15.1.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4))(typescript@5.7.3):
+  inngest@3.30.0(express@4.21.2)(fastify@5.2.1)(hono@4.6.16)(next@15.1.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4))(typescript@5.7.3):
     dependencies:
+      '@inngest/ai': 0.0.0
       '@types/debug': 4.1.12
       canonicalize: 1.0.8
       chalk: 4.1.2
@@ -15865,7 +15874,7 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier-plugin-tailwindcss@0.6.9(prettier@3.4.2):
+  prettier-plugin-tailwindcss@0.6.10(prettier@3.4.2):
     dependencies:
       prettier: 3.4.2
 
@@ -15918,7 +15927,7 @@ snapshots:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
-      '@types/node': 22.10.6
+      '@types/node': 22.10.7
       long: 5.2.4
 
   proxy-addr@2.0.7:
@@ -16627,7 +16636,7 @@ snapshots:
     dependencies:
       atomic-sleep: 1.0.0
 
-  sonner@1.7.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  sonner@1.7.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
@@ -17167,24 +17176,24 @@ snapshots:
       d3-time: 3.1.0
       d3-timer: 3.0.1
 
-  vite-tsconfig-paths@4.3.2(typescript@5.7.3)(vite@4.5.5(@types/node@22.10.6)(sass@1.77.4)):
+  vite-tsconfig-paths@4.3.2(typescript@5.7.3)(vite@4.5.5(@types/node@22.10.7)(sass@1.77.4)):
     dependencies:
       debug: 4.4.0
       globrex: 0.1.2
       tsconfck: 3.1.4(typescript@5.7.3)
     optionalDependencies:
-      vite: 4.5.5(@types/node@22.10.6)(sass@1.77.4)
+      vite: 4.5.5(@types/node@22.10.7)(sass@1.77.4)
     transitivePeerDependencies:
       - supports-color
       - typescript
 
-  vite@4.5.5(@types/node@22.10.6)(sass@1.77.4):
+  vite@4.5.5(@types/node@22.10.7)(sass@1.77.4):
     dependencies:
       esbuild: 0.18.20
       postcss: 8.5.1
       rollup: 3.29.5
     optionalDependencies:
-      '@types/node': 22.10.6
+      '@types/node': 22.10.7
       fsevents: 2.3.3
       sass: 1.77.4
 
