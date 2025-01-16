@@ -12,84 +12,19 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar';
 import { NavGroup } from '@/components/Layout/NavGroup';
-import { sidebarData } from '@/components/Layout/Data/AppSidebar';
 import { VERSION } from '@/lib/constants';
-import { useEffect, useState } from 'react';
-import type { SidebarData } from '@/components/Layout/types';
-import { useTolgee, useTranslate } from '@tolgee/react';
-import { Favorite, Module } from '@/payload-types';
-import {
-  IconDualScreen,
-  IconFileDescription,
-  IconStar,
-} from '@tabler/icons-react';
+import { useTranslate } from '@tolgee/react';
 import { Support } from '@/components/Support';
 import { MessageCircle } from 'lucide-react';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useAppSideBarData } from '@/providers/AppSideBarData';
+//import { useFavorites } from '@/providers/FavoritesContext';
+//import { favorites } from '@/payload-generated-schema';
 
-type AppSidebarProps = {
-  title?: string;
-  modules?: Module[];
-  favorites?: Favorite[];
-} & React.ComponentProps<typeof Sidebar>;
-
-export function AppSidebar({
-  title,
-  modules,
-  favorites,
-  ...props
-}: AppSidebarProps) {
-  const [nav, setNav] = useState<SidebarData | null>(null);
-  const tolgee = useTolgee(['language']);
-  const currentLanguage = tolgee.getLanguage();
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { nav } = useAppSideBarData();
   const { t } = useTranslate();
-
-  useEffect(() => {
-    async function getNav() {
-      const groups = await sidebarData();
-      if (favorites && favorites.length > 0) {
-        const favs = favorites?.map((favorite) => ({
-          title: favorite?.title,
-          url: favorite.url,
-          icon: IconStar,
-          isFavorite: true,
-        }));
-
-        const favoritesNav = {
-          title: t('favorites'),
-          items: favs,
-        };
-        groups.navGroups.push(favoritesNav);
-      }
-
-      if (title) {
-        const tmp = modules?.map((module) => ({
-          title: module.title,
-          icon: IconDualScreen,
-          items: module.lessons
-            .map(({ value }) => value)
-            .filter((lesson) => typeof lesson === 'object')
-            .map((lesson) => ({
-              id: lesson.id,
-              title: lesson.title,
-              url: '#',
-              icon: IconFileDescription,
-            })),
-        }));
-        const courseNav = {
-          title: title,
-          items: tmp,
-        };
-
-        groups.navGroups.unshift(courseNav);
-      }
-
-      setNav(groups);
-    }
-
-    void getNav();
-  }, [currentLanguage, title, modules, t, favorites]);
 
   return (
     <Sidebar collapsible="icon" variant="floating" {...props}>
@@ -138,4 +73,4 @@ export function AppSidebar({
       <SidebarRail />
     </Sidebar>
   );
-}
+};

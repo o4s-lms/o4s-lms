@@ -12,6 +12,7 @@ import { ThemeSwitch } from '@/components/ThemeSwitch';
 import { ProfileDropdown } from '@/components/Layout/ProfileDropdown';
 import { createPayloadClient } from '@/lib/payload';
 import { currentUser } from '@/lib/session';
+import { AppSideBarDataProvider } from '@/providers/AppSideBarData';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -45,11 +46,15 @@ export default async function Page({ params: paramsPromise }: Args) {
     .map(({ value }) => value)
     .filter((module) => typeof module === 'object');
 
-  const favorites = await queryFavoritesByUserId({ userId: user.id })
+  //const favorites = await queryFavoritesByUserId({ userId: user.id })
+
+  //const courseNav = await getLessons(course.title, course.modules);
+
+  console.log(JSON.stringify(course.modules));
 
   return (
-    <>
-      <AppSidebar title={course.title} modules={modules} favorites={favorites} />
+    <AppSideBarDataProvider title={course.title} modules={modules} >
+      <AppSidebar />
       <div
         id="content"
         className={cn(
@@ -75,14 +80,14 @@ export default async function Page({ params: paramsPromise }: Args) {
         <span className="relative flex justify-center">
           <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-transparent bg-gradient-to-r from-transparent via-gray-500 to-transparent opacity-75"></div>
 
-          <span className="relative z-10 font-bold bg-white dark:bg-black px-6">
+          <span className="relative z-10 bg-white px-6 font-bold dark:bg-black">
             {course.title}
           </span>
         </span>
 
         <CourseContent userId={user.id} courseId={course.id} />
       </div>
-    </>
+    </AppSideBarDataProvider>
   );
 }
 
@@ -91,8 +96,8 @@ const queryCourseBySlug = cache(async ({ slug }: { slug: string }) => {
 
   const result = await payload.find({
     collection: 'courses',
-    depth: 2,
-    limit: 1,
+    depth: 0,
+    limit: 2,
     pagination: false,
     where: {
       slug: {
@@ -104,7 +109,7 @@ const queryCourseBySlug = cache(async ({ slug }: { slug: string }) => {
   return result.docs?.[0] ?? null;
 });
 
-const queryFavoritesByUserId = cache(async ({ userId }: { userId: string }) => {
+/**const queryFavoritesByUserId = cache(async ({ userId }: { userId: string }) => {
   const payload = await createPayloadClient();
 
   const result = await payload.find({
@@ -120,7 +125,7 @@ const queryFavoritesByUserId = cache(async ({ userId }: { userId: string }) => {
   });
 
   return result.docs ?? null;
-});
+});*/
 
 const topNav = [
   {

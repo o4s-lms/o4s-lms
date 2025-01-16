@@ -8,6 +8,7 @@ import { ThemeSwitch } from '@/components/ThemeSwitch';
 import { AppSidebar } from '@/components/Layout/AppSidebar';
 import { cn } from '@/lib/utils';
 import { AskAi } from '@/components/Learn/AskAi';
+import { AppSideBarDataProvider } from '@/providers/AppSideBarData';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function AskAIPage() {
   return (
-    <>
+    <AppSideBarDataProvider>
       <AppSidebar />
       <div
         id="content"
@@ -44,7 +45,7 @@ export default function AskAIPage() {
 
         <AskAi />
       </div>
-    </>
+    </AppSideBarDataProvider>
   );
 }
 

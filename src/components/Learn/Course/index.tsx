@@ -6,13 +6,11 @@ import RichText from '@/components/RichText';
 import { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical';
 import { useQueryState } from 'nuqs';
 import { getLessonById, getLessonProgress } from '@/utilities/lessons';
-import { usePathname } from 'next/navigation';
 import type { LessonProgress } from '@/payload-types';
 import { Speeddial } from '@/components/ui/animata/fabs/speed-dial';
 import {
   Check,
   Share2,
-  SquarePen,
   Star,
   StarOff,
   Trash,
@@ -20,13 +18,7 @@ import {
 } from 'lucide-react';
 import { Main } from '@/components/Layout/Main';
 import { ContentSection } from './ContentSection';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { FavoriteMutationData } from '@/hooks/useFavorites';
-import {
-  createUserFavorites,
-  removeUserFavorites,
-  verifyIsFavorite,
-} from '@/utilities/favorites';
+import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useTranslate } from '@tolgee/react';
 import { fetcher } from '@/lib/fetcher';
@@ -40,7 +32,6 @@ interface CourseProps {
 
 export function CourseContent({ userId, courseId }: CourseProps) {
   const [lessonId, setLessonId] = useQueryState('lessonId');
-  const pathname = usePathname();
   const { t } = useTranslate();
   const [lesson, setLesson] = React.useState<
     | {
@@ -54,8 +45,8 @@ export function CourseContent({ userId, courseId }: CourseProps) {
   const [progress, setLessonProgress] = React.useState<LessonProgress | null>(
     null,
   );
-  const [isFavorite, setIsFavorite] = React.useState<boolean>(false);
-  const queryClient = useQueryClient();
+  //const [isFavorite, setIsFavorite] = React.useState<boolean>(false);
+  //const queryClient = useQueryClient();
 
   React.useEffect(() => {
     const getLesson = async () => {
@@ -64,8 +55,8 @@ export function CourseContent({ userId, courseId }: CourseProps) {
         setLesson({ ...l });
         const p = await getLessonProgress(userId, lessonId);
         setLessonProgress(p);
-        const f = await verifyIsFavorite(userId, lessonId);
-        setIsFavorite(f);
+        //const f = await verifyIsFavorite(userId, lessonId);
+        //setIsFavorite(f);
         fetcher(
           `/api/functions/lastLessonAccess?userId=${userId}&courseId=${courseId}&lessonId=${lessonId}`,
           {
@@ -91,7 +82,7 @@ export function CourseContent({ userId, courseId }: CourseProps) {
     },
   });
 
-  const createFavorite = useMutation({
+  /**const createFavorite = useMutation({
     mutationFn: () => {
       const data: FavoriteMutationData = {
         objectType: 'lessons',
@@ -136,7 +127,7 @@ export function CourseContent({ userId, courseId }: CourseProps) {
   const renderFavoriteIcon = () => {
     if (isFavorite) return <StarOff />;
     return <Star />;
-  };
+  };*/
 
   const renderCompletedIcon = () => {
     if (progress?.completed) return <X />;
@@ -152,14 +143,14 @@ export function CourseContent({ userId, courseId }: CourseProps) {
         <aside className="top-0 hidden lg:sticky lg:block lg:w-16">
           <Speeddial
             actionButtons={[
-              {
+              /**{
                 action: () => {
                   handleFavorite();
                 },
                 icon: renderFavoriteIcon(),
                 key: 'favorite',
                 label: 'Favorite',
-              },
+              },*/
               {
                 action: async () => {
                   const l = await lessonCompleted.mutateAsync(
@@ -199,14 +190,14 @@ export function CourseContent({ userId, courseId }: CourseProps) {
         <aside className="top-0 lg:sticky lg:hidden lg:h-16">
           <Speeddial
             actionButtons={[
-              {
+              /**{
                 action: () => {
                   handleFavorite();
                 },
                 icon: renderFavoriteIcon(),
                 key: 'favorite',
                 label: 'Favorite',
-              },
+              },*/
               {
                 action: async () => {
                   const l = await lessonCompleted.mutateAsync(

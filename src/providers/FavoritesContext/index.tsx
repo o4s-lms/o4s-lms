@@ -1,21 +1,16 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { BulkOperationResult, Where } from 'payload';
+import * as React from 'react';
 import { useAuth } from '../Auth';
-import { stringify } from 'qs-esm';
-import { fetcher } from '@/lib/fetcher';
-import { Favorite, FavoritesSelect } from '@/payload-types';
-import { useMutation, UseMutationResult, useQueryClient } from '@tanstack/react-query';
-import { removeUserFavorites } from '@/utilities/favorites';
+import { Favorite } from '@/payload-types';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getFavorites, removeUserFavorites } from '@/utilities/favorites';
 import { toast } from 'sonner';
 
 interface FavoritesContextType {
-  favorites: Favorite[] | null;
+  favorites: Favorite[] | null | undefined;
   isLoading: boolean;
-  removeFavorite: UseMutationResult<BulkOperationResult<"favorites", FavoritesSelect<false> | FavoritesSelect<true>>, Error, {
-    id: string;
-}, unknown
+  removeFavorite: (id: string) => Promise<Favorite | unknown>;
 }
 
 const FavoritesContext = React.createContext<FavoritesContextType | null>(null);
@@ -24,14 +19,21 @@ interface Props {
   children: React.ReactNode;
 }
 
-export default function TransactionsProvider({ children }: Props) {
-  const [favorites, setFavorites] = useState<Favorite[] | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+export function FavoritesProvider({ children }: Props) {
+  //const [favorites, setFavorites] = React.useState<Favorite[] | null>(null);
+  //const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
-  const removeFavorite = useMutation({
-    mutationFn: ({ id }: { id: string }) => removeUserFavorites(id, 'lessons'),
+  const { data: favorites, isPending } = useQuery({
+    queryKey: ['user-favorites'],
+    queryFn: () => getFavorites(user?.id),
+  });
+
+  const {
+    mutate: removeFavorite,
+  } = useMutation({
+    mutationFn: (id: string) => removeUserFavorites(id, 'lessons'),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user-favorites'] });
       toast.success('Favorite removed');
@@ -42,7 +44,7 @@ export default function TransactionsProvider({ children }: Props) {
     },
   });
 
-  useEffect(() => {
+  /**React.useEffect(() => {
     const fetchFavorites = async () => {
       setIsLoading(true);
       if (user) {
@@ -60,27 +62,30 @@ export default function TransactionsProvider({ children }: Props) {
         );
 
         try {
-          const res = await fetcher(`/api/favorites${stringifiedQuery}`)
+          const res = await fetcher(`/api/favorites${stringifiedQuery}`);
           const data = await res.json();
           setFavorites(data.docs);
-
         } catch (error) {
           console.log('Failed to get user favorites:', error);
           throw error;
         }
       }
       setIsLoading(false);
-
     };
 
     void fetchFavorites();
-  }, [user]);
+  }, [user]);*/
 
-  return (
-    <FavoritesContext value={{ favorites, isLoading, removeFavorite }}>
-      {children}
-    </FavoritesContext>
+  const value: FavoritesContextType = React.useMemo(
+    () => ({
+      favorites: favorites,
+      isLoading: isPending,
+      removeFavorite,
+    }),
+    [favorites, isPending, removeFavorite],
   );
+
+  return <FavoritesContext value={value}>{children}</FavoritesContext>;
 }
 
 export const useFavorites = () => {

@@ -1,9 +1,33 @@
 'use server';
 
-import configPromise from '@payload-config';
-import { getPayload } from 'payload';
+import { createPayloadClient } from '@/lib/payload';
 
-export async function getModulesByCourseId(courseId: string) {
+export async function getModulesByCourseId(courseId: string | undefined) {
+  const payload = await createPayloadClient();
+
+  if (!courseId) return null;
+
+  const result = await payload.find({
+    collection: 'modules',
+    depth: 1,
+    limit: 50,
+    pagination: false,
+    where: {
+      course: {
+        equals: courseId,
+      },
+    },
+    select: {
+      title: true,
+      course: true,
+      lessons: true,
+    },
+  });
+
+  return result.docs ?? null;
+}
+
+/**export async function getModulesByCourseId(courseId: string) {
   const payload = await getPayload({ config: configPromise });
 
   const course = await payload.findByID({
@@ -53,4 +77,4 @@ export async function getModulesByCourseId(courseId: string) {
   ];
 
   return nav;
-}
+}*/

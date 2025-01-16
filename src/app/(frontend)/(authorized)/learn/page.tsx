@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 import { cache } from 'react';
 import { createPayloadClient } from '@/lib/payload';
 import { currentUser } from '@/lib/session';
+import { AppSideBarDataProvider } from '@/providers/AppSideBarData';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -30,7 +31,7 @@ export default async function Page() {
   const enrollments = await queryEnrollmentsByUser({ userId: user.id})
 
   return (
-    <>
+    <AppSideBarDataProvider>
       <AppSidebar />
       <div
         id="content"
@@ -56,7 +57,7 @@ export default async function Page() {
 
         <CoursesContent userId={user.id} enrollments={enrollments} />
       </div>
-    </>
+    </AppSideBarDataProvider>
   );
 }
 
