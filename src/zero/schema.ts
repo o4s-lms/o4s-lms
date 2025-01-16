@@ -57,7 +57,7 @@ export const permissions = definePermissions<AuthData, Schema>(schema, () => {
 
   const allowIfMessageRecipient = (
     authData: AuthData,
-    { cmp }: ExpressionBuilder<typeof notificationSchema>,
+    { cmp }: ExpressionBuilder<TableSchema>,
   ) => cmp('recipient', '=', authData.sub ?? '');
 
   return {

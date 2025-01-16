@@ -27,8 +27,8 @@
               {
                 "type": "simple",
                 "left": {
-                  "type": "column",
-                  "name": "recipient"
+                  "type": "literal",
+                  "value": "recipient"
                 },
                 "right": {
                   "type": "static",
