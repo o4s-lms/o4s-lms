@@ -2,17 +2,50 @@
   "permissions": {
     "notification": {
       "row": {
-        "update": {}
-      }
-    },
-    "user": {
-      "row": {
-        "update": {}
+        "insert": [
+          [
+            "allow",
+            {
+              "type": "simple",
+              "left": {
+                "type": "static",
+                "anchor": "authData",
+                "field": "sub"
+              },
+              "right": {
+                "type": "literal",
+                "value": "676d9f913e197080a3dd3a48"
+              },
+              "op": "="
+            }
+          ]
+        ],
+        "update": {
+          "preMutation": [
+            [
+              "allow",
+              {
+                "type": "simple",
+                "left": {
+                  "type": "column",
+                  "name": "recipient"
+                },
+                "right": {
+                  "type": "static",
+                  "anchor": "authData",
+                  "field": "sub"
+                },
+                "op": "="
+              }
+            ]
+          ]
+        },
+        "delete": []
       }
     }
   },
   "schema": {
-    "version": 1,
+    "version": 2,
     "tables": {
       "notification": {
         "tableName": "notification",
@@ -50,37 +83,6 @@
           },
           "type": {
             "type": "string",
-            "optional": false
-          }
-        },
-        "relationships": {
-          "to": {
-            "sourceField": [
-              "recipient"
-            ],
-            "destField": [
-              "id"
-            ],
-            "destSchema": "user"
-          }
-        }
-      },
-      "user": {
-        "tableName": "user",
-        "primaryKey": [
-          "id"
-        ],
-        "columns": {
-          "id": {
-            "type": "string",
-            "optional": false
-          },
-          "name": {
-            "type": "string",
-            "optional": false
-          },
-          "roles": {
-            "type": "json",
             "optional": false
           }
         },

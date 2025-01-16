@@ -46,30 +46,40 @@ export type Schema = typeof schema;
 export type Notification = Row<typeof notificationSchema>;
 
 type AuthData = {
-  id: string | null;
+  sub: string | null;
 };
 
 export const permissions = definePermissions<AuthData, Schema>(schema, () => {
   const allowIfAdmin = (
     authData: AuthData,
     { cmpLit }: ExpressionBuilder<typeof notificationSchema>,
-  ) => cmpLit(authData.id, '=', '676d9f913e197080a3dd3a48');
+  ) => cmpLit(authData.sub, '=', '676d9f913e197080a3dd3a48');
 
   const allowIfMessageRecipient = (
     authData: AuthData,
     { cmp }: ExpressionBuilder<typeof notificationSchema>,
-  ) => cmp('recipient', '=', authData.id ?? '');
+  ) => cmp('recipient', '=', authData.sub ?? '');
 
   return {
     notification: {
       row: {
-        read: allowIfMessageRecipient,
-        insert: allowIfAdmin,
+        read: [allowIfMessageRecipient],
+        insert: [allowIfAdmin],
         update: {
-          preMutation: allowIfMessageRecipient,
+          preMutation: [allowIfMessageRecipient],
         },
         delete: NOBODY_CAN,
       },
     },
   };
+  /**return {
+    notification: {
+      row: {
+        read: ANYONE_CAN,
+        insert: ANYONE_CAN,
+        update: ANYONE_CAN,
+        delete: NOBODY_CAN,
+      },
+    },
+  };*/
 });
