@@ -1,5 +1,6 @@
 'use client';
 
+import { fetcher } from '@/lib/fetcher';
 import Link from 'next/link';
 import React, { Fragment, useEffect, useState } from 'react';
 
@@ -10,12 +11,8 @@ export const LogoutPage: React.FC = () => {
   useEffect(() => {
     const performLogout = async () => {
       try {
-        await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/logout`, {
+        await fetcher(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/logout`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({}),
         });
         setSuccess('Logged out successfully.');
       } catch (_) {

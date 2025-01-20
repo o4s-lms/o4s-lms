@@ -17,6 +17,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/providers/Auth';
+import { fetcher } from '@/lib/fetcher';
 
 const formSchema = z
   .object({
@@ -55,13 +56,10 @@ export const ResetPasswordForm = () => {
   const onSubmit = React.useCallback(
     async (values: z.infer<typeof formSchema>) => {
       setIsLoading(true);
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/reset-password`,
+      const response = await fetcher(
+        `/api/users/reset-password`,
         {
           body: JSON.stringify(values),
-          headers: {
-            'Content-Type': 'application/json',
-          },
           method: 'POST',
         },
       );
@@ -72,22 +70,20 @@ export const ResetPasswordForm = () => {
         // Automatically log the user in after they successfully reset password
         try {
           const user = await login({ email: json.user.email, password: values.password });
-          await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/lastLogin?userId=${user.id}`,
+          await fetcher(
+            `/api/functions/lastLogin?userId=${user.id}`,
             {
               method: 'POST',
-              credentials: 'include',
             },
           );
         } catch (error) {
           throw error;
         }
 
-        await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/emailPasswordUpdated?email=${json.user.email}`,
+        await fetcher(
+          `/api/functions/emailPasswordUpdated?email=${json.user.email}`,
           {
             method: 'POST',
-            credentials: 'include',
           },
         );
 

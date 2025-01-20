@@ -20,6 +20,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/providers/Auth';
 import { useTranslate } from '@tolgee/react';
 import { PasswordInput } from '@/components/PasswordInput';
+import { fetcher } from '@/lib/fetcher';
 
 const formSchema = z
   .object({
@@ -70,13 +71,10 @@ export const AuthSignUpForm = ({ variant, id }: AuthFormProps) => {
       callbackURL = `http://localhost:3000/accept-invitation/${id}`;
     }
 
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users`,
+    const response = await fetcher(
+      `/api/users`,
       {
         body: JSON.stringify(values),
-        headers: {
-          'Content-Type': 'application/json',
-        },
         method: 'POST',
       },
     );
