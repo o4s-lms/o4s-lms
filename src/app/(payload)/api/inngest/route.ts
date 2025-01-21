@@ -13,6 +13,7 @@ import {
   processTransaction,
 } from '@/inngest/transactions';
 import { computeCourseProgress } from '@/inngest/courses';
+import { createAnnouncementNotifications } from '@/inngest/announcements';
 
 // Create an API that serves zero functions
 export const { GET, POST, PUT } = serve({
@@ -28,5 +29,6 @@ export const { GET, POST, PUT } = serve({
     pendingTransaction,
     processTransaction,
     computeCourseProgress,
+    createAnnouncementNotifications,
   ],
 });

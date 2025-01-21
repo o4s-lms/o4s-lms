@@ -98,6 +98,16 @@ export const Users: CollectionConfig = {
       async ({ req, doc, operation }) => {
         // Set enrolledAt on creation
         if (operation === 'create') {
+          // update sub for zero
+          if (!doc.sub) {
+            await req.payload.update({
+              collection: 'users',
+              id: doc.id,
+              data: {
+                sub: doc.id,
+              },
+            });
+          }
           // update eventual existing transactions
           await req.payload.update({
             collection: 'transactions',
@@ -116,12 +126,22 @@ export const Users: CollectionConfig = {
   },
   fields: [
     {
+      name: 'sub',
+      type: 'text',
+      saveToJWT: true,
+      admin: {
+        readOnly: true,
+        position: 'sidebar',
+      },
+    },
+    {
       name: 'name',
       type: 'text',
     },
     {
       name: 'role',
       type: 'select',
+      saveToJWT: true,
       admin: {
         position: 'sidebar',
       },

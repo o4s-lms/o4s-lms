@@ -25,6 +25,7 @@ import { Points } from '@/collections/Courses/Progress/Points';
 import { Badges } from '@/collections/Courses/Progress/Badges';
 import { Favorites } from '@/collections/Users/Favorites';
 import { Transactions } from '@/collections/Transactions';
+import { Announcements } from '@/collections/Communications/Announcements';
 import { Newsletter } from '@/collections/Newsletter';
 import { Users } from '@/collections/Users';
 import { Avatar } from '@/collections/Users/Avatar';
@@ -121,6 +122,7 @@ export default buildConfig({
     Badges,
     Favorites,
     Transactions,
+    Announcements,
     Newsletter,
     Users,
     Avatar,

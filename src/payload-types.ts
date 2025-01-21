@@ -27,6 +27,7 @@ export interface Config {
     badges: Badge;
     favorites: Favorite;
     transactions: Transaction;
+    announcements: Announcement;
     'newsletter-signups': NewsletterSignup;
     users: User;
     avatar: Avatar;
@@ -57,6 +58,7 @@ export interface Config {
     badges: BadgesSelect<false> | BadgesSelect<true>;
     favorites: FavoritesSelect<false> | FavoritesSelect<true>;
     transactions: TransactionsSelect<false> | TransactionsSelect<true>;
+    announcements: AnnouncementsSelect<false> | AnnouncementsSelect<true>;
     'newsletter-signups': NewsletterSignupsSelect<false> | NewsletterSignupsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     avatar: AvatarSelect<false> | AvatarSelect<true>;
@@ -495,6 +497,7 @@ export interface Post {
  */
 export interface User {
   id: string;
+  sub?: string | null;
   name?: string | null;
   role: 'admin' | 'user' | 'student' | 'teacher';
   /**
@@ -1408,6 +1411,53 @@ export interface Transaction {
   createdAt: string;
 }
 /**
+ * System-wide announcements
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "announcements".
+ */
+export interface Announcement {
+  id: string;
+  title: string;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  language: 'pt' | 'en' | 'fr' | 'es';
+  type:
+    | 'general'
+    | 'announcement'
+    | 'course'
+    | 'assignment'
+    | 'achievement'
+    | 'quiz'
+    | 'discussion'
+    | 'system'
+    | 'maintenance';
+  priority: 'low' | 'medium' | 'high';
+  audience: {
+    roles: ('all' | 'student' | 'teacher' | 'user' | 'admin')[];
+  };
+  status?: ('draft' | 'published' | 'scheduled' | 'archived') | null;
+  schedule?: {
+    publishAt?: string | null;
+    expireAt?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "newsletter-signups".
  */
@@ -1596,6 +1646,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'transactions';
         value: string | Transaction;
+      } | null)
+    | ({
+        relationTo: 'announcements';
+        value: string | Announcement;
       } | null)
     | ({
         relationTo: 'newsletter-signups';
@@ -2273,6 +2327,31 @@ export interface TransactionsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "announcements_select".
+ */
+export interface AnnouncementsSelect<T extends boolean = true> {
+  title?: T;
+  content?: T;
+  language?: T;
+  type?: T;
+  priority?: T;
+  audience?:
+    | T
+    | {
+        roles?: T;
+      };
+  status?: T;
+  schedule?:
+    | T
+    | {
+        publishAt?: T;
+        expireAt?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "newsletter-signups_select".
  */
 export interface NewsletterSignupsSelect<T extends boolean = true> {
@@ -2286,6 +2365,7 @@ export interface NewsletterSignupsSelect<T extends boolean = true> {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  sub?: T;
   name?: T;
   role?: T;
   avatar?: T;

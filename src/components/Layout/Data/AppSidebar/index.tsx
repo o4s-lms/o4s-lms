@@ -62,6 +62,11 @@ export const sidebarData = async (): Promise<SidebarData> => {
           url: '/dashboard/billing',
           icon: IconCreditCard,
         },
+        {
+          title: 'Notifications',
+          url: '/dashboard/notifications',
+          icon: IconNotification,
+        },
       ],
     },
     {

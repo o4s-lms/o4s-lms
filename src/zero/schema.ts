@@ -18,21 +18,25 @@ const notificationSchema = createTableSchema({
     id: 'string',
     recipient: 'string',
     subject: 'string',
-    content: 'string',
+    content: json(),
     type: enumeration<
-      | 'course_update'
+      | 'general'
+      | 'course'
       | 'assignment'
       | 'achievement'
       | 'announcement'
       | 'system'
       | 'quiz'
       | 'discussion'
+      | 'maintenance'
     >(),
     priority: enumeration<'low' | 'medium' | 'high'>(),
     read: 'boolean',
-    reference: json<{ collection: 'string'; id: 'string' }>(),
+    //reference: json<{ collection: 'string'; id: 'string' }>(),
+    reference: json(),
   },
   primaryKey: 'id',
+  index: 'recipient',
 });
 
 export const schema = createSchema({
@@ -43,30 +47,32 @@ export const schema = createSchema({
 });
 
 export type Schema = typeof schema;
-export type Notification = Row<typeof notificationSchema>;
+//export type Notification = Row<typeof notificationSchema>;
+type Notification = typeof schema.tables.notification;
 
 type AuthData = {
-  sub: string | null;
+  sub: string | null
+  role: string | null
 };
 
 export const permissions = definePermissions<AuthData, Schema>(schema, () => {
   const allowIfAdmin = (
     authData: AuthData,
-    { cmpLit }: ExpressionBuilder<typeof notificationSchema>,
-  ) => cmpLit(authData.sub, '=', '676d9f913e197080a3dd3a48');
+    { cmpLit }: ExpressionBuilder<Notification>,
+  ) => cmpLit(authData.role, '=', 'admin');
 
-  const allowIfMessageRecipient = (
+  const allowIfUserIsSelf = (
     authData: AuthData,
-    { cmp }: ExpressionBuilder<TableSchema>,
+    { cmp }: ExpressionBuilder<Notification>,
   ) => cmp('recipient', '=', authData.sub ?? '');
 
   return {
     notification: {
       row: {
-        read: [allowIfMessageRecipient],
+        read: [allowIfUserIsSelf],
         insert: [allowIfAdmin],
         update: {
-          preMutation: [allowIfMessageRecipient],
+          preMutation: [allowIfUserIsSelf],
         },
         delete: NOBODY_CAN,
       },

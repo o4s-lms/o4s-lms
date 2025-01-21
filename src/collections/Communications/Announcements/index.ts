@@ -1,6 +1,9 @@
-import { CollectionConfig } from 'payload'
-import { isAdmin, isAdminOrTeacher, isTeacher } from '@/access/roles'
-import { AccessArgs } from 'payload'
+import { CollectionConfig } from 'payload';
+import { isAdmin, isAdminOrTeacher, isTeacher } from '@/access/roles';
+import { AccessArgs } from 'payload';
+import { DEFAULT_LANGUAGE, ALL_LANGUAGES as LANGUAGES } from '@/tolgee/shared';
+import { getLocaleDisplayName } from '@/utilities/getLocaleDisplayName';
+import { fetcher } from '@/lib/fetcher';
 
 export const Announcements: CollectionConfig = {
   slug: 'announcements',
@@ -11,12 +14,14 @@ export const Announcements: CollectionConfig = {
   },
   access: {
     read: ({ req: { user } }: AccessArgs) => {
-      if (isAdminOrTeacher(user)) return true
+      if (!user) return false;
+      if (user.role === 'admin' || user.role === 'teacher') return true;
+
       return {
         status: {
-          equals: 'published'
-        }
-      }
+          equals: 'published',
+        },
+      };
     },
     create: isAdminOrTeacher,
     update: isAdminOrTeacher,
@@ -34,12 +39,30 @@ export const Announcements: CollectionConfig = {
       required: true,
     },
     {
+      name: 'language',
+      type: 'select',
+      admin: {
+        position: 'sidebar',
+      },
+      options: LANGUAGES.map((locale) => ({
+        label: getLocaleDisplayName(locale),
+        value: locale,
+      })),
+      required: true,
+      defaultValue: DEFAULT_LANGUAGE,
+    },
+    {
       name: 'type',
       type: 'select',
       required: true,
       options: [
         { label: 'General', value: 'general' },
-        { label: 'Course', value: 'course' },
+        { label: 'Announcement', value: 'announcement' },
+        { label: 'Course Update', value: 'course' },
+        { label: 'Assignment', value: 'assignment' },
+        { label: 'Achievement', value: 'achievement' },
+        { label: 'Quiz', value: 'quiz' },
+        { label: 'Discussion', value: 'discussion' },
         { label: 'System', value: 'system' },
         { label: 'Maintenance', value: 'maintenance' },
       ],
@@ -47,6 +70,7 @@ export const Announcements: CollectionConfig = {
     {
       name: 'priority',
       type: 'select',
+      required: true,
       defaultValue: 'medium',
       options: [
         { label: 'Low', value: 'low' },
@@ -62,6 +86,7 @@ export const Announcements: CollectionConfig = {
           name: 'roles',
           type: 'select',
           hasMany: true,
+          required: true,
           options: [
             { label: 'All Users', value: 'all' },
             { label: 'Students', value: 'student' },
@@ -112,10 +137,46 @@ export const Announcements: CollectionConfig = {
     beforeChange: [
       ({ data }) => {
         if (data.status === 'published' && !data.schedule.publishAt) {
-          data.schedule.publishAt = new Date()
+          data.schedule.publishAt = new Date();
         }
-        return data
+        return data;
+      },
+    ],
+    afterChange: [
+      async ({ doc, operation }) => {
+        if (
+          operation === 'create' &&
+          (doc.status === 'scheduled' || doc.status === 'published')
+        ) {
+          await fetcher(
+            `/api/functions/createAnnouncementNotifications?id=${doc.id}`,
+            {
+              method: 'POST',
+              body: JSON.stringify(doc),
+            },
+          );
+        }
+
+        /**if (operation === 'update' && doc.processed === false) {
+              
+              switch (doc.status) {
+                case 'completed':
+                  const f = doc.user ? 'processTransaction' : 'waitUserSignUp';
+                  await fetcher(`/api/functions/${f}`, {
+                    method: 'POST',
+                    body: JSON.stringify(doc),
+                
+                  });
+                  break;
+                case 'disputed':
+                  // transaction disputed - revoke the student access
+                  break;
+                case 'refunded':
+                  // transaction refunded - revoke the student access
+                  break;
+              }
+            }*/
       },
     ],
   },
-}
+};
