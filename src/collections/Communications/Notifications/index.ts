@@ -1,6 +1,7 @@
-import { CollectionConfig } from 'payload'
-import { isAdmin, isAdminOrTeacher } from '@/access/roles'
-import { AccessArgs } from 'payload'
+import { CollectionConfig } from 'payload';
+import { isAdmin } from '@/access/roles';
+import { AccessArgs } from 'payload';
+import { ANNOUNCEMENT_TYPES } from '@/lib/constants';
 
 export const Notifications: CollectionConfig = {
   slug: 'notifications',
@@ -11,21 +12,27 @@ export const Notifications: CollectionConfig = {
   },
   access: {
     read: ({ req: { user } }: AccessArgs) => {
-      if (isAdmin(user)) return true
+      if (!user) return false;
+      if (user?.role === 'admin') return true;
       return {
         recipient: {
-          equals: user?.id
-        }
-      }
+          equals: user?.id,
+        },
+      };
     },
-    create: ({ req: { user } }: AccessArgs) => isAdminOrTeacher(user),
+    create: ({ req: { user } }: AccessArgs) => {
+      if (!user) return false;
+      if (user.role === 'admin' || user.role === 'teacher') return true;
+      return false;
+    },
     update: ({ req: { user } }: AccessArgs) => {
-      if (isAdmin(user)) return true
+      if (!user) return false;
+      if (user?.role === 'admin') return true;
       return {
         recipient: {
-          equals: user?.id
-        }
-      }
+          equals: user?.id,
+        },
+      };
     },
     delete: isAdmin,
   },
@@ -34,64 +41,64 @@ export const Notifications: CollectionConfig = {
       name: 'subject',
       type: 'text',
       required: true,
+      admin: {
+        readOnly: true,
+      },
     },
     {
-      name: 'content',
-      type: 'richText',
+      name: 'announcement',
+      type: 'relationship',
+      relationTo: 'announcements',
       required: true,
-    },
-    {
-      name: 'type',
-      type: 'select',
-      required: true,
-      options: [
-        { label: 'Course Update', value: 'course_update' },
-        { label: 'Assignment', value: 'assignment' },
-        { label: 'Achievement', value: 'achievement' },
-        { label: 'Announcement', value: 'announcement' },
-        { label: 'System', value: 'system' },
-        { label: 'Quiz', value: 'quiz' },
-        { label: 'Discussion', value: 'discussion' },
-      ],
-    },
-    {
-      name: 'priority',
-      type: 'select',
-      defaultValue: 'medium',
-      options: [
-        { label: 'Low', value: 'low' },
-        { label: 'Medium', value: 'medium' },
-        { label: 'High', value: 'high' },
-      ],
+      admin: {
+        readOnly: true,
+      },
     },
     {
       name: 'recipient',
       type: 'relationship',
       relationTo: 'users',
       required: true,
-      hasMany: false,
+      admin: {
+        readOnly: true,
+      },
+    },
+    {
+      name: 'type',
+      type: 'select',
+      required: true,
+      options: ANNOUNCEMENT_TYPES,
+      admin: {
+        readOnly: true,
+      },
     },
     {
       name: 'read',
       type: 'checkbox',
       defaultValue: false,
+      required: true,
       admin: {
         position: 'sidebar',
       },
     },
     {
-      name: 'reference',
-      type: 'group',
-      fields: [
-        {
-          name: 'collection',
-          type: 'text',
-        },
-        {
-          name: 'id',
-          type: 'text',
-        },
-      ],
+      name: 'readAt',
+      type: 'date',
+      admin: {
+        readOnly: true,
+        position: 'sidebar',
+      },
     },
   ],
-}
+  hooks: {
+    beforeChange: [
+      async ({ data, operation }) => {
+        if (operation === 'update' && data.read && !data.readAt) {
+          data.readAt = new Date();
+        }
+
+        return data;
+      },
+    ],
+  },
+};

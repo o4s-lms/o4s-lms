@@ -13,7 +13,7 @@ import { SidebarNav } from './SidebarNav';
 import { AppearanceForm } from './Appearance';
 import { NotificationsForm } from './Notifications';
 import { Main } from '@/components/Layout/Main';
-import ContentSection from './ContentSection';
+import ContentSection from '../ContentSection';
 
 interface SettingsProps {
   user: User;

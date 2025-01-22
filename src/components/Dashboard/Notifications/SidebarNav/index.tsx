@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
-import { JSX, useState } from 'react';
+import { useState } from 'react';
 import {
   Select,
   SelectContent,
@@ -16,24 +16,23 @@ import { useRouter } from 'next/navigation';
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: {
-    step: string | null;
-    icon: JSX.Element;
-    title: string;
+    label: string | null;
+    value: string;
   }[];
-  currentStep: string | null;
+  notificationsType: string | null;
 }
 
 export function SidebarNav({
   className,
   items,
-  currentStep,
+  notificationsType,
   ...props
 }: SidebarNavProps) {
   //const [settingsStep, setSettingsStep] = useQueryState('settingsStep');
   const [val, setVal] = useState(
-    currentStep
-      ? `/dashboard/settings/${currentStep}`
-      : 'dashboard/settings/account',
+    notificationsType
+      ? `/dashboard/notifications/${notificationsType}`
+      : 'dashboard/notifications/unread',
   );
   const router = useRouter();
 
@@ -52,12 +51,11 @@ export function SidebarNav({
           <SelectContent>
             {items.map((item) => (
               <SelectItem
-                key={item.title}
-                value={`/dashboard/settings/${item.step}`}
+                key={item.value}
+                value={`/dashboard/notifications/${item.value}`}
               >
                 <div className="flex gap-x-4 px-2 py-1">
-                  <span className="scale-125">{item.icon}</span>
-                  <span className="text-md">{item.title}</span>
+                  <span className="text-md">{item.label}</span>
                 </div>
               </SelectItem>
             ))}
@@ -79,19 +77,18 @@ export function SidebarNav({
         >
           {items.map((item) => (
             <Link
-              key={item.title}
-              href={`/dashboard/settings/${item.step}`}
+              key={item.value}
+              href={`/dashboard/notifications/${item.value}`}
               className={cn(
                 buttonVariants({ variant: 'ghost' }),
-                currentStep === item.step
+                notificationsType === item.value
                   ? 'bg-muted hover:bg-muted'
                   : 'hover:bg-transparent hover:underline',
                 'justify-start',
               )}
             >
               <div className="flex gap-x-4 px-2 py-1">
-                <span className="scale-100">{item.icon}</span>
-                <span className="text-md">{item.title}</span>
+                <span className="text-md">{item.label}</span>
               </div>
             </Link>
           ))}

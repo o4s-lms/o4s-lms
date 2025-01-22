@@ -28,6 +28,7 @@ export interface Config {
     favorites: Favorite;
     transactions: Transaction;
     announcements: Announcement;
+    notifications: Notification;
     'newsletter-signups': NewsletterSignup;
     users: User;
     avatar: Avatar;
@@ -59,6 +60,7 @@ export interface Config {
     favorites: FavoritesSelect<false> | FavoritesSelect<true>;
     transactions: TransactionsSelect<false> | TransactionsSelect<true>;
     announcements: AnnouncementsSelect<false> | AnnouncementsSelect<true>;
+    notifications: NotificationsSelect<false> | NotificationsSelect<true>;
     'newsletter-signups': NewsletterSignupsSelect<false> | NewsletterSignupsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     avatar: AvatarSelect<false> | AvatarSelect<true>;
@@ -1454,6 +1456,35 @@ export interface Announcement {
     publishAt?: string | null;
     expireAt?: string | null;
   };
+  notifications?: number | null;
+  processed?: boolean | null;
+  processedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * System notifications and alerts
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "notifications".
+ */
+export interface Notification {
+  id: string;
+  subject: string;
+  announcement: string | Announcement;
+  recipient: string | User;
+  type:
+    | 'general'
+    | 'announcement'
+    | 'course'
+    | 'assignment'
+    | 'achievement'
+    | 'quiz'
+    | 'discussion'
+    | 'system'
+    | 'maintenance';
+  read: boolean;
+  readAt?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1650,6 +1681,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'announcements';
         value: string | Announcement;
+      } | null)
+    | ({
+        relationTo: 'notifications';
+        value: string | Notification;
       } | null)
     | ({
         relationTo: 'newsletter-signups';
@@ -2347,6 +2382,23 @@ export interface AnnouncementsSelect<T extends boolean = true> {
         publishAt?: T;
         expireAt?: T;
       };
+  notifications?: T;
+  processed?: T;
+  processedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "notifications_select".
+ */
+export interface NotificationsSelect<T extends boolean = true> {
+  subject?: T;
+  announcement?: T;
+  recipient?: T;
+  type?: T;
+  read?: T;
+  readAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }

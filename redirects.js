@@ -18,7 +18,13 @@ const redirects = async () => {
     source: '/dashboard/settings',
   };
 
-  const redirects = [internetExplorerRedirect, settings];
+  const notifications = {
+    destination: '/dashboard/notifications/unread',
+    permanent: true,
+    source: '/dashboard/notifications',
+  };
+
+  const redirects = [internetExplorerRedirect, settings, notifications];
 
   return redirects;
 };

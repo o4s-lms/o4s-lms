@@ -64,7 +64,7 @@ export const sidebarData = async (): Promise<SidebarData> => {
         },
         {
           title: 'Notifications',
-          url: '/dashboard/notifications',
+          url: '/dashboard/notifications/unread',
           icon: IconNotification,
         },
       ],

@@ -1,20 +1,11 @@
 import { Where } from 'payload';
 import { inngest } from './client';
-import { createId } from '@paralleldrive/cuid2';
-import { schema } from '@/zero/schema';
-import { Zero } from '@rocicorp/zero';
 
 export const createAnnouncementNotifications = inngest.createFunction(
   { id: 'create-notifications-for-announcement' },
   { event: 'announcements/create.notifications.records' },
   async ({ event, step, payload }) => {
     const now = new Date().toISOString();
-    const z = new Zero({
-      schema: schema,
-      auth: event.user.token,
-      server: process.env.ZERO_PUBLIC_SERVER,
-      userID: event.user.id,
-    });
 
     // step 1 - create notification records
     const announcement = await step.run(
@@ -38,14 +29,14 @@ export const createAnnouncementNotifications = inngest.createFunction(
       Date.parse(announcement.schedule?.publishAt) > Date.parse(now)
     ) {
       await step.sleepUntil(
-        'wait-for-iso-string',
+        'wait-for-publish-date',
         announcement.schedule.publishAt,
       );
     }
 
     // step 2 - get recipient records
     const recipients = await step.run('get-recipient-records', async () => {
-      if (announcement.status !== 'published') {
+      /**if (announcement.status !== 'published') {
         try {
           await payload.update({
             collection: 'announcements',
@@ -57,7 +48,7 @@ export const createAnnouncementNotifications = inngest.createFunction(
         } catch (error) {
           throw error;
         }
-      }
+      }*/
       let query: Where;
       if (announcement.audience?.roles.includes('all')) {
         query = {
@@ -96,23 +87,63 @@ export const createAnnouncementNotifications = inngest.createFunction(
       }
     });
 
-    // step 2 - create notification zero records
+    // step 3 - create notification records
     await step.run('create-notification-records', async () => {
-      recipients.map((recipient) => {
-        z.mutate.notification.insert({
-          id: createId(),
-          recipient: recipient.id,
-          subject: announcement.title,
-          content: announcement.content,
-          type: announcement.type,
-          priority: announcement.priority,
-          read: false,
-          reference: {
-            collection: 'announcements',
-            id: announcement.id,
-          },
-        });
+      recipients.map(async (recipient) => {
+        try {
+          await payload.create({
+            collection: 'notifications',
+            data: {
+              subject: announcement.title,
+              announcement: announcement.id,
+              recipient: recipient.id,
+              type: announcement.type,
+              read: false,
+            },
+          });
+        } catch (error) {
+          throw error;
+        }
+        
       });
     });
+
+    // step 4 - get the notifications number
+    const notifications = await step.run('get-notifications-number', async () => {
+      try {
+        const result = await payload.count({
+          collection: 'notifications',
+          where: {
+            announcement: {
+              equals: announcement.id,
+            }
+          },
+        });
+        return result.totalDocs;
+      } catch (error) {
+        throw error;
+      }
+    });
+
+    // step 5 - update announcement to processed
+    await step.run('update-announcement-to-processed', async () => {
+      try {
+        await payload.update({
+          collection: 'announcements',
+          id: event.data.id,
+          data: {
+            notifications: notifications,
+            processed: true,
+          },
+        });
+      } catch (error) {
+        throw error;
+      }
+    });
+
+    return {
+      success: true,
+      notifications: notifications,
+    }
   },
 );

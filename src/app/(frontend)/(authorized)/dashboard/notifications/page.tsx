@@ -7,7 +7,6 @@ import { ThemeSwitch } from '@/components/ThemeSwitch';
 import { redirect } from 'next/navigation';
 import { Notifications } from '@/components/Dashboard/Notifications';
 import { currentUser } from '@/lib/session';
-import { Z } from './provider';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -37,9 +36,7 @@ export default async function NotificationsPage() {
           <ProfileDropdown />
         </div>
       </Header>
-      <Z userID={user.id}>
-        <Notifications userId={user.id} />
-      </Z>
+      <Notifications userId={user.id} />
     </>
   );
 }

@@ -20,3 +20,29 @@ export const TICKETS_STATUS = [
   { label: 'Canceled', value: 'canceled' },
   { label: 'Unanswered', value: 'unanswered' },
 ];
+
+export const ANNOUNCEMENT_TYPES = [
+  { label: 'General', value: 'general' },
+  { label: 'Announcement', value: 'announcement' },
+  { label: 'Course Update', value: 'course' },
+  { label: 'Assignment', value: 'assignment' },
+  { label: 'Achievement', value: 'achievement' },
+  { label: 'Quiz', value: 'quiz' },
+  { label: 'Discussion', value: 'discussion' },
+  { label: 'System', value: 'system' },
+  { label: 'Maintenance', value: 'maintenance' },
+];
+
+export const NOTIFICATIONS_TYPES = [
+  { label: 'Unread', value: 'unread' },
+  { label: 'All', value: 'all' },
+  { label: 'General', value: 'general' },
+  { label: 'Announcement', value: 'announcement' },
+  { label: 'Course Update', value: 'course' },
+  { label: 'Assignment', value: 'assignment' },
+  { label: 'Achievement', value: 'achievement' },
+  { label: 'Quiz', value: 'quiz' },
+  { label: 'Discussion', value: 'discussion' },
+  { label: 'System', value: 'system' },
+  { label: 'Maintenance', value: 'maintenance' },
+];

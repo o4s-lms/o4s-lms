@@ -1,9 +1,10 @@
 import { CollectionConfig } from 'payload';
-import { isAdmin, isAdminOrTeacher, isTeacher } from '@/access/roles';
+import { isAdmin, isAdminOrTeacher } from '@/access/roles';
 import { AccessArgs } from 'payload';
 import { DEFAULT_LANGUAGE, ALL_LANGUAGES as LANGUAGES } from '@/tolgee/shared';
 import { getLocaleDisplayName } from '@/utilities/getLocaleDisplayName';
 import { fetcher } from '@/lib/fetcher';
+import { ANNOUNCEMENT_TYPES } from '@/lib/constants';
 
 export const Announcements: CollectionConfig = {
   slug: 'announcements',
@@ -55,17 +56,7 @@ export const Announcements: CollectionConfig = {
       name: 'type',
       type: 'select',
       required: true,
-      options: [
-        { label: 'General', value: 'general' },
-        { label: 'Announcement', value: 'announcement' },
-        { label: 'Course Update', value: 'course' },
-        { label: 'Assignment', value: 'assignment' },
-        { label: 'Achievement', value: 'achievement' },
-        { label: 'Quiz', value: 'quiz' },
-        { label: 'Discussion', value: 'discussion' },
-        { label: 'System', value: 'system' },
-        { label: 'Maintenance', value: 'maintenance' },
-      ],
+      options: ANNOUNCEMENT_TYPES,
     },
     {
       name: 'priority',
@@ -132,13 +123,44 @@ export const Announcements: CollectionConfig = {
         },
       ],
     },
+    {
+      name: 'notifications',
+      type: 'number',
+      defaultValue: 0,
+      admin: {
+        readOnly: true,
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'processed',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        readOnly: true,
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'processedAt',
+      type: 'date',
+      admin: {
+        readOnly: true,
+        position: 'sidebar',
+      },
+    },
   ],
   hooks: {
     beforeChange: [
-      ({ data }) => {
+      async ({ data }) => {
         if (data.status === 'published' && !data.schedule.publishAt) {
           data.schedule.publishAt = new Date();
         }
+
+        if (data.processed && !data.processedAt) {
+          data.processedAt = new Date();
+        }
+
         return data;
       },
     ],
@@ -152,30 +174,9 @@ export const Announcements: CollectionConfig = {
             `/api/functions/createAnnouncementNotifications?id=${doc.id}`,
             {
               method: 'POST',
-              body: JSON.stringify(doc),
             },
           );
         }
-
-        /**if (operation === 'update' && doc.processed === false) {
-              
-              switch (doc.status) {
-                case 'completed':
-                  const f = doc.user ? 'processTransaction' : 'waitUserSignUp';
-                  await fetcher(`/api/functions/${f}`, {
-                    method: 'POST',
-                    body: JSON.stringify(doc),
-                
-                  });
-                  break;
-                case 'disputed':
-                  // transaction disputed - revoke the student access
-                  break;
-                case 'refunded':
-                  // transaction refunded - revoke the student access
-                  break;
-              }
-            }*/
       },
     ],
   },
