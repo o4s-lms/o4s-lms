@@ -1,3 +1,5 @@
+'use server';
+
 import { createPayloadClient } from "@/lib/payload";
 import { Notification } from "@/payload-types";
 
