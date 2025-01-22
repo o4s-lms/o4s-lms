@@ -16,3 +16,27 @@ export async function getNotifications(userId: string): Promise<Notification[] |
 
   return notifications.docs ?? null
 }
+export async function unreadNotifications(userId: string): Promise<Notification[] | null> {
+  const payload = await createPayloadClient();
+
+  const notifications = await payload.find({
+    collection: 'notifications',
+    depth: 0,
+    where: {
+      and: [
+        {
+          recipient: {
+            equals: userId,
+          },
+        },
+        {
+          read: {
+            equals: false,
+          },
+        },
+      ],
+    }
+  })
+
+  return notifications.docs ?? null
+}

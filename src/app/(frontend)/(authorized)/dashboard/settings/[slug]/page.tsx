@@ -7,6 +7,7 @@ import { LanguageSelector } from '@/components/LangSelector.';
 import { ThemeSwitch } from '@/components/ThemeSwitch';
 import { ProfileDropdown } from '@/components/Layout/ProfileDropdown';
 import { currentUser } from '@/lib/session';
+import { NotificationsDropdown } from '@/components/Layout/Notifications';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -37,6 +38,7 @@ export default async function Settings({ params: paramsPromise }: Args) {
         <div className="ml-auto flex items-center space-x-4">
           {/**<Search />
                 <ThemeSwitch />*/}
+          <NotificationsDropdown />
           <LanguageSelector />
           <ThemeSwitch />
           <ProfileDropdown />

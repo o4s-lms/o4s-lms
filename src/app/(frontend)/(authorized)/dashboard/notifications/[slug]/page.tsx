@@ -9,6 +9,7 @@ import { currentUser } from '@/lib/session';
 import { createPayloadClient } from '@/lib/payload';
 import { Where } from 'payload';
 import { Notifications } from '@/components/Dashboard/Notifications';
+import { NotificationsDropdown } from '@/components/Layout/Notifications';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -44,6 +45,7 @@ export default async function NotificationsPage({ params: paramsPromise }: Args)
         <div className="ml-auto flex items-center space-x-4">
           {/**<Search />
                 <ThemeSwitch />*/}
+          <NotificationsDropdown />
           <LanguageSelector />
           <ThemeSwitch />
           <ProfileDropdown />
