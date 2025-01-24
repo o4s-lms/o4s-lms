@@ -26,7 +26,7 @@ export default async function LogOutPage() {
           <Undo2 className="mr-2 h-4 w-4" /> {t('go-back')}
         </Link>
       </Button>
-      <LogoutPage success={req.ok ? 'You have been logged out successfully.' : null} error={req.ok ? null : 'There was an error creating the account.'} />
+      <LogoutPage success={req.ok ? 'You have been logged out successfully.' : null} error={req.ok ? null : 'Something went wrong. Please try again.'} />
     </div>
   );
 }
