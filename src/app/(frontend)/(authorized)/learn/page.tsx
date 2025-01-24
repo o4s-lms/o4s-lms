@@ -12,6 +12,7 @@ import { cache } from 'react';
 import { createPayloadClient } from '@/lib/payload';
 import { currentUser } from '@/lib/session';
 import { AppSideBarDataProvider } from '@/providers/AppSideBarData';
+import { NotificationsDropdown } from '@/components/Layout/Notifications';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -49,6 +50,7 @@ export default async function Page() {
           <TopNav links={topNav} />
           <div className="ml-auto flex items-center space-x-4">
             {/**<Search />*/}
+            <NotificationsDropdown />
             <LanguageSelector />
             <ThemeSwitch />
             <ProfileDropdown />

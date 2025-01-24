@@ -1,20 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from 'lucide-react';
-
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -33,638 +19,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { Drawer } from 'vaul';
 import type { Transaction } from '@/payload-types';
 import { Main } from '@/components/Layout/Main';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
+import { DotFilledIcon, DotsVerticalIcon } from '@radix-ui/react-icons';
+import { fromNow } from '@/lib/utils';
+import { Invoice } from './Invoice';
+import { fetcher } from '@/lib/fetcher';
 
-const cols = () => {
-
-  const columns: ColumnDef<Partial<Transaction>>[] = [
-    {
-      id: 'select',
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && 'indeterminate')
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
-      accessorKey: 'id',
-      header: 'Transaction ID',
-      cell: ({ row }) => <div>{row.getValue('id')}</div>,
-    },
-    {
-      accessorKey: 'status',
-      header: 'Status',
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue('status')}</div>
-      ),
-    },
-    {
-      accessorKey: 'provider',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Provider
-            <ArrowUpDown />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue('provider')}</div>
-      ),
-    },
-    {
-      accessorKey: 'courses',
-      header: 'Courses',
-      cell: ({ row }) => {
-        const c = row.original.courses;
-        const courses = c
-          ?.map(({ value }) => value)
-          .filter((course) => typeof course === 'object');
-        return (
-          <div className="flex items-center">
-            <ul>
-              {courses?.map((course, index) => (
-                <li key={index}>{course.title}</li>
-              ))}
-            </ul>
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: 'amount',
-      header: () => <div className="text-right">Amount</div>,
-      cell: ({ row }) => {
-        const amount = parseFloat(row.getValue('amount')) / 100;
-  
-        // Format the amount as a euro amount
-        const formatted = new Intl.NumberFormat('pt-PT', {
-          style: 'currency',
-          currency: 'EUR',
-        }).format(amount);
-  
-        return <div className="text-right font-medium">{formatted}</div>;
-      },
-    },
-    {
-      accessorKey: 'discount',
-      header: () => <div className="text-right">Discount</div>,
-      cell: ({ row }) => {
-        const discount = parseFloat(row.getValue('discount')) / 100;
-  
-        // Format the amount as a euro amount
-        const formatted = new Intl.NumberFormat('pt-PT', {
-          style: 'currency',
-          currency: 'EUR',
-        }).format(discount);
-  
-        return <div className="text-right font-medium">{formatted}</div>;
-      },
-    },
-    {
-      accessorKey: 'tax',
-      header: () => <div className="text-right">Tax</div>,
-      cell: ({ row }) => {
-        const tax = parseFloat(row.getValue('tax')) / 100;
-  
-        // Format the amount as a euro amount
-        const formatted = new Intl.NumberFormat('pt-PT', {
-          style: 'currency',
-          currency: 'EUR',
-        }).format(tax);
-  
-        return <div className="text-right font-medium">{formatted}</div>;
-      },
-    },
-    {
-      accessorKey: 'total',
-      header: () => <div className="text-right">Total</div>,
-      cell: ({ row }) => {
-        const total = parseFloat(row.getValue('total')) / 100;
-  
-        // Format the amount as a euro amount
-        const formatted = new Intl.NumberFormat('pt-PT', {
-          style: 'currency',
-          currency: 'EUR',
-        }).format(total);
-  
-        return <div className="text-right font-medium">{formatted}</div>;
-      },
-    },
-    {
-      id: 'actions',
-      enableHiding: false,
-      cell: ({ row }) => {
-        const transaction = row.original;
-  
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem asChild>
-                <Button
-                  onClick={() =>
-                    navigator.clipboard.writeText(transaction.id as string)
-                  }
-                  variant="outline"
-                  className="p-4"
-                >
-                  Copy transaction ID
-                </Button>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              {transaction.status === 'awaiting' && (
-                <>
-                  <DropdownMenuItem asChild>
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button variant="outline">Payment instructions</Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>
-                            Payment instructions:
-                          </AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Payment instructions:
-                            <Button
-                              onClick={async () => {
-                                await fetch(
-                                  `${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/emailPaymentInstructions?transactionId=${transaction.id}`,
-                                  {
-                                    method: 'POST',
-                                    credentials: 'include',
-                                  },
-                                );
-                                toast.info(
-                                  'Payment instructions sent via email!',
-                                );
-                              }}
-                              variant="outline"
-                            >
-                              Send payment instructions via email
-                            </Button>
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction>Continue</AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                </>
-              )}
-              <DropdownMenuItem asChild>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="outline">View transaction details</Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Transaction details:</AlertDialogTitle>
-                      <AlertDialogDescription asChild>
-                        <div className="mb-4 flex items-center gap-4">
-                          <table>
-                            <tbody>
-                              <tr>
-                                <td>Transaction ID:</td>
-                                <td>{transaction.id}</td>
-                              </tr>
-                              <tr>
-                                <td>Buyer name:</td>
-                                <td>{transaction.name}</td>
-                              </tr>
-                              <tr>
-                                <td>Buyer email:</td>
-                                <td>{transaction.email}</td>
-                              </tr>
-                              {transaction.provider === 'paypal' && (
-                                <tr>
-                                  <td>Paypal transaction ID:</td>
-                                  <td>{transaction.transactionId}</td>
-                                </tr>
-                              )}
-                              <tr>
-                                <td>Amount:</td>
-                                <td>
-                                  {new Intl.NumberFormat('pt-PT', {
-                                    style: 'currency',
-                                    currency: 'EUR',
-                                  }).format(transaction.amount / 100)}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Discount:</td>
-                                <td>
-                                  {new Intl.NumberFormat('pt-PT', {
-                                    style: 'currency',
-                                    currency: 'EUR',
-                                  }).format(transaction.discount / 100)}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Tax:</td>
-                                <td>
-                                  {new Intl.NumberFormat('pt-PT', {
-                                    style: 'currency',
-                                    currency: 'EUR',
-                                  }).format(transaction.tax / 100)}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Total:</td>
-                                <td>
-                                  {new Intl.NumberFormat('pt-PT', {
-                                    style: 'currency',
-                                    currency: 'EUR',
-                                  }).format(transaction.total / 100)}
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction>Continue</AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
-    },
-  ];
-
-  return columns;
-};
-
-export const columns: ColumnDef<Partial<Transaction>>[] = [
-  {
-    id: 'select',
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && 'indeterminate')
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: 'id',
-    header: 'Transaction ID',
-    cell: ({ row }) => <div>{row.getValue('id')}</div>,
-  },
-  {
-    accessorKey: 'status',
-    header: 'Status',
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue('status')}</div>
-    ),
-  },
-  {
-    accessorKey: 'provider',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Provider
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue('provider')}</div>
-    ),
-  },
-  {
-    accessorKey: 'courses',
-    header: 'Courses',
-    cell: ({ row }) => {
-      const c = row.original.courses;
-      const courses = c
-        ?.map(({ value }) => value)
-        .filter((course) => typeof course === 'object');
-      return (
-        <div className="flex items-center">
-          <ul>
-            {courses?.map((course, index) => (
-              <li key={index}>{course.title}</li>
-            ))}
-          </ul>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: 'amount',
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue('amount')) / 100;
-
-      // Format the amount as a euro amount
-      const formatted = new Intl.NumberFormat('pt-PT', {
-        style: 'currency',
-        currency: 'EUR',
-      }).format(amount);
-
-      return <div className="text-right font-medium">{formatted}</div>;
-    },
-  },
-  {
-    accessorKey: 'discount',
-    header: () => <div className="text-right">Discount</div>,
-    cell: ({ row }) => {
-      const discount = parseFloat(row.getValue('discount')) / 100;
-
-      // Format the amount as a euro amount
-      const formatted = new Intl.NumberFormat('pt-PT', {
-        style: 'currency',
-        currency: 'EUR',
-      }).format(discount);
-
-      return <div className="text-right font-medium">{formatted}</div>;
-    },
-  },
-  {
-    accessorKey: 'tax',
-    header: () => <div className="text-right">Tax</div>,
-    cell: ({ row }) => {
-      const tax = parseFloat(row.getValue('tax')) / 100;
-
-      // Format the amount as a euro amount
-      const formatted = new Intl.NumberFormat('pt-PT', {
-        style: 'currency',
-        currency: 'EUR',
-      }).format(tax);
-
-      return <div className="text-right font-medium">{formatted}</div>;
-    },
-  },
-  {
-    accessorKey: 'total',
-    header: () => <div className="text-right">Total</div>,
-    cell: ({ row }) => {
-      const total = parseFloat(row.getValue('total')) / 100;
-
-      // Format the amount as a euro amount
-      const formatted = new Intl.NumberFormat('pt-PT', {
-        style: 'currency',
-        currency: 'EUR',
-      }).format(total);
-
-      return <div className="text-right font-medium">{formatted}</div>;
-    },
-  },
-  {
-    id: 'actions',
-    enableHiding: false,
-    cell: ({ row }) => {
-      const transaction = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem asChild>
-              <Button
-                onClick={() =>
-                  navigator.clipboard.writeText(transaction.id as string)
-                }
-                variant="outline"
-                className="p-4"
-              >
-                Copy transaction ID
-              </Button>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            {transaction.status === 'awaiting' && (
-              <>
-                <DropdownMenuItem asChild>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button variant="outline">Payment instructions</Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Payment instructions:
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Payment instructions:
-                          <Button
-                            onClick={async () => {
-                              await fetch(
-                                `${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/emailPaymentInstructions?transactionId=${transaction.id}&email=${transaction.email}&total=${parseFloat(transaction.total) / 100}`,
-                                {
-                                  method: 'POST',
-                                  credentials: 'include',
-                                },
-                              );
-                              toast.info(
-                                'Payment instructions sent via email!',
-                              );
-                            }}
-                            variant="outline"
-                          >
-                            Send payment instructions via email
-                          </Button>
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction>Continue</AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-              </>
-            )}
-            <DropdownMenuItem asChild>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="outline">View transaction details</Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Transaction details:</AlertDialogTitle>
-                    <AlertDialogDescription asChild>
-                      <div className="mb-4 flex items-center gap-4">
-                        <table>
-                          <tbody>
-                            <tr>
-                              <td>Transaction ID:</td>
-                              <td>{transaction.id}</td>
-                            </tr>
-                            <tr>
-                              <td>Buyer name:</td>
-                              <td>{transaction.name}</td>
-                            </tr>
-                            <tr>
-                              <td>Buyer email:</td>
-                              <td>{transaction.email}</td>
-                            </tr>
-                            {transaction.provider === 'paypal' && (
-                              <tr>
-                                <td>Paypal transaction ID:</td>
-                                <td>{transaction.transactionId}</td>
-                              </tr>
-                            )}
-                            <tr>
-                              <td>Amount:</td>
-                              <td>
-                                {new Intl.NumberFormat('pt-PT', {
-                                  style: 'currency',
-                                  currency: 'EUR',
-                                }).format(transaction.amount / 100)}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>Discount:</td>
-                              <td>
-                                {new Intl.NumberFormat('pt-PT', {
-                                  style: 'currency',
-                                  currency: 'EUR',
-                                }).format(transaction.discount / 100)}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>Tax:</td>
-                              <td>
-                                {new Intl.NumberFormat('pt-PT', {
-                                  style: 'currency',
-                                  currency: 'EUR',
-                                }).format(transaction.tax / 100)}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>Total:</td>
-                              <td>
-                                {new Intl.NumberFormat('pt-PT', {
-                                  style: 'currency',
-                                  currency: 'EUR',
-                                }).format(transaction.total / 100)}
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction>Continue</AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
 
 export function Billing({ transactions }: { transactions: Transaction[] }) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
 
   const data = transactions.map((transaction) => transaction);
-
-  const table = useReactTable({
-    data,
-    columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
-  });
 
   return (
     <Main fixed>
@@ -674,124 +41,132 @@ export function Billing({ transactions }: { transactions: Transaction[] }) {
           <CardDescription>Manage your transactions.</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="mb-4 flex items-center gap-4">
-            <Input
-              placeholder="Filter providers..."
-              value={
-                (table.getColumn('provider')?.getFilterValue() as string) ?? ''
-              }
-              onChange={(event) =>
-                table.getColumn('provider')?.setFilterValue(event.target.value)
-              }
-              className="max-w-sm"
-            />
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="ml-auto">
-                  Columns <ChevronDown />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {table
-                  .getAllColumns()
-                  .filter((column) => column.getCanHide())
-                  .map((column) => {
-                    return (
-                      <DropdownMenuCheckboxItem
-                        key={column.id}
-                        className="capitalize"
-                        checked={column.getIsVisible()}
-                        onCheckedChange={(value) =>
-                          column.toggleVisibility(!!value)
-                        }
-                      >
-                        {column.id}
-                      </DropdownMenuCheckboxItem>
-                    );
-                  })}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                      return (
-                        <TableHead
-                          key={header.id}
-                          className="[&:has([role=checkbox])]:pl-3"
-                        >
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext(),
-                              )}
-                        </TableHead>
-                      );
-                    })}
-                  </TableRow>
-                ))}
-              </TableHeader>
-              <TableBody>
-                {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && 'selected'}
+          <ul role="list" className="px-5 divide-y divide-gray-100">
+            {data.map((item) => (
+              <li key={item.id} className="flex justify-between gap-x-6 py-5">
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-5">
+                    <h3 className="text-xl font-bold leading-6 text-gray-600">
+                      {item.id}
+                    </h3>
+                    <span
+                      className={`px-2 border tex-sm rounded ${item.status === "completed"
+                        ? "border-green-300 text-green-700 bg-green-50"
+                        : item.status === "awaiting"
+                          ? "border-gray-300 text-gray-700 bg-gray-50"
+                          : "border-orange-300 text-orange-700 bg-orange-50"
+                        }`}
                     >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell
-                          key={cell.id}
-                          className="[&:has([role=checkbox])]:pl-3"
-                        >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext(),
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="h-24 text-center"
-                    >
-                      No results.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-          <div className="flex items-center justify-end space-x-2 pt-4">
-            <div className="flex-1 text-sm text-muted-foreground">
-              {table.getFilteredSelectedRowModel().rows.length} of{' '}
-              {table.getFilteredRowModel().rows.length} row(s) selected.
-            </div>
-            <div className="space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}
-              >
-                Previous
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
-              >
-                Next
-              </Button>
-            </div>
-          </div>
+                      {item.status}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    {item.processedAt && (
+                      <>
+                        <p className="text-gray-400 text-sm">Processed at {fromNow(item.processedAt, 'pt')}</p>
+                        <DotFilledIcon className="text-gray-400 text-sm" />
+                      </>
+                    )}
+                    <p className="text-gray-400 text-sm">Created at {fromNow(item.createdAt, 'pt')} - {item.provider}</p>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <p className="text-gray-400 text-sm">Amount: {new Intl.NumberFormat('pt-PT', {
+                      style: 'currency',
+                      currency: 'EUR',
+                    }).format(item.amount / 100)}</p>
+                    <DotFilledIcon className="text-gray-400 text-sm" />
+                    <p className="text-gray-400 text-sm">Discount: {new Intl.NumberFormat('pt-PT', {
+                      style: 'currency',
+                      currency: 'EUR',
+                    }).format(item.discount / 100)}</p>
+                    <DotFilledIcon className="text-gray-400 text-sm" />
+                    <p className="text-gray-400 text-sm">Tax: {new Intl.NumberFormat('pt-PT', {
+                      style: 'currency',
+                      currency: 'EUR',
+                    }).format(item.tax / 100)}</p>
+                    <DotFilledIcon className="text-gray-400 text-sm" />
+                    <p className="text-gray-400 text-sm">Total: {new Intl.NumberFormat('pt-PT', {
+                      style: 'currency',
+                      currency: 'EUR',
+                    }).format(item.total / 100)}</p>
+                  </div>
+                </div>
+                <div className="items-end flex items-center gap-5">
+                  <div className="hidden shrink-0 sm:flex">
+                    {item.status === "completed" && (
+                      <Drawer.Root direction="right">
+                        <Drawer.Trigger asChild>
+                          <Button variant="outline">View invoice</Button>
+                        </Drawer.Trigger>
+                        <Drawer.Portal>
+                          <Drawer.Overlay className="fixed inset-0 bg-black/40" />
+                          <Drawer.Content
+                            className="right-2 top-2 bottom-2 fixed z-10 outline-none flex"
+                            // The gap between the edge of the screen and the drawer is 8px in this case.
+                            style={{ '--initial-transform': 'calc(100% + 8px)' } as React.CSSProperties}
+                          >
+                            <div className="p-4 bg-white"><Invoice transaction={item} /></div>
+                          </Drawer.Content>
+                        </Drawer.Portal>
+                      </Drawer.Root>
+                    )}
+                    {item.status === "awaiting" && (
+                      <Drawer.Root direction="right">
+                        <Drawer.Trigger asChild>
+                          <Button variant="outline">Payment instructions</Button>
+                        </Drawer.Trigger>
+                        <Drawer.Portal>
+                          <Drawer.Overlay className="fixed inset-0 bg-black/40" />
+                          <Drawer.Content
+                            className="right-2 top-2 bottom-2 fixed z-10 outline-none flex"
+                            // The gap between the edge of the screen and the drawer is 8px in this case.
+                            style={{ '--initial-transform': 'calc(100% + 8px)' } as React.CSSProperties}
+                          >
+                            <div className="p-4 bg-white">
+                              <Drawer.Title className="font-medium mb-4 text-gray-900">Payment instructions</Drawer.Title>
+                              
+                              <Button
+                                onClick={async () => {
+                                  await fetcher(
+                                    `/api/functions/emailPaymentInstructions?transactionId=${item.id}`,
+                                    {
+                                      method: 'POST',
+                                    },
+                                  );
+                                  toast.info(
+                                    'Payment instructions sent via email!',
+                                  );
+                                }}
+                                variant="outline"
+                              >
+                                Send payment instructions via email
+                              </Button>
+                            </div>
+                          </Drawer.Content>
+                        </Drawer.Portal>
+                      </Drawer.Root>
+                    )}
+                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <DotsVerticalIcon />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-28">
+                      <DropdownMenuItem>
+                        <span>Edit</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <span>Move</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <span>Delete</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </li>
+            ))}
+          </ul>
         </CardContent>
       </Card>
     </Main>
