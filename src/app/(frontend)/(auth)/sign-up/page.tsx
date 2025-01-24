@@ -30,7 +30,7 @@ export default async function SignUpPage() {
           <Undo2 className="mr-2 h-4 w-4" /> {t('go-back')}
         </Link>
       </Button>
-      <AuthSignUpForm variant="signup" />
+      <AuthSignUpForm />
     </div>
   );
 }

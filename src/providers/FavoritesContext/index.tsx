@@ -26,8 +26,9 @@ export function FavoritesProvider({ children }: Props) {
   const queryClient = useQueryClient();
 
   const { data: favorites, isPending } = useQuery({
-    queryKey: ['user-favorites'],
+    queryKey: ['user-favorites', user?.id],
     queryFn: () => getFavorites(user?.id),
+    enabled: !!user?.id,
   });
 
   const {
@@ -35,7 +36,7 @@ export function FavoritesProvider({ children }: Props) {
   } = useMutation({
     mutationFn: (id: string) => removeUserFavorites(id, 'lessons'),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['user-favorites'] });
+      queryClient.invalidateQueries({ queryKey: ['user-favorites', user?.id] });
       toast.success('Favorite removed');
     },
     onError: (error) => {

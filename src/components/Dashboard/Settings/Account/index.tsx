@@ -54,13 +54,7 @@ import { setLanguage } from '@/tolgee/language';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getClientSideURL } from '@/utilities/getURL';
 import { StaticImageData } from 'next/image';
-
-const languages = [
-  { label: 'Português', value: 'pt' },
-  { label: 'English', value: 'en' },
-  { label: 'Français', value: 'fr' },
-  { label: 'Españhol', value: 'es' },
-] as const;
+import { languages } from '@/lib/constants';
 
 const accountFormSchema = z.object({
   name: z

@@ -5,6 +5,7 @@ import { Header } from '@/components/Layout/Header';
 import { TopNav } from '@/components/Layout/TopNav';
 import { ProfileDropdown } from '@/components/Layout/ProfileDropdown';
 import { ThemeSwitch } from '@/components/ThemeSwitch';
+import { NotificationsDropdown } from '@/components/Layout/Notifications';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -20,6 +21,7 @@ export default function SupportPage() {
         <div className="ml-auto flex items-center space-x-4">
           {/**<Search />
             <ThemeSwitch />*/}
+          <NotificationsDropdown />
           <LanguageSelector />
           <ThemeSwitch />
           <ProfileDropdown />

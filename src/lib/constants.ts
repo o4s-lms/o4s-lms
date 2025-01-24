@@ -46,3 +46,10 @@ export const NOTIFICATIONS_TYPES = [
   { label: 'System', value: 'system' },
   { label: 'Maintenance', value: 'maintenance' },
 ];
+
+export const languages = [
+  { label: 'Português', value: 'pt' },
+  { label: 'English', value: 'en' },
+  { label: 'Français', value: 'fr' },
+  { label: 'Españhol', value: 'es' },
+] as const;

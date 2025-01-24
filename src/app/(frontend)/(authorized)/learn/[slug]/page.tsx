@@ -13,6 +13,7 @@ import { ProfileDropdown } from '@/components/Layout/ProfileDropdown';
 import { createPayloadClient } from '@/lib/payload';
 import { currentUser } from '@/lib/session';
 import { AppSideBarDataProvider } from '@/providers/AppSideBarData';
+import { NotificationsDropdown } from '@/components/Layout/Notifications';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -69,6 +70,7 @@ export default async function Page({ params: paramsPromise }: Args) {
           <div className="ml-auto flex items-center space-x-4">
             {/**<Search />
                           <ThemeSwitch />*/}
+            <NotificationsDropdown />
             <LanguageSelector />
             <ThemeSwitch />
             <ProfileDropdown />

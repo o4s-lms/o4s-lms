@@ -9,6 +9,7 @@ import { AppSidebar } from '@/components/Layout/AppSidebar';
 import { cn } from '@/lib/utils';
 import { AskAi } from '@/components/Learn/AskAi';
 import { AppSideBarDataProvider } from '@/providers/AppSideBarData';
+import { NotificationsDropdown } from '@/components/Layout/Notifications';
 
 export const metadata: Metadata = {
   //metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
@@ -37,6 +38,7 @@ export default function AskAIPage() {
           <div className="ml-auto flex items-center space-x-4">
             {/**<Search />
                                    <ThemeSwitch />*/}
+            <NotificationsDropdown />
             <LanguageSelector />
             <ThemeSwitch />
             <ProfileDropdown />

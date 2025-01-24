@@ -1,27 +1,14 @@
 'use client';
 
-import { fetcher } from '@/lib/fetcher';
 import Link from 'next/link';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment } from 'react';
 
-export const LogoutPage: React.FC = () => {
-  const [success, setSuccess] = useState('');
-  const [error, setError] = useState('');
+interface LogoutProps {
+  success: string | null;
+  error: string | null;
+}
 
-  useEffect(() => {
-    const performLogout = async () => {
-      try {
-        await fetcher(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/logout`, {
-          method: 'POST',
-        });
-        setSuccess('Logged out successfully.');
-      } catch (_) {
-        setError('You are already logged out.');
-      }
-    };
-
-    void performLogout();
-  }, []);
+export const LogoutPage = ({ success, error }: LogoutProps) => {
 
   return (
     <Fragment>

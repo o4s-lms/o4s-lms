@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { Loader2 as Spinner } from 'lucide-react';
+import { Check, ChevronsUpDown, Loader2 as Spinner } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -18,13 +18,18 @@ import {
 import { Input } from '@/components/ui/input';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/providers/Auth';
-import { useTranslate } from '@tolgee/react';
+import { useTolgee, useTranslate } from '@tolgee/react';
 import { PasswordInput } from '@/components/PasswordInput';
 import { fetcher } from '@/lib/fetcher';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { cn } from '@/lib/utils';
+import { languages } from '@/lib/constants';
 
 const formSchema = z
   .object({
     name: z.string(),
+    language: z.string(),
     email: z.string().email(),
     password: z.string().min(8),
     passwordConfirmation: z.string().min(8),
@@ -34,13 +39,12 @@ const formSchema = z
     path: ['passwordConfirmation'],
   });
 
-interface AuthFormProps {
-  variant: 'signin' | 'signup' | 'invitation';
-  id?: string;
-}
 
-export const AuthSignUpForm = ({ variant, id }: AuthFormProps) => {
+
+export const AuthSignUpForm = () => {
   const { t } = useTranslate();
+  const tolgee = useTolgee(['language']);
+  const currentLanguage = tolgee.getLanguage();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<null | string>(null);
 
@@ -56,6 +60,7 @@ export const AuthSignUpForm = ({ variant, id }: AuthFormProps) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
+      language: currentLanguage,
       email: '',
       password: '',
       passwordConfirmation: '',
@@ -65,11 +70,6 @@ export const AuthSignUpForm = ({ variant, id }: AuthFormProps) => {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    let callbackURL = `http://localhost:3000/dashboard`;
-
-    if (variant === 'invitation') {
-      callbackURL = `http://localhost:3000/accept-invitation/${id}`;
-    }
 
     const response = await fetcher(
       `/api/users`,
@@ -101,7 +101,7 @@ export const AuthSignUpForm = ({ variant, id }: AuthFormProps) => {
         router.push(redirect);
       } else {
         router.push(
-          `/dashboard/account?success=${encodeURIComponent('Account created successfully')}`,
+          `/dashboard/settings/account?success=${encodeURIComponent('Account created successfully')}`,
         );
       }
     } catch (_) {
@@ -124,22 +124,14 @@ export const AuthSignUpForm = ({ variant, id }: AuthFormProps) => {
     });
   }
 
-  // Messaging
-  let primaryMessage = 'create an account to accept the invitation';
-  let secondaryMessage = 'sign up';
-  if (variant === 'signin') {
-    primaryMessage = 'sign In';
-    secondaryMessage = 'sign In';
-  }
-
   return (
     <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
       <div className="flex flex-col space-y-2 text-center">
         <h1 className="text-2xl font-semibold capitalize tracking-tight">
-          {primaryMessage}
+          Create an account
         </h1>
         <p className="text-muted-foregroun text-sm">
-          Enter your data below to {primaryMessage}
+          Enter your data below to create an account
         </p>
       </div>
       <div className="grid gap-6">
@@ -160,6 +152,65 @@ export const AuthSignUpForm = ({ variant, id }: AuthFormProps) => {
                     />
                   </FormControl>
                   <FormMessage className="text-red-600" />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="language"
+              render={({ field }) => (
+                <FormItem>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            'w-full justify-between',
+                            !field.value && 'text-muted-foreground',
+                          )}
+                        >
+                          {field.value
+                            ? languages.find(
+                              (language) => language.value === field.value,
+                            )?.label
+                            : 'Select language'}
+                          <ChevronsUpDown className="opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput placeholder="Search language..." />
+                        <CommandList>
+                          <CommandEmpty>No language found.</CommandEmpty>
+                          <CommandGroup>
+                            {languages.map((language) => (
+                              <CommandItem
+                                value={language.label}
+                                key={language.value}
+                                onSelect={() => {
+                                  form.setValue('language', language.value);
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    'mr-2',
+                                    language.value === field.value
+                                      ? 'opacity-100'
+                                      : 'opacity-0',
+                                  )}
+                                />
+                                {language.label}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -219,7 +270,7 @@ export const AuthSignUpForm = ({ variant, id }: AuthFormProps) => {
             />
             <Button type="submit" className="capitalize" disabled={isLoading}>
               {isLoading && <Spinner className="mr-2 h-4 w-4 animate-spin" />}
-              {secondaryMessage} with Email and Password
+              Sign Up
             </Button>
           </form>
         </Form>
