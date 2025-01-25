@@ -20,7 +20,13 @@ import { createAvatar } from '@dicebear/core';
 import { lorelei } from '@dicebear/collection';
 import { StaticImageData } from 'next/image';
 import { checkRole } from '@/access/checkRole';
-import { BadgeCheck, BookUser, CreditCard, LogOut, Settings } from 'lucide-react';
+import {
+  BadgeCheck,
+  BookUser,
+  CreditCard,
+  LogOut,
+  Settings,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export function ProfileDropdown() {

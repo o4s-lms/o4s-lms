@@ -17,7 +17,11 @@ import { Transaction } from '@/payload-types';
 
 export const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
-export function TransactionCancelledEmail({ transaction }: { transaction: Transaction}) {
+export function TransactionCancelledEmail({
+  transaction,
+}: {
+  transaction: Transaction;
+}) {
   return (
     <Html>
       <Head />
@@ -37,20 +41,23 @@ export function TransactionCancelledEmail({ transaction }: { transaction: Transa
               </Section>
 
               <Section className="mb-[32px] mt-[32px]">
-              <Text className="mb-8 text-[14px] font-medium leading-[24px] text-black">
+                <Text className="mb-8 text-[14px] font-medium leading-[24px] text-black">
                   Hi {transaction.name},
                 </Text>
               </Section>
 
-
               <Section className="mb-[32px] mt-[32px] text-center">
                 <Text className="mb-8 text-[14px] font-medium leading-[24px] text-black">
-                  After 30 days without the payment your transaction as changed to the status: CANCELLED<br />
-                  Transaction ID: {transaction.id}<br />
-                  Total: {new Intl.NumberFormat('pt-PT', {
-                                    style: 'currency',
-                                    currency: 'EUR',
-                                  }).format(transaction.total / 100)}
+                  After 30 days without the payment your transaction as changed
+                  to the status: CANCELLED
+                  <br />
+                  Transaction ID: {transaction.id}
+                  <br />
+                  Total:{' '}
+                  {new Intl.NumberFormat('pt-PT', {
+                    style: 'currency',
+                    currency: 'EUR',
+                  }).format(transaction.total / 100)}
                 </Text>
 
                 <Text className="text-[14px] font-medium leading-[24px] text-black">

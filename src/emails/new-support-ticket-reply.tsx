@@ -17,7 +17,11 @@ import type { SupportTicketReply } from '@/payload-types';
 
 export const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
-export function NewSupportTicketReplyEmail({ reply }: { reply: SupportTicketReply}) {
+export function NewSupportTicketReplyEmail({
+  reply,
+}: {
+  reply: SupportTicketReply;
+}) {
   return (
     <Html>
       <Head />
@@ -37,11 +41,10 @@ export function NewSupportTicketReplyEmail({ reply }: { reply: SupportTicketRepl
               </Section>
 
               <Section className="mb-[32px] mt-[32px]">
-              <Text className="mb-8 text-[14px] font-medium leading-[24px] text-black">
+                <Text className="mb-8 text-[14px] font-medium leading-[24px] text-black">
                   Hi {reply.recipient?.name},
                 </Text>
               </Section>
-
 
               <Section className="mb-[32px] mt-[32px] text-center">
                 <Text className="mb-8 text-[14px] font-medium leading-[24px] text-black">

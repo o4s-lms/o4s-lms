@@ -29,7 +29,7 @@ export default async function Page() {
     );
   }
 
-  const enrollments = await queryEnrollmentsByUser({ userId: user.id})
+  const enrollments = await queryEnrollmentsByUser({ userId: user.id });
 
   return (
     <AppSideBarDataProvider>

@@ -16,17 +16,20 @@ export default async function LogOutPage() {
   const t = await getTranslate();
 
   const req = await fetcher('/api/users/logout', {
-    method: "POST",
-  })
+    method: 'POST',
+  });
 
   return (
     <div className="flex h-full items-center justify-center p-10">
       <Button asChild className="absolute right-3 top-3" variant="ghost">
-        <Link href="#" >
+        <Link href="#">
           <Undo2 className="mr-2 h-4 w-4" /> {t('go-back')}
         </Link>
       </Button>
-      <LogoutPage success={req.ok ? 'You have been logged out successfully.' : null} error={req.ok ? null : 'Something went wrong. Please try again.'} />
+      <LogoutPage
+        success={req.ok ? 'You have been logged out successfully.' : null}
+        error={req.ok ? null : 'Something went wrong. Please try again.'}
+      />
     </div>
   );
 }

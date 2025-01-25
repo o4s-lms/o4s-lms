@@ -9,8 +9,7 @@ export const protectRoles: FieldHook<{ id: string } & User> = ({
   req,
 }) => {
   const isAdmin =
-    req.user?.role  === 'admin' ||
-    data?.email === 'joseantcordeiro@gmail.com'; // for the seed script
+    req.user?.role === 'admin' || data?.email === 'joseantcordeiro@gmail.com'; // for the seed script
 
   if (!isAdmin) {
     return 'user';

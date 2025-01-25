@@ -22,7 +22,11 @@ export default async function CompletionPage({
   return (
     <div className="py-16 antialiased md:py-24">
       <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
-        <Completion guest={guest === 'true' ? true : false} transactionId={transactionId} provider={provider} />
+        <Completion
+          guest={guest === 'true' ? true : false}
+          transactionId={transactionId}
+          provider={provider}
+        />
       </div>
     </div>
   );

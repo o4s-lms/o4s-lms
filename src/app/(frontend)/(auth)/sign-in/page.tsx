@@ -26,7 +26,7 @@ export default async function SigninPage() {
   return (
     <div className="flex h-full items-center justify-center p-10">
       <Button asChild className="absolute right-3 top-3" variant="ghost">
-        <Link href="#" >
+        <Link href="#">
           <Undo2 className="mr-2 h-4 w-4" /> {t('go-back')}
         </Link>
       </Button>

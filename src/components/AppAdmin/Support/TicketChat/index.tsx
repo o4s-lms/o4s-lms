@@ -22,16 +22,16 @@ import { StaticImageData } from 'next/image';
 import { Fragment, useState } from 'react';
 import { format } from 'timeago.js';
 
-import { conversations } from './data.json'
+import { conversations } from './data.json';
 
-type ChatUser = (typeof conversations)[number]
-type Convo = ChatUser['messages'][number]
+type ChatUser = (typeof conversations)[number];
+type Convo = ChatUser['messages'][number];
 
 export function TicketChat({ ticket }: { ticket: SupportTicket }) {
   const [search, setSearch] = useState('Alex John');
   const [selectedUser, setSelectedUser] = useState<ChatUser>(conversations[0]);
   const [mobileSelectedUser, setMobileSelectedUser] = useState<ChatUser | null>(
-    null
+    null,
   );
   let src: StaticImageData | string = '';
   //const currentMessage: unknown[] = [];
@@ -64,25 +64,25 @@ export function TicketChat({ ticket }: { ticket: SupportTicket }) {
 
   // Filtered data based on the search query
   const filteredChatList = conversations.filter(({ fullName }) =>
-    fullName.toLowerCase().includes(search.trim().toLowerCase())
-  )
+    fullName.toLowerCase().includes(search.trim().toLowerCase()),
+  );
 
   const currentMessage = selectedUser.messages.reduce(
     (acc: Record<string, Convo[]>, obj) => {
-      const key = format(obj.timestamp, 'd MMM, yyyy')
+      const key = format(obj.timestamp, 'd MMM, yyyy');
 
       // Create an array for the category if it doesn't exist
       if (!acc[key]) {
-        acc[key] = []
+        acc[key] = [];
       }
 
       // Push the current object to the array
-      acc[key].push(obj)
+      acc[key].push(obj);
 
-      return acc
+      return acc;
     },
-    {}
-  )
+    {},
+  );
 
   return (
     <Main fixed>

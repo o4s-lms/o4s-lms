@@ -15,7 +15,7 @@ export const revalidate = 600;
 export default async function Page() {
   const language = await getLanguage();
 
-  const posts = await queryPostsByLanguage({ language: language })
+  const posts = await queryPostsByLanguage({ language: language });
 
   return (
     <div className="pb-24 pt-24">
@@ -46,33 +46,34 @@ export default async function Page() {
   );
 }
 
-const queryPostsByLanguage = cache(async ({ language }: { language: string }) => {
-  const payload = await createPayloadClient();
+const queryPostsByLanguage = cache(
+  async ({ language }: { language: string }) => {
+    const payload = await createPayloadClient();
 
-  const posts = await payload.find({
-    collection: 'posts',
-    depth: 1,
-    limit: 12,
-    overrideAccess: false,
-    where: {
-      language: {
-        equals: language,
+    const posts = await payload.find({
+      collection: 'posts',
+      depth: 1,
+      limit: 12,
+      overrideAccess: false,
+      where: {
+        language: {
+          equals: language,
+        },
       },
-    },
-    select: {
-      title: true,
-      slug: true,
-      heroImage: true,
-      categories: true,
-      populatedAuthors: true,
-      publishedAt: true,
-      meta: true,
-    },
-  });
+      select: {
+        title: true,
+        slug: true,
+        heroImage: true,
+        categories: true,
+        populatedAuthors: true,
+        publishedAt: true,
+        meta: true,
+      },
+    });
 
-  return posts ?? null;
-
-});
+    return posts ?? null;
+  },
+);
 
 export function generateMetadata(): Metadata {
   return {

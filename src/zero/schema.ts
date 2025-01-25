@@ -51,8 +51,8 @@ export type Schema = typeof schema;
 type Notification = typeof schema.tables.notification;
 
 type AuthData = {
-  sub: string | null
-  role: string | null
+  sub: string | null;
+  role: string | null;
 };
 
 export const permissions = definePermissions<AuthData, Schema>(schema, () => {

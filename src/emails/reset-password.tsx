@@ -53,12 +53,12 @@ export function ResetPasswordEmail({ token }: { token: string }) {
 
               <Section className="mb-[32px] mt-[16px] text-center">
                 <Text className="mb-8 text-[14px] font-medium leading-[24px] text-black">
-                  If you received this email and you didn&apos;t request, it&apos;s likely
-                  that someone accidentally entered your email when attempting
-                  to log in to their account. This often happens if you have a
-                  popular email address. As long as you don&apos;t click the link to
-                  reset your password, no action will be taken and your account
-                  will remain secure.
+                  If you received this email and you didn&apos;t request,
+                  it&apos;s likely that someone accidentally entered your email
+                  when attempting to log in to their account. This often happens
+                  if you have a popular email address. As long as you don&apos;t
+                  click the link to reset your password, no action will be taken
+                  and your account will remain secure.
                 </Text>
               </Section>
 

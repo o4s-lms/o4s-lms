@@ -4,8 +4,12 @@ import { checkRole } from './access/checkRole';
 //const protectedRoutes = ["/dashboard", "/admin"];
 
 export default async function authMiddleware(request: NextRequest) {
-  const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard') || request.nextUrl.pathname.startsWith('/learn');
-  const isAdminRoute = request.nextUrl.pathname.startsWith('/admin') || request.nextUrl.pathname.startsWith('/app-admin');
+  const isProtectedRoute =
+    request.nextUrl.pathname.startsWith('/dashboard') ||
+    request.nextUrl.pathname.startsWith('/learn');
+  const isAdminRoute =
+    request.nextUrl.pathname.startsWith('/admin') ||
+    request.nextUrl.pathname.startsWith('/app-admin');
   //const path = request.nextUrl.pathname;
   //const isProtectedRoute = protectedRoutes.includes(path);
 

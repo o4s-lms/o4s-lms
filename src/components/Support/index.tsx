@@ -1,6 +1,6 @@
 'use client';
 
-import * as crypto from "crypto";
+import * as crypto from 'crypto';
 import * as React from 'react';
 import { ButtonHTMLAttributes } from 'react';
 import {
@@ -70,7 +70,6 @@ interface Guest {
   email: string;
 }
 
-
 export function Support(props: ButtonHTMLAttributes<HTMLButtonElement>) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [guest, setGuest] = React.useState<Guest | undefined>({
@@ -124,7 +123,7 @@ export function Support(props: ButtonHTMLAttributes<HTMLButtonElement>) {
           message: values.description,
           timestamp: new Date().toISOString(),
           sender: user ? 'user' : 'guest',
-        }
+        },
       ],
     };
 

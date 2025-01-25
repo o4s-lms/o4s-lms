@@ -8,14 +8,7 @@ import { useQueryState } from 'nuqs';
 import { getLessonContent, getLessonProgress } from '@/utilities/lessons';
 import type { LessonProgress } from '@/payload-types';
 import { Speeddial } from '@/components/ui/animata/fabs/speed-dial';
-import {
-  Check,
-  Share2,
-  Star,
-  StarOff,
-  Trash,
-  X,
-} from 'lucide-react';
+import { Check, Share2, Star, StarOff, Trash, X } from 'lucide-react';
 import { Main } from '@/components/Layout/Main';
 import { ContentSection } from './ContentSection';
 import { useMutation } from '@tanstack/react-query';

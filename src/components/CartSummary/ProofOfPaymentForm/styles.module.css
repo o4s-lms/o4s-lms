@@ -1,15 +1,20 @@
 .pageWrapper {
-  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica,
+    Roboto, Arial, sans-serif;
   font-size: 14px;
   padding: 12px;
 }
 
-.paragraph, .previewData {
+.paragraph,
+.previewData {
   margin: 0;
   line-height: 1.4em;
 }
 
-.link:link, .link:hover, .link:active, .link:visited {
+.link:link,
+.link:hover,
+.link:active,
+.link:visited {
   color: blue;
   text-decoration: none;
 }

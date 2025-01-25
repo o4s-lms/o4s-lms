@@ -1,8 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  getUserFavorites,
-  createUserFavorites,
-} from '@/utilities/favorites';
+import { getUserFavorites, createUserFavorites } from '@/utilities/favorites';
 
 export interface FavoriteMutationData {
   objectType: 'pages' | 'posts' | 'courses' | 'lessons';

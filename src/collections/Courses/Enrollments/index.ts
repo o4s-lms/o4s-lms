@@ -11,8 +11,7 @@ export const Enrollments: CollectionConfig = {
   access: {
     read: ({ req: { user } }: AccessArgs) => {
       if (!user) return false;
-      if (user.role === 'admin' || user.role === 'teacher')
-        return true;
+      if (user.role === 'admin' || user.role === 'teacher') return true;
       return {
         and: [
           {
@@ -26,8 +25,7 @@ export const Enrollments: CollectionConfig = {
     create: ({ req: { user } }: AccessArgs) => {
       if (!user || !user.role) return false;
       // Allow admins and instructors to enroll students
-      if (user.role === 'admin' || user.role === 'teacher')
-        return true;
+      if (user.role === 'admin' || user.role === 'teacher') return true;
       // Allow students to self-enroll if the course allows it
       if (user.role === 'student') {
         return {
@@ -44,8 +42,7 @@ export const Enrollments: CollectionConfig = {
     },
     update: ({ req: { user } }: AccessArgs) => {
       if (!user || !user.role) return false;
-      if (user.role === 'admin' || user.role === 'teacher')
-        return true;
+      if (user.role === 'admin' || user.role === 'teacher') return true;
       // Students can only update their own enrollment status
       return {
         and: [
@@ -171,7 +168,9 @@ export const Enrollments: CollectionConfig = {
       async ({ doc, operation, req }) => {
         // Create initial progress record on enrollment
         if (operation === 'create') {
-          await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/function/updateUserRole?userId=${doc.student}&role=student`);
+          await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_URL}/api/function/updateUserRole?userId=${doc.student}&role=student`,
+          );
           const progress = await req.payload.create({
             collection: 'course-progress',
             data: {
@@ -193,7 +192,7 @@ export const Enrollments: CollectionConfig = {
             },
             data: {
               progress: progress,
-            }
+            },
           });
         }
       },

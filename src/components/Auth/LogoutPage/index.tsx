@@ -9,7 +9,6 @@ interface LogoutProps {
 }
 
 export const LogoutPage = ({ success, error }: LogoutProps) => {
-
   return (
     <Fragment>
       {(error || success) && (

@@ -142,7 +142,7 @@ export const columns: ColumnDef<Transaction>[] = [
         {new Intl.NumberFormat('pt-PT', {
           style: 'currency',
           currency: 'EUR',
-        }).format(row.getValue('total') as number / 100)}
+        }).format((row.getValue('total') as number) / 100)}
       </div>
     ),
     enableSorting: false,
@@ -156,9 +156,7 @@ export const columns: ColumnDef<Transaction>[] = [
       const { processed, processedAt } = row.original;
       if (processed) {
         return (
-          <div className="w-fit text-nowrap">
-            {format(processedAt as Date)}
-          </div>
+          <div className="w-fit text-nowrap">{format(processedAt as Date)}</div>
         );
       } else {
         return <div className="w-fit text-nowrap">Not processed</div>;

@@ -18,8 +18,8 @@ export default async function AppAdminPage() {
 
   const tickets = payload.find({
     collection: 'support-tickets',
-    depth: 2
-  })
+    depth: 2,
+  });
 
   return (
     <>

@@ -63,7 +63,6 @@ services:
   #    - SMTP_USER=${SMTP_USER}
   #    - SMTP_PASSWORD=${SMTP_PASS}
   #    - SMTP_SECURE_ENABLED=0
-    
 
 volumes:
   inngest_data:

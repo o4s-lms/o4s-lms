@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     name: 'auth/password.updated',
     user: {
       email: email,
-    }
+    },
   });
 
   return NextResponse.json({ message: 'Event sent!' });

@@ -15,7 +15,11 @@ interface Props {
   currentRow: Transaction;
 }
 
-export function TransactionsDeleteDialog({ open, onOpenChange, currentRow }: Props) {
+export function TransactionsDeleteDialog({
+  open,
+  onOpenChange,
+  currentRow,
+}: Props) {
   const [value, setValue] = useState('');
 
   const handleDelete = () => {
@@ -54,7 +58,8 @@ export function TransactionsDeleteDialog({ open, onOpenChange, currentRow }: Pro
             Are you sure you want to delete{' '}
             <span className="font-bold">{currentRow.id}</span>?
             <br />
-            This action will permanently remove the transaction with the status of{' '}
+            This action will permanently remove the transaction with the status
+            of{' '}
             <span className="font-bold">
               {currentRow.status.toUpperCase()}
             </span>{' '}

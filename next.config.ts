@@ -1,4 +1,4 @@
-//import MillionLint from '@million/lint'; 
+//import MillionLint from '@million/lint';
 import type { NextConfig } from 'next';
 import { withPayload } from '@payloadcms/next/withPayload';
 

@@ -148,7 +148,7 @@ export const lessonCompleted = inngest.createFunction(
           },
         },
       ],
-    }
+    };
     // step 1
     const lessonProgress = await step.run(
       'update-lesson-completed',

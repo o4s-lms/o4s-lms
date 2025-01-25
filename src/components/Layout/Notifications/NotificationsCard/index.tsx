@@ -1,8 +1,8 @@
-import React from "react";
-import { BellIcon, CheckIcon } from "lucide-react";
+import React from 'react';
+import { BellIcon, CheckIcon } from 'lucide-react';
 
-import { cn, fromNow } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { cn, fromNow } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -10,21 +10,28 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-import { Notification } from "@/payload-types";
+} from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
+import { Notification } from '@/payload-types';
 
 type CardProps = {
-  notifications: Notification[] | null | undefined
-  unreadCount: number
+  notifications: Notification[] | null | undefined;
+  unreadCount: number;
 } & React.ComponentProps<typeof Card>;
 
-const NotificationCard = ({ notifications, unreadCount, className, ...props }: CardProps) => {
+const NotificationCard = ({
+  notifications,
+  unreadCount,
+  className,
+  ...props
+}: CardProps) => {
   return (
-    <Card className={cn("w-[380px]", className)} {...props}>
+    <Card className={cn('w-[380px]', className)} {...props}>
       <CardHeader>
         <CardTitle>Notifications</CardTitle>
-        <CardDescription>You have {unreadCount} unread messages.</CardDescription>
+        <CardDescription>
+          You have {unreadCount} unread messages.
+        </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
         {/**<div className=" flex items-center space-x-4 rounded-md border p-4">
@@ -52,7 +59,8 @@ const NotificationCard = ({ notifications, unreadCount, className, ...props }: C
                     {notification.subject}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    {notification.type} - {fromNow(notification?.createdAt as string, 'pt')}
+                    {notification.type} -{' '}
+                    {fromNow(notification?.createdAt as string, 'pt')}
                   </p>
                 </div>
               </div>

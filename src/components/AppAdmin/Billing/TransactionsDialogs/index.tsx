@@ -5,11 +5,11 @@ import { TransactionsActionDialog } from '@/components/AppAdmin/Billing/Transact
 import { TransactionsDeleteDialog } from '@/components/AppAdmin/Billing/TransactionsDeleteDialog';
 
 export function TransactionsDialogs() {
-  const { open, setOpen, currentRow, setCurrentRow } = useTransactions()
+  const { open, setOpen, currentRow, setCurrentRow } = useTransactions();
   return (
     <>
       <TransactionsActionDialog
-        key='transaction-add'
+        key="transaction-add"
         open={open === 'add'}
         onOpenChange={() => setOpen('add')}
       />
@@ -20,10 +20,10 @@ export function TransactionsDialogs() {
             key={`transaction-edit-${currentRow.id}`}
             open={open === 'edit'}
             onOpenChange={() => {
-              setOpen('edit')
+              setOpen('edit');
               setTimeout(() => {
-                setCurrentRow(null)
-              }, 500)
+                setCurrentRow(null);
+              }, 500);
             }}
             currentRow={currentRow}
           />
@@ -32,15 +32,15 @@ export function TransactionsDialogs() {
             key={`transaction-delete-${currentRow.id}`}
             open={open === 'delete'}
             onOpenChange={() => {
-              setOpen('delete')
+              setOpen('delete');
               setTimeout(() => {
-                setCurrentRow(null)
-              }, 500)
+                setCurrentRow(null);
+              }, 500);
             }}
             currentRow={currentRow}
           />
         </>
       )}
     </>
-  )
+  );
 }

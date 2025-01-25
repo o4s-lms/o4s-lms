@@ -1,6 +1,4 @@
-import type {
-  CollectionConfig,
-} from 'payload';
+import type { CollectionConfig } from 'payload';
 
 export const Achievements: CollectionConfig = {
   slug: 'achievements',

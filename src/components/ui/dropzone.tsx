@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 import {
   createContext,
   forwardRef,
@@ -8,24 +8,24 @@ import {
   useMemo,
   useReducer,
   useState,
-} from "react";
+} from 'react';
 import {
   Accept,
   FileRejection,
   useDropzone as rootUseDropzone,
-} from "react-dropzone";
-import { Button, ButtonProps } from "@/components/ui/button";
+} from 'react-dropzone';
+import { Button, ButtonProps } from '@/components/ui/button';
 
 type DropzoneResult<TUploadRes, TUploadError> =
   | {
-      status: "pending";
+      status: 'pending';
     }
   | {
-      status: "error";
+      status: 'error';
       error: TUploadError;
     }
   | {
-      status: "success";
+      status: 'success';
       result: TUploadRes;
     };
 
@@ -36,17 +36,17 @@ export type FileStatus<TUploadRes, TUploadError> = {
   tries: number;
 } & (
   | {
-      status: "pending";
+      status: 'pending';
       result?: undefined;
       error?: undefined;
     }
   | {
-      status: "error";
+      status: 'error';
       error: TUploadError;
       result?: undefined;
     }
   | {
-      status: "success";
+      status: 'success';
       result: TUploadRes;
       error?: undefined;
     }
@@ -56,35 +56,35 @@ const fileStatusReducer = <TUploadRes, TUploadError>(
   state: FileStatus<TUploadRes, TUploadError>[],
   action:
     | {
-        type: "add";
+        type: 'add';
         id: string;
         fileName: string;
         file: File;
       }
     | {
-        type: "remove";
+        type: 'remove';
         id: string;
       }
     | ({
-        type: "update-status";
+        type: 'update-status';
         id: string;
       } & DropzoneResult<TUploadRes, TUploadError>),
 ): FileStatus<TUploadRes, TUploadError>[] => {
   switch (action.type) {
-    case "add":
+    case 'add':
       return [
         ...state,
         {
           id: action.id,
           fileName: action.fileName,
           file: action.file,
-          status: "pending",
+          status: 'pending',
           tries: 1,
         },
       ];
-    case "remove":
+    case 'remove':
       return state.filter((fileStatus) => fileStatus.id !== action.id);
-    case "update-status":
+    case 'update-status':
       return state.map((fileStatus) => {
         if (fileStatus.id === action.id) {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -93,7 +93,7 @@ const fileStatusReducer = <TUploadRes, TUploadError>(
             ...fileStatus,
             ...rest,
             tries:
-              action.status === "pending"
+              action.status === 'pending'
                 ? fileStatus.tries + 1
                 : fileStatus.tries,
           } as FileStatus<TUploadRes, TUploadError>;
@@ -104,10 +104,10 @@ const fileStatusReducer = <TUploadRes, TUploadError>(
 };
 type DropZoneErrorCode = (typeof dropZoneErrorCodes)[number];
 const dropZoneErrorCodes = [
-  "file-invalid-type",
-  "file-too-large",
-  "file-too-small",
-  "too-many-files",
+  'file-invalid-type',
+  'file-too-large',
+  'file-too-small',
+  'too-many-files',
 ] as const;
 
 const getDropZoneErrorCodes = (fileRejections: FileRejection[]) => {
@@ -132,26 +132,26 @@ const getRootError = (
 ) => {
   const errors = errorCodes.map((error) => {
     switch (error) {
-      case "file-invalid-type":
+      case 'file-invalid-type':
         const acceptedTypes = Object.values(limits.accept ?? {})
           .flat()
-          .join(", ");
+          .join(', ');
         return `only ${acceptedTypes} are allowed`;
-      case "file-too-large":
+      case 'file-too-large':
         const maxMb = limits.maxSize
           ? (limits.maxSize / (1024 * 1024)).toFixed(2)
-          : "infinite?";
+          : 'infinite?';
         return `max size is ${maxMb}MB`;
-      case "file-too-small":
+      case 'file-too-small':
         const roundedMinSize = limits.minSize
           ? (limits.minSize / (1024 * 1024)).toFixed(2)
-          : "negative?";
+          : 'negative?';
         return `min size is ${roundedMinSize}MB`;
-      case "too-many-files":
+      case 'too-many-files':
         return `max ${limits.maxFiles} files`;
     }
   });
-  const joinedErrors = errors.join(", ");
+  const joinedErrors = errors.join(', ');
   return joinedErrors.charAt(0).toUpperCase() + joinedErrors.slice(1);
 };
 
@@ -159,7 +159,7 @@ type UseDropzoneProps<TUploadRes, TUploadError> = {
   onDropFile: (
     file: File,
   ) => Promise<
-    Exclude<DropzoneResult<TUploadRes, TUploadError>, { status: "pending" }>
+    Exclude<DropzoneResult<TUploadRes, TUploadError>, { status: 'pending' }>
   >;
   onRemoveFile?: (id: string) => void | Promise<void>;
   onFileUploaded?: (result: TUploadRes) => void;
@@ -184,8 +184,8 @@ type UseDropzoneProps<TUploadRes, TUploadError> = {
     });
 
 interface UseDropzoneReturn<TUploadRes, TUploadError> {
-  getRootProps: ReturnType<typeof rootUseDropzone>["getRootProps"];
-  getInputProps: ReturnType<typeof rootUseDropzone>["getInputProps"];
+  getRootProps: ReturnType<typeof rootUseDropzone>['getRootProps'];
+  getInputProps: ReturnType<typeof rootUseDropzone>['getInputProps'];
   onRemoveFile: (id: string) => Promise<void>;
   onRetry: (id: string) => Promise<void>;
   canRetry: (id: string) => boolean;
@@ -235,7 +235,7 @@ const useDropzone = <TUploadRes, TUploadError = string>(
 
   const isInvalid = useMemo(() => {
     return (
-      fileStatuses.filter((file) => file.status === "error").length > 0 ||
+      fileStatuses.filter((file) => file.status === 'error').length > 0 ||
       rootError !== undefined
     );
   }, [fileStatuses, rootError]);
@@ -244,16 +244,16 @@ const useDropzone = <TUploadRes, TUploadError = string>(
     async (file: File, id: string, tries = 0) => {
       const result = await pOnDropFile(file);
 
-      if (result.status === "error") {
+      if (result.status === 'error') {
         if (autoRetry === true && tries < (maxRetryCount ?? Infinity)) {
-          dispatch({ type: "update-status", id, status: "pending" });
+          dispatch({ type: 'update-status', id, status: 'pending' });
           return _uploadFile(file, id, tries + 1);
         }
 
         dispatch({
-          type: "update-status",
+          type: 'update-status',
           id,
-          status: "error",
+          status: 'error',
           error:
             pShapeUploadError !== undefined
               ? pShapeUploadError(result.error)
@@ -268,7 +268,7 @@ const useDropzone = <TUploadRes, TUploadError = string>(
         pOnFileUploaded(result.result);
       }
       dispatch({
-        type: "update-status",
+        type: 'update-status',
         id,
         ...result,
       });
@@ -286,7 +286,7 @@ const useDropzone = <TUploadRes, TUploadError = string>(
   const onRemoveFile = useCallback(
     async (id: string) => {
       await pOnRemoveFile?.(id);
-      dispatch({ type: "remove", id });
+      dispatch({ type: 'remove', id });
     },
     [pOnRemoveFile],
   );
@@ -295,7 +295,7 @@ const useDropzone = <TUploadRes, TUploadError = string>(
     (id: string) => {
       const fileStatus = fileStatuses.find((file) => file.id === id);
       return (
-        fileStatus?.status === "error" &&
+        fileStatus?.status === 'error' &&
         fileStatus.tries < (maxRetryCount ?? Infinity)
       );
     },
@@ -307,9 +307,9 @@ const useDropzone = <TUploadRes, TUploadError = string>(
       if (!canRetry(id)) {
         return;
       }
-      dispatch({ type: "update-status", id, status: "pending" });
+      dispatch({ type: 'update-status', id, status: 'pending' });
       const fileStatus = fileStatuses.find((file) => file.id === id);
-      if (!fileStatus || fileStatus.status !== "error") {
+      if (!fileStatus || fileStatus.status !== 'error') {
         return;
       }
       await _uploadFile(fileStatus.file, id);
@@ -336,7 +336,7 @@ const useDropzone = <TUploadRes, TUploadError = string>(
       if (maxNewFiles < newFiles.length) {
         if (shiftOnMaxFiles === true) {
         } else {
-          setRootError(getRootError(["too-many-files"], validation ?? {}));
+          setRootError(getRootError(['too-many-files'], validation ?? {}));
         }
       }
 
@@ -349,7 +349,7 @@ const useDropzone = <TUploadRes, TUploadError = string>(
         }
 
         const id = crypto.randomUUID();
-        dispatch({ type: "add", fileName: file.name, file, id });
+        dispatch({ type: 'add', fileName: file.name, file, id });
         await _uploadFile(file, id);
       });
 
@@ -395,10 +395,10 @@ const DropZoneContext = createContext<UseDropzoneReturn<any, any>>({
   isInvalid: false,
   isDragActive: false,
   rootError: undefined,
-  inputId: "",
-  rootMessageId: "",
-  rootDescriptionId: "",
-  getFileMessageId: () => "",
+  inputId: '',
+  rootMessageId: '',
+  rootDescriptionId: '',
+  getFileMessageId: () => '',
 });
 
 const useDropzoneContext = <TUploadRes, TUploadError>() => {
@@ -420,7 +420,7 @@ const Dropzone = <TUploadRes, TUploadError>(
     <DropZoneContext.Provider value={rest}>{children}</DropZoneContext.Provider>
   );
 };
-Dropzone.displayName = "Dropzone";
+Dropzone.displayName = 'Dropzone';
 
 interface DropZoneAreaProps extends React.HTMLAttributes<HTMLDivElement> {}
 const DropZoneArea = forwardRef<HTMLDivElement, DropZoneAreaProps>(
@@ -428,7 +428,7 @@ const DropZoneArea = forwardRef<HTMLDivElement, DropZoneAreaProps>(
     const context = useDropzoneContext();
 
     if (!context) {
-      throw new Error("DropzoneArea must be used within a Dropzone");
+      throw new Error('DropzoneArea must be used within a Dropzone');
     }
 
     const { onFocus, onBlur, onDragEnter, onDragLeave, onDrop, ref } =
@@ -441,7 +441,7 @@ const DropZoneArea = forwardRef<HTMLDivElement, DropZoneAreaProps>(
         ref={(instance) => {
           // TODO: test if this actually works?
           ref.current = instance;
-          if (typeof forwardedRef === "function") {
+          if (typeof forwardedRef === 'function') {
             forwardedRef(instance);
           } else if (forwardedRef) {
             forwardedRef.current = instance;
@@ -455,9 +455,9 @@ const DropZoneArea = forwardRef<HTMLDivElement, DropZoneAreaProps>(
         {...props}
         aria-label="dropzone"
         className={cn(
-          "flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-          context.isDragActive && "animate-pulse bg-black/5",
-          context.isInvalid && "border-destructive",
+          'flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+          context.isDragActive && 'animate-pulse bg-black/5',
+          context.isInvalid && 'border-destructive',
           className,
         )}
       >
@@ -466,7 +466,7 @@ const DropZoneArea = forwardRef<HTMLDivElement, DropZoneAreaProps>(
     );
   },
 );
-DropZoneArea.displayName = "DropZoneArea";
+DropZoneArea.displayName = 'DropZoneArea';
 
 export interface DropzoneDescriptionProps
   extends React.HTMLAttributes<HTMLParagraphElement> {}
@@ -478,7 +478,7 @@ const DropzoneDescription = forwardRef<
   const { className, ...rest } = props;
   const context = useDropzoneContext();
   if (!context) {
-    throw new Error("DropzoneDescription must be used within a Dropzone");
+    throw new Error('DropzoneDescription must be used within a Dropzone');
   }
 
   return (
@@ -486,11 +486,11 @@ const DropzoneDescription = forwardRef<
       ref={ref}
       id={context.rootDescriptionId}
       {...rest}
-      className={cn("pb-1 text-sm text-muted-foreground", className)}
+      className={cn('pb-1 text-sm text-muted-foreground', className)}
     />
   );
 });
-DropzoneDescription.displayName = "DropzoneDescription";
+DropzoneDescription.displayName = 'DropzoneDescription';
 
 interface DropzoneFileListContext<TUploadRes, TUploadError> {
   onRemoveFile: () => Promise<void>;
@@ -508,8 +508,8 @@ const DropzoneFileListContext = createContext<
   onRetry: async () => {},
   fileStatus: {} as FileStatus<unknown, unknown>,
   canRetry: false,
-  dropzoneId: "",
-  messageId: "",
+  dropzoneId: '',
+  messageId: '',
 });
 
 const useDropzoneFileListContext = () => {
@@ -523,21 +523,21 @@ const DropzoneFileList = forwardRef<HTMLOListElement, DropZoneFileListProps>(
   (props, ref) => {
     const context = useDropzoneContext();
     if (!context) {
-      throw new Error("DropzoneFileList must be used within a Dropzone");
+      throw new Error('DropzoneFileList must be used within a Dropzone');
     }
     return (
       <ol
         ref={ref}
         aria-label="dropzone-file-list"
         {...props}
-        className={cn("flex flex-col gap-4", props.className)}
+        className={cn('flex flex-col gap-4', props.className)}
       >
         {props.children}
       </ol>
     );
   },
 );
-DropzoneFileList.displayName = "DropzoneFileList";
+DropzoneFileList.displayName = 'DropzoneFileList';
 
 interface DropzoneFileListItemProps<TUploadRes, TUploadError>
   extends React.LiHTMLAttributes<HTMLLIElement> {
@@ -563,7 +563,7 @@ const DropzoneFileListItem = forwardRef<
   );
   const onRetry = useCallback(() => cOnRetry(fileId), [fileId, cOnRetry]);
   const messageId = cGetFileMessageId(fileId);
-  const isInvalid = props.file.status === "error";
+  const isInvalid = props.file.status === 'error';
   const canRetry = useMemo(() => cCanRetry(fileId), [fileId, cCanRetry]);
   return (
     <DropzoneFileListContext.Provider
@@ -581,7 +581,7 @@ const DropzoneFileListItem = forwardRef<
         aria-label="dropzone-file-list-item"
         aria-describedby={isInvalid ? messageId : undefined}
         className={cn(
-          "flex flex-col justify-center gap-2 rounded-md bg-muted/40 px-4 py-2",
+          'flex flex-col justify-center gap-2 rounded-md bg-muted/40 px-4 py-2',
           className,
         )}
       >
@@ -590,7 +590,7 @@ const DropzoneFileListItem = forwardRef<
     </DropzoneFileListContext.Provider>
   );
 });
-DropzoneFileListItem.displayName = "DropzoneFileListItem";
+DropzoneFileListItem.displayName = 'DropzoneFileListItem';
 
 interface DropzoneFileMessageProps
   extends React.HTMLAttributes<HTMLParagraphElement> {}
@@ -603,12 +603,12 @@ const DropzoneFileMessage = forwardRef<
   const context = useDropzoneFileListContext();
   if (!context) {
     throw new Error(
-      "DropzoneFileMessage must be used within a DropzoneFileListItem",
+      'DropzoneFileMessage must be used within a DropzoneFileListItem',
     );
   }
 
   const body =
-    context.fileStatus.status === "error"
+    context.fileStatus.status === 'error'
       ? String(context.fileStatus.error)
       : children;
   return (
@@ -617,7 +617,7 @@ const DropzoneFileMessage = forwardRef<
       id={context.messageId}
       {...rest}
       className={cn(
-        "h-5 text-[0.8rem] font-medium text-destructive",
+        'h-5 text-[0.8rem] font-medium text-destructive',
         rest.className,
       )}
     >
@@ -625,7 +625,7 @@ const DropzoneFileMessage = forwardRef<
     </p>
   );
 });
-DropzoneFileMessage.displayName = "DropzoneFileMessage";
+DropzoneFileMessage.displayName = 'DropzoneFileMessage';
 interface DropzoneMessageProps
   extends React.HTMLAttributes<HTMLParagraphElement> {}
 
@@ -634,7 +634,7 @@ const DropzoneMessage = forwardRef<HTMLParagraphElement, DropzoneMessageProps>(
     const { children, ...rest } = props;
     const context = useDropzoneContext();
     if (!context) {
-      throw new Error("DropzoneRootMessage must be used within a Dropzone");
+      throw new Error('DropzoneRootMessage must be used within a Dropzone');
     }
 
     const body = context.rootError ? String(context.rootError) : children;
@@ -644,7 +644,7 @@ const DropzoneMessage = forwardRef<HTMLParagraphElement, DropzoneMessageProps>(
         id={context.rootMessageId}
         {...rest}
         className={cn(
-          "h-5 text-[0.8rem] font-medium text-destructive",
+          'h-5 text-[0.8rem] font-medium text-destructive',
           rest.className,
         )}
       >
@@ -653,7 +653,7 @@ const DropzoneMessage = forwardRef<HTMLParagraphElement, DropzoneMessageProps>(
     );
   },
 );
-DropzoneMessage.displayName = "DropzoneMessage";
+DropzoneMessage.displayName = 'DropzoneMessage';
 
 interface DropzoneRemoveFileProps extends ButtonProps {}
 
@@ -664,7 +664,7 @@ const DropzoneRemoveFile = forwardRef<
   const context = useDropzoneFileListContext();
   if (!context) {
     throw new Error(
-      "DropzoneRemoveFile must be used within a DropzoneFileListItem",
+      'DropzoneRemoveFile must be used within a DropzoneFileListItem',
     );
   }
   return (
@@ -675,7 +675,7 @@ const DropzoneRemoveFile = forwardRef<
       size="icon"
       {...props}
       className={cn(
-        "aria-disabled:pointer-events-none aria-disabled:opacity-50",
+        'aria-disabled:pointer-events-none aria-disabled:opacity-50',
         className,
       )}
     >
@@ -684,7 +684,7 @@ const DropzoneRemoveFile = forwardRef<
     </Button>
   );
 });
-DropzoneRemoveFile.displayName = "DropzoneRemoveFile";
+DropzoneRemoveFile.displayName = 'DropzoneRemoveFile';
 
 interface DropzoneRetryFileProps extends ButtonProps {}
 
@@ -694,7 +694,7 @@ const DropzoneRetryFile = forwardRef<HTMLButtonElement, DropzoneRetryFileProps>(
 
     if (!context) {
       throw new Error(
-        "DropzoneRetryFile must be used within a DropzoneFileListItem",
+        'DropzoneRetryFile must be used within a DropzoneFileListItem',
       );
     }
 
@@ -710,7 +710,7 @@ const DropzoneRetryFile = forwardRef<HTMLButtonElement, DropzoneRetryFileProps>(
         size="icon"
         {...props}
         className={cn(
-          "aria-disabled:pointer-events-none aria-disabled:opacity-50",
+          'aria-disabled:pointer-events-none aria-disabled:opacity-50',
           className,
         )}
       >
@@ -720,7 +720,7 @@ const DropzoneRetryFile = forwardRef<HTMLButtonElement, DropzoneRetryFileProps>(
     );
   },
 );
-DropzoneRetryFile.displayName = "DropzoneRetryFile";
+DropzoneRetryFile.displayName = 'DropzoneRetryFile';
 
 interface DropzoneTriggerProps
   extends React.LabelHTMLAttributes<HTMLLabelElement> {}
@@ -729,7 +729,7 @@ const DropzoneTrigger = forwardRef<HTMLLabelElement, DropzoneTriggerProps>(
   ({ className, children, ...props }, ref) => {
     const context = useDropzoneContext();
     if (!context) {
-      throw new Error("DropzoneTrigger must be used within a Dropzone");
+      throw new Error('DropzoneTrigger must be used within a Dropzone');
     }
 
     const { fileStatuses, getFileMessageId } = context;
@@ -737,7 +737,7 @@ const DropzoneTrigger = forwardRef<HTMLLabelElement, DropzoneTriggerProps>(
     const fileMessageIds = useMemo(
       () =>
         fileStatuses
-          .filter((file) => file.status === "error")
+          .filter((file) => file.status === 'error')
           .map((file) => getFileMessageId(file.id)),
       [fileStatuses, getFileMessageId],
     );
@@ -747,7 +747,7 @@ const DropzoneTrigger = forwardRef<HTMLLabelElement, DropzoneTriggerProps>(
         ref={ref}
         {...props}
         className={cn(
-          "cursor-pointer rounded-sm bg-secondary px-4 py-2 font-medium ring-offset-background transition-colors focus-within:outline-none hover:bg-secondary/80 has-[input:focus-visible]:ring-2 has-[input:focus-visible]:ring-ring has-[input:focus-visible]:ring-offset-2",
+          'cursor-pointer rounded-sm bg-secondary px-4 py-2 font-medium ring-offset-background transition-colors focus-within:outline-none hover:bg-secondary/80 has-[input:focus-visible]:ring-2 has-[input:focus-visible]:ring-ring has-[input:focus-visible]:ring-offset-2',
           className,
         )}
       >
@@ -757,12 +757,12 @@ const DropzoneTrigger = forwardRef<HTMLLabelElement, DropzoneTriggerProps>(
             style: {
               display: undefined,
             },
-            className: "sr-only",
+            className: 'sr-only',
             tabIndex: undefined,
           })}
           aria-describedby={
             context.isInvalid
-              ? [context.rootMessageId, ...fileMessageIds].join(" ")
+              ? [context.rootMessageId, ...fileMessageIds].join(' ')
               : undefined
           }
           aria-invalid={context.isInvalid}
@@ -771,22 +771,22 @@ const DropzoneTrigger = forwardRef<HTMLLabelElement, DropzoneTriggerProps>(
     );
   },
 );
-DropzoneTrigger.displayName = "DropzoneTrigger";
+DropzoneTrigger.displayName = 'DropzoneTrigger';
 
 interface InfiniteProgressProps extends React.HTMLAttributes<HTMLDivElement> {
-  status: "pending" | "success" | "error";
+  status: 'pending' | 'success' | 'error';
 }
 
 const valueTextMap = {
-  pending: "indeterminate",
-  success: "100%",
-  error: "error",
+  pending: 'indeterminate',
+  success: '100%',
+  error: 'error',
 };
 
 const InfiniteProgress = forwardRef<HTMLDivElement, InfiniteProgressProps>(
   ({ className, ...props }, ref) => {
-    const done = props.status === "success" || props.status === "error";
-    const error = props.status === "error";
+    const done = props.status === 'success' || props.status === 'error';
+    const error = props.status === 'error';
     return (
       <div
         ref={ref}
@@ -796,23 +796,23 @@ const InfiniteProgress = forwardRef<HTMLDivElement, InfiniteProgressProps>(
         aria-valuetext={valueTextMap[props.status]}
         {...props}
         className={cn(
-          "relative h-2 w-full overflow-hidden rounded-full bg-muted",
+          'relative h-2 w-full overflow-hidden rounded-full bg-muted',
           className,
         )}
       >
         <div
           //   TODO: add proper done transition
           className={cn(
-            "h-full w-full rounded-full bg-primary",
-            done ? "translate-x-0" : "animate-infinite-progress",
-            error && "bg-destructive",
+            'h-full w-full rounded-full bg-primary',
+            done ? 'translate-x-0' : 'animate-infinite-progress',
+            error && 'bg-destructive',
           )}
         />
       </div>
     );
   },
 );
-InfiniteProgress.displayName = "InfiniteProgress";
+InfiniteProgress.displayName = 'InfiniteProgress';
 
 export {
   Dropzone,

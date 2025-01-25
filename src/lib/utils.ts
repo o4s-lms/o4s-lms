@@ -43,10 +43,10 @@ export const priceSchema = z.string().transform((val) => {
 export const formatDate = (timestamp: number) => {
   const date = new Date(timestamp);
   const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  const day = date.getDate().toString().padStart(2, "0");
-  const hours = date.getHours().toString().padStart(2, "0");
-  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
   return `${year}-${month}-${day} ${hours}:${minutes}`;
 };
 
@@ -57,10 +57,10 @@ export const randID = () => Math.random().toString(36).slice(2);
 
 export function toNow(date: string, language: 'pt' | 'en' | 'fr' | 'es') {
   dayjs.locale(language);
-  return dayjs(date).toNow()
+  return dayjs(date).toNow();
 }
 
 export function fromNow(date: string, language: 'pt' | 'en' | 'fr' | 'es') {
   dayjs.locale(language);
-  return dayjs(new Date()).from(date)
+  return dayjs(new Date()).from(date);
 }

@@ -18,7 +18,9 @@ import { VERSION } from '@/lib/constants';
 import { useEffect, useState } from 'react';
 import type { SidebarData } from '@/components/Layout/types';
 
-export function AppAdminSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppAdminSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
   const [nav, setNav] = useState<SidebarData | null>(null);
 
   useEffect(() => {
@@ -62,9 +64,7 @@ export function AppAdminSidebar({ ...props }: React.ComponentProps<typeof Sideba
           ))}
         </SidebarContent>
       )}
-      <SidebarFooter>
-        
-      </SidebarFooter>
+      <SidebarFooter></SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

@@ -212,7 +212,6 @@ const SidebarMenuCollapsedDropdown = ({
                 </a>
               )}
             </DropdownMenuItem>
-            
           ))}
         </DropdownMenuContent>
       </DropdownMenu>

@@ -102,9 +102,7 @@ export const pendingTransaction = inngest.createFunction(
             to: transaction.email,
             subject: 'Transaction cancelled',
             html: await render(
-              <TransactionCancelledEmail
-                transaction={transaction}
-              />,
+              <TransactionCancelledEmail transaction={transaction} />,
             ),
           });
         } catch (error) {

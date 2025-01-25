@@ -34,7 +34,7 @@ export async function getLastLessonAccessed(userId: string, courseId: string) {
     //.filter((lesson) => typeof lesson === 'object')
     return result.docs[0].lesson as string;
   }
-  
+
   return null;
 }
 
@@ -68,7 +68,7 @@ export async function getLessonContent(lessonId: string | null, depth = 0) {
     where: {
       lesson: {
         equals: lessonId,
-      }
+      },
     },
     select: {
       title: true,
@@ -106,7 +106,7 @@ export async function getLessonProgress(
   });
 
   //if (result.docs.length < 1) {
-    //return null;
+  //return null;
   //}
 
   return result.docs[0] ?? null;

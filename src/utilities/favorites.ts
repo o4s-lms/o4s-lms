@@ -21,7 +21,7 @@ export async function verifyIsFavorite(userId: string, lessonId: string) {
         },
         {
           objectType: {
-            equals: 'lessons'
+            equals: 'lessons',
           },
         },
         {
@@ -57,8 +57,10 @@ export async function getUserFavorites() {
   return favorites.docs;
 }
 
-export async function getFavorites(userId: string | undefined): Promise<Favorite[] | null> {
-  if (!userId) return null
+export async function getFavorites(
+  userId: string | undefined,
+): Promise<Favorite[] | null> {
+  if (!userId) return null;
 
   const payload = await createPayloadClient();
 

@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 export function Progress({ progress }: { progress: number }) {
   const [width, setWidth] = useState(0);
@@ -35,14 +35,14 @@ export function Progress({ progress }: { progress: number }) {
         const highlight = shouldUseValue ? index / bars < progress / 100 : 0;
         return (
           <div
-            className={cn("h-full w-[2px] rounded-[1px] transition-all", {
-              "bg-blue-100 duration-75 group-hover:rounded group-hover:bg-zinc-50 group-active:rounded group-active:bg-zinc-50":
+            className={cn('h-full w-[2px] rounded-[1px] transition-all', {
+              'bg-blue-100 duration-75 group-hover:rounded group-hover:bg-zinc-50 group-active:rounded group-active:bg-zinc-50':
                 highlight,
-              "bg-zinc-900/30 duration-300 group-hover:scale-75 group-hover:bg-zinc-900/15 group-active:scale-75 group-active:bg-zinc-900/15":
+              'bg-zinc-900/30 duration-300 group-hover:scale-75 group-hover:bg-zinc-900/15 group-active:scale-75 group-active:bg-zinc-900/15':
                 !highlight,
             })}
             style={{
-              transitionDelay: highlight ? `${index * 24}ms` : "0ms",
+              transitionDelay: highlight ? `${index * 24}ms` : '0ms',
             }}
             key={`bar_${index}`}
           />

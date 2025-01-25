@@ -291,12 +291,15 @@ export function AppAdminSupport({ tickets }: { tickets: SupportTicket[] }) {
                             key={item.value}
                             onSelect={async () => {
                               try {
-                                await fetcher(`/api/support-tickets/${selectedTicket.id}`, {
-                                  method: 'PATCH',
-                                  body: JSON.stringify({
-                                    category: item.value,
-                                  }),
-                                });
+                                await fetcher(
+                                  `/api/support-tickets/${selectedTicket.id}`,
+                                  {
+                                    method: 'PATCH',
+                                    body: JSON.stringify({
+                                      category: item.value,
+                                    }),
+                                  },
+                                );
                                 toast.info(`Category changed to ${item.value}`);
                               } catch (error) {
                                 throw error;
@@ -348,12 +351,15 @@ export function AppAdminSupport({ tickets }: { tickets: SupportTicket[] }) {
                             key={item.value}
                             onSelect={async () => {
                               try {
-                                await fetcher(`/api/support-tickets/${selectedTicket.id}`, {
-                                  method: 'PATCH',
-                                  body: JSON.stringify({
-                                    priority: item.value,
-                                  }),
-                                });
+                                await fetcher(
+                                  `/api/support-tickets/${selectedTicket.id}`,
+                                  {
+                                    method: 'PATCH',
+                                    body: JSON.stringify({
+                                      priority: item.value,
+                                    }),
+                                  },
+                                );
                                 toast.info(`Priority changed to ${item.value}`);
                               } catch (error) {
                                 throw error;

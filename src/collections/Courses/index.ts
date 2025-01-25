@@ -45,14 +45,12 @@ export const Courses: CollectionConfig<'courses'> = {
     admin: admin,
     create: ({ req: { user } }: AccessArgs): boolean | Where => {
       if (!user || !user.role) return false;
-      if (user.role === 'admin' || user.role === 'teacher')
-        return true;
+      if (user.role === 'admin' || user.role === 'teacher') return true;
       return false;
     },
     delete: admin,
     read: ({ req: { user } }: AccessArgs): boolean | Where => {
-      if (user?.role === 'admin' || user?.role === 'teacher')
-        return true;
+      if (user?.role === 'admin' || user?.role === 'teacher') return true;
 
       return {
         _status: {

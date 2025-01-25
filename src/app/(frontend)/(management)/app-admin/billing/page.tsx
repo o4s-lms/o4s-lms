@@ -33,8 +33,8 @@ export default async function AppAdminTransactionsPage() {
       processedAt: true,
       createdAt: true,
       updatedAt: true,
-    }
-  })
+    },
+  });
 
   return (
     <>

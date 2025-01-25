@@ -83,7 +83,7 @@ export const SupportTickets: CollectionConfig = {
         {
           name: 'message',
           type: 'textarea',
-          required: true
+          required: true,
         },
         {
           name: 'timestamp',
@@ -105,14 +105,13 @@ export const SupportTickets: CollectionConfig = {
             {
               label: 'System',
               value: 'system',
-            }
+            },
           ],
           defaultValue: 'guest',
         },
       ],
       required: true,
     },
-    
   ],
   timestamps: true,
   hooks: {

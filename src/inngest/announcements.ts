@@ -104,26 +104,28 @@ export const createAnnouncementNotifications = inngest.createFunction(
         } catch (error) {
           throw error;
         }
-        
       });
     });
 
     // step 4 - get the notifications number
-    const notifications = await step.run('get-notifications-number', async () => {
-      try {
-        const result = await payload.count({
-          collection: 'notifications',
-          where: {
-            announcement: {
-              equals: announcement.id,
-            }
-          },
-        });
-        return result.totalDocs;
-      } catch (error) {
-        throw error;
-      }
-    });
+    const notifications = await step.run(
+      'get-notifications-number',
+      async () => {
+        try {
+          const result = await payload.count({
+            collection: 'notifications',
+            where: {
+              announcement: {
+                equals: announcement.id,
+              },
+            },
+          });
+          return result.totalDocs;
+        } catch (error) {
+          throw error;
+        }
+      },
+    );
 
     // step 5 - update announcement to processed
     await step.run('update-announcement-to-processed', async () => {
@@ -144,6 +146,6 @@ export const createAnnouncementNotifications = inngest.createFunction(
     return {
       success: true,
       notifications: notifications,
-    }
+    };
   },
 );

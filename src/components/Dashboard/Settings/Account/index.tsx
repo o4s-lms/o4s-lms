@@ -75,7 +75,7 @@ type AccountFormValues = z.infer<typeof accountFormSchema>;
 export function AccountForm({ currentUser }: { currentUser: User }) {
   const [user, setUser] = React.useState<User>(currentUser);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  
+
   let src: StaticImageData | string = '';
 
   const defaultValues: Partial<AccountFormValues> = {
@@ -261,7 +261,7 @@ export function AccountForm({ currentUser }: { currentUser: User }) {
               </FormItem>
             )}
           />
-          
+
           <FormField
             control={form.control}
             name="language"

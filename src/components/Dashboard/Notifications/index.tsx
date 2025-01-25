@@ -74,9 +74,7 @@ export function Notifications({
                 {notifications.map((notification) => {
                   return (
                     <>
-                      <li>
-                        {JSON.stringify(notification)}
-                      </li>
+                      <li>{JSON.stringify(notification)}</li>
                     </>
                   );
                 })}

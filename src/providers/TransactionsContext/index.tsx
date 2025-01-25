@@ -4,38 +4,42 @@ import React, { useState } from 'react';
 import useDialogState from '@/hooks/use-dialog-state';
 import { Transaction } from '@/components/AppAdmin/Billing/Data/schema';
 
-type TransactionsDialogType = 'add' | 'edit' | 'delete'
+type TransactionsDialogType = 'add' | 'edit' | 'delete';
 
 interface TransactionsContextType {
-  open: TransactionsDialogType | null
-  setOpen: (str: TransactionsDialogType | null) => void
-  currentRow: Transaction | null
-  setCurrentRow: React.Dispatch<React.SetStateAction<Transaction | null>>
+  open: TransactionsDialogType | null;
+  setOpen: (str: TransactionsDialogType | null) => void;
+  currentRow: Transaction | null;
+  setCurrentRow: React.Dispatch<React.SetStateAction<Transaction | null>>;
 }
 
-const TransactionsContext = React.createContext<TransactionsContextType | null>(null)
+const TransactionsContext = React.createContext<TransactionsContextType | null>(
+  null,
+);
 
 interface Props {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export default function TransactionsProvider({ children }: Props) {
-  const [open, setOpen] = useDialogState<TransactionsDialogType>(null)
-  const [currentRow, setCurrentRow] = useState<Transaction | null>(null)
+  const [open, setOpen] = useDialogState<TransactionsDialogType>(null);
+  const [currentRow, setCurrentRow] = useState<Transaction | null>(null);
 
   return (
     <TransactionsContext value={{ open, setOpen, currentRow, setCurrentRow }}>
       {children}
     </TransactionsContext>
-  )
+  );
 }
 
 export const useTransactions = () => {
-  const transactionsContext = React.useContext(TransactionsContext)
+  const transactionsContext = React.useContext(TransactionsContext);
 
   if (!transactionsContext) {
-    throw new Error('useTransactions has to be used within <TransactionsContext>')
+    throw new Error(
+      'useTransactions has to be used within <TransactionsContext>',
+    );
   }
 
-  return transactionsContext
-}
+  return transactionsContext;
+};

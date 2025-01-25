@@ -21,8 +21,19 @@ import { useAuth } from '@/providers/Auth';
 import { useTolgee, useTranslate } from '@tolgee/react';
 import { PasswordInput } from '@/components/PasswordInput';
 import { fetcher } from '@/lib/fetcher';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
 import { cn } from '@/lib/utils';
 import { languages } from '@/lib/constants';
 
@@ -38,8 +49,6 @@ const formSchema = z
     message: "Passwords don't match",
     path: ['passwordConfirmation'],
   });
-
-
 
 export const AuthSignUpForm = () => {
   const { t } = useTranslate();
@@ -71,13 +80,10 @@ export const AuthSignUpForm = () => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
 
-    const response = await fetcher(
-      `/api/users`,
-      {
-        body: JSON.stringify(values),
-        method: 'POST',
-      },
-    );
+    const response = await fetcher(`/api/users`, {
+      body: JSON.stringify(values),
+      method: 'POST',
+    });
 
     if (!response.ok) {
       const message =
@@ -173,8 +179,8 @@ export const AuthSignUpForm = () => {
                         >
                           {field.value
                             ? languages.find(
-                              (language) => language.value === field.value,
-                            )?.label
+                                (language) => language.value === field.value,
+                              )?.label
                             : 'Select language'}
                           <ChevronsUpDown className="opacity-50" />
                         </Button>

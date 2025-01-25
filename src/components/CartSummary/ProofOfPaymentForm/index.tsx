@@ -21,7 +21,7 @@ export function ProofOfPaymentForm({
 
   const metadata = {
     transactionId: transactionId,
-  }
+  };
 
   const handleChangeEvent = async (files) => {
     console.log('change event payload:', files);
@@ -30,16 +30,17 @@ export function ProofOfPaymentForm({
     //setFiles(event.successEntries);
     //console.log('change event payload:', files);
 
-    await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/emailProofOfPayment?transactionId=${transactionId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/functions/emailProofOfPayment?transactionId=${transactionId}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(files.successEntries),
       },
-      credentials: 'include',
-      body: JSON.stringify(files.successEntries),
-  
-    });
-  
+    );
   };
   return (
     <div className="flex h-full flex-col items-center justify-center bg-background text-foreground">

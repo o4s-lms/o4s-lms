@@ -105,7 +105,8 @@ export function CoursesContent({ userId, enrollments }: CoursesProps) {
                     </a>
                     <div>
                       <strong className="font-normal text-gray-700">
-                        <strong>{item.progress.overallProgress}%</strong> progress
+                        <strong>{item.progress.overallProgress}%</strong>{' '}
+                        progress
                       </strong>
                       <div className="h-[12px] sm:w-96">
                         <Progress progress={item.progress.overallProgress} />

@@ -103,22 +103,25 @@ export const waitUserSignUp = inngest.createFunction(
       if (!onboardingCompleted) {
         // if no event is received within 3 days, onboardingCompleted will be null
       } else {
-        const transaction = await step.run('find-transaction-record-with-user', async () => {
-          try {
-            const transaction = await payload.find({
-              collection: 'transactions',
-              depth: 0,
-              where: {
-                id: {
-                  equals: event.data.transaction.id,
+        const transaction = await step.run(
+          'find-transaction-record-with-user',
+          async () => {
+            try {
+              const transaction = await payload.find({
+                collection: 'transactions',
+                depth: 0,
+                where: {
+                  id: {
+                    equals: event.data.transaction.id,
+                  },
                 },
-              },
-            });
-            return transaction;
-          } catch (error) {
-            throw error;
-          }
-        });
+              });
+              return transaction;
+            } catch (error) {
+              throw error;
+            }
+          },
+        );
         await step.sendEvent('send-process-transaction-event', {
           name: 'transactions/process.transaction',
           data: { transaction: transaction },
@@ -126,6 +129,6 @@ export const waitUserSignUp = inngest.createFunction(
       }
     }
 
-    return { message: ''}
+    return { message: '' };
   },
 );

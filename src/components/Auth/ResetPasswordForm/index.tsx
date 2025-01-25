@@ -56,26 +56,23 @@ export const ResetPasswordForm = () => {
   const onSubmit = React.useCallback(
     async (values: z.infer<typeof formSchema>) => {
       setIsLoading(true);
-      const response = await fetcher(
-        `/api/users/reset-password`,
-        {
-          body: JSON.stringify(values),
-          method: 'POST',
-        },
-      );
+      const response = await fetcher(`/api/users/reset-password`, {
+        body: JSON.stringify(values),
+        method: 'POST',
+      });
 
       if (response.ok) {
         const json = await response.json();
 
         // Automatically log the user in after they successfully reset password
         try {
-          const user = await login({ email: json.user.email, password: values.password });
-          await fetcher(
-            `/api/functions/lastLogin?userId=${user.id}`,
-            {
-              method: 'POST',
-            },
-          );
+          const user = await login({
+            email: json.user.email,
+            password: values.password,
+          });
+          await fetcher(`/api/functions/lastLogin?userId=${user.id}`, {
+            method: 'POST',
+          });
         } catch (error) {
           throw error;
         }
@@ -90,7 +87,9 @@ export const ResetPasswordForm = () => {
         setIsLoading(false);
 
         // Redirect them to `/dashboard` with success message in URL
-        router.push(`/dashboard?success=${encodeURIComponent('Password reset successfully.')}`);
+        router.push(
+          `/dashboard?success=${encodeURIComponent('Password reset successfully.')}`,
+        );
       } else {
         setIsLoading(false);
         toast.error(

@@ -80,11 +80,8 @@ export const Badges: CollectionConfig = {
       if (user.role === 'admin') return true;
       return false;
     },
-    create: ({ req: { user } }: AccessArgs) =>
-      user?.role === 'admin',
-    update: ({ req: { user } }: AccessArgs) =>
-      user?.role === 'admin',
-    delete: ({ req: { user } }: AccessArgs) =>
-      user?.role === 'admin',
+    create: ({ req: { user } }: AccessArgs) => user?.role === 'admin',
+    update: ({ req: { user } }: AccessArgs) => user?.role === 'admin',
+    delete: ({ req: { user } }: AccessArgs) => user?.role === 'admin',
   },
 };

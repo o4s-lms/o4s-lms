@@ -33,12 +33,9 @@ export const Transactions: CollectionConfig = {
   hooks: {
     beforeChange: [
       async ({ data, originalDoc, operation }) => {
-
         // Handle status changes
         if (operation === 'update' && data.status && originalDoc.processed) {
-          
           switch (data.status) {
-            
             case 'disputed':
               // transaction disputed - revoke the student access
               break;
@@ -49,34 +46,31 @@ export const Transactions: CollectionConfig = {
         }
 
         if (operation === 'update' && data.processed) {
-          if (data.processed && !data.processedAt) data.processedAt = new Date().toISOString();
+          if (data.processed && !data.processedAt)
+            data.processedAt = new Date().toISOString();
         }
 
-        return data; 
+        return data;
       },
     ],
     afterChange: [
       async ({ doc, operation }) => {
-        
         if (operation === 'create' && doc.status === 'completed') {
           const f = doc.user ? 'processTransaction' : 'waitUserSignUp';
-       
+
           await fetcher(`/api/functions/${f}`, {
             method: 'POST',
             body: JSON.stringify(doc),
-        
           });
         }
 
         if (operation === 'update' && doc.processed === false) {
-          
           switch (doc.status) {
             case 'completed':
               const f = doc.user ? 'processTransaction' : 'waitUserSignUp';
               await fetcher(`/api/functions/${f}`, {
                 method: 'POST',
                 body: JSON.stringify(doc),
-            
               });
               break;
             case 'disputed':

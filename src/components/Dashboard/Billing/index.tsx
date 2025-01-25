@@ -28,9 +28,7 @@ import { fromNow } from '@/lib/utils';
 import { Invoice } from './Invoice';
 import { fetcher } from '@/lib/fetcher';
 
-
 export function Billing({ transactions }: { transactions: Transaction[] }) {
-
   const data = transactions.map((transaction) => transaction);
 
   return (
@@ -41,7 +39,7 @@ export function Billing({ transactions }: { transactions: Transaction[] }) {
           <CardDescription>Manage your transactions.</CardDescription>
         </CardHeader>
         <CardContent>
-          <ul role="list" className="px-5 divide-y divide-gray-100">
+          <ul role="list" className="divide-y divide-gray-100 px-5">
             {data.map((item) => (
               <li key={item.id} className="flex justify-between gap-x-6 py-5">
                 <div className="flex flex-col gap-2">
@@ -50,12 +48,13 @@ export function Billing({ transactions }: { transactions: Transaction[] }) {
                       {item.id}
                     </h3>
                     <span
-                      className={`px-2 border tex-sm rounded ${item.status === "completed"
-                        ? "border-green-300 text-green-700 bg-green-50"
-                        : item.status === "awaiting"
-                          ? "border-gray-300 text-gray-700 bg-gray-50"
-                          : "border-orange-300 text-orange-700 bg-orange-50"
-                        }`}
+                      className={`tex-sm rounded border px-2 ${
+                        item.status === 'completed'
+                          ? 'border-green-300 bg-green-50 text-green-700'
+                          : item.status === 'awaiting'
+                            ? 'border-gray-300 bg-gray-50 text-gray-700'
+                            : 'border-orange-300 bg-orange-50 text-orange-700'
+                      }`}
                     >
                       {item.status}
                     </span>
@@ -63,37 +62,54 @@ export function Billing({ transactions }: { transactions: Transaction[] }) {
                   <div className="flex items-center gap-1">
                     {item.processedAt && (
                       <>
-                        <p className="text-gray-400 text-sm">Processed at {fromNow(item.processedAt, 'pt')}</p>
-                        <DotFilledIcon className="text-gray-400 text-sm" />
+                        <p className="text-sm text-gray-400">
+                          Processed at {fromNow(item.processedAt, 'pt')}
+                        </p>
+                        <DotFilledIcon className="text-sm text-gray-400" />
                       </>
                     )}
-                    <p className="text-gray-400 text-sm">Created at {fromNow(item.createdAt, 'pt')} - {item.provider}</p>
+                    <p className="text-sm text-gray-400">
+                      Created at {fromNow(item.createdAt, 'pt')} -{' '}
+                      {item.provider}
+                    </p>
                   </div>
                   <div className="flex items-center gap-1">
-                    <p className="text-gray-400 text-sm">Amount: {new Intl.NumberFormat('pt-PT', {
-                      style: 'currency',
-                      currency: 'EUR',
-                    }).format(item.amount / 100)}</p>
-                    <DotFilledIcon className="text-gray-400 text-sm" />
-                    <p className="text-gray-400 text-sm">Discount: {new Intl.NumberFormat('pt-PT', {
-                      style: 'currency',
-                      currency: 'EUR',
-                    }).format(item.discount / 100)}</p>
-                    <DotFilledIcon className="text-gray-400 text-sm" />
-                    <p className="text-gray-400 text-sm">Tax: {new Intl.NumberFormat('pt-PT', {
-                      style: 'currency',
-                      currency: 'EUR',
-                    }).format(item.tax / 100)}</p>
-                    <DotFilledIcon className="text-gray-400 text-sm" />
-                    <p className="text-gray-400 text-sm">Total: {new Intl.NumberFormat('pt-PT', {
-                      style: 'currency',
-                      currency: 'EUR',
-                    }).format(item.total / 100)}</p>
+                    <p className="text-sm text-gray-400">
+                      Amount:{' '}
+                      {new Intl.NumberFormat('pt-PT', {
+                        style: 'currency',
+                        currency: 'EUR',
+                      }).format(item.amount / 100)}
+                    </p>
+                    <DotFilledIcon className="text-sm text-gray-400" />
+                    <p className="text-sm text-gray-400">
+                      Discount:{' '}
+                      {new Intl.NumberFormat('pt-PT', {
+                        style: 'currency',
+                        currency: 'EUR',
+                      }).format(item.discount / 100)}
+                    </p>
+                    <DotFilledIcon className="text-sm text-gray-400" />
+                    <p className="text-sm text-gray-400">
+                      Tax:{' '}
+                      {new Intl.NumberFormat('pt-PT', {
+                        style: 'currency',
+                        currency: 'EUR',
+                      }).format(item.tax / 100)}
+                    </p>
+                    <DotFilledIcon className="text-sm text-gray-400" />
+                    <p className="text-sm text-gray-400">
+                      Total:{' '}
+                      {new Intl.NumberFormat('pt-PT', {
+                        style: 'currency',
+                        currency: 'EUR',
+                      }).format(item.total / 100)}
+                    </p>
                   </div>
                 </div>
-                <div className="items-end flex items-center gap-5">
+                <div className="flex items-end items-center gap-5">
                   <div className="hidden shrink-0 sm:flex">
-                    {item.status === "completed" && (
+                    {item.status === 'completed' && (
                       <Drawer.Root direction="right">
                         <Drawer.Trigger asChild>
                           <Button variant="outline">View invoice</Button>
@@ -101,30 +117,44 @@ export function Billing({ transactions }: { transactions: Transaction[] }) {
                         <Drawer.Portal>
                           <Drawer.Overlay className="fixed inset-0 bg-black/40" />
                           <Drawer.Content
-                            className="right-2 top-2 bottom-2 fixed z-10 outline-none flex"
+                            className="fixed bottom-2 right-2 top-2 z-10 flex outline-none"
                             // The gap between the edge of the screen and the drawer is 8px in this case.
-                            style={{ '--initial-transform': 'calc(100% + 8px)' } as React.CSSProperties}
+                            style={
+                              {
+                                '--initial-transform': 'calc(100% + 8px)',
+                              } as React.CSSProperties
+                            }
                           >
-                            <div className="p-4 bg-white"><Invoice transaction={item} /></div>
+                            <div className="bg-white p-4">
+                              <Invoice transaction={item} />
+                            </div>
                           </Drawer.Content>
                         </Drawer.Portal>
                       </Drawer.Root>
                     )}
-                    {item.status === "awaiting" && (
+                    {item.status === 'awaiting' && (
                       <Drawer.Root direction="right">
                         <Drawer.Trigger asChild>
-                          <Button variant="outline">Payment instructions</Button>
+                          <Button variant="outline">
+                            Payment instructions
+                          </Button>
                         </Drawer.Trigger>
                         <Drawer.Portal>
                           <Drawer.Overlay className="fixed inset-0 bg-black/40" />
                           <Drawer.Content
-                            className="right-2 top-2 bottom-2 fixed z-10 outline-none flex"
+                            className="fixed bottom-2 right-2 top-2 z-10 flex outline-none"
                             // The gap between the edge of the screen and the drawer is 8px in this case.
-                            style={{ '--initial-transform': 'calc(100% + 8px)' } as React.CSSProperties}
+                            style={
+                              {
+                                '--initial-transform': 'calc(100% + 8px)',
+                              } as React.CSSProperties
+                            }
                           >
-                            <div className="p-4 bg-white">
-                              <Drawer.Title className="font-medium mb-4 text-gray-900">Payment instructions</Drawer.Title>
-                              
+                            <div className="bg-white p-4">
+                              <Drawer.Title className="mb-4 font-medium text-gray-900">
+                                Payment instructions
+                              </Drawer.Title>
+
                               <Button
                                 onClick={async () => {
                                   await fetcher(

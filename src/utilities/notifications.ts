@@ -1,9 +1,11 @@
 'use server';
 
-import { createPayloadClient } from "@/lib/payload";
-import { Notification } from "@/payload-types";
+import { createPayloadClient } from '@/lib/payload';
+import { Notification } from '@/payload-types';
 
-export async function getNotifications(userId: string): Promise<Notification[] | null> {
+export async function getNotifications(
+  userId: string,
+): Promise<Notification[] | null> {
   const payload = await createPayloadClient();
 
   const notifications = await payload.find({
@@ -12,13 +14,15 @@ export async function getNotifications(userId: string): Promise<Notification[] |
     where: {
       recipient: {
         equals: userId,
-      }
-    }
-  })
+      },
+    },
+  });
 
-  return notifications.docs ?? null
+  return notifications.docs ?? null;
 }
-export async function unreadNotifications(userId: string): Promise<Notification[] | null> {
+export async function unreadNotifications(
+  userId: string,
+): Promise<Notification[] | null> {
   const payload = await createPayloadClient();
 
   const notifications = await payload.find({
@@ -37,8 +41,8 @@ export async function unreadNotifications(userId: string): Promise<Notification[
           },
         },
       ],
-    }
-  })
+    },
+  });
 
-  return notifications.docs ?? null
+  return notifications.docs ?? null;
 }

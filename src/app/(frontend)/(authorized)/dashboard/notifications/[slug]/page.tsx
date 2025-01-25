@@ -23,7 +23,9 @@ type Args = {
   }>;
 };
 
-export default async function NotificationsPage({ params: paramsPromise }: Args) {
+export default async function NotificationsPage({
+  params: paramsPromise,
+}: Args) {
   const { slug = 'unread' } = await paramsPromise;
   const user = await currentUser();
 
@@ -36,7 +38,7 @@ export default async function NotificationsPage({ params: paramsPromise }: Args)
   const userId = user.id;
   const type = slug;
 
-  const notifications = await queryNotificationsByUser({userId, type});
+  const notifications = await queryNotificationsByUser({ userId, type });
 
   return (
     <>
@@ -57,7 +59,13 @@ export default async function NotificationsPage({ params: paramsPromise }: Args)
   );
 }
 
-const queryNotificationsByUser = async ({ userId, type }: { userId: string; type: string }) => {
+const queryNotificationsByUser = async ({
+  userId,
+  type,
+}: {
+  userId: string;
+  type: string;
+}) => {
   const payload = await createPayloadClient();
 
   function query() {
@@ -99,7 +107,7 @@ const queryNotificationsByUser = async ({ userId, type }: { userId: string; type
           ],
         };
     }
-  };
+  }
 
   const result = await payload.find({
     collection: 'notifications',

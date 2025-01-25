@@ -49,9 +49,7 @@
     "tables": {
       "notification": {
         "tableName": "notification",
-        "primaryKey": [
-          "id"
-        ],
+        "primaryKey": ["id"],
         "columns": {
           "content": {
             "type": "json",

@@ -11,7 +11,8 @@ interface NotificationsContextType {
   isLoading: boolean;
 }
 
-const NotificationsContext = React.createContext<NotificationsContextType | null>(null);
+const NotificationsContext =
+  React.createContext<NotificationsContextType | null>(null);
 
 interface Props {
   children: React.ReactNode;

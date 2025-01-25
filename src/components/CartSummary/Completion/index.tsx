@@ -52,7 +52,11 @@ export function Completion({
         </p>
       </div>
       <div className="bg-secondary-700 hover:bg-secondary-600 mt-2 flex cursor-pointer justify-center rounded-lg px-4 py-2">
-        <Button variant="secondary" asChild className="text-primary-700 m-0 p-4">
+        <Button
+          variant="secondary"
+          asChild
+          className="text-primary-700 m-0 p-4"
+        >
           {guest ? (
             <Link href="/sign-up" scroll={false}>
               Sign Up/Sign In to see the transaction details

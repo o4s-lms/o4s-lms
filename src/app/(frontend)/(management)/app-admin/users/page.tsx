@@ -27,8 +27,8 @@ export default async function AppAdminUsersPage() {
       lastLogin: true,
       createdAt: true,
       updatedAt: true,
-    }
-  })
+    },
+  });
 
   return (
     <>

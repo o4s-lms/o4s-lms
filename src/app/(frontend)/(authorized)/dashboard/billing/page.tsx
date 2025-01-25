@@ -27,7 +27,7 @@ export default async function BillingPage() {
     );
   }
 
-  const transactions = await queryTransactionsByUser({ email: user?.email })
+  const transactions = await queryTransactionsByUser({ email: user?.email });
 
   return (
     <>
@@ -45,7 +45,7 @@ export default async function BillingPage() {
       <Billing transactions={transactions} />
     </>
   );
-};
+}
 
 const queryTransactionsByUser = cache(async ({ email }: { email: string }) => {
   const payload = await createPayloadClient();

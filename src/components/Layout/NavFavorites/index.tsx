@@ -71,7 +71,9 @@ export function NavFavorites() {
               <SidebarMenuSubItem key={item.id}>
                 <SidebarMenuSubButton asChild>
                   <a href={item.url} title={item.title}>
-                    <span><IconStar /></span>
+                    <span>
+                      <IconStar />
+                    </span>
                     <span>{item.title}</span>
                   </a>
                 </SidebarMenuSubButton>

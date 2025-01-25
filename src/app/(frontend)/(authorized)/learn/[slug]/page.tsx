@@ -46,12 +46,16 @@ export default async function Page({ params: paramsPromise }: Args) {
     .map(({ value }) => value)
     .filter((module) => typeof module === 'object');
 
-  const favorites = await queryFavoritesByUserId({ userId: user.id })
+  const favorites = await queryFavoritesByUserId({ userId: user.id });
 
   console.log(JSON.stringify(course.modules));
 
   return (
-    <AppSideBarDataProvider title={course.title} modules={modules} favorites={favorites} >
+    <AppSideBarDataProvider
+      title={course.title}
+      modules={modules}
+      favorites={favorites}
+    >
       <AppSidebar />
       <div
         id="content"
