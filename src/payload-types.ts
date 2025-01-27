@@ -2786,7 +2786,12 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Config1 {
   id: string;
-  invoice: number;
+  invoice: {
+    name: string;
+    taxID: string;
+    prefix: string;
+    num: number;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2915,7 +2920,14 @@ export interface FooterE {
  * via the `definition` "config_select".
  */
 export interface ConfigSelect<T extends boolean = true> {
-  invoice?: T;
+  invoice?:
+    | T
+    | {
+        name?: T;
+        taxID?: T;
+        prefix?: T;
+        num?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

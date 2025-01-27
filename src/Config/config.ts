@@ -8,9 +8,33 @@ export const Config: GlobalConfig = {
   fields: [
     {
       name: 'invoice',
-      type: 'number',
-      defaultValue: 0,
-      required: true,
+      type: 'group',
+      fields: [
+        {
+          name: 'name',
+          type: 'text',
+          defaultValue: 'O4S LMS',
+          required: true,
+        },
+        {
+          name: 'taxID',
+          type: 'text',
+          defaultValue: 'PT199999999',
+          required: true,
+        },
+        {
+          name: 'prefix',
+          type: 'text',
+          defaultValue: 'INV',
+          required: true,
+        },
+        {
+          name: 'num',
+          type: 'number',
+          defaultValue: 0,
+          required: true,
+        },
+      ],
     },
   ],
 };

@@ -1,5 +1,4 @@
 import { Image, Text, View, Page, Document, StyleSheet, renderToBuffer } from '@react-pdf/renderer';
-import { fetcher } from '@/lib/fetcher';
 import { Transaction } from '@/payload-types';
 import { Fragment } from 'react';
 import { createPayloadClient } from '@/lib/payload';
@@ -17,7 +16,7 @@ const InvoicePDF = async ({ transaction }: { transaction: Transaction }) => {
     .filter((course) => typeof course === 'object');
 
   const reciept_data = {
-    invoice_no: config.invoice + 1,
+    invoice_no: config.invoice.num + 1,
     name: transaction?.name,
     email: transaction?.email,
     date: transaction?.processedAt,
@@ -65,7 +64,7 @@ const InvoicePDF = async ({ transaction }: { transaction: Transaction }) => {
     <View style={styles.titleContainer}>
       <View style={styles.spaceBetween}>
         <Image style={styles.logo} src='/iconO4S-100x100.png' />
-        <Text style={styles.reportTitle}>José Cordeiro</Text>
+        <Text style={styles.reportTitle}>{config.invoice.name}</Text>
       </View>
     </View>
   );
@@ -78,9 +77,7 @@ const InvoicePDF = async ({ transaction }: { transaction: Transaction }) => {
           <Text style={styles.invoiceNumber}>Invoice number: {reciept_data.invoice_no} </Text>
         </View>
         <View>
-          <Text style={styles.addressTitle}>7, Ademola Odede, </Text>
-          <Text style={styles.addressTitle}>Ikeja,</Text>
-          <Text style={styles.addressTitle}>Lagos, Nigeria.</Text>
+          <Text style={styles.addressTitle}>Tax ID: {config.invoice.taxID}</Text>
         </View>
       </View>
     </View>
@@ -237,17 +234,24 @@ const InvoicePDF = async ({ transaction }: { transaction: Transaction }) => {
     if (response.ok) {
       const json = await response.json();
 
-      await fetcher(
-        `/api/transactions/${transaction.id}`,
-        {
-          // Make sure to include cookies with fetch
-          body: JSON.stringify({
-            invoice: reciept_data.invoice_no,
-            pdf: json.doc.id,
-          }),
-          method: 'PATCH',
+      await payload.update({
+        collection: 'transactions', // required
+        id: transaction.id, // required
+        data: {
+          invoice: reciept_data.invoice_no,
+          pdf: json.doc.id,
         },
-      );
+        depth: 0,
+      })
+
+      await payload.updateGlobal({
+        slug: 'config',
+        data: {
+          invoice: {
+            num: reciept_data.invoice_no,
+          }
+        },
+      })
 
       return {
         status: 'success',

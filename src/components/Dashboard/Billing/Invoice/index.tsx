@@ -2,6 +2,7 @@ import { Logo } from '@/components/Brand/logo';
 import { Transaction } from '@/payload-types';
 import React from 'react';
 import { useTranslate } from '@tolgee/react';
+import { Button } from '@react-email/components';
 
 export const Invoice = ({ transaction }: { transaction: Transaction }) => {
   const { t } = useTranslate();
@@ -23,7 +24,12 @@ export const Invoice = ({ transaction }: { transaction: Transaction }) => {
         <div className="text-gray-700">
           <div className="mb-2 text-xl font-bold">INVOICE</div>
           <div className="text-sm">Date: {transaction.processedAt}</div>
-          <div className="text-sm">Invoice #: INV12345</div>
+          {transaction.invoice ? (
+            <div className="text-sm">Invoice #: {transaction.invoice}</div>
+
+          ) : (
+            <Button className="text-sm">Generate Invoice</Button>
+          )}
         </div>
       </div>
       <div className="mb-8 border-b-2 border-gray-300 pb-8">
