@@ -25,6 +25,7 @@ import { Points } from '@/collections/Courses/Progress/Points';
 import { Badges } from '@/collections/Courses/Progress/Badges';
 import { Favorites } from '@/collections/Users/Favorites';
 import { Transactions } from '@/collections/Transactions';
+import { Invoice } from '@/collections/Transactions/Invoice';
 import { Announcements } from '@/collections/Communications/Announcements';
 import { Notifications } from '@/collections/Communications/Notifications';
 import { Newsletter } from '@/collections/Newsletter';
@@ -35,6 +36,7 @@ import { FooterPt } from '@/Footer/pt/config';
 import { FooterEn } from '@/Footer/en/config';
 import { FooterFr } from '@/Footer/fr/config';
 import { FooterEs } from '@/Footer/es/config';
+import { Config } from '@/Config/config';
 import { Header } from '@/Header/config';
 import { plugins } from '@/plugins';
 import { defaultLexical } from '@/fields/defaultLexical';
@@ -123,6 +125,7 @@ export default buildConfig({
     Badges,
     Favorites,
     Transactions,
+    Invoice,
     Announcements,
     Notifications,
     Newsletter,
@@ -132,7 +135,7 @@ export default buildConfig({
   ],
   cors: [getServerSideURL()].filter(Boolean),
   csrf: [getServerSideURL()].filter(Boolean),
-  globals: [Header, FooterPt, FooterEn, FooterFr, FooterEs],
+  globals: [Config, Header, FooterPt, FooterEn, FooterFr, FooterEs],
   plugins: [
     ...plugins,
     // storage-adapter-placeholder
@@ -140,6 +143,7 @@ export default buildConfig({
       collections: {
         media: true,
         avatar: true,
+        invoice: true,
       },
       bucket: process.env.S3_BUCKET || '',
       config: {

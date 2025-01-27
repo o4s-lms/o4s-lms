@@ -64,6 +64,7 @@
     "@radix-ui/react-tabs": "^1.1.2",
     "@radix-ui/react-tooltip": "^1.1.6",
     "@react-email/components": "0.0.32",
+    "@react-pdf/renderer": "^4.1.6",
     "@rocicorp/zero": "^0.11.2025011402",
     "@tabler/icons-react": "^3.29.0",
     "@tanstack/react-query": "^5.64.2",

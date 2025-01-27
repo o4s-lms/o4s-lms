@@ -178,6 +178,21 @@ export const Transactions: CollectionConfig = {
       },
     },
     {
+      name: 'invoice',
+      type: 'number',
+      admin: {
+        readOnly: true,
+      },
+    },
+    {
+      name: 'pdf',
+      type: 'relationship',
+      relationTo: 'invoice',
+      admin: {
+        readOnly: true,
+      },
+    },
+    {
       name: 'user',
       type: 'relationship',
       relationTo: 'users',

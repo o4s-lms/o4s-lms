@@ -27,6 +27,7 @@ export interface Config {
     badges: Badge;
     favorites: Favorite;
     transactions: Transaction;
+    invoice: Invoice;
     announcements: Announcement;
     notifications: Notification;
     'newsletter-signups': NewsletterSignup;
@@ -59,6 +60,7 @@ export interface Config {
     badges: BadgesSelect<false> | BadgesSelect<true>;
     favorites: FavoritesSelect<false> | FavoritesSelect<true>;
     transactions: TransactionsSelect<false> | TransactionsSelect<true>;
+    invoice: InvoiceSelect<false> | InvoiceSelect<true>;
     announcements: AnnouncementsSelect<false> | AnnouncementsSelect<true>;
     notifications: NotificationsSelect<false> | NotificationsSelect<true>;
     'newsletter-signups': NewsletterSignupsSelect<false> | NewsletterSignupsSelect<true>;
@@ -77,6 +79,7 @@ export interface Config {
     defaultIDType: string;
   };
   globals: {
+    config: Config1;
     header: Header;
     footer_pt: FooterPt;
     footer_en: FooterEn;
@@ -84,6 +87,7 @@ export interface Config {
     footer_es: FooterE;
   };
   globalsSelect: {
+    config: ConfigSelect<false> | ConfigSelect<true>;
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer_pt: FooterPtSelect<false> | FooterPtSelect<true>;
     footer_en: FooterEnSelect<false> | FooterEnSelect<true>;
@@ -1404,6 +1408,8 @@ export interface Transaction {
   status: 'pending' | 'awaiting' | 'cancelled' | 'declined' | 'refunded' | 'disputed' | 'completed';
   processed?: boolean | null;
   processedAt?: string | null;
+  invoice?: number | null;
+  pdf?: (string | null) | Invoice;
   user?: (string | null) | User;
   courses: {
     relationTo: 'courses';
@@ -1411,6 +1417,25 @@ export interface Transaction {
   }[];
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "invoice".
+ */
+export interface Invoice {
+  id: string;
+  invoice?: number | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * System-wide announcements
@@ -1677,6 +1702,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'transactions';
         value: string | Transaction;
+      } | null)
+    | ({
+        relationTo: 'invoice';
+        value: string | Invoice;
       } | null)
     | ({
         relationTo: 'announcements';
@@ -2355,10 +2384,30 @@ export interface TransactionsSelect<T extends boolean = true> {
   status?: T;
   processed?: T;
   processedAt?: T;
+  invoice?: T;
+  pdf?: T;
   user?: T;
   courses?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "invoice_select".
+ */
+export interface InvoiceSelect<T extends boolean = true> {
+  invoice?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2733,6 +2782,16 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "config".
+ */
+export interface Config1 {
+  id: string;
+  invoice: number;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header".
  */
 export interface Header {
@@ -2850,6 +2909,16 @@ export interface FooterE {
     | null;
   updatedAt?: string | null;
   createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "config_select".
+ */
+export interface ConfigSelect<T extends boolean = true> {
+  invoice?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
