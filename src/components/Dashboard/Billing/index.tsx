@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -27,8 +26,6 @@ import { DotFilledIcon, DotsVerticalIcon } from '@radix-ui/react-icons';
 import { fromNow } from '@/lib/utils';
 import { Invoice } from './Invoice';
 import { fetcher } from '@/lib/fetcher';
-import Link from 'next/link';
-import { getClientSideURL } from '@/utilities/getURL';
 
 export function Billing({ transactions }: { transactions: Transaction[] }) {
   const data = transactions.map((transaction) => transaction);
@@ -114,7 +111,7 @@ export function Billing({ transactions }: { transactions: Transaction[] }) {
                     {item.status === 'completed' && (
                       <Drawer.Root direction="right">
                         <Drawer.Trigger asChild>
-                          <Button variant="outline">View invoice</Button>
+                          <Button variant="outline">View receipt</Button>
                         </Drawer.Trigger>
                         <Drawer.Portal>
                           <Drawer.Overlay className="fixed inset-0 bg-black/40" />
