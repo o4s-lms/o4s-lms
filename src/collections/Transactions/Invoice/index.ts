@@ -15,7 +15,7 @@ export const Invoice: CollectionConfig = {
     admin: admin,
     create: anyone,
     delete: admin,
-    read: ({ req: { user } }: AccessArgs) => {
+    /**read: ({ req: { user } }: AccessArgs) => {
       if (!user) return false;
       if (user.role === 'admin') return true;
       return {
@@ -27,7 +27,8 @@ export const Invoice: CollectionConfig = {
           },
         ],
       };
-    },
+    },*/
+    read: anyone,
     update: admin,
   },
   admin: {

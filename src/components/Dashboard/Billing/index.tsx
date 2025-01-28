@@ -20,13 +20,15 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Drawer } from 'vaul';
-import type { Transaction } from '@/payload-types';
+import type { Invoice as InvoiceType, Transaction } from '@/payload-types';
 import { Main } from '@/components/Layout/Main';
 import { toast } from 'sonner';
 import { DotFilledIcon, DotsVerticalIcon } from '@radix-ui/react-icons';
 import { fromNow } from '@/lib/utils';
 import { Invoice } from './Invoice';
 import { fetcher } from '@/lib/fetcher';
+import Link from 'next/link';
+import { getClientSideURL } from '@/utilities/getURL';
 
 export function Billing({ transactions }: { transactions: Transaction[] }) {
   const data = transactions.map((transaction) => transaction);

@@ -5,6 +5,7 @@ import { useTranslate } from '@tolgee/react';
 import dayjs from 'dayjs';
 import { InvoicePDF } from './PDF';
 import { Button } from '@/components/ui/button';
+import { getClientSideURL } from '@/utilities/getURL';
 
 export const Invoice = ({ transaction }: { transaction: Transaction }) => {
   const [receipt, setReceipt] = React.useState<Transaction>(transaction);
@@ -24,6 +25,18 @@ export const Invoice = ({ transaction }: { transaction: Transaction }) => {
 
   return (
     <div className="mx-auto max-w-xl rounded-lg bg-white px-8 py-10 shadow-lg">
+      {receipt.invoice && (
+        <Button variant="outline" asChild>
+          <a
+            href={receipt?.pdf && typeof receipt?.pdf === 'object'
+              ? `${getClientSideURL()}${receipt.pdf.url}`
+              : '#'}
+            target="_blank"
+          >
+            View PDF
+          </a>
+        </Button>
+      )}
       <div className="mb-8 flex items-center justify-between">
         <div className="flex items-center">
           <Logo className="mr-2 h-8 w-8" />
@@ -122,5 +135,6 @@ export const Invoice = ({ transaction }: { transaction: Transaction }) => {
         <div className="text-gray-700">Abrantes, Portugal</div>
       </div>
     </div>
+
   );
 };
