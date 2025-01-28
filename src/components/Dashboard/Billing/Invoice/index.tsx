@@ -1,5 +1,5 @@
 import { Logo } from '@/components/Brand/logo';
-import { Transaction } from '@/payload-types';
+import type { Transaction } from '@/payload-types';
 import * as React from 'react';
 import { useTranslate } from '@tolgee/react';
 import dayjs from 'dayjs';

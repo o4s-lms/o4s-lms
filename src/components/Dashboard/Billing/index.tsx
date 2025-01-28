@@ -19,7 +19,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Drawer } from 'vaul';
-import type { Invoice as InvoiceType, Transaction } from '@/payload-types';
+import type { Transaction } from '@/payload-types';
 import { Main } from '@/components/Layout/Main';
 import { toast } from 'sonner';
 import { DotFilledIcon, DotsVerticalIcon } from '@radix-ui/react-icons';
