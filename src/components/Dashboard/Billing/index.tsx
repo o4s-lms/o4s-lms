@@ -107,7 +107,7 @@ export function Billing({ transactions }: { transactions: Transaction[] }) {
                     </p>
                   </div>
                 </div>
-                <div className="flex items-end items-center gap-5">
+                <div className="flex items-center gap-5">
                   <div className="hidden shrink-0 sm:flex">
                     {item.status === 'completed' && (
                       <Drawer.Root direction="right">

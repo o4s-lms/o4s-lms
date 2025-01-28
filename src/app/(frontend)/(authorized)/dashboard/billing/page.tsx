@@ -27,7 +27,7 @@ export default async function BillingPage() {
     );
   }
 
-  const transactions = await queryTransactionsByUser({ email: user?.email });
+  const transactions = await queryTransactionsByUser(user.email);
 
   return (
     <>
@@ -47,7 +47,7 @@ export default async function BillingPage() {
   );
 }
 
-const queryTransactionsByUser = cache(async ({ email }: { email: string }) => {
+const queryTransactionsByUser = cache(async (email: string) => {
   const payload = await createPayloadClient();
 
   const result = await payload.find({
