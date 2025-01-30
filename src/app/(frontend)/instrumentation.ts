@@ -2,6 +2,8 @@ import { LogLayer, type ILogLayer } from 'loglayer';
 import { PinoTransport } from "@loglayer/transport-pino";
 import pino from "pino";
 import { serializeError } from "serialize-error";
+import { Instrumentation } from 'next';
+import * as Sentry from "@sentry/nextjs";
 
 /**
  * Strip ANSI codes from a string, which is something Next.js likes to inject.
@@ -63,6 +65,12 @@ function createConsoleMethod(log: ILogLayer, method: "error" | "info" | "warn" |
   };
 }
 
+export const onRequestError: Instrumentation.onRequestError = (...args) => {
+  Sentry.captureRequestError(...args);
+
+  // ... additional logic here
+};
+
 export async function register() {
   const logger = new LogLayer({
     errorSerializer: serializeError,
@@ -72,6 +80,14 @@ export async function register() {
       }),
     ]
   })
+
+  //if (process.env.NEXT_RUNTIME === "nodejs") {
+    await import("../../sentry.server.config");
+  //}
+
+  //if (process.env.NEXT_RUNTIME === "edge") {
+    //await import("../../sentry.edge.config");
+  //}
 
   if (process.env.NEXT_RUNTIME === "nodejs") {
     console.error = createConsoleMethod(logger, "error");
