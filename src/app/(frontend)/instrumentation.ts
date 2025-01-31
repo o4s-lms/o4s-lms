@@ -24,7 +24,7 @@ function createConsoleMethod(log: ILogLayer, method: "error" | "info" | "warn" |
   return (...args: any[]) => {
     const messages: string[] = [];
     let error: Error | undefined;
-    let data: Record<string, any> | undefined;
+    let data: Record<string, any> = {};
     
     args.forEach((arg) => {
       if (arg instanceof Error) {
@@ -36,7 +36,7 @@ function createConsoleMethod(log: ILogLayer, method: "error" | "info" | "warn" |
       }
     });
 
-    const hasData = data && Object.keys(data).length > 0;
+    const hasData = Object.keys(data).length > 0;
 
     let finalMessage = stripAnsiCodes(messages.join(" ")).trim();
 
