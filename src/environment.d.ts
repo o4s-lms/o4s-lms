@@ -1,6 +1,7 @@
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
+      NEXT_RUNTIME: string;
       PAYLOAD_SECRET: string;
       PAYLOAD_ADMIN_API_KEY: string;
       DATABASE_URI: string;
