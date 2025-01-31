@@ -26,6 +26,7 @@ declare global {
       INNGEST_EVENT_KEY: string;
       INNGEST_SIGNING_KEY: string;
       REDIS_URI: string;
+      SENTRY_DSN: string;
     }
   }
 }
