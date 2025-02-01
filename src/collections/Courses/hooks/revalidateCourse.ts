@@ -5,7 +5,7 @@ import type {
 
 import { revalidatePath, revalidateTag } from 'next/cache';
 
-import type { Course } from '../../../payload-types';
+import type { Course } from '@/payload-types';
 
 export const revalidateCourse: CollectionAfterChangeHook<Course> = ({
   doc,
