@@ -1,3 +1,4 @@
+import { fetcher } from '@/lib/fetcher';
 import type { CollectionConfig, AccessArgs } from 'payload';
 
 export const Enrollments: CollectionConfig = {
@@ -168,8 +169,10 @@ export const Enrollments: CollectionConfig = {
       async ({ doc, operation, req }) => {
         // Create initial progress record on enrollment
         if (operation === 'create') {
-          await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_URL}/api/function/updateUserRole?userId=${doc.student}&role=student`,
+          await fetcher(
+            `/api/function/updateUserRole?userId=${doc.student}&role=student`, {
+            method: 'POST',
+          }
           );
           const progress = await req.payload.create({
             collection: 'course-progress',

@@ -54,6 +54,13 @@ export function VerifyEmail({ token }: { token: string }) {
                 </Text>
               </Section>
 
+              <Section className="mb-[32px] mt-[32px] text-center">
+                <Text className="mb-8 text-[14px] font-medium leading-[24px] text-black">
+                  Note: If you create the account on checkout, you will need change your password.
+                </Text>
+
+              </Section>
+
               <Hr className="mx-0 my-[26px] w-full border border-solid border-[#eaeaea]" />
 
               <Text className="flex items-center justify-center text-[12px] leading-[24px] text-[#666666]">

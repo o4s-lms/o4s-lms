@@ -66,13 +66,13 @@ export const Users: CollectionConfig = {
     lockTime: 600 * 1000, // Time period to allow the max login attempts
     // More options are available
     verify: {
-      generateEmailHTML: async ({ req, token, user }) => {
+      generateEmailHTML: async ({ token }) => {
         // Use the token provided to allow your user to verify their account
         return await render(<VerifyEmail token={token} />);
       },
     },
     forgotPassword: {
-      generateEmailHTML: async ({ req, token, user }) => {
+      generateEmailHTML: async ({ token }) => {
         // Use the token provided to allow your user to reset their password
         return await render(<ResetPasswordEmail token={token} />);
       },

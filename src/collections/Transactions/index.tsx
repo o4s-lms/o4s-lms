@@ -1,8 +1,9 @@
 import type { AccessArgs, CollectionConfig } from 'payload';
-
+import * as crypto from 'crypto';
 import { admin } from '@/access/admin';
 import { anyone } from '@/access/anyone';
 import { fetcher } from '@/lib/fetcher';
+import { getLanguage } from '@/tolgee/language';
 
 export const Transactions: CollectionConfig = {
   slug: 'transactions',
@@ -32,7 +33,51 @@ export const Transactions: CollectionConfig = {
   },
   hooks: {
     beforeChange: [
-      async ({ data, originalDoc, operation }) => {
+      async ({ req, data, originalDoc, operation }) => {
+        if (operation === 'create' && !data.user) {
+          try {
+            const user = await req.payload.find({
+              collection: 'users',
+              depth: 0,
+              where: {
+                email: {
+                  equals: data.email,
+                },
+              },
+            });
+            if (user.docs.length > 0) {
+              data.user = user.docs[0].id;
+            } else {
+              const currentLanguage = await getLanguage();
+              const password = crypto.randomBytes(16).toString('hex');
+              try {
+                const result = await fetch(
+                  `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users`,
+                  {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      Authorization: `users API-Key ${process.env.PAYLOAD_ADMIN_API_KEY}`,
+                    },
+                    body: JSON.stringify({
+                      name: data.name,
+                      email: data.email,
+                      password: password,
+                      passwordConfirmation: password,
+                      language: currentLanguage
+                    }),
+                  },
+                );
+                const user = await result.json();
+                data.user = user.doc.id;
+              } catch (error) {
+                throw error;
+              }
+            }
+          } catch (error) {
+            throw error;
+          }
+        }
         // Handle status changes
         if (operation === 'update' && data.status && originalDoc.processed) {
           switch (data.status) {
@@ -56,9 +101,7 @@ export const Transactions: CollectionConfig = {
     afterChange: [
       async ({ doc, operation }) => {
         if (operation === 'create' && doc.status === 'completed') {
-          const f = doc.user ? 'processTransaction' : 'waitUserSignUp';
-
-          await fetcher(`/api/functions/${f}`, {
+          await fetcher(`/api/functions/processTransaction`, {
             method: 'POST',
             body: JSON.stringify(doc),
           });
@@ -67,8 +110,7 @@ export const Transactions: CollectionConfig = {
         if (operation === 'update' && doc.processed === false) {
           switch (doc.status) {
             case 'completed':
-              const f = doc.user ? 'processTransaction' : 'waitUserSignUp';
-              await fetcher(`/api/functions/${f}`, {
+              await fetcher(`/api/functions/processTransaction`, {
                 method: 'POST',
                 body: JSON.stringify(doc),
               });

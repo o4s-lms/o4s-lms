@@ -10,7 +10,6 @@ import {
 } from '@payloadcms/richtext-lexical';
 
 import { admin } from '@/access/admin';
-import { published } from '@/access/published';
 import { Banner } from '@/blocks/Banner/config';
 import { Code } from '@/blocks/Code/config';
 import { MediaBlock } from '@/blocks/MediaBlock/config';
@@ -28,9 +27,7 @@ import {
 import { slugField } from '@/fields/slug';
 import { languageSelectOptions } from '@/utilities/languages';
 import { FAQBlock } from '@/blocks/FAQBlock/config';
-import { anyone } from '@/access/anyone';
-import { User } from '@/payload-types';
-import { settings } from '@/payload-generated-schema';
+import type { User } from '@/payload-types';
 
 type AccessArgs = {
   req: {
