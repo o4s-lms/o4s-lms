@@ -27,6 +27,8 @@ declare global {
       INNGEST_SIGNING_KEY: string;
       REDIS_URI: string;
       SENTRY_DSN: string;
+      SENTRY_ORG: string;
+      SENTRY_PROJECT: string;
     }
   }
 }
